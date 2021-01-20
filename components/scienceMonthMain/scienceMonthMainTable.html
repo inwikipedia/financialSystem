@@ -1,0 +1,255 @@
+
+<!-- zTree 样式 -->
+<link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/metroStyle.css">
+<style>
+    body{
+        overflow-y: hidden;
+    }
+</style>
+<div class="layui-row layui-col-space15">
+    <!-- 单列普通表格 -->
+    <div class="layui-col-md12">
+        <div class="layui-card p-main">
+            <div class="layui-card-header" style="height: 0px"></div>
+            <!-- 卡片容器 -->
+            <div class="layui-card-body">
+                <div class="layui-form">
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"
+                                lay-filter="btn_add_form" lay-submit title="自动创建时间管理" id="btn_create_time">
+                            自动创建时间管理
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 下部表格容器 -->
+                <table id="tableContent-daily" lay-filter="tableContent-daily"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="barTool">
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-look">查看</button>
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-down">导出</button>
+</script>
+<script>
+    // 初始化 layui
+    layui.use(['laydate', 'table', 'upload', 'formSelects'], function () {
+        var table = layui.table,
+            form = layui.form,
+            upload = layui.upload,
+            formSelects = layui.formSelects,
+            laydate = layui.laydate,
+            tools = layui.tools,
+            layer = layui.layer,
+            config = layui.config,
+            admin = layui.admin;
+        var account = config.getAccount();
+        // 渲染表格
+        var renderTable = function (search) {
+            if (!search) {
+                search = {};
+            }
+            // search.userId = config.getAccount().usid;
+            // 渲染表格
+            table.render({
+                elem: '#tableContent-daily',
+                id: 'tableContent-daily',
+                url: admin.formatUrl('/api/smallprogram/scheduleResearch/getResearchVOByPage'),
+                // contentType: "application/json",
+                // method: 'post',
+                // 格式化后台返回的数据
+                parseData: function (res) { //res 即为原始返回的数据
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "count": res.data.count,
+                        "msg": res.message, //解析提示文本
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                request: {
+                    pageName: 'page',
+                    limitName: 'pageSize'
+                },
+                height: 'full-120',
+                cols: [
+                    [{
+                        type: 'checkbox'
+                    },
+                        {
+                            field: 'title',
+                            title: '名称',
+                            align: 'center',
+                        },
+                        {
+                            field: 'createTime',
+                            title: '创建时间',
+                            align: 'center',
+                            templet: function (row) {
+                                if (row.createTime) {
+                                    return '<div title="'+tools.getDate(row.createTime,"YYYY-MM-DD HH:mm:ss")+'"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ tools.getDate(row.createTime,"YYYY-MM-DD HH:mm:ss") +'</div></div>' ;
+                                }else{
+                                    return '';
+                                }
+                            }
+                        },
+                        {
+                        title: '操作',
+                        align: 'center',
+                        toolbar:'#barTool',
+                        width: 200
+                    }
+                    ]
+                ],
+                page: true,
+                limit: 15, //显示的数量
+                limits: [10, 15, 20, 25, 30],
+                cellMinWidth: 90,
+                where: search
+            });
+        }
+
+        // 初始化，执行一次渲染表格
+        renderTable();
+        table.on('tool(tableContent-daily)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'btn-look') {
+                admin.popupCenter({
+                    title: data.title,
+                    area: ["950px","560px"],
+                    path: 'components/scienceMonthMain/scienceMonthDetails.html',
+                    finish: function (typeFin) {
+                    },
+                    success: function () {
+                        var load2 = layer.load(2);
+                        $.ajax({
+                            url: "/api/smallprogram/scheduleResearchUser/selectByResearchIdAndStatus?status=1&researchId="+data.id,
+                            type: "get",
+                            contentType: "application/json",
+                            success: function (res) {
+                                if(res.ok){
+                                    $.ajax({
+                                        url: "/api/smallprogram/scheduleResearchUser/queryFinishList?status=0&researchId="+data.id,
+                                        type: "get",
+                                        contentType: "application/json",
+                                        success: function (resp) {
+                                            layer.close(load2);
+                                            if(resp.ok){
+                                                var finishHtml ="";
+                                                var memberName =[];
+                                                for(var i =0;i<res.data.length;i++){
+                                                    finishHtml+='<div class="finishTop">\n' +
+                                                        '            <span class="finishName">'+res.data[i].createUserName+'</span>\n' +
+                                                        '            <span class="finishTime">完成日期：'+(res.data[i].updateTime?tools.getDate(res.data[i].updateTime,"YYYY-MM-DD HH:mm:ss"):"")+'</span>\n' +
+                                                        '        </div>\n' +
+                                                        '        <div class="finishContent">'+res.data[i].content+'</div>';
+                                                }
+                                                for(var j =0;j<resp.data.length;j++){
+                                                    memberName.push(resp.data[j].createUserName);
+                                                }
+                                                $(".finishBox").empty().append(finishHtml);
+                                                $(".memberName").empty().append(memberName.join(","));
+                                                $(".memberName").attr("title",memberName.join(","));
+                                            }else{
+                                                return layer.msg(resp.message, {
+                                                    icon: 5
+                                                });
+                                            }
+                                        }
+                                    });
+                                }else{
+                                    return layer.msg(resp.message, {
+                                        icon: 5
+                                    });
+                                }
+                            }
+                        });
+                        form.render()
+
+                    }
+                });
+            }else if(obj.event==='btn-down'){
+                window.open("/ADC_info/api/smallprogram/scheduleResearchUser/export?researchId="+data.id,"_slef")
+            }
+        });
+        $("#btn_create_time").off("click").on("click",function () {
+            layer.open({
+                type: 1,
+                title: '自动创建时间管理',
+                content: '<div id="searchDate" class="layui-form" lay-filter="searchDate"; style="padding: 35px 20px 0px 20px" >\n' +
+                '<div class="layui-form-item" style="position: relative">\n' +
+                '<div style="display: inline-block;width: 110px;height:19px">' +
+                '<label style="white-space: pre;position: absolute;top:5px;"><span class="redSpan">*</span>自动创建时间：</label>' +
+                '</div>'+
+                '<div style="display: inline-block;width: calc(100% - 120px);position: relative">\n' +
+                '<input type="text" style="cursor: pointer" placeholder="请选择自动创建时间" lay-verify="required" class="layui-input" name="checkDate" id="checkDate" >\n' +
+                '<img src="/assetsInfo/images/riliform.png" style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;"/>\n' +
+                '</div>\n' +
+                '</div>\n' +
+                '</div>',
+                area: ['600px', '200px'],
+                btn: ['确定', '取消'],
+                yes: function(index, layero) {
+                    if(!$('#checkDate').val()){
+                        return layer.msg('请选择自动创建时间', {
+                            icon: 5
+                        });
+                    }
+                    console.log($('#checkDate').val().substring(8,10),55555)
+                    if($('#checkDate').val().substring(8,10)>=29){
+                        return layer.msg('只允许选择1至28日', {
+                            icon: 5
+                        });
+                    }
+                    var data={
+                        id:$("#searchDate").attr("data-id"),
+                        configValueString:$('#checkDate').val()
+                    };
+                    var editType='put';
+                    $.ajax({
+                        url: "/api/smallprogram/scheduleConfig",
+                        data: JSON.stringify(data),
+                        type: editType,
+                        contentType: "application/json",
+                        success: function (res) {
+                            if(res.ok){
+                                table.reload('tableContent-daily');
+                                layer.close(index);
+                            }else{
+                                return layer.msg(res.message, {
+                                    icon: 5
+                                });
+                            }
+                        }
+                    });
+                },
+                success: function() {
+
+                    $.ajax({
+                        url: "/api/smallprogram/scheduleConfig?configName=SCHEDULE_RESEARCH_DATE",
+                        type: "get",
+                        success: function (res) {
+                            if(res.ok){
+                                laydate.render({
+                                    elem: '#checkDate',
+                                    value:res.data[0].configValueString.substring(0,10),
+                                    ready: function(date){
+                                        // $(".layui-laydate-main .layui-laydate-header").css("display","none")
+                                    }
+                                });
+                                $("#searchDate").attr("data-id",res.data[0].id)
+                            }else{
+                                return layer.msg(res.message, {
+                                    icon: 5
+                                });
+                            }
+                        }
+                    });
+                },
+                resize: false
+            });
+        });
+    });
+
+</script>

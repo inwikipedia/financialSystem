@@ -1,0 +1,333 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>柱状图配置</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-ie6.css">
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/ie.css">
+    <![endif]-->
+    <script type="text/javascript" src="../dialogs/internal.js"></script>
+    <script src="./utils.js"></script>
+    <script src="./jquery-1.7.2.min.js"></script>
+    <script src="../../echarts.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+    <table class="table table-bordered table-striped table-hover">
+        <tr>
+            <th>控件名称<span class="label label-important">*</span></th>
+            <th>主题颜色</th>
+        </tr>
+        <tr>
+            <td><input type="text" id="adcform_title" placeholder="必填"></td>
+            <td>
+                <input type="text" id="adcform_theme" placeholder="多个颜色时请用‘，’隔开" >
+            </td>
+        </tr>
+        <tr>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;长&nbsp;&nbsp;X&nbsp;&nbsp;宽</th>
+            <th></th>
+        </tr>
+        <tr>
+            <td>
+                <input id="adcform_width" type="text" value="500" class="input-small span1" placeholder="auto" />
+                X
+                <input id="adcform_height" type="text" value="300" class="input-small span1" placeholder="auto" />
+
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <th>数据接口</th>
+            <th></th>
+        </tr>
+        <tr>
+            <td>
+                <select id="adcform_url" multiple="multiple" class="span14"></select>
+                <!--<input id="adcform_url" type="text">-->
+            </td>
+            <td>
+                <button title="获取" onclick="getDataById();" class="btn btn-default">获取</button>
+            </td>
+        </tr>
+        <tr>
+            <th>横坐标数据</th>
+            <th>纵坐标数据</th>
+        </tr>
+        <tr>
+            <td>
+                <select id="adcform_xdata" multiple="multiple" class="span14"></select>
+            </td>
+            <td>
+                <select id="adcform_ydata" multiple="multiple" class="span14"></select>
+            </td>
+        </tr>
+    </table>
+</div>
+<!-- layui 脚本文件 -->
+<script type="text/javascript" src="/assetsInfo/libs/layui/layui.all.js"></script>
+<script type="text/javascript" src="/module/config.js"></script>
+<script type="text/javascript">
+    var oNode = null,
+        thePlugins = 'adc_form_bar_canvas',
+        datetimeName = '';
+    $.ajax({
+        url:"/ADC_info/api/model/model/page",
+        type:"GET",
+        data:{
+            design: 0,
+            pageNo:1,
+            pageSize:9999
+        },
+        async:false,
+        success:function (res) {
+            var cur = res.data.list;
+            var option = "";
+            for(var i =0;i<cur.length;i++){
+                option += '<option value="' + cur[i].mid + '" >' + cur[i].mname +
+                    '</option>';
+            }
+            $("#adcform_url").empty().append(option);
+        },
+        error:function (err) {
+            layui.layer.msg('获取信息失败！');
+            console.log(err);
+        }
+    });
+    window.onload = function () {
+        if (UE.plugins[thePlugins].editdom) {
+            oNode = UE.plugins[thePlugins].editdom;
+            var gTitle = oNode.getAttribute('title').replace(/&quot;/g, "\""),
+                // gAlign = oNode.getAttribute('adcform_align'),
+                // gType = oNode.getAttribute('adcform_type'),
+                gWidth = oNode.getAttribute('adcform_width'),
+                gHeight = oNode.getAttribute('adcform_height'),
+                gUrl = oNode.getAttribute('adcform_url'),
+                gxdata = oNode.getAttribute('adcform_xdata'),
+                gydata = oNode.getAttribute('adcform_ydata'),
+                gTheme = oNode.getAttribute('adcform_theme');
+            gTitle = gTitle == null ? '' : gTitle;
+            $G('adcform_title').value = gTitle;
+            $G('adcform_width').value = gWidth;
+            $G('adcform_height').value = gHeight;
+            $G('adcform_url').value = gUrl;
+            $G('adcform_theme').value = gTheme;
+            getDataById(gxdata,gydata);
+        }
+    }
+    dialog.oncancel = function () {
+        if (UE.plugins[thePlugins].editdom) {
+            delete UE.plugins[thePlugins].editdom;
+        }
+    };
+    dialog.onok = function () {
+        if ($G('adcform_title').value == '') {
+            alert('请输入控件名称');
+            return false;
+        }
+        var gTitle = $G('adcform_title').value.replace(
+            /\"/g,
+            "&quot;"),
+            // gAlign = $G('adcform_align').value,
+            // gType = $G('adcform_type').value,
+            gWidth = $G('adcform_width').value,
+            gHeight = $G('adcform_height').value,
+            gUrl = $G('adcform_url').value,
+            gydata = $G('adcform_ydata').value,
+            gxdata = $G('adcform_xdata').value,
+            gTheme = $G('adcform_theme').value;
+
+
+        if (!oNode) {
+            try {
+                oNode = createElement('div', 'barCanvas');
+                // oNode.setAttribute('type', 'text');
+                oNode.setAttribute('title', gTitle);
+                oNode.setAttribute('adcform_xdata', gxdata);
+                oNode.setAttribute('adcform_ydata', gydata);
+                oNode.setAttribute('adcform_url', gUrl);
+                oNode.setAttribute('adcform', thePlugins);
+                oNode.setAttribute('adcform_theme', gTheme);
+                // oNode.setAttribute('adcform_type', gType);
+                datetimeName = oNode.getAttribute('name');
+                oNode.setAttribute('class', datetimeName );
+                oNode.style.boxSizing = 'border-box';
+                oNode.setAttribute('id', oNode.name);
+                // if (gAlign != '') {
+                //     oNode.style.textAlign = gAlign;
+                //     oNode.setAttribute('adcform_align', gAlign);
+                // }
+                if (gWidth != '') {
+                    oNode.style.width = gWidth + 'px';
+                    oNode.setAttribute('adcform_width', gWidth);
+                }
+                if (gHeight != '') {
+                    oNode.style.height = gHeight + 'px';
+                    oNode.setAttribute('adcform_height', gHeight);
+                }
+                $(oNode).append("<img class='imgOccupy' style='width:"+gWidth+"px;height:"+gHeight+"px;' src='/assetsInfo/images/canvasImg/zhuzhuangtu.jpg' />")
+                console.log($(oNode),5555);
+                var html ='<span style="position: relative;">'+oNode.outerHTML+'</span>';
+                // TODO: 如何使用 laydate ???
+                // editor.execCommand('insertHtml', '<script src="/assets/libs/laydate/laydate.js"><\/script>');
+                var script='<script>\n' +
+                    '    ADCFormDesignHelper.setBarCanvas("'+oNode.name+'")\n' +
+                    '<\/script>';
+
+                editor.execCommand('insertHtml', html);
+                editor.execCommand('insertHtml', script);
+            } catch (e) {
+                try {
+                    editor.execCommand('error');
+                } catch (e) {
+                    alert('控件异常！');
+                }
+                return false;
+            }
+        } else {
+            oNode.setAttribute('title', gTitle);
+            oNode.setAttribute('adcform_theme', gTheme);
+            // oNode.setAttribute('adcform_type', gType);
+            oNode.setAttribute('adcform_xdata', gxdata);
+            oNode.setAttribute('adcform_ydata', gydata);
+            oNode.setAttribute('adcform_url', gUrl);
+            if (gWidth != '') {
+                oNode.style.width = gWidth + 'px';
+                $(oNode).children("img").css("width",gWidth+"px");
+                oNode.setAttribute('adcform_width', gWidth);
+            } else {
+                oNode.style.width = '';
+                $(oNode).children("img").css("width","");
+                oNode.setAttribute('adcform_width', '');
+            }
+            if (gHeight != '') {
+                oNode.style.height = gHeight + 'px';
+                $(oNode).children("img").css("height",gHeight+"px");
+                oNode.setAttribute('adcform_height', gHeight);
+            } else {
+                oNode.style.height = '';
+                $(oNode).children("img").css("height",'');
+                oNode.setAttribute('adcform_height', '');
+            }
+            delete UE.plugins[thePlugins].editdom;
+        }
+    };
+    //根据url获取列表值
+    function getFormUrl() {
+        var oUrl = document.getElementById("adcform_url").value;
+        $.ajax({
+            url:oUrl,
+            type:"GET",
+            async:false,
+            success:function (data) {
+                //console.log(data);
+                //循环接口返回的字段名
+                var cur = data.data;
+                var option = "";
+                for (var item in cur){
+                    option += '<option value=\"' + item + '\" >' + item +
+                        '</option>';
+                }
+                $("#adcform_xdata").empty().append(option);
+                $("#adcform_ydata").empty().append(option);
+            },
+            error:function (err) {
+                layui.layer.msg('获取信息失败！');
+                console.log(err);
+            }
+        })
+    }
+    function getDataById(gxdata,gydata) {
+        var oUrl =$('#adcform_url option:selected').val();
+        $.ajax({
+            url:"/ADC_info/api/model/model",
+            type:"GET",
+            data:{
+                MId: oUrl
+            },
+            async:false,
+            success:function (res) {
+                if(res.ok){
+                    if(res.data[0].mparam){
+                        $.ajax({
+                            url:"/ADC_info/api/dataset/page",
+                            data:{
+                                Param: res.data[0].mparam,
+                                associates: res.data[0].massociates,
+                                tableName: res.data[0].mtables
+                            },
+                            type:"GET",
+                            async:false,
+                            success:function (info) {
+                                if(info.ok){
+                                    //循环接口返回的字段名
+                                    var cur = info.data.list[0];
+                                    var option = "";
+                                    for (var item in cur){
+                                        option += '<option value=\"' + item + '\" >' + item +
+                                            '</option>';
+                                    }
+                                    $("#adcform_xdata").empty().append(option);
+                                    $("#adcform_ydata").empty().append(option);
+                                    if(gxdata&&gydata){
+                                        $G('adcform_xdata').value = gxdata;
+                                        $G('adcform_ydata').value = gydata;
+                                    }
+                                }else{
+                                    layui.layer.msg('获取信息失败！');
+                                }
+                            },
+                            error:function (err) {
+                                layui.layer.msg('获取信息失败！');
+                            }
+                        })
+                    }else{
+                        $.ajax({
+                            url:"/ADC_info/api/dataset/forCode/"+res.data[0].mCode,
+                            type:"GET",
+                            async:false,
+                            success:function (info) {
+                                if(info.ok){
+                                    //循环接口返回的字段名
+                                    var cur = info.data[0];
+                                    var option = "";
+                                    for (var item in cur){
+                                        option += '<option value=\"' + item + '\" >' + item +
+                                            '</option>';
+                                    }
+                                    $("#adcform_xdata").empty().append(option);
+                                    $("#adcform_ydata").empty().append(option);
+                                    if(gxdata&&gydata){
+                                        $G('adcform_xdata').value = gxdata;
+                                        $G('adcform_ydata').value = gydata;
+                                    }
+                                }else{
+                                    layui.layer.msg('获取信息失败！');
+                                }
+                            },
+                            error:function (err) {
+                                layui.layer.msg('获取信息失败！');
+                            }
+                        })
+                    }
+                }else{
+                    layui.layer.msg('获取信息失败！');
+                }
+            },
+            error:function (err) {
+                layui.layer.msg('获取信息失败！');
+            }
+        });
+    }
+</script>
+</body>
+
+</html>

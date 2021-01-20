@@ -1,0 +1,283 @@
+<!--
+Description: 组织机构选择，弹出框插件，请使用 iframe 弹出；
+-----
+HISTORY:
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>请选择</title>
+
+    <link rel="stylesheet" href="../../assetsInfo/libs/layui/css/layui.css" />
+    <link rel="stylesheet" href="../../assetsInfo/css/style.css">
+    <link rel="stylesheet" href="../../assetsInfo/css/theme.css" />
+    <link rel="stylesheet" href="../../assetsInfo/css/task_orgs_select.css">
+    <!--<link rel="stylesheet" href="../../assetsInfo/css/task_orgs_input.css">-->
+
+    <!-- zTree 样式 -->
+    <link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/metroStyle.css">
+    <style>
+       .person-container .layui-form-selected dl{
+            top:32px;
+        }
+        .table-top-bar .search-item input{
+           padding-left:10px;
+       }
+    </style>
+</head>
+
+<body>
+
+<div class="layui-fluid layui-tab" lay-filter="person-tab">
+    <!--<div class="layui-row person-header">-->
+    <!--<ul class="layui-tab-title">-->
+    <!--<li class="layui-this">项目号</li>-->
+    <!--</ul>-->
+    <!--</div>-->
+    <div class="layui-row person-container">
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md12 person-container-l">
+            <div class="layui-row">
+                <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+                    <!-- tab 切换 -->
+                    <div class="layui-tab-content" style="padding-top: 0px"><!--style="min-width: 680px"-->
+                        <div class="layui-tab-content"><!--style="min-width: 680px"-->
+                            <div class="layui-form">
+                                <div class="layui-form-item table-top-bar">
+                                    <div class="layui-inline">
+                                        <div class="layui-inline ">
+                                            <!--<i class="layui-icon layui-icon-search"></i>-->
+                                            类别：
+                                            <div style="display: inline-block">
+                                                <select name="ass_search" id="ass_search" >
+                                                    <option value="">请选择</option>
+                                                    <option value="0">经营类</option>
+                                                    <option value="1">科研类</option>
+                                                    <option value="2">成本类</option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                        <div class="layui-inline search-item">
+                                            名称：
+                                            <input type="text" style="display: inline-block" name="name_search" id="name_search" placeholder="输入名称"
+                                                   class="layui-input input-tabs">
+                                        </div>
+                                        <div class="layui-inline">
+                                            <button class="layui-btn layui-btn-sm layui-btn-normal"
+                                                    lay-filter="btn_search_form"
+                                                    lay-submit title="查询">查询
+                                            </button>
+                                        </div>
+                                        <div class="layui-inline">
+                                            <button class="layui-btn layui-btn-sm layui-btn-primary"
+                                                    lay-filter="btn_reset_form"
+                                                    lay-submit title="重置">重置
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- 资产编码 -->
+                            <table lay-filter="table-con" class="layui-hide" id="test"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- jQuery 1.x 版本兼容 IE8 -->
+<script type="text/javascript" src="../../assetsInfo/libs/jquery-1.12.4.min.js"></script>
+<!-- Q.js 轻量路由框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/q.js"></script>
+<!-- jQuery 轻量级 MVVM 框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/pandyle.min.js"></script>
+<!-- layui 脚本文件 -->
+<script type="text/javascript" src="../../assetsInfo/libs/layui/layui.js"></script>
+
+<script>
+    // 重写时间戳转换方法
+    Date.prototype.toLocaleString = function () {
+        return this.getFullYear() + "-" + (this.getMonth() + 1 < 10 ? '0' + (this.getMonth() + 1) : this
+            .getMonth() + 1) + "-" + (this.getDate() < 10 ? '0' + (this.getDate()) : this.getDate())
+    };
+    var tableData = [];
+    var tableDataOne = [];
+    var purchaseType;
+    var createUserId;
+    var task_ass_input = {
+        init:function(data){
+            purchaseType=data.purchaseType;
+            createUserId=data.createUserId;
+            tableData = [];
+            layui.use('table', function(){
+                var table = layui.table;
+                var tools = layui.tools;
+                var layer = layui.layer;
+                var option = {
+
+                };
+                // option.querys[0].eq=data;
+                table.render({
+                    elem: '#test'
+                    ,id:'test'
+                    ,url:'/ADC_info/api/finance/businessGonfig/getBusinessPage'
+                    // ,method:'post'
+                    // ,contentType: 'application/json'
+                    ,where:option
+                    ,parseData: function(res){ //res 即为原始返回的数据
+                        return {
+                            "code": res.respCode, //解析接口状态
+                            "msg": res.message, //解析提示文本
+                            "count": res.data.count, //解析数据长度
+                            "data": res.data.list //解析数据列表
+                        };
+                    }
+                    ,request: {
+                        pageName: 'page',
+                        limitName: 'pageSize'
+                    },
+                    cols: [[
+                        {type:'radio'},
+                        {
+                            field:'bgType',
+                            align: 'center',
+                            width:160,
+                            title: '类别',
+                            templet: function (d) {
+                                var text ="";
+                                if(d.bgType==0){
+                                    text="经营类";
+                                }else if(d.bgType==1){
+                                    text="科研类";
+                                }else if(d.bgType==2){
+                                    text="成本类";
+                                }
+                                return '<div title="'+text+'"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ text +'</div></div>';
+                            }
+                        },
+                        {field:'departName',width:180,  align: 'center',title: '部门'}
+                        ,{field:'bgName', title: '名称'}
+                        // ,{field:'isScientific', align: 'center',width:200,title: '是否是科研项目'}
+                        // ,{field:'bidNumber', align: 'center',width:200,title: '招标编号'}
+                        // ,{field:'bidName', align: 'center',width:200,title: '招标名称'}
+                        // ,{field:'winBidTime', align: 'center',width:140,title: '中标时间'}
+                    ]]
+                    ,page: {
+                        // limit:3,
+                        jump: function(obj, first){
+                            //obj包含了当前分页的所有参数，比如：
+                            console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                            console.log(obj.limit); //得到每页显示的条数
+
+                            //首次不执行
+                            if(!first){
+                                //do something
+                            }
+                        }
+                    }
+                    ,done:function(res, curr, count){
+                        $("table tr td ").each(function () {
+                            if($(this).attr('data-field') != 0){
+                                $(this).attr("title", $(this).children().text());
+                            }
+                            // $(this).css("cursor", 'pointer');
+                        });
+                        //  翻页重新载入表格数据   把选取到的数据存起来  并处理回显选中问题
+                        // task_ass_input.getShow(res.data, tableData)
+                        // tableData = tableData.concat(tableDataOne);
+                        // tableDataOne = []
+                    }
+                });
+                table.on('radio(table-con)', function(obj){
+                    console.log(obj,"==========obj")
+                    console.log(obj.checked,"当前是否选中状态"); //当前是否选中状态
+                    console.log(obj.data,"选中行的相关数据"); //选中行的相关数据
+                    console.log(obj.type,"是否全选"); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
+                    tableData = table.checkStatus('test').data; // 获取表格中选中行的数据
+                });
+            });
+        }
+        ,finish: function () {
+            return tableData;
+        }
+        , unique: function (arr) {
+            if (!Array.isArray(arr)) {
+                console.log('type error!')
+                return
+            }
+            var res = [],
+                obj = {}
+            for (var i = 0; i < arr.length; i++) {
+                if (!obj[arr[i]]) {
+                    res.push(arr[i])
+                    obj[arr[i]] = 1
+                } else {
+                    obj[arr[i]]++
+                }
+            }
+            return res
+        }
+        ,getShow: function(list,tabDat){   //回显选中
+            var num=0
+            for(var i=0;i<list.length;i++){
+                for (var z = 0; z < tabDat.length; z++) {
+                    if (list[i].id == tabDat[z].id) {
+                        num += 1;
+                        $('tr[data-index="' + i + '"]').find('input[type="radio"]').attr('radio', true);
+                    }
+                }
+            }
+            if(num == list.length && num!= 0){
+                $('thead').find('input[type="radio"]').prop('radio',true);
+            }
+            layui.form.render('radio')
+        }
+    }
+    layui.use(['table'],function(){
+        var form = layui.form;
+        var table = layui.table;
+        var option = {
+
+        };
+        // 搜索
+        form.on('submit(btn_search_form)', function (data) {
+            var searchValue = {
+                bgType:data.field.ass_search,
+                bgName:data.field.name_search,
+            }
+            table.reload('test', {
+                where: searchValue,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+            });
+        });
+        // 重置
+        form.on('submit(btn_reset_form)', function (data) {
+            $('#ass_search').val('');
+            $('#name_search').val('');
+            var searchValue = {
+                bgType:"",
+                bgName:"",
+            };
+            form.render();
+            table.reload('test', {
+                where: searchValue,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+            });
+        });
+    })
+
+</script>
+</body>
+
+</html>

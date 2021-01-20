@@ -1,0 +1,744 @@
+<!--
+File   : task.html
+Created: Wednesday August 29th 2018 3:12:18 pm
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+-----
+Description: 任务管理
+-----
+HISTORY:
+
+-->
+<style>
+    .layui-layer-page .layui-layer-content{
+        overflow: visible !important;
+    }
+    #btn-export {
+        margin-left: 10px;
+    }
+    body{
+        overflow-y: hidden;
+    }
+</style>
+<div class="layui-row layui-col-space15">
+    <!-- 单列普通表格 -->
+    <div class="layui-col-md12 autoScrollLeft">
+        <div class="layui-card p-main">
+            <!-- 卡片容器 -->
+            <div class="layui-card-body">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form" lay-filter="task-search">
+                    <div class="layui-form-item table-top-bar">
+                        <div class="layui-inline  layui-pull-right" style="min-width: 250px"  id="search-area">
+                            <select  name="projectListSelect" id="projectListSelect" data-placeholder="选择所属项目" lay-filter="projectListSelect" lay-search>
+                            </select>
+                        </div>
+                        <div class="layui-inline">
+                            <div class="layui-inline ">
+
+                                <button class="layui-btn layui-btn-sm layui-maincolor" id="btn-add-task" title="添加任务">
+                                    <i class="layui-icon  layui-icon-add-1"></i>
+                                    新建
+                                </button>
+                                <button id="btn_edit" type="button" class="layui-btn layui-btn-sm layui-import">
+                                    <i class="layui-icon layui-icon-edit"></i>编辑
+                                </button>
+                                <button class="layui-btn layui-btn-sm layui-delete" id="btn-becth-delete" title="删除">
+                                    <i class="layui-icon  layui-icon-delete"></i>
+                                    删除
+                                </button>
+                                <!--<button class="layui-btn layui-btn-sm layui-maincolor" id="btn-export" title="导出">-->
+                                    <!--<i class="layui-icon  layui-icon-download-circle"></i>    导出-->
+                                <!--</button>-->
+
+                                <button class="layui-btn layui-btn-sm layui-maincolor" id="btnHref" title="子任务列表">
+                                    <!--<i class="layui-icon  layui-icon-add-1"></i>-->
+                                    子任务列表
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- 下部表格容器 -->
+                <table id="tableContent-task" lay-filter="tableContent-task"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--表格操作-->
+<script src="assetsInfo/libs/chosen/chosen.jquery.min.js"></script>
+
+<script>
+    // 初始化 layui
+
+
+    layui.use(['laydate', 'table', 'upload','formSelects'], function() {
+        var table = layui.table,
+            form = layui.form,
+            upload = layui.upload,
+            laydate = layui.laydate,
+            admin = layui.admin,
+            BudgetId='',
+            projectId='',
+            formSelects = layui.formSelects,
+            itemData={},
+            //头部按钮权限
+            permission = [{
+                name: 'fin:task:save',
+                id: 'btn-add-task'
+            }, {
+                name: 'fin:task:import',
+                id: 'upload-task'
+            }, {
+                name: 'fin:task:export',
+                id: 'btn-export'
+            }, {
+                name: 'fin:task:delete',
+                id: 'btn-becth-delete'
+            }, ];
+
+
+        var flag = admin.GetRequest().flag;
+
+        if (flag==undefined)
+        {
+            flag=0
+        }
+        else if (flag==1)
+        {
+             BudgetId = admin.GetRequest().id;
+
+        }
+        else if (flag==2)
+        {
+            projectId = admin.GetRequest().id;
+        }
+        if (projectId)
+        {
+            $('#search-area').hide();
+        }
+        else {
+            $('#search-area').show();
+        }
+        init();
+
+
+
+
+        function init() {
+            //初始化下拉项目列表
+            admin.req('/api/budget/project/query/all', {}, function(res) {
+                var arrprolist = res.data,
+
+                    elem2 = $('#projectListSelect');
+                elem2.empty();
+                elem2.append('<option value=""></option>');
+                for (var item2 of arrprolist) {
+                    elem2.append('<option value="' + item2.id + '">' + item2.name + '</option>')
+                }
+                form.render('select');
+               if (flag==0) {
+                    renderTable({
+                        type:1
+                    });
+                }
+                if (flag==1) {
+
+
+                        $(".layui-breadcrumb a:eq(2)").hide();
+                        $(".layui-breadcrumb span:eq(2)").hide();
+                        renderTable({
+                            budgetId: BudgetId,
+                            type:0
+                        });
+
+
+                }
+                else if(flag==2)
+                {
+                    renderTable({
+                        projectId:  projectId,
+                        type:1
+                    });
+                }
+
+            });
+        }
+
+        form.on('select(projectListSelect)', function(data) {
+            if (data.value) {
+                renderTable({
+                    projectId: data.value,
+                    type:1
+                });
+            } else {
+                renderTable({
+                    type:1
+                });
+            }
+        });
+
+
+        // 渲染左侧表格
+        var renderTable = function(search, url) {
+            var heightTable = $(document).height()-140;
+                if (!search) {
+                    search = {};
+                }
+                if (!url) {
+                    url = '/api/budget/task/page';
+                }
+                // 渲染表格
+                table.render({
+                    elem: '#tableContent-task',
+                    id: 'tableContent-task',
+                    url: admin.formatUrl(url),
+                    // 格式化后台返回的数据
+                    parseData: function(res) { //res 即为原始返回的数据
+                        // 返回结果，进行渲染表格
+                        return {
+                            "code": res.respCode, //解析接口状态
+                            "msg": res.message, //解析提示文本
+                            "count": res.data.count,
+                            "data": res.data.dataList //解析数据列表
+                        };
+                    },
+                    height: heightTable,
+                    cols: [
+                        [{
+                            type: 'checkbox'
+                        }, {
+                            field: 'name',
+                            title: '任务名称',
+                            align: 'center',
+                            minWidth: 200,
+                            templet:'<div><span title="{{d.name}}">{{d.name}}</span></div>'
+
+                        }, {
+                            field: 'planStartTime',
+                            title: '开始时间',
+                            width:160,
+                            templet: function(d) {
+                                var time= d.planStartTime ? new Date(parseInt(d.planStartTime)).toLocaleString() : "";
+                                return '<div title="'+time+'"><span>'+ time +'</span></div>'
+
+                            },
+                            align: 'center'
+                        }, {
+                            field: 'planEndTime',
+                            width:160,
+                            title: '结束时间',
+                            templet: function(d) {
+                                var time= d.planEndTime ? new Date(parseInt(d.planEndTime)).toLocaleString() : "";
+                                return '<div title="'+time+'"><span>'+ time +'</span></div>'
+
+                            },
+                            align: 'center'
+                        }, {
+                            field: 'createTime',
+                            title: '创建时间',
+                            width:160,
+                            templet: function(d) {
+                                var time= d.createTime ? new Date(parseInt(d.createTime)).toLocaleString() : "";
+                                return '<div title="'+time+'"><span>'+ time +'</span></div>'
+                            },
+                            align: 'center'
+                        }, {
+                            field: 'finishedActualTime',
+                            title: '实际完成时间',
+                            width:160,
+                            templet: function(d) {
+                                var time= d.finishedActualTime ? new Date(parseInt(d.finishedActualTime))
+                                    .toLocaleString() : "";
+                                return '<div title="'+time+'"><span>'+ time +'</span></div>'
+                            },
+//                            templet:,
+            align: 'center'
+                        }, {
+                            field: 'memberNames',
+                            title: '成员',
+                            align: 'center',
+                            templet:'<div><span title="{{d.memberNames}}">{{d.memberNames}}</span></div>'
+                        }, {
+                            field: 'priority',
+                            title: '优先级',
+                            align: 'center',
+                            templet:'<div><span title="{{d.priority}}">{{d.priority}}</span></div>'
+                        }, {
+                            field: 'taskStatus',
+                            title: '是否完成',
+                            align: 'center',
+                            templet:'<div><span title="{{d.taskStatus}}">{{d.taskStatus}}</span></div>'
+
+                        }, ]
+                    ],
+
+                    page: true,
+                    request: {
+                        pageName: 'page',
+                        limitName: 'size'
+                    },
+                    cellMinWidth: 90,
+                    where: search
+                });
+            }
+        layui.admin.addTableCache('tableContent-task');
+
+        // 表单提交，查询
+        form.on('submit(search_task)', function(data) {
+            // 获取表单数据
+            var d = data.field;
+            d.name = $.trim(d.name);
+            d.planStartTime = $.trim(d.planStartTime);
+            d.planStartTime = $.trim(d.planStartTime);
+            d.planStartTime = $.trim(d.planStartTime);
+            d.type=0;
+            renderTable(d);
+        });
+        form.on('submit(reset_task)', function(data) {
+            reset();
+        });
+
+        $('#btnHref').on('click', function() {
+
+            var checkStatus = table.checkStatus('tableContent-task');
+            if (checkStatus.data.length != 1) {
+                return layer.msg('请选择1个要查询的任务', {
+                    icon: 0
+                });
+            }
+            // if(UrlSearch()!=undefined && UrlSearch()[1]!=undefined){
+            //     window.location.href='#!ADC_project_childTask_html?'+checkStatus.data[0].id+"&1"
+            // }else{
+
+                window.location.href='#!ADC_project_childTask_html?id='+checkStatus.data[0].id
+            // }
+
+        });
+        /*
+           任务添加
+         */
+        $('#btn-add-task').on('click', function() {
+            popMenu('add')
+        });
+
+        $('#btn-export').on('click', function() {
+            var  a = document.createElement('a');
+            a.href = '/api/budget/task/export?fileName=任务导出&type=1';
+            a.download='任务导出'
+            document.body.append(a);
+            a.click();
+        });
+
+
+
+        /*
+           表格操作事件处理
+         */
+        table.on('tool(tableContent-task)', function(obj) {
+            var data = obj.data;
+            var event = obj.event;
+            if (event == 'edit') {
+                popMenu(event, data);
+                return;
+            }
+            if (event == 'del') {
+                layer.confirm('确定删除任务：' + data.name + ' 吗？', {
+                    icon: 3,
+                    title: '提示'
+                }, function() {
+                    admin.req('/api/budget/task/' + data.id, {}, function(data) {
+                        if (data.ok) {
+                            layer.msg('删除任务成功！', {
+                                icon: 1
+                            });
+                            table.reload('tableContent-task', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        } else {
+                            return layer.msg('删除角色信息失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: 'delete'
+                    });
+                });
+            }
+        });
+        /*
+           批量删除
+         */
+        $('#btn-becth-delete').on('click', function() {
+            var checkStatus = table.checkStatus('tableContent-task');
+            if (checkStatus.data.length == 0) {
+                return layer.msg('请选择要删除的任务', {
+                    icon: 0
+                });
+            };
+            var ids = [];
+            for (var item of checkStatus.data) {
+                ids.push(item.id);
+
+            }
+            layer.confirm('确定删除' + checkStatus.data.length + '个任务吗？', {
+                icon: 3,
+                title: '提示'
+            }, function() {
+                admin.req('/api/budget/task/' + ids.join(','), {}, function(data) {
+                    if (data.ok) {
+                        layer.msg('删除任务成功！', {
+                            icon: 1
+                        });
+                        table.reload('tableContent-task', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    } else {
+                        return layer.msg('删除角色信息失败：' + data.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: 'delete'
+                });
+            });
+        });
+        //        编辑按钮
+        $('#btn_edit').on('click', function() {
+            var checkStatus = table.checkStatus('tableContent-task');
+            console.log(checkStatus);
+            if (checkStatus.data.length != 1) {
+                return layer.msg('请选择1个要编辑的任务', {
+                    icon: 0
+                });
+            }
+            popMenu("edit", checkStatus.data[0]);
+
+        });
+        /*
+           导入任务
+         */
+        upload.render({
+            elem: '#upload-task',
+            url: '/api/budget/task/excelImport', //上传接口
+            accept: 'file',
+            acceptMime: 'xlsx/xlsm',
+            before: function(obj) {
+                layer.load(); //上传loading
+            },
+            done: function(res) {
+                layer.closeAll();
+
+                if (res.respCode == 0) {
+                    layer.msg('导入成功！', {
+                        icon: 1
+                    });
+                } else {
+                    return layer.msg('导入失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            },
+            error: function() {
+                //请求异常回调
+                layer.closeAll();
+                return layer.msg('导入出现错误，请重试！', {
+                    icon: 5
+                });
+            }
+        });
+        /*
+          任务弹窗
+         */
+        function popMenu(handleType, data) {
+            var params = {};
+            var title = "任务添加";
+            if (handleType === 'edit') {
+                title = data.name + '任务编辑';
+                params = data;
+            }
+            params.handleType = handleType;
+            admin.popupCenter({
+                title: title,
+                path: 'components/tpl/task_save_form.html',
+                finish: function() {
+                    $('#projectListSelect').val();
+                    form.render('select');
+                    init();
+
+                },
+                success: function() {
+                    setFormValue(params);
+                    console.log(params);
+                }
+            });
+        };
+        /*
+            初始化表单
+          */
+        function setFormValue(obj) {
+            var title = $('.layui-tpl-container .layui-card-header');
+            var formNames = ['id', 'handleType', 'name', 'planStartTime', 'planEndTime', 'taskStatus'];
+
+            obj.title && title.text(obj.title);
+            obj.planStartTime = obj.planStartTime ? formatDate(obj.planStartTime) : '';
+            obj.planEndTime = obj.planEndTime ? formatDate(obj.planEndTime) : '';
+            for (var i = 0; i < formNames.length; i++) {
+                if (obj[formNames[i]]) {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                } else {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val('');
+                }
+            }
+
+            //初始化项目
+            setTaskMember(obj);
+            formSelects.data('taskStatus_blong', 'local', {
+                arr: [{name:'未完成',value:'未完成',},{name:'已完成',value:'已完成'}]
+            });
+
+            if(obj.taskStatus)
+            {
+                formSelects.value('taskStatus_blong', [obj.taskStatus]);
+                form.render();
+            }
+
+            formSelects.data('priority_blong', 'local', {
+                arr: [{name:'普通',value:'普通'},{name:'紧急',value:'紧急'},{name:'十分紧急',value:'十分紧急'}]
+            });
+
+            if(obj.priority)
+            {
+                formSelects.value('priority_blong', [obj.priority]);
+                form.render();
+            }
+            if (flag==0)
+            {
+                $('#project_form').hide();
+            }
+            else if(flag==1)
+            {
+              obj.budgetId=BudgetId;
+            }
+            else if (flag==2)
+            {
+                obj.projectId=projectId;
+
+            }
+
+            if(obj.handleType=='add')
+            {
+                setBudgetData(obj);
+
+            }
+            $('#business_form').hide();
+            setProjectData(obj);
+            $('#project_form').show();
+            $('input:radio:last').prop('checked', 'checked');
+            $('input:radio:first').prop('disabled', 'disabled');
+             if (obj.projectId){
+
+                setTaskMember(0,obj.projectId,obj);
+                obj.type=0;
+
+
+            }
+            form.render('radio');
+            itemData=obj;
+
+        };
+
+        formSelects.on('business_blong', function(id, vals, val){
+            setTaskMember(1,val.value);
+        });
+        formSelects.on('project_blong', function(id, vals, val){
+            setTaskMember(0,val.value)
+        });
+        form.on('radio(type)',function(data){
+            if(data.value==0)
+            {
+                 $('#business_form').hide();
+                 $('#project_form').show();
+                  setProjectData(itemData);
+
+            }
+            else
+            {
+                $('#business_form').show();
+                $('#project_form').hide();
+                  setBudgetData(itemData);
+            }
+
+        })
+
+        function setBudgetData(obj) {
+            admin.req('/api/budget/budget', {
+            }, function(res) {
+                var arr = res.data,
+                    elem = $('#business_blong');
+                elem.empty().append('');
+
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i].projectName) {
+                            if (i == 0) {
+                                elem.empty().append('<option value="' + arr[i].id + '">' + arr[i].projectName + '</option>')
+                            } else {
+                                elem.append('<option value="' + arr[i].id + '">' + arr[i].projectName + '</option>');
+
+                            }
+
+                        }
+                    }
+                formSelects.render('business_blong');
+                formSelects.btns('business_blong', []);
+                if(obj.budgetId)
+                {
+                    formSelects.value('business_blong', [obj.budgetId]);
+                    //formSelects.disabled('business_blong');
+                }
+
+
+            });
+
+        }
+
+        function setProjectData(obj)
+        {
+            admin.req('/api/budget/task/currentUserProject', {
+            }, function(res) {
+                var arr = res.data,
+                    elem = $('#project_blong');
+                if(arr.length==0){
+                    elem.empty().append('');
+                } else {
+                    for (var i = 0; i < arr.length; i++) {
+                        if(arr[i].name)
+                        {
+                            if(i == 0) {
+                                elem.empty().append('<option value="' + arr[i].id + '">' + arr[i].name + '</option>');
+                            }else{
+                                elem.append('<option value="' + arr[i].id + '">' + arr[i].name + '</option>');
+
+                            }
+                        }
+                    }
+                }
+                formSelects.render('project_blong');
+                formSelects.btns('project_blong', []);
+                $(".layui-input-block").css("overflow","");
+                if(obj.projectId)
+                {
+                    formSelects.value('project_blong', [obj.projectId]);
+                }
+
+                if(projectId)
+                {
+                    formSelects.disabled('project_blong');
+
+                }
+                else
+                {
+                    formSelects.undisabled('project_blong');
+                }
+
+            });
+
+        }
+
+        function setTaskMember(type,id,obj) {
+            if(!id)
+            {
+                var elem = $('#memberIds_blong');
+                elem.empty();
+                formSelects.render('memberIds_blong');
+                formSelects.btns('memberIds_blong', []);
+                return;
+            }
+            var url='';
+            if (type==0)
+            {
+                url='/api/budget/project/query/' + id;
+            }
+            else if (type==1) {
+                url='/api/budget/budget/'+id+'/users';
+            }
+            admin.req(url, {
+
+            }, function(res) {
+
+                if(type==0)
+                {
+                    var arr = res.data.mapList;
+                }
+                else {
+                    var arr = res.data;
+                }
+                   elem = $('#memberIds_blong')
+                // if (arr == null || arr.length == 0) {
+                //     elem.empty().append('');
+                // }
+                // else{
+                if(arr){
+                    elem.empty();
+                    for (var i = 0; i < arr.length; i++) {
+                        if(arr[i].name)
+                        {
+                            elem.append('<option value="' + arr[i].id + '">' + arr[i].name + '</option>');
+                        }
+                    }
+                }
+                formSelects.render('memberIds_blong');
+                formSelects.btns('memberIds_blong', []);
+                console.log(obj);
+                var goslist=[];
+                if(obj){
+                    for(var i in obj.mapsList){
+                        goslist.push(obj.mapsList[i].id)
+                    }
+                    formSelects.value('memberIds_blong', goslist);
+                }
+
+
+            });
+
+        }
+        function formatDate(time) {
+            var now = new Date(time)
+            var year = now.getFullYear(),
+                month = now.getMonth() + 1,
+                date = now.getDate(),
+                hour = now.getHours(),
+                minute = now.getMinutes(),
+                second = now.getSeconds();
+            return year + "-" + (month < 10 ? '0' + month : month) + "-" + (date < 10 ? '0' + date : date) + " " + (hour < 10 ? '0' + hour : hour) + ":" + (minute < 10 ? '0' + minute : minute) + ":" + (second < 10 ? '0' + second : second);
+        }
+    });
+</script>

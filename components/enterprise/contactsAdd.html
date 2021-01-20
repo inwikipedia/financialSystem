@@ -1,0 +1,537 @@
+<style>
+    .layui-layer-page .layui-layer-content {
+        overflow: visible;
+    }
+    .ketitle {
+        text-align: center;
+        font-weight: bold;
+        font-size: 15px;
+        margin: 10px auto;
+    }
+    .posi {
+        width: 100%;
+        overflow-y: auto;
+    }
+    .layui-row{
+        margin: 0 auto;
+    }
+    .around{
+        display: flex;
+        justify-content: space-between;
+    }
+    .layui--col{
+        width: 45%;
+    }
+    .layui-form-select dl{
+        top:33px
+    }
+</style>
+<div class="layui-form layuiInput">
+    <div class="posi" style="height: 450px;">
+        <div class="layui-row around" style="padding-top: 10px;">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 企业名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入企业名称" class="layui-input" name="enterpriseName"
+                            id="enterpriseName"  autocomplete="off">
+                        <img class="deptName" src="/assetsInfo/images/bumen.png" alt=""
+                            style="position:absolute; right:23px;top:6px">
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 企业领域</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="企业领域" class="layui-input" name="enterpriseDomain"
+                            id="enterpriseDomain" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"> 省份</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入省份" class="layui-input" name="enterpriseProvince"
+                            id="enterpriseProvince" lay-verify="required" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">单位地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="单位地址" class="layui-input" name="enterpriseAddress"
+                            id='enterpriseAddress' disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 姓名</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入姓名" maxlength="80" class="layui-input"
+                            name="contactsUsname" id="contactsUsname" lay-verify="required"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">性别</label>
+                    <div class="layui-input-block">
+                        <select name="contactsSex"  id="contactsSex">
+                            <option value=""></option>
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">部门</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入部门名称" maxlength="80" class="layui-input" name="departName"
+                            id="departName"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">子部门</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入子部门名称" maxlength="80" class="layui-input"
+                            name="childDepartName" id="childDepartName"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">职务</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入职务名称" maxlength="80" class="layui-input" name="contactsPost"
+                            id="contactsPost"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">手机</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入手机号" class="layui-input"
+                            name="contactsPhone" id="contactsPhone" lay-verify="Tphone"  
+                            autocomplete="off" maxlength="11">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">座机</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入座机" class="layui-input" lay-verify="Tzuo"
+                            name="contactsLandline" id="contactsLandline" maxlength="20"  autocomplete="off" >
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">邮箱</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入邮箱" maxlength="80" class="layui-input" name="contactsEmail"
+                            lay-verify="Temail" id="contactsEmail"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">家庭住址</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入家庭住址" maxlength="200" class="layui-input"
+                            name="contactsHomeaddress" id="contactsHomeaddress"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">生日</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入生日" class="layui-input" name="contactsBirthday"
+                            id="contactsBirthday"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">籍贯</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入籍贯" maxlength="80" class="layui-input"
+                            name="contactsBirthplace" id="contactsBirthplace"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">毕业院校</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入毕业院校" maxlength="80" class="layui-input"
+                            name="contactsSchool" id="contactsSchool"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 影响力</label>
+                    <div class="layui-input-block">
+                        <select name="effectId" lay-verify="required" id="effect" lay-filter="effect">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">亲密度</label>
+                    <div class="layui-input-block">
+                        <select name="intimacyId" id="intimacy" lay-filter="intimacy">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">录入日期</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入录入日期" class="layui-input" name="createTime" id="createTime"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">录入人</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入录入人" maxlength="80" class="layui-input" name="createUserName"
+                            id="createUserName"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">联系人</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入联系人" maxlength="80" class="layui-input" name="conUsname"
+                            id="conUsname"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">联系人部门</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入联系人部门" maxlength="80" class="layui-input"
+                            name="conDepartName" id="conDepartName"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">联系人职务</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入联系人职务" maxlength="80" class="layui-input" name="conPost"
+                            id="conPost"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">联系方式</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入联系人方式" maxlength="80" class="layui-input" name="conPhone"
+                            id="conPhone"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">联系邮箱</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入联系邮箱" maxlength="80" class="layui-input" name="conEmail"
+                            id="conEmail" lay-verify="Temail"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入备注" maxlength="80" class="layui-input" name="remark"
+                            id="remark"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="ketitle">客户分类</div>
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"> 材料</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入材料" class="layui-input" name="stuff" id="stuff"
+                            maxlength="80"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"> 评价</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入评价" maxlength="80" class="layui-input" name="evaluate"
+                            id="evaluate"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"> 市场</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入市场" class="layui-input" name="market" maxlength="80"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">法规</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入法规" class="layui-input" name="statute" maxlength="80"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"> 认证</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入认证" class="layui-input" name="authentication"
+                            id="authentication" maxlength="80"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"> 智能</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入智能" class="layui-input" maxlength="80" name="intelligence"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">综合</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入综合" maxlength="80" class="layui-input" name="comprehensive"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"> 采购</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入采购" class="layui-input" name="purchase" maxlength="80"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-row around">
+            <div class="layui--col">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">财务</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入财务" maxlength="80" class="layui-input" name="finance"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="layui--col">
+            </div>
+        </div>
+        <input type="text" name="type" style="display: none;">
+        <input type="text" name="id" style="display: none;">
+        <input type="text" name="effectName" id="effectName" style="display: none;">
+        <input type="text" name="intimacyName" id="intimacyName" style="display: none;">
+        <input type="text" name="enterpriseId" id="enterpriseId" style="display: none;">
+        <input type="text" name="createUserId" id="createUserId" style="display: none;">
+    </div>
+    <!-- 提交按钮 -->
+    <!-- 取消按钮 -->
+    <div class="layui-form-item" style="text-align: center;position: absolute;bottom: 15px;left: 0;right: 0;">
+        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="menuSavecontac">保存</button>
+        <button class="layui-btn layui-btn-primary" id="menuCancle_user">取消</button>
+    </div>
+</div>
+
+<script>
+    var company = {};
+    layui.use(['laydate', 'admin', 'form'], function () {
+        var laydate = layui.laydate,
+            admin = layui.admin,
+            form = layui.form;
+        laydate.render({
+            elem: "#deadTime",
+            type: "year"
+        });
+        laydate.render({
+            elem: "#contactsBirthday",
+            type: "date"
+        });
+        laydate.render({
+            elem: "#createTime",
+            type: "date",
+            value:new Date()
+        });
+        form.verify({
+            Tphone: function (value) {
+                if (value.length > 0) {
+                    if (!(/^1[3456789]\d{9}$/.test(value))) {
+                        return '手机号码有误，请重填';
+                    }
+                }
+            },
+            Temail: function (value) {
+                if (value.length > 0) {
+                    var re = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/
+                    if (!re.test(value)) {
+                        return '邮箱输入有误，请重填';
+                    }
+                }
+            },
+            Tzuo: function (value) {
+                if (value.length > 0) {
+                    if (!(/^\d{8}$/.test(value)) &&
+                        !(/^\d{1,4}-\d{8}$/.test(value)) &&
+                        !(/^\d{1,4}-\d{8}-\d{1,5}$/.test(value)) &&
+                        !(/^\d{8}\/\d{8}$/.test(value))
+                    ) {
+                        return '请输入正确的办公电话，格式如下：<br/>84370000<br/>022-84370000<br/>022-84370000-0000<br/>84370000/84370000';
+                    }
+                }
+            }
+        });
+        $('input[name=contactsPhone]').on('input',function(e){
+            var inputData = e.target.value;
+            inputData = inputData.replace(/[^\d]/g, "");
+            inputData = inputData.replace(/^[0]+[0-9]*$/gi,"")
+            $('#contactsPhone').val(inputData);
+        })
+        $('input[name=contactsLandline]').on('input',function(e){
+            var inputData = e.target.value;
+            inputData = inputData.replace(/[^\d-/]/g, "");
+            $('#contactsLandline').val(inputData);
+        })
+        // 下拉框赋值
+        admin.req('/api/sys/dictype/page?dicId=B8WMB8BLRT', {}, function (data) {
+            var datas = data.data.list;
+            $.each(datas, function (index, item) {
+                $('#effect').append(new Option(item.dicTypeName, item.id));
+            });
+            if (parent.parentData.effectId) {
+                $('#effect').val(parent.parentData.effectId);
+                $('#contactsSex').val(parent.parentData.contactsSex);
+                $('#contactsBirthday').val(parent.parentData.contactsBirthday?timestampToTime(parent.parentData.contactsBirthday):"");
+                $('#createTime').val(parent.parentData.createTime?timestampToTime(parent.parentData.createTime):"");
+            }
+            layui.form.render("select");
+        }, { method: 'get' })
+        form.on('select(effect)', function (data) {
+            var texts = data.elem[data.elem.selectedIndex].text;
+            $('#effectName').val(texts);
+        })
+        admin.req('/api/sys/dictype/page?dicId=S94FM367XG', {}, function (data) {
+            var datas = data.data.list;
+            $.each(datas, function (index, item) {
+                $('#intimacy').append(new Option(item.dicTypeName, item.id));
+            });
+            if (parent.parentData.effectId) {
+                $('#intimacy').val(parent.parentData.intimacyId);
+            }
+            layui.form.render("select");
+        }, { method: 'get' })
+        form.on('select(intimacy)', function (data) {
+            var texts = data.elem[data.elem.selectedIndex].text;
+            $('#intimacyName').val(texts);
+        })
+        //选择企业
+        $('#enterpriseName').on('click', function () {
+            function deptName(data) {
+            }
+            dept2(deptName)
+        })
+    })
+    //获取企业的
+    function dept2(callback) {
+        layer.open({
+            type: 2,
+            id: 'orgsSelect',
+            title: false,
+            moveOut: true,
+            content: 'components/enterprise/company.html',
+            area: ['50%', '70%'],
+            btn: ['确定', '取消'],
+            yes: function (index, layero) {
+                $('#enterpriseId').val(company.id);
+                $('#enterpriseName').val(company.enterpriseName);
+                $('#enterpriseProvince').val(company.enterpriseProvince);
+                $('#enterpriseDomain').val(company.enterpriseDomain);
+                $('#enterpriseAddress').val(company.enterpriseAddress);
+                layer.close(index);
+            },
+            resize: false
+        });
+    }
+    function getValue(obj) {
+        company = obj;
+    }
+    // 取消按钮
+    $('#menuCancle_user').on('click', function () {
+        layui.admin.closePopupCenter();
+    });
+    //时间戳转换年月日
+    function timestampToTime(timestamp) {
+        var date = new Date(timestamp);
+        Y = date.getFullYear() + '-';
+        M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+        D = (date.getDate() + 1 < 10 ? '0' + date.getDate() : date.getDate());
+        return Y + M + D;
+    }
+</script>

@@ -1,0 +1,186 @@
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<link rel="stylesheet" href="assetsInfo/css/report.css">
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+
+    .titDivbox {
+        width: 90%;
+        margin: auto;
+        position: relative;
+    }
+
+    .titDiv {
+        width: 100%;
+        font-size: 16px;
+        font-weight: bold;
+        color: #888;
+        position: absolute;
+        top: 25px;
+    }
+
+    .tit01,
+    .tit02 {
+        width: 50%;
+        float: left;
+        text-align: center;
+    }
+
+    .botTable {
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+
+    .manageChart {
+        height: 480px;
+        width: 96%;
+    }
+
+    @media screen and (min-width: 1366px) and (max-width: 1920px) {
+        .manageChart {
+            height: 400px;
+            width: 96%;
+        }
+    }
+
+    @media screen and (min-width: 1920px) {
+        .manageChart {
+            height: 480px;
+            width: 96%;
+        }
+    }
+    @media screen and (max-width: 1366px) {
+        .manageChart{
+            height:400px;
+        }
+    }
+    .searchBtn{
+        margin-top: 10px;
+        margin-left: 38px;
+        height:29px !important;
+        line-height: 29px !important;
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span class="layui-card-header-title"><strong>业务经营情况</strong></span>
+                <!-- <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-sm exportbtn">导出PPT</a> -->
+            </div>
+
+            <div class="layui-row">
+                <div class="layui-col-md2">
+                    <input type="text" class="searchInput text" placeholder="请输入" id="searchText">
+
+                </div>
+                <div class="layui-col-md3" style="text-align: left">
+                    <button type="button" class="searchBtn layui-btn layui-btn-primary" id="searchInfo" >查询</button>
+                </div>
+            </div>
+
+            <div class="botTable">
+
+                <table id="tableContent-form" lay-filter="tableContent-form"></table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+
+<script>
+    layui.use(['table'], function() {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer,
+            thisYear=new Date().getFullYear(),
+            month = new Date().getMonth()+1;
+        var index = layer.load(2);
+        // 渲染表格
+        function tableInit(search) {
+            if (!search) {
+                search = {};
+            }
+            table.render({
+                elem: '#tableContent-form',
+                url: admin.formatUrl('/api/business/tableReport/getBusinessStatus?thisYear='+thisYear+'&startMonth=1&endMonth=12'), //数据接口
+                method: 'GET',
+                parseData: function (res) { //res 即为原始返回的数据
+                    for (var i = 0; i <res.data.list.length ; i++) {
+                        res.data.list[i].executionRate=(res.data.list[i].executionRate*100).toFixed(2)+'%';
+                       // res.data.list[i].workTime=(res.data.list[i].workTime).toFixed(2);
+                    }
+                    layer.close(index);
+                    // 返回结果，进行渲染表格
+                    return {
+                        "count": res.data.count,
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                request: {
+                    pageName: 'pageNo',
+                    limitName: 'pageSize'
+                },
+                cols: [
+                    [{
+                        title: '序号',
+                        type: 'numbers',
+                        fixed:'left',
+                        align: 'center'
+                    },{
+                        title: '业务名称',
+                        field: 'businessName',
+                        align: 'center'
+                    }, {
+                        title: '当年累计收入',
+                        field: 'allInvoice',
+                        align: 'center'
+                    }, {
+                        title: '当年收入预算',
+                        field: 'revenueBudget',
+                        align: 'center'
+                    }, {
+                        title: '预算执行率',
+                        field: 'executionRate',
+                        align: 'center'
+                    }, {
+                        title: '实际工时',
+                        field: 'workTime',
+                        align: 'center'
+                    }, {
+                        title: '人员数量',
+                        field: 'personCount',
+                        align: 'center'
+                    }, {
+                        title: '主管',
+                        field: 'pmName',
+                        align: 'center'
+                    }]
+                ],
+                page: true,
+                limit: 10, //显示的数量
+                limits:[10,15,20,25,30],
+                where: search
+            });
+        }
+
+        tableInit();
+        $("#searchInfo").click(function(){
+            tableInit({"businessName":$('#searchText').val()});
+            });
+    });
+</script>

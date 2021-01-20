@@ -1,0 +1,780 @@
+<style>
+    .selectContract {
+        height: 28px;
+        border: 1px solid #999;
+        border-radius: 3px;
+    }
+</style>
+<div class="layui-row">
+    <div class="layui-col-md12">
+        <div class="layui-card p-main">
+            <!-- 卡片容器 -->
+            <div class="layui-card-body" style="height: auto; overflow: hidden;">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar">
+                        <input type="hidden" id="processType">
+                        <input type="hidden" id="departmentName">
+                        <div class="layui-inline">
+                            <span>冻结方向：</span>
+                            <div class="layui-inline" style="width: 70px;">
+                                <select name="colsDir" id="colsDir" lay-filter="colsDir">
+                                    <option value="forward">前</option>
+                                    <option value="behind">后</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <span>冻结列数：</span>
+                            <div class="layui-inline" style="width: 70px;">
+                                <select name="colsNum" id="colsNum" lay-filter="colsNum">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- 右侧 -->
+                        <div class="layui-inline layui-pull-right">
+                            <div class="layui-inline">
+                                <button id="btn_add_contract" class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_add_user" lay-submit>
+                                    <i class="layui-icon layui-icon-add-1"></i>新增
+                                </button>
+
+                                <button id="btn_upload_contract" class="layui-btn layui-btn-sm  layui-btn-primary" lay-filter="btn_upload_project" lay-submit>
+                                    <i class="layui-icon layui-icon-upload-circle"></i>上传
+                                </button>
+
+                                <button id="btn_download_contract" class="layui-btn layui-btn-sm  layui-btn-primary" lay-filter="btn_download_project" lay-submit>
+                                    <i class="layui-icon layui-icon-download-circle"></i>下载
+                                </button>
+
+                                <button id="btn_del_contract_batch" class="layui-btn layui-btn-sm layui-btn-danger" lay-filter="btn_del_user_batch" lay-submit>
+                                    <i class="layui-icon layui-icon-delete"></i>删除
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 下部表格容器 -->
+                <table id="tableContent-confirmContract" layui-hide lay-filter="tableContent-confirmContract"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" id="conState">
+    <input type="hidden" value={{d.conState}}>
+    <select name="conState_selected" class="selectContract" lay-filter="conState_selected" lay-ignore>
+        <option value="">-- 请选择 --</option>
+        <option value="终止">终止</option>
+        <option value="继续执行">继续执行</option>
+    </select>
+</script>
+
+<script type="text/html" id="conType1">
+    <input type="hidden" value={{d.conType1}}>
+    <select name="conType1_selected" class="selectContract" lay-filter="conType1_selected" lay-ignore>
+        <option value="">-- 请选择 --</option>
+        <option value="有关课题项目">有关课题项目</option>
+        <option value="有关成本项目">有关成本项目</option>
+    </select>
+</script>
+
+<script type="text/html" id="conType">
+    <input type="hidden" value={{d.conType}}>
+    <select name="conType_selected" class="selectContract" lay-filter="conType_selected" lay-ignore>
+        <option value="">-- 请选择 --</option>
+        <option value="固定资产">固定资产</option>
+        <option value="无形资产">无形资产</option>
+        <option value="试验车">试验车</option>
+        <option value="库存商品">库存商品</option>
+    </select>
+</script>
+
+<script type="text/html" id="isStock">
+    <input type="hidden" value={{d.isStock}}>
+    <select name="isStock_selected" class="selectContract" lay-filter="isStock_selected" lay-ignore>
+        <option value="">-- 请选择 --</option>
+        <option value="是">是</option>
+        <option value="否">否</option>
+    </select>
+</script>
+
+<script>
+    layui.use(['table', 'upload', 'config', 'jquery', 'laydate'], function() {
+        var table = layui.table,
+            form = layui.form,
+            admin = layui.admin,
+            config = layui.config,
+            $ = layui.jquery,
+            laydate = layui.laydate,
+            upload = layui.upload;
+        //表格权限
+        var tableAuth = {};
+        var roles = config.getAccount().roles; //角色数组
+        var orgs = config.getAccount().orgs; //部门数组
+        var processType = $("#loadWithParams").val();
+        var orgName = '';
+        var searchObj = {};
+        if (orgs.length > 0) {
+            orgName = orgs[0].name;
+        }
+        if (orgName != '财务部') {
+            searchObj.myDepartment = true;
+        }
+
+        //获取表格权限并渲染表格
+        var getTableAuth = function() {
+            
+            var auth = 0; //0:：财务，1：部长，2：本部长
+            //如果是已办事项，变为只读
+            if (processType == "finish") {
+                auth = 2;
+                $('#btn_add_contract').css('display', 'none');
+                $('#btn_del_contract_batch').css('display', 'none');
+                $('#btn_upload_contract').css('display', 'none');
+                $('#btn_download_contract').css('display', 'none');
+            } else {
+                for (var i = 0; i < roles.length; i++) {
+                    if (roles[i].name == '财务人员' || roles[i].name == '管理员') {
+                        break;
+                    }
+                    if (roles[i].name == '部长' || roles[i].name == '副部长') {
+                        auth = 1;
+                        $('#btn_upload_contract').css('display', 'none');
+                        $('#btn_download_contract').css('display', 'none');
+                        break;
+                    }
+                    if (roles[i].name == '本部长' || roles[i].name == '副本部长') {
+                        auth = 2;
+                        $('#btn_add_contract').css('display', 'none');
+                        $('#btn_del_contract_batch').css('display', 'none');
+                        $('#btn_upload_contract').css('display', 'none');
+                        $('#btn_download_contract').css('display', 'none');
+                        break;
+                    }
+                }
+            }
+            admin.req('components/externalForm/contractDataAuth.json', {}, function(req) {
+                if (req.ok) {
+                    tableAuth = req.data[auth];
+                }
+                renderTable(searchObj, {
+                    "direction": "",
+                    "num": ""
+                });
+            });
+        };
+
+        //Select回显+权限控制
+        var setSelected = function(arr) {
+            for (var i = 0; i < arr.length; i++) {
+                $("[data-field = " + arr[i] + "]").children().each(function() {
+                    var value = $($(this).find("input")[0]).val();
+                    var select = $(this).children("select")[0];
+                    if (value != "null") {
+                        $(select).val(value);
+                    }
+                    if (!tableAuth[arr[i]]) {
+                        $(select).attr("disabled", "disabled");
+                    }
+                });
+            }
+        }
+
+        // 渲染左侧表格树
+        var renderTable = function(data, colsParam) {
+            if (!data) {
+                data = {};
+            }
+            //如果部门不为空，则只查询该部门数据
+            var departmentName = $('#departmentName').val();
+            if(departmentName!=null&&departmentName!=''){
+                data.deptId = departmentName;
+            }
+            var tableIns = table.render({
+                // table参数
+                elem: '#tableContent-confirmContract',
+                //url: admin.formatUrl('components/externalForm/contractData.json'),
+                url: admin.formatUrl('/api/budget/buinessPerfonmanceContract'),
+                where: data,
+                //height: 490,
+                parseData: function(res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        //"count": res.data.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+                },
+                cols: getCols(colsParam.direction, colsParam.num),
+                page: false,
+                height: 450,
+
+                done: function(res, curr, count) {
+                    if (orgName != '财务部') {
+                        //锁定行的权限控制
+                        var dataCache = table.cache['tableContent-confirmContract'],
+                            el = this.elem.next('.layui-table-view');
+                        $.each(dataCache, function(ind, item) {
+                            if (item.islock === '是') {
+                                var i = item.LAY_TABLE_INDEX;
+                                el.find('tr[data-index="' + i + '"]').find('input[name="layTableCheckbox"]')
+                                    .attr({
+                                        name: 'layTableCheckboxDisabled',
+                                        disabled: 'disabled'
+                                    })
+                            }
+                        });
+                    }
+
+                    //下拉回显及权限控制
+                    setSelected(['conState', 'conType1', 'conType', 'isStock']);
+                    //修复表格中放下拉框，下拉框下部被隐藏一部分的bug
+                    var tableElem = this.elem.next('.layui-table-view');
+                    layui.each(tableElem.find('tbody select'), function(index, item) {
+                        var elem = $(item);
+                        elem.parents('div.layui-table-cell').css('overflow', 'visible');
+                    });
+                    //重新渲染表格下拉框
+                    form.render();
+                    //修复表格固定列的问题
+                    $(window).resize();
+                    //初始化表格编辑校验
+                    LayValidator.init({
+                        filter: 'tableContent-confirmContract', //与待校验table元素的lay-filter属性对应
+                        cols: [ //需要校验的列设置
+                            {
+                                field: 'deptName',
+                                maxLength: 40 //非必填，限制输入长度
+                            }, {
+                                field: 'contractNo',
+                                maxLength: 40,
+                                notEmpty: true
+                            }, {
+                                field: 'secondParty',
+                                maxLength: 40,
+                                notEmpty: true
+                            }, {
+                                field: 'conMoney',
+                                type: 'float2',
+                                notEmpty: true
+                            }, {
+                                field: 'wkpje',
+                                type: 'float2',
+                                notEmpty: true
+                            }, {
+                                field: 'wzcje',
+                                type: 'float2',
+                                notEmpty: true
+                            }, {
+                                field: 'yjbxfpje2018s4',
+                                type: 'float2',
+                                notEmpty: true
+                            }, {
+                                field: 'yjzfje2018s4',
+                                type: 'float2',
+                                notEmpty: true
+                            }, {
+                                field: 'yjbxfpje2019',
+                                type: 'float2',
+                                notEmpty: true
+                            }, {
+                                field: 'yjzfje2019',
+                                type: 'float2',
+                                notEmpty: true
+                            }, {
+                                field: 'yjbxfpje2020',
+                                type: 'float2',
+                                notEmpty: true
+                            }, {
+                                field: 'yjzfje2020',
+                                type: 'float2',
+                                notEmpty: true
+                            }, {
+                                field: 'zerenren',
+                                maxLength: 10
+                            }, {
+                                field: 'remark',
+                                maxLength: 450
+                            }
+                            //some other cols..
+                        ],
+                        success: function(obj) {
+                            var updateData = {
+                                id: obj.data.id
+                            };
+                            updateData[obj.field] = obj.value;
+                            admin.req('/api/budget/buinessPerfonmanceContract', updateData, function(res) {
+                                if (res.ok) {
+
+                                } else {
+                                    layer.msg('更新失败' + res.message, {
+                                        icon: 5
+                                    });
+                                }
+                            }, {
+                                method: 'PUT'
+                            });
+                        },
+                        error: function(obj) {},
+                        final: function(obj) {}
+                    });
+                },
+                // 列宽最少 120，防止在小屏幕上显示不全列标题
+                cellMinWidth: 120
+            });
+        }
+        // 初始化，执行一次渲染表格树
+        setTimeout(function() {
+            getTableAuth();
+        }, 100);
+
+        //获得表格渲染所需列数据
+        function getCols(direction, num) {
+            var cols = [
+                [{
+                    checkbox: true,
+                    fixed: 'left',
+                    rowspan: '2'
+                }, {
+                    type: 'numbers',
+                    title: '序号',
+                    fixed: 'left',
+                    rowspan: '2'
+                }, {
+                    field: 'id',
+                    hide: true
+                }, {
+                    field: 'deptId',
+                    title: '部门',
+                    align: 'center',
+                    rowspan: '2',
+                    width: 150,
+                    edit: tableAuth.deptName
+                }, {
+                    field: 'contractNo',
+                    title: '合同编号',
+                    align: 'center',
+                    width: '160',
+                    rowspan: '2',
+                    edit: tableAuth.contractNo
+                }, {
+                    field: 'secondParty',
+                    title: '乙方',
+                    align: 'center',
+                    width: '160',
+                    rowspan: '2',
+                    edit: tableAuth.secondParty
+                }, {
+                    field: 'startDate',
+                    title: '生效日期',
+                    align: 'center',
+                    width: '160',
+                    rowspan: '2',
+                    edit: tableAuth.startDate
+                }, {
+                    field: 'endDate',
+                    title: '终止日期',
+                    align: 'center',
+                    width: '160',
+                    rowspan: '2',
+                    edit: tableAuth.endDate
+                }, {
+                    field: 'contractName',
+                    title: '合同名称',
+                    align: 'center',
+                    rowspan: '2',
+                    width: 260,
+                    edit: tableAuth.contractName
+                }, {
+                    field: 'conMoney',
+                    title: '合同金额',
+                    align: 'center',
+                    width: '160',
+                    rowspan: '2',
+                    edit: tableAuth.conMoney
+                }, {
+                    field: 'conState',
+                    templet: '#conState',
+                    title: '合同状态',
+                    align: 'center',
+                    width: 125,
+                    rowspan: '2'
+                }, {
+                    field: 'conType1',
+                    templet: '#conType1',
+                    title: '合同类型1',
+                    align: 'center',
+                    width: '200',
+                    rowspan: '2'
+                }, {
+                    field: 'conType',
+                    templet: '#conType',
+                    title: '合同类型',
+                    align: 'center',
+                    rowspan: '2'
+                }, {
+                    field: 'isStock',
+                    templet: '#isStock',
+                    title: '库存商品2018年前是否处置',
+                    align: 'center',
+                    width: '220',
+                    rowspan: '2'
+                }, {
+                    field: 'ykphzxqk',
+                    title: '已开票和执行金额',
+                    align: 'center',
+                    colspan: '2'
+                }, {
+                    field: 'yjbxfpje',
+                    title: '预计报销发票金额和预计支付金额',
+                    align: 'center',
+                    colspan: '6'
+                }, {
+                    field: 'zerenren',
+                    title: '责任人',
+                    align: 'center',
+                    rowspan: '2',
+                    edit: tableAuth.zerenren
+                }, {
+                    field: 'remark',
+                    title: '备注',
+                    align: 'center',
+                    rowspan: '2',
+                    edit: tableAuth.remark
+                }],
+                [{
+                    field: 'wkpje',
+                    title: '未开票金额',
+                    align: 'center',
+                    edit: tableAuth.wkpje
+                }, {
+                    field: 'wzcje',
+                    title: '未支出金额',
+                    align: 'center',
+                    edit: tableAuth.wzcje
+                }, {
+                    field: 'yjbxfpje2018s4',
+                    title: '2018年10-12月预计报销发票金额',
+                    align: 'center',
+                    width: 240,
+                    edit: tableAuth.yjbxfpje2018s4
+                }, {
+                    field: 'yjzfje2018s4',
+                    title: '2018年10-12月预计支付金额',
+                    align: 'center',
+                    width: 220,
+                    edit: tableAuth.yjzfje2018s4
+                }, {
+                    field: 'yjbxfpje2019',
+                    title: '2019年预计报销发票金额',
+                    align: 'center',
+                    width: 200,
+                    edit: tableAuth.yjbxfpje2019
+                }, {
+                    field: 'yjzfje2019',
+                    title: '2019年预计支付金额',
+                    align: 'center',
+                    width: 180,
+                    edit: tableAuth.yjzfje2019
+                }, {
+                    field: 'yjbxfpje2020',
+                    title: '2020年预计报销发票金额',
+                    align: 'center',
+                    width: 200,
+                    edit: tableAuth.yjbxfpje2020
+                }, {
+                    field: 'yjzfje2020',
+                    title: '2020年预计支付金额',
+                    align: 'center',
+                    width: 180,
+                    edit: tableAuth.yjzfje2020
+                }]
+            ]
+            if (direction == "forward") {
+                for (var i = 0; i <= num; i++) {
+                    cols[0][i].fixed = "left";
+                }
+            } else if (direction == "behind") {
+                for (var i = cols[0].length - 1; i >= (cols[0].length - num); i--) {
+                    cols[0][i].fixed = "right";
+                }
+            }
+            return cols;
+        }
+
+        //监听冻结方向下拉框选择
+        form.on('select(colsDir)', function(data) {
+            var option;
+            if (data.value == "forward") {
+                option = '<option value="1">1</option>' +
+                    '<option value="2">2</option>' +
+                    '<option value="3">3</option>' +
+                    '<option value="4">4</option>' +
+                    '<option value="5">5</option>';
+            } else {
+                option = '<option value="1">1</option>' +
+                    '<option value="2">2</option>';
+            }
+            $("#colsNum").empty().append(option);
+            form.render("select");
+        });
+
+        //layui下拉框监听选择
+        form.on('select(colsNum)', function(data) {
+            var params = {};
+            params.direction = $("#colsDir").val();
+            params.num = data.value;
+            renderTable(searchObj, params);
+        });
+
+        //下拉框监听修改提交
+        $("body").on("change", ".selectContract", function() {
+            var id = $(this).parent().parent().siblings("[data-field='id']")[0].innerText;
+            var updateData = {
+                id: id
+            };
+            var this_field = $(this).attr('name');
+            this_field = this_field.substr(0, this_field.length - 9);
+            updateData[this_field] = $(this).val();
+            admin.req('/api/budget/buinessPerfonmanceContract', updateData, function(res) {
+                if (res.ok) {
+
+
+                } else {
+                    layer.msg('更新失败' + res.message, {
+                        icon: 5
+                    });
+                }
+            }, {
+                method: 'PUT'
+            });
+        });
+
+        //        setTimeout(function() {
+        //            var td = $('#tableContent-confirmContract').next().find('.layui-table-fixed tr[data-index="0"] td input');
+        //            
+        //            td.next().remove();
+        //            
+        //        }, 300);
+
+        //        table.on('checkbox(tableContent-confirmProject)', function(obj) {
+        //            if (obj.checked) {
+        //                var str = obj.tr.selector.replace('body', 'fixed');
+        //                var td = $('#tableContent-confirmProject').next().find('.' + str + ' td input');
+        //                td.next().click();
+        //            }
+        //            console.log(obj.checked); //当前是否选中状态
+        //            console.log(obj.data); //选中行的相关数据
+        //            console.log(obj.tr.selector); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
+        //
+        //            obj.checked = false;
+        //        });
+
+        // 新增 按钮事件
+        $('#btn_add_contract').on('click', function() {
+            var orgs = config.getAccount().orgs;
+            var org = "";
+            if (orgs.length > 0) {
+                org = orgs[0].name;
+            }
+
+            layer.open({
+                type: 1,
+                area: ['500px', '65%'], //宽高
+                success: function (layero, index) {
+                    laydate.render({
+                        elem: '#startDate',
+                        type: 'date'
+                    });
+                    laydate.render({
+                        elem: '#endDate',
+                        type: 'date'
+                    });
+                    //添加form标识
+                    layero.addClass("layui-form");
+                    layero.find(".layui-layer-btn0").attr("lay-filter", "addEdit").attr("lay-submit", "").css("background-color", "#1BB394");
+                },
+                content: '<div class="layui-tpl-container layui-form" style="padding-bottom: 60px;">\n' +
+                '    <div class="layui-form-item tpl-password">\n' +
+                '        <label class="layui-form-label"><span style="color: red;">*</span> 合同编号</label>\n' +
+                '        <div class="layui-input-block">\n' +
+                '            <input type="text" name="contractNo" placeholder="请输入合同编号" class="layui-input" lay-verify="required">\n' +
+                '        </div>\n' +
+                '    </div>\n' +
+                '    <div class="layui-form-item tpl-password">\n' +
+                '        <label class="layui-form-label"><span style="color: red;">*</span> 乙方</label>\n' +
+                '        <div class="layui-input-block">\n' +
+                '            <input type="text" name="secondParty" placeholder="请输入乙方" class="layui-input" lay-verify="required">\n' +
+                '        </div>\n' +
+                '    </div>\n' +
+                '    <div class="layui-form-item tpl-password">\n' +
+                '        <label class="layui-form-label"><span style="color: red;">*</span> 生效日期</label>\n' +
+                '        <div class="layui-input-block">\n' +
+                '            <input type="text" name="startDate" id="startDate" placeholder="请输入生效日期" class="layui-input" lay-verify="required">\n' +
+                '        </div>\n' +
+                '    </div>\n' +
+                '    <div class="layui-form-item tpl-password">\n' +
+                '        <label class="layui-form-label"><span style="color: red;">*</span> 终止日期</label>\n' +
+                '        <div class="layui-input-block">\n' +
+                '            <input type="text" name="endDate" id="endDate" placeholder="请输入终止日期" class="layui-input" lay-verify="required">\n' +
+                '        </div>\n' +
+                '    </div>\n' +
+                '    <div class="layui-form-item tpl-password">\n' +
+                '        <label class="layui-form-label"><span style="color: red;">*</span> 合同名称</label>\n' +
+                '        <div class="layui-input-block">\n' +
+                '            <input type="text" name="contractName" placeholder="请输入合同名称" class="layui-input" lay-verify="required">\n' +
+                '        </div>\n' +
+                '    </div>\n' +
+                '\n' +
+                '    <div class="layui-form-item tpl-password">\n' +
+                '        <label class="layui-form-label"><span style="color: red;">*</span> 合同金额</label>\n' +
+                '        <div class="layui-input-block">\n' +
+                '            <input type="text" name="conMoney" placeholder="请输入合同金额" class="layui-input" lay-verify="required|number">\n' +
+                '        </div>\n' +
+                '    </div>\n' +
+                '\n' +
+                '    <div class="layui-form-item tpl-password">\n' +
+                '        <label class="layui-form-label"><span style="color: red;">*</span> 未开票金额</label>\n' +
+                '        <div class="layui-input-block">\n' +
+                '            <input type="text" name="wkpje" placeholder="请输入未开票金额" class="layui-input" lay-verify="required|number">\n' +
+                '        </div>\n' +
+                '    </div>\n' +
+                '\n' +
+                '    <div class="layui-form-item tpl-password">\n' +
+                '        <label class="layui-form-label"><span style="color: red;">*</span> 未支出金额</label>\n' +
+                '        <div class="layui-input-block">\n' +
+                '            <input type="text" name="wzcje" placeholder="请输入未支出金额" class="layui-input" lay-verify="required|number">\n' +
+                '        </div>\n' +
+                '    </div>\n' +
+                '</div>',
+                btn: ['提交', '关闭'],
+                btnAlign: 'c', // l => 居左, c => 居中, r => 居右, 默认居右,
+                // 每个按钮触发的事件
+                btn1: function (index) {
+                    form.on("submit(addEdit)", function (formData) {
+                        var d = formData.field ;
+                        d.deptId = org;
+                        admin.req('/api/budget/buinessPerfonmanceContract', d, function(res) {
+                            if (res.ok) {
+                                layer.msg('新增成功！');
+                                layer.close(index);
+                                table.reload('tableContent-confirmContract', {
+                                    where: {
+                                        reload: new Date().getTime()
+                                    }
+                                });
+                            } else {
+                                layer.msg('更新失败' + res.message, {
+                                    icon: 5
+                                });
+                            }
+                        }, {
+                            method: 'POST'
+                        })
+                    })
+
+                }
+            });
+
+
+        });
+
+        // 下载 按钮事件
+        $('#btn_download_contract').on('click', function() {
+            var url = '/api/budget/buinessPerfonmanceContract/excelExport';
+            url += '?fileName='+'2018年合同执行情况_'+getNowFormatDate();
+            window.location.href = url;
+        });
+
+        //文件上传
+        upload.render({
+            elem: '#btn_upload_contract',
+            url: '/api/budget/buinessPerfonmanceContract/excelImport',
+            field: 'file',
+            accept: 'file',
+            exts: 'xls|xlsx',
+            acceptMime: 'application/vnd.ms-excel,application/x-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            done: function(res) {
+                if (res.ok) {
+                    layer.msg('数据上传成功！', {
+                        icon: 1
+                    });
+                    table.reload('tableContent-confirmContract', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                } else {
+                    layer.msg('数据上传失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            }
+        });
+
+        // 批量删除 按钮事件
+        $('#btn_del_contract_batch').on('click', function() {
+            var checkStatus = table.checkStatus('tableContent-confirmContract');
+            if (checkStatus.data.length === 0) {
+                return layer.msg('请选择要删除的数据！', {
+                    icon: 0
+                });
+            }
+            var delArr = [];
+            for (var i = 0; i < checkStatus.data.length; i++) {
+                delArr.push(checkStatus.data[i].id);
+            }
+
+            layer.confirm('确定删除选中的 ' + checkStatus.data.length + ' 条数据吗？', {
+                icon: 3,
+                title: '提示'
+            }, function() {
+                admin.req('/api/budget/buinessPerfonmanceContract/deleteBatch?ids=' + delArr.join(','), {},
+                    function(data) {
+                        if (data.ok) {
+                            layer.msg('数据删除成功！', {
+                                icon: 1
+                            });
+                            table.reload('tableContent-confirmContract', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        } else {
+                            return layer.msg('数据删除失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: 'delete'
+                    });
+            });
+        });
+        
+        //获取当前时间，格式YYYY-MM-DD
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "";
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = year + seperator1 + month + seperator1 + strDate;
+            return currentdate;
+        }
+
+    });
+
+</script>

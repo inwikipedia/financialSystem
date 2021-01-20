@@ -1,0 +1,56 @@
+<style>
+    .layui-layer-page .layui-layer-content{
+        overflow: visible !important;
+    }
+</style>
+<div class="layui-tpl-container" style="height: 350px" >
+    <div class="layui-form ">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 所属项目</label>
+            <div class="layui-input-block memberNames-loading">
+                <select name="parentProjectId" id='project_blong' xm-select="project_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-radio="">
+                    <option value="">选择所属项目</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 类型</label>
+            <div class="layui-input-block">
+                <select name="feeType" id="feeType"  xm-select="feeType_blong" data-placeholder="类型"  xm-select-skin="normal"   lay-verify="required" xm-select-radio="">
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 内容</label>
+            <div class="layui-input-block">
+                <input type="text" name="feeContent" placeholder="请输入内容(长度最大是200)" class="layui-input" lay-verify="required" maxlength="200">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 参与人员</label>
+            <div class="layui-input-block memberNames-loading">
+                <select name="participateMembers" xm-select="participateMembers_pop"  xm-select-search  xm-select-skin="normal" xm-select-direction="down" lay-verify="required">
+                    <option value="">参与人员</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 金额（￥）</label>
+            <div class="layui-input-block">
+                <input type="text" name="expensesAmount" placeholder="请输入金额(最大为100000000)" class="layui-input"  lay-verify="required|number" maxlength="9">
+            </div>
+        </div>
+        <!--传递过来的操作类型-->
+        <input type="text" name="handleType" id="handleType" style="display: none;">
+        <!-- 如果是编辑传过来的id-->
+        <input type="text" name="id" id="id" style="display: none;">
+        <div class="layui-form-item" style="text-align: center;">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="btn-reverse-save">保存</button>
+            <button class="layui-btn layui-btn-primary" id="btn-reverse-cancel">取消</button>
+        </div>
+    </div>
+</div>
+

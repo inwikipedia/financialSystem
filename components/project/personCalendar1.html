@@ -1,0 +1,799 @@
+<link rel='stylesheet' href='../../assetsInfo/libs/fullcalendar/fullcalendar.css' />
+<link rel="stylesheet" href="../../assetsInfo/css/duty.css">
+<link rel="stylesheet" href="assetsInfo/libs/chosen/chosen.min.css">
+<!-- zTree 样式 -->
+<link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/metroStyle.css">
+
+<script src='../../assetsInfo/libs/fullcalendar/moment.min.js'></script>
+<script src='../../assetsInfo/libs/fullcalendar/fullcalendar.js'></script>
+<script src="../../assetsInfo/libs/fullcalendar/lunar.js"></script>
+<script src="../../assetsInfo/libs/fullcalendar/zh-cn.js"></script>
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<script src="assetsInfo/libs/chosen/chosen.jquery.min.js"></script>
+
+<div >
+
+
+    <div class="" style="line-height:30px;margin-bottom:10px;font-size: 14px;">
+        <!--<label>开始时间：</label>-->
+        <!--<input type="text" style="width:150px;;height: 28px;padding-left:10px;"  id="planStartTime" placeholder="开始时间"  lay-verify="required">-->
+        <!--<label style="margin-left: 20px;">结束时间：</label>-->
+        <!--<input type="text" style="width:150px;height: 28px;padding-left:10px;"  id="planEndTime" placeholder="结束时间"   lay-verify="required">-->
+        <button style="margin-left: 20px;width: 250px;" type="button" class="layui-btn layui-btn-sm" id="upload-daily">
+            <i class="layui-icon layui-icon-upload-drag"></i>导入考勤表并数据清洗
+        </button>
+        <label style="color: #888;">支持zip压缩格式(文件最大为15MB)</label>
+        <!--<button  style="margin-left: 20px;" class="layui-btn layui-btn-sm layui-btn-danger" id="btn-export">-->
+            <!--<a download="日报导出.xlms" style="color: #000">-->
+                <!--<i class="layui-icon  layui-icon-download-circle"></i>    导出-->
+            <!--</a>-->
+        <!--</button>-->
+    </div>
+
+
+</div>
+
+
+<div class="layui-row layui-col-space15" style="height: 100%">
+    <div class="layui-col-md12 card-show-list" style="height: 100%">
+        <div class="layui-card" style="height: 98%;padding-top: 5px;padding-bottom: 25px;">
+            <div id="main"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 填写日报弹窗 -->
+<div id="addEventTpl" class="layui-form" lay-filter="addEventTpl" style="display: none;padding: 20px;margin-top: 15px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red;">*</span> 事件名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="eventName" id="eventName" placeholder="请输入任务名称" class="layui-input" lay-verify="required">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="description"><span style="color: red;">*</span> 项目</label>
+        <div class="layui-input-block">
+            <select name="projectId" id="projectId" lay-ignore data-placeholder="选择项目"></select>
+        </div>
+    </div>
+    <table id="task" lay-filter="task"></table>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="description"><span style="color: red;">*</span> 工作描述</label>
+        <div class="layui-input-block">
+            <textarea type="text" placeholder="输入日程内容" class="layui-textarea" id="workDescription" name="workDescription" lay-verify="required"></textarea>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<!-- 任务列表复选框 -->
+<script type="text/html" id="isCompleteTpl">
+    <input type="checkbox" name="isComplete" value="未完成" lay-filter="isComplete">
+</script>
+
+<!-- zTree js 文件 -->
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+
+<script>
+    let callback2 = null;
+    // layui初始化
+    layui.use(['admin', 'layer', 'form', 'laydate', 'config','formSelects','upload'], function() {
+        var admin = layui.admin,
+            layer = layui.layer,
+            form = layui.form,
+            formSelects = layui.formSelects,
+            laydate = layui.laydate,
+            config = layui.config,
+            upload = layui.upload,
+            table = layui.table;
+        // 人员id
+        var personId = admin.GetRequest().usid;
+        var personName = admin.GetRequest().usname;
+        // 日期框初始化
+
+        laydate.render({
+            elem: '#planStartTime'
+        });
+        laydate.render({
+            elem: '#planEndTime'
+        });
+        upload.render({
+            elem: '#upload-daily', //绑定元素,
+            url: '/api/attendance/attendanceInfo/AttendanceImport', //上传接口
+            accept: 'file',
+            acceptMime: 'xlsx/xlsm',
+            before: function(obj) {
+                layer.load(); //上传loading
+            },
+            done: function(res) {
+
+                layer.closeAll();
+
+                if (res.respCode == 0) {
+                    layer.msg('导入成功！', {
+                        icon: 1
+                    })
+                } else if(res.respCode == -11) {
+                    return layer.msg('导入失败：' + res.message, {
+                        icon: 5
+                    });
+                } else if(res.respCode == -12) {
+                    return layer.msg('导入失败：' + res.message, {
+                        icon: 5
+                    });
+                }else if(res.respCode == -13) {
+                    return layer.msg('导入失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+               if(res.data!=null && res.data!=""){
+
+                   window.open("/ADC_info/api/attendance/attendanceInfo/AttendanceExport?url="+res.data)
+
+               }
+            },
+            error: function(res) {
+
+                //请求异常回调
+                layer.closeAll();
+                return layer.msg('导入出现错误，请重试！', {
+                    icon: 5
+                });
+            }
+        });
+        function test(obj) {
+
+
+
+
+        }
+        // 渲染任务列表
+        function renderTable(url, data, isEdited) {
+            if (!data) {
+                data = {};
+            }
+            // 加载动画
+            admin.showLoading('.layui-body');
+            table.render({
+                // table参数
+                id: 'task',
+                elem: '#task',
+                url: admin.formatUrl(url),
+                where: data,
+                parseData: function(res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        //"count": res.data.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+                },
+                cols: [
+                    [{
+                        type: 'checkbox'
+                    }, {
+                        type: 'numbers',
+                        title: '序号'
+                    }, {
+                        field: 'childrenName',
+                        title: '任务',
+                        align: 'center'
+                    }, {
+                        field: 'taskName',
+                        title: '任务',
+                        align: 'center',
+                        hide: true
+                    }, {
+                        field: 'workTime',
+                        title: '工时',
+                        align: 'center',
+                        edit: isEdited
+                    }, {
+                        field: 'taskStatus',
+                        title: '是否完成',
+                        templet: '#isCompleteTpl',
+                        align: 'center'
+                    }]
+                ],
+                page: false,
+                // 渲染表格完成后，去除加载动画
+                done: function() {
+                    admin.removeLoading('.layui-body');
+                    $(window).resize();
+                    if (!isEdited) {
+                        $("[name='isComplete']").attr("disabled", "");
+                    }
+                },
+                // 列宽最少 120，防止在小屏幕上显示不全列标题
+                cellMinWidth: 80
+            });
+        }
+        // 公共弹层方法
+        function layerfn(title, content, calEvent,projectId) {
+            var btn = null;
+            if (title.substr(0, 4) == "日程详情") {
+                btn = ["关闭"];
+            } else {
+                btn = ['确定', '关闭'];
+            }
+            layer.open({
+                type: 1,
+                title: title,
+                content: $("#" + content),
+                area: '500px',
+                success: function(layero, index) {
+                    // 解决蒙层遮住全部页面bug
+                    var mask = $(".layui-layer-shade");
+                    mask.appendTo(layero.parent());
+                    var option = '<option value=""></option>';
+                    admin.req("/api/budget/projectSchedule/queryProjectByUserId", {}, function(res) {
+                        for (var i = 0; i < res.data.length; i++) {
+                            option += '<option value="' + res.data[i].id + '">' + res.data[i].name + '</option>';
+                        }
+                        $("#projectId").empty().append(option);
+                        $("#projectId").chosen({
+                            width: '100%'
+                        });
+                        if (title.substr(0, 4) == "新增日程") {
+                            //添加form标识
+                            layero.addClass("layui-form");
+                            layero.find(".layui-layer-btn0").attr("lay-filter", "btn-daily-save").attr("lay-submit", "");
+                            // 清空表单
+                            form.val("addEventTpl", {
+                                "eventName": "",
+                                "workDescription": ""
+                            });
+                            $("#projectId").val("");
+                            $("#projectId").trigger("chosen:updated");
+                            $("#task").next(".layui-table-view").remove();
+                            // 将表单变为可编辑状态
+                            $("#eventName").removeAttr("disabled").removeClass("layui-disabled");
+                            $("#workDescription").removeAttr("disabled").removeClass("layui-disabled");
+                            $("#projectId").prop('disabled', false).trigger("chosen:updated");
+                        } else if (title.substr(0, 4) == "日程详情") {
+                            form.val("addEventTpl", {
+                                "eventName": calEvent.title,
+                                "workDescription": calEvent.description
+                            });
+                            if (calEvent.projectId) {
+
+                                $("#projectId option[value='" + calEvent.projectId + "']").attr('selected', 'selected')
+                                $("#projectId").trigger("chosen:updated");
+                            }
+                            var arr = [];
+                            for (var i = 0; i < calEvent.childrenTaskName.length; i++) {
+                                var obj = {};
+                                obj.childrenName = calEvent.childrenTaskName[i];
+                                obj.workTime = calEvent.workTimeArray[i];
+                                obj.taskStatus = calEvent.taskStatusArray[i];
+                                arr.push(obj);
+                            }
+                            table.render({
+                                id: 'task',
+                                elem: '#task',
+                                url: '',
+                                data: arr,
+                                cols: [
+                                    [{
+                                        type: 'checkbox'
+                                    }, {
+                                        type: 'numbers',
+                                        title: '序号'
+                                    }, {
+                                        field: 'childrenName',
+                                        title: '任务',
+                                        align: 'center'
+                                    }, {
+                                        field: 'taskName',
+                                        title: '任务',
+                                        align: 'center',
+                                        hide: true
+                                    }, {
+                                        field: 'workTime',
+                                        title: '工时',
+                                        align: 'center',
+                                        edit: false
+                                    }, {
+                                        field: 'taskStatus',
+                                        title: '是否完成',
+                                        templet: '#isCompleteTpl',
+                                        align: 'center'
+                                    }]
+                                ],
+                                done: function() {
+                                    $("td[data-field = 'taskStatus']").each(function() {
+                                        if ($(this).attr("data-content") == '已完成') {
+                                            $(this).find('.layui-unselect').addClass('layui-form-checked');
+                                        }
+                                    })
+                                }
+                            });
+                            // 设置表单不可编辑状态
+                            $("#eventName").attr("disabled", "").addClass("layui-disabled");
+                            $("#workDescription").attr("disabled", "").addClass("layui-disabled");
+                            $("#projectId").prop('disabled', true).trigger("chosen:updated");
+                            $("input[name='isComplete']").attr("disabled", "").addClass("layui-disabled");
+                        }
+                        $("#projectId").hide();
+                    }, {
+                        method: "post"
+                    });
+                    // 重新渲染表单
+                    form.render();
+                },
+                btn: btn,
+                btnAlign: 'c',
+                btn1: function(index, layero) {
+                    if (title.substr(0, 4) == "日程详情") {
+                        layer.close(index);
+                    } else {
+                        form.on('submit(btn-daily-save)', function(obj) {
+                            var data = obj.field,
+                                elem = data.elem;
+
+                            var checkStatus = table.checkStatus('task');
+                            if (checkStatus.data.length === 0) {
+                                return layer.msg('请选择子任务', {
+                                    icon: 0
+                                });
+                            }
+                            data.taskIdArray = [];
+                            data.taskStatusArray = [];
+                            var status = $("input[name='layTableCheckbox']").next(".layui-form-checked");
+                            for (var j = 0; j < status.length; j++) {
+                                var value = $(status[j]).parent().parent().siblings("[data-field='taskStatus']").find("input[type='checkbox']").val();
+                                if (value) {
+                                    data.taskStatusArray.push(value);
+                                }
+                            }
+                            data.workTimeArray = [];
+                            for (var i = 0; i < checkStatus.data.length; i++) {
+                                data.taskIdArray.push(checkStatus.data[i].Id);
+                                // data.taskStatusArray.push(checkStatus.data[i].taskName);
+                                if (checkStatus.data[i].workTime) {
+                                    data.workTimeArray.push(checkStatus.data[i].workTime);
+                                } else {
+                                    return layer.msg('请输入任务工时', {
+                                        icon: 0
+                                    });
+                                }
+                            }
+                            var ajaxType = 'post';
+                            delete data.handleType;
+                            delete data.layTableCheckbox;
+                            delete data.isComplete;
+                            admin.req('/api/Daily/save', data, function(data) {
+                                $(elem).attr('disabled', false);
+                                if (data.ok) {
+                                    layer.msg('保存成功！', {
+                                        icon: 1
+                                    });
+                                    layer.close(index);
+                                    $('#main').fullCalendar('refetchEvents');
+                                } else {
+                                    return layer.msg('保存失败：' + data.message, {
+                                        icon: 5
+                                    });
+                                    layer.close(index);
+                                }
+                            }, {
+                                method: ajaxType
+                            });
+                            // return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                    }
+                }
+            })
+        }
+        $('#btn-export').on('click', function() {
+            let startTime =$('#planStartTime').val()
+            let endTime =$('#planEndTime').val()
+
+            window.open("/ADC_info/api/attendance/attendanceInfo/AttendanceExport?startDate="+startTime+"&endDate="+endTime+"&fileName=考勤异常信息.xls")
+        });
+
+        // 日历部分
+        $('#main').fullCalendar({
+            // customButtons: {
+            //     myCustomButton: {
+            //         text: '添加事件',
+            //         click: function() {
+            //             $("#endTimeBlock").addClass("layui-hide");
+            //             popMenu('add')
+            //             // layerfn("新增日程", "addEventTpl", {
+            //             //     time: "",
+            //             //     isEnabled: true
+            //             // });
+            //         }
+            //     },
+            //     listButton: {
+            //         text: '列表',
+            //         click: function() {
+
+            //         }
+            //     }
+            // },
+            // 日历头部
+            header: {
+                right: 'month, basicWeek, listButton',
+                left: 'prev, next, today, myCustomButton',
+                center: 'title'
+            },
+            height: "parent",
+            showNonCurrentDates: false,
+            eventLimit: true,
+            eventLimitText: function(data) {
+                return "还有" + data + "项..."
+            },
+            eventAfterRender: function(event, element, view) {
+                var $this = $(element);
+                //通过 操作 $this 可以从新定义dom
+                // 通过 wz_title wz_name 自定义css样式  例如：
+                $this.html("<div id='"+ event.obj.id +"' class=\"wz_title\">" +
+                    event.title + "</div>");
+                // $this.after("<div class=\"wz_name\">" + event.description + "</div>");
+            },
+            eventOrder: "description",
+            // 日历日程活动事件
+            events: function(start, end, timezone, callback) {
+                // 获得当前日历月份
+                var date = this.getDate();
+                // 获得后台数据
+                admin.req("/api/attendance/workDate/getListByStartEnd?startDate="+start.format('YYYY-MM-DD')+'&endDate='+end.format('YYYY-MM-DD')
+                    , {}, function(res) {
+
+                    var events = [];
+
+                    // 遍历返回数据
+                    $.each(res.data, function(i, c) {
+                        events.push({
+                            start: c.calendar, // will be parsed
+                            color: c.isWorkDate==1?'#ffffff':'#ffddc6',
+                            title: c.isWorkDate==1?'班':'休',
+                            obj:c,
+                            startDate:start.format('YYYY-MM-DD'),
+                            endDate:end.format('YYYY-MM-DD')
+                        });
+                    });
+                    callback2 = callback
+                    // 回调函数
+                    callback(events);
+                });
+            },
+            eventAfterAllRender: function(view) {
+                $(window).resize();
+            },
+            // 日历框点击事件
+            dayClick: function(date, jsEvent, view, callback) {
+                var curDate = new Date().Format('yyyy-MM-dd');
+                var selectDate = date.format('YYYY-MM-DD');
+
+                // $(this).css('background-color', 'red')
+
+                    achecked = 1
+                    adate = selectDate;
+               
+                // 新增日程弹层
+                if (curDate == selectDate && personId == config.getAccount().usid) {
+                    layerfn("新增日程：" + personName, "addEventTpl", {
+                        time: curDate
+                    });
+                }
+            },
+            // 日程事件点击事件
+            eventClick: function(calEvent, jsEvent, view) {
+                let obj = calEvent.obj
+                let start = calEvent.startDate
+                let end = calEvent.endDate
+                // 获得日历当天日期
+                var curDate = new Date().Format('yyyy-MM-dd');
+                // 获取点击日程日期
+                var selectDate = calEvent.start.format('YYYY-MM-DD');
+                // 弹窗按钮
+                var btn = null;
+                $.MsgBox.Confirm("温馨提示", obj);
+
+                $('#mb_btn_ok').on('click', function(e) {
+                    let isWorkDate = 0;
+                    if(obj.isWorkDate == 1){
+                        isWorkDate = 0
+                    }else{
+                        isWorkDate = 1
+                    }
+
+                    admin.req("/api/attendance/workDate",{
+                        "id": obj.id,
+                        "isWorkDate": isWorkDate
+                    }, function(res) {
+                        if(res.ok){
+
+                        }else{
+
+                        }
+                        admin.req("/api/attendance/workDate/getListByStartEnd?startDate="+start+'&endDate='+end
+                            , {}, function(res) {
+
+                                var events = [];
+
+                                // 遍历返回数据
+                                $.each(res.data, function(i, c) {
+                                    events.push({
+                                        start: c.calendar, // will be parsed
+                                        color: c.isWorkDate==1?'#ffffff':'#ffddc6',
+                                        title: c.isWorkDate==1?'班':'休',
+                                        obj:c
+                                    });
+                                });
+                                // 回调函数
+                                $("#main").fullCalendar('refetchEvents')
+                            });
+
+                    }, {
+                        method: "put"
+                    });
+                });
+            }
+        })
+        Date.prototype.Format = function(fmt) { //author: meizz
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "H+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+        $('#projectId').on('change', function(e, params) {
+            renderTable("/api/Daily/daily/children?projectId=" + params.selected, null, true);
+        });
+
+        function setFormValue(obj) {
+
+            $('#center-area').hide();
+
+            //出差
+            if (obj.dailyType==1)
+            {
+                $('#center-area').show();
+                obj.customerInfo=[obj.customer,obj.dept,obj.contacts];
+                obj.taskChecked=obj.taskIdArray;
+
+            }
+            var elemArray=  $('#dailytype-form input:radio');
+            $.each(elemArray,function(index,elem){
+                if (elem.value==obj.dailyType)
+                {
+                    $(elem).prop('checked','checked');
+                }
+
+            })
+
+            var custArray=  $('#time_form input:radio');
+
+            $.each(custArray,function(index,value){
+
+                if (value.value==obj.timeSlot)
+                {
+                    $(value).prop('checked','checked');
+                }
+
+            })
+            var title = $('.layui-tpl-container .layui-card-header');
+            var formNames = ['id', 'workDescription', 'handleType','customerInfo','taskChecked'];
+            obj.title && title.text(obj.title);
+            for (var i = 0; i < formNames.length; i++) {
+                if (obj[formNames[i]]) {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                } else {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val('');
+                }
+            }
+
+        }
+
+
+
+    })
+    $(function () {
+
+        $('.layui-card').css('height',$(document).height()-131);
+        $(".fc-day-top").each(function(){
+            if($(this).data("date")=='2019-01-03'){
+                $(this).css('background-color', 'red')
+            }
+
+        });
+    })
+</script>
+<script>
+
+$("#add").bind("click", function() {
+    $.MsgBox.Alert("消息", "哈哈，添加成功！");
+});
+
+//回调函数可以直接写方法function(){}
+/*$("#delete").bind("click", function () {
+    $.MsgBox.Confirm("温馨提示", "执行删除后将无法恢复，确定继续吗？温馨提示", function () { alert("你居然真的删除了..."); });
+});*/
+
+//也可以传方法名 test
+$("#update").bind("click", function() {
+    $.MsgBox.Confirm("温馨提示", "确定要进行修改吗？", test);
+});
+//当然你也可以不给回调函数,点击确定后什么也不做，只是关闭弹出层
+　　　　 //$("#update").bind("click", function () { $.MsgBox.Confirm("温馨提示", "确定要进行修改吗？"); });
+
+
+(function() {
+    $.MsgBox = {
+        Alert: function(title, msg) {
+            GenerateHtml("alert", title, msg);
+            btnOk(); //alert只是弹出消息，因此没必要用到回调函数callback
+            btnNo();
+        },
+        Confirm: function(title, msg, callback) {
+            GenerateHtml("confirm", title, msg);
+            btnOk(callback);
+            btnNo();
+        }
+    }
+    //生成Html
+    var GenerateHtml = function(type, title, msg) {
+        var _html = "";
+        let date = msg.calendar
+        let mm = '休息日'
+        if(msg.isWorkDate==1){
+            mm = '休息日'
+        }else{
+            mm = '工作日'
+        }
+        _html += '<div id="mb_box"></div><div id="mb_con"><span id="mb_tit">' + title + '</span>';
+        _html += '<a id="mb_ico">x</a><div id="mb_msg">'+'是否将' + date + '修改为'+mm+'</div><div id="mb_btnbox">';
+        if (type == "alert") {
+            _html += '<input id="mb_btn_ok" type="button" value="确定" />';
+        }
+        if (type == "confirm") {
+            _html += '<input id="mb_btn_ok" type="button" value="确定" />';
+            _html += '<input id="mb_btn_no" type="button" value="取消" />';
+        }
+        _html += '</div></div>';
+        //必须先将_html添加到body，再设置Css样式
+        $("body").append(_html);
+        //生成Css
+        GenerateCss();
+    }
+
+    //生成Css
+    var GenerateCss = function() {
+        $("#mb_box").css({
+            width: '100%',
+            height: '100%',
+            zIndex: '99999',
+            position: 'fixed',
+            filter: 'Alpha(opacity=60)',
+            backgroundColor: 'black',
+            top: '0',
+            left: '0',
+            opacity: '0.6'
+        });
+        $("#mb_con").css({
+            zIndex: '999999',
+            width: '400px',
+            position: 'fixed',
+            backgroundColor: 'White',
+            borderRadius: '15px'
+        });
+        $("#mb_tit").css({
+            display: 'block',
+            fontSize: '14px',
+            color: '#444',
+            padding: '10px 15px',
+            backgroundColor: '#DDD',
+            borderRadius: '15px 15px 0 0',
+            borderBottom: '3px solid #009BFE',
+            fontWeight: 'bold'
+        });
+        $("#mb_msg").css({
+            // padding: '20px',
+            lineHeight: '20px',
+            fontSize: '13px',
+            // textAlign: center
+        });
+        $("#mb_ico").css({
+            display: 'block',
+            position: 'absolute',
+            right: '10px',
+            top: '9px',
+            border: '1px solid Gray',
+            width: '18px',
+            height: '18px',
+            textAlign: 'center',
+            lineHeight: '16px',
+            cursor: 'pointer',
+            borderRadius: '12px',
+            fontFamily: '微软雅黑'
+        });
+        $("#mb_btnbox").css({
+            margin: '15px 0 10px 0',
+            textAlign: 'center'
+        });
+        $("#mb_btn_ok,#mb_btn_no").css({
+            width: '85px',
+            height: '30px',
+            color: 'white',
+            border: 'none'
+        });
+        $("#mb_btn_ok").css({
+            backgroundColor: '#168bbb'
+        });
+        $("#mb_btn_no").css({
+            backgroundColor: 'gray',
+            marginLeft: '20px'
+        });
+        //右上角关闭按钮hover样式
+        $("#mb_ico").hover(function() {
+            $(this).css({
+                backgroundColor: 'Red',
+                color: 'White'
+            });
+        }, function() {
+            $(this).css({
+                backgroundColor: '#DDD',
+                color: 'black'
+            });
+        });
+        var _widht = document.documentElement.clientWidth; //屏幕宽
+        var _height = document.documentElement.clientHeight; //屏幕高
+        var boxWidth = $("#mb_con").width();
+        var boxHeight = $("#mb_con").height();
+        //让提示框居中
+        $("#mb_con").css({
+            top: (_height - boxHeight) / 2 + "px",
+            left: (_widht - boxWidth) / 2 + "px"
+        });
+    }
+    //确定按钮事件
+    var btnOk = function(callback) {
+        $("#mb_btn_ok").click(function() {
+            $("#mb_box,#mb_con").remove();
+            if (typeof(callback) == 'function') {
+                callback();
+            }
+        });
+    }
+    //取消按钮事件
+    var btnNo = function() {
+        $("#mb_btn_no,#mb_ico").click(function() {
+            $("#mb_box,#mb_con").remove();
+        });
+    }
+})();
+
+
+var achecked = 1;
+var adate;
+var acallback = [];
+function changePeriod(a){
+    achecked = a
+}
+</script>
+<style>
+    #mb_msg {
+        text-align: center;
+    }
+    #xx {
+        margin-bottom: 20px;
+    }
+</style>
+</html>

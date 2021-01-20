@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" http-equiv="Content-Type" content="text/html">
+    <title>上传文件</title>
+    <style>
+        .layui-tpl-container .p-form,
+        .layui-layout-body .layui-layer-page .layui-layer-content {
+            overflow: visible !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layui-form-item" style="text-align: center;">
+        <button class="layui-btn layui-btn-normal" id="file">上传</button>
+        <button class="layui-btn layui-btn-primary" id="cancel" lay-submit lay-filter="popmenuCancle">取消</button>
+    </div>
+</body>
+
+</html>
+
+
+<script>
+    layui.use('upload', function() {
+        var upload = layui.upload;
+        var admin = layui.admin;
+
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#file' //绑定元素
+                ,
+            url: '/api/detail/detail/upload' //上传接口
+                ,
+            accept: 'file',
+
+            done: function(res) {
+                if (res.respCode === '0') {
+
+                    var detailId;
+
+                    sessionStorage.setItem("detailId", res.data.id);
+                    layer.msg('上传成功！', {
+                        icon: 1
+                    });
+
+                    admin.finishPopupCenter();
+                } else {
+                    layer.msg('上传失败（文件已存在）！', {
+                        icon: 5
+                    });
+                }
+            }
+        });
+    });
+</script>

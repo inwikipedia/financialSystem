@@ -1,0 +1,78 @@
+<div class="layui-table layui-form adc-form-design-helper" style="padding: 20px;box-sizing: border-box;">
+    <table data-sort="sortDisabled" style="margin: 0 auto;width: 100%;">
+        <tbody>
+        <tr>
+            <td style="-ms-word-break: break-all;" valign="middle" align="left">
+                <span style="color: red">*</span> 任务名称：<br>
+            </td>
+            <td style="word-break: break-all;" valign="middle" align="left">
+                <input name="input_1543541363646" id="itemName" class="layui-input"
+                       readonly="readonly">
+            </td>
+
+            <td rowspan="1" colspan="1" valign="middle" align="left">
+                <span style="color: red">*</span>任务类型：
+            </td>
+            <td rowspan="1" colspan="1" valign="middle" align="left">
+                <input id="taskType" type="text" readonly="readonly"
+                       style="box-sizing: border-box; font-size: 14px; text-align: left;  height: 30px;">
+            </td>
+
+        </tr>
+
+        <tr>
+            <td rowspan="1" colspan="1" valign="middle" align="left">
+                <span style="color: red">*</span> <span id="belong">所属项目：</span>
+            </td>
+            <td rowspan="1" colspan="1" valign="middle" align="left">
+                <input id="projectName" type="text"
+                       style="box-sizing: border-box; font-size: 14px; text-align: left;  height: 30px;" maxlength="50"
+                       readonly="readonly">
+            </td>
+            <td rowspan="1" colspan="1" valign="middle" align="left">
+                <span style="color: red">*</span>分配人员：
+            </td>
+            <td rowspan="1" colspan="1" valign="middle" align="left">
+                <input id="personName" type="text" readonly="readonly" name='personName'
+                       style="box-sizing: border-box; font-size: 14px; text-align: left;  height: 30px;">
+            </td>
+        </tr>
+        <tr>
+            <td rowspan="1" colspan="1" valign="middle" align="left">
+                <span style="color: red">*</span>计划开始时间：
+            </td>
+            <td rowspan="1" colspan="1" valign="middle" align="left">
+                <input id="createTime" type="text" readonly="readonly"
+                       style="box-sizing: border-box; font-size: 14px; text-align: left;  height: 30px;">
+            </td>
+            <td rowspan="1" colspan="1" valign="middle" align="left">
+                <span style="color: red">*</span>计划完成时间：
+            </td>
+            <td rowspan="1" colspan="1" valign="middle" align="left">
+                <input id="planEndTime" type="text" readonly="readonly"
+                       style="box-sizing: border-box; font-size: 14px; text-align: left;  height: 30px;">
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+    <style>.layui-form-select dl {
+        top: 42px !important;
+        bottom: auto;
+        height: 155px !important;
+    }
+
+    .layui-form-selected dl {
+        height: 195px;
+        width: 200px;
+    }
+    input,input:disabled {
+        background-color: #fff;
+        border: 1px solid #e6e6e6;
+        cursor: not-allowed!important;
+        width: 100%;
+        padding-left: 10px;
+    }
+    </style>
+</div>

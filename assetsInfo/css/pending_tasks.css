@@ -1,0 +1,519 @@
+/**
+ *
+ * 待办任务页面 处理任务弹窗样式
+ *
+ */
+
+
+.task-container {
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.task-container .layui-row {
+    height: 100%;
+}
+
+/**
+ *
+ * 左侧
+ *
+ */
+
+
+.task-container-l {
+    height: 100%;
+    padding: 0;
+    transition: 0.3s all;
+}
+
+/* 左侧上部 */
+.task-container-l-t {
+    padding: 6px 6px 6px 16px;
+}
+
+.layui-table-view{
+    margin: 0;
+}
+
+.layui-table-cell{
+    height:24px;
+    line-height: 24px;
+}
+
+.layui-layer-title{
+    padding-left:16px;
+}
+
+.task-container-l-t .task-header {
+    width: 100%;
+    height: 20px;
+    overflow: hidden;
+}
+
+.task-container-l-t .task-header .task-header-title {
+    width: 50%;
+    float: left;
+}
+
+.task-container-l-t .task-header .task-header-title h1 {
+    line-height: 25px;
+    font-size: 18px;
+    color: #575757;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 4px;
+}
+
+.task-container-l-t .task-header .task-header-title h3 {
+    line-height: 24px;
+    font-size: 12px;
+    color: #949494;
+}
+
+.task-container-l-t .task-header .task-header-control {
+    width: 50%;
+    float: left;
+    line-height: 25px;
+    text-align: right;
+}
+
+.task-container-l-t .task-header .task-header-control a {
+    font-size: 12px;
+    color: #575757;
+    margin-left: 8px;
+}
+
+.task-container-l-t .task-header .task-header-control a:hover {
+    opacity: 0.7;
+}
+
+.task-container-l-t .task-header .task-header-control a i {
+    font-size: 12px;
+    color: #67BFFF;
+    margin-right: 6px;
+}
+
+/* 左侧下部 */
+.task-container-l-b {
+    /* height: calc(100% - 439px); */
+    min-height: 120px;
+    padding-bottom: 10px;
+    padding-right: 30px;
+    box-sizing: border-box;
+}
+
+.task-container-l-b .task-header {
+    position: relative;
+    padding-left: 30px;
+}
+
+.task-container-l-b .task-header img {
+    height: 16px;
+    margin: 3px 0;
+    float: left;
+}
+
+.task-container-l-b .task-header h1 {
+    line-height: 22px;
+    font-size: 16px;
+    color: #575757;
+    margin-left: 24px;
+}
+
+.task-container-l-b .task-header .task-header-control {
+    line-height: 22px;
+    position: absolute;
+    top: 0;
+    right: 0px;
+}
+
+.task-container-l-b .task-header .task-header-control .task-container-l-b-hide::before {
+    content: "\e619";
+}
+
+.task-container-l-b .task-body {
+    height: calc(100% - 43px);
+    overflow: auto;
+    padding: 0 30px;
+}
+
+.task-container-l-b .task-body .task-body-container {
+    margin-bottom: 15px;
+}
+
+.task-container-l-b .task-body .task-body-container div {
+    height: 22px;
+    line-height: 22px;
+    margin-bottom: 12px;
+}
+
+.task-container-l-b .task-body .task-body-container img {
+    width: 20px;
+    height: 20px;
+    margin: 0 10px;
+}
+
+.task-container-l-b .task-body .task-body-container a {
+    font-size: 14px;
+    color: #1890FF;
+}
+
+.task-container-l-b .task-body .task-body-container strong {
+    font-size: 14px;
+    color: #919191;
+    font-weight: normal;
+    margin-left: 4px;
+}
+
+.task-container-l-b .task-body .task-body-container span {
+    font-size: 14px;
+    color: #c8c8c8;
+    margin-left: 10px;
+}
+
+.task-container-l-b .task-body .task-body-container p {
+    color: #5e5e5e;
+    font-size: 14px;
+    line-height: 24px;
+    padding-left: 40px;
+}
+
+.task-container-l-b .task-body .task-body-container hr {
+    background-color: #E8E8E8;
+    margin: 15px 0 0;
+}
+
+@media screen and (max-width: 750px) {
+    .task-container {
+        overflow: auto;
+    }
+}
+
+
+
+
+/**
+ *
+ * 右侧
+ *
+ */
+
+
+
+.task-container-r {
+    height: 100%;
+    background-color: #F9FCFF;
+    padding: 15px 10px;
+    transition: 0.3s all;
+}
+
+.task-container-r .task-header {
+    margin-bottom: 16px;
+}
+
+.task-container-r .task-header h1 {
+    line-height: 22px;
+    color: #4A90E2;
+    font-size: 16px;
+}
+
+.task-container-r .task-header h1 i {
+    margin-right: 2px;
+    cursor: pointer;
+}
+
+.task-container-r .task-header-control {}
+
+.task-container-r .task-header-control a {
+    line-height: 20px;
+    margin-right: 4px;
+    font-size: 14px;
+}
+
+.task-container-r .task-header-control a:hover {
+    opacity: 0.7;
+}
+
+.task-container-r .task-header-control a.more {
+    margin: 0;
+    float: right;
+}
+
+.task-container-r .task-header-control a img {
+    height: 16px;
+    margin-bottom: 4px;
+    margin-right: 8px;
+}
+
+
+/**
+ *
+ * 流程图
+ *
+ */
+
+/* Tab 容器 */
+
+.layui-tab-content {
+    min-height: 120px;
+    overflow: auto;
+    transition: .3s all;
+    padding: 0;
+}
+
+.layui-card-body{
+    padding: 5px 10px;
+}
+
+.task-timeline {
+    position: relative;
+    padding-top: 20px;
+    min-width: 530px;
+}
+
+.task-timeline .task-timeline-item {
+    overflow: hidden;
+    padding-bottom: 20px;
+}
+
+.task-timeline .task-timeline-item .task-timeline-time {
+    float: left;
+    width: 100px;
+    clear: both;
+    text-align: right;
+    margin-top: 5px;
+}
+
+.task-timeline .task-timeline-item .task-timeline-time h1 {
+    font-size: 16px;
+    color: #55B7FF;
+    line-height: 22px;
+}
+
+.task-timeline .task-timeline-item .task-timeline-time h5 {
+    font-size: 14px;
+    color: #949494;
+    line-height: 20px;
+}
+
+.task-timeline .task-timeline-item .task-timeline-axis {
+    float: left;
+    width: 50px;
+    margin-top: 5px;
+}
+
+.task-timeline .task-timeline-item .task-timeline-axis span {
+    /* background-color: #7ED321; */
+    display: block;
+    width: 22px;
+    height: 22px;
+    border-radius: 22px;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 22px;
+    color: #fff;
+}
+
+.task-timeline .task-timeline-item .task-timeline-content {
+    float: left;
+    position: relative;
+}
+
+.task-timeline .task-timeline-item .task-timeline-content::before {
+    content: '';
+    position: absolute;
+    left: -26px;
+    top: 32px;
+    width: 2px;
+    height: 100%;
+    /* background-color: #7ED321; */
+}
+
+.task-timeline .task-timeline-item:last-child .task-timeline-content::before {
+    content: none;
+}
+
+.task-timeline .task-timeline-item .task-timeline-content .task-timeline-header {
+    background-color: rgba(126, 211, 33, 0.3);
+    color: #4D9A00;
+    width: 376px;
+    min-height: 32px;
+    line-height: 32px;
+    font-size: 16px;
+    text-indent: 1em;
+}
+
+.task-timeline .task-timeline-item .task-timeline-content .task-timeline-header::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 11px;
+    width: 0;
+    height: 0;
+    border-left: 0;
+    border-right: 7px solid transparent;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+
+.task-timeline .task-timeline-item .task-timeline-content .task-timeline-body {
+    box-sizing: border-box;
+    /* border: 1px solid rgba(126, 211, 33, 0.3); */
+    width: 376px;
+    min-height: 63px;
+    color: #949494;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 5px 18px;
+    word-wrap:break-word
+}
+
+/* 0 - 灰色 */
+
+
+.task-timeline .task-timeline-item.task-timeline-status0 .task-timeline-axis span {
+    background-color: #D4D4D4;
+}
+
+.task-timeline .task-timeline-item.task-timeline-status0 .task-timeline-content::before {
+    background-color: #D4D4D4;
+}
+
+.task-timeline .task-timeline-item.task-timeline-status0 .task-timeline-content .task-timeline-header {
+    background-color: #EAEAEA;
+    color: #949494;
+}
+
+.task-timeline .task-timeline-item.task-timeline-status0 .task-timeline-content .task-timeline-header::before {
+    border-right-color: #EAEAEA;
+}
+
+.task-timeline .task-timeline-item.task-timeline-status0 .task-timeline-content .task-timeline-body {
+    border: 1px solid #EAEAEA;
+}
+
+.task-timeline-status0-important .task-timeline-header {
+    background-color: #EAEAEA !important;
+    color: #949494 !important;
+}
+
+.task-timeline-status0-important .task-timeline-body {
+    border: 1px solid #EAEAEA !important;
+}
+
+/* 1 - 红色 */
+
+
+.task-timeline .task-timeline-item.task-timeline-status1 .task-timeline-axis span {
+    background-color: #FF7168;
+}
+
+.task-timeline .task-timeline-item.task-timeline-status1 .task-timeline-content::before {
+    background-color: #FF7168;
+}
+
+.task-timeline .task-timeline-item.task-timeline-status1 .task-timeline-content .task-timeline-header {
+    background-color: rgba(255, 113, 104, 0.3);
+    color: #F14E10;
+}
+
+.task-timeline .task-timeline-item.task-timeline-status1 .task-timeline-content .task-timeline-header::before {
+    border-right-color: rgba(255, 113, 104, 0.3);
+}
+
+.task-timeline .task-timeline-item.task-timeline-status1 .task-timeline-content .task-timeline-body {
+    border: 1px solid rgba(255, 113, 104, 0.3);
+}
+
+.task-timeline-status1-important .task-timeline-header {
+    background-color: rgba(255, 113, 104, 0.3) !important;
+    color: #F14E10 !important;
+}
+
+.task-timeline-status1-important .task-timeline-body {
+    border: 1px solid rgba(255, 113, 104, 0.3) !important;
+}
+
+/* 2 - 绿色 */
+
+.task-timeline .task-timeline-item.task-timeline-status2 .task-timeline-axis span {
+    background-color: #7ED321;
+}
+
+.task-timeline .task-timeline-item.task-timeline-status2 .task-timeline-content::before {
+    background-color: #7ED321;
+}
+
+.task-timeline .task-timeline-item.task-timeline-status2 .task-timeline-content .task-timeline-header {
+    background-color: rgba(126, 211, 33, 0.3);
+    color: #4D9A00;
+}
+
+.task-timeline .task-timeline-item.task-timeline-status2 .task-timeline-content .task-timeline-header::before {
+    border-right-color: rgba(126, 211, 33, 0.3);
+}
+
+.task-timeline .task-timeline-item.task-timeline-status2 .task-timeline-content .task-timeline-body {
+    border: 1px solid rgba(126, 211, 33, 0.3);
+}
+
+.task-timeline-status2-important .task-timeline-header {
+    background-color: rgba(126, 211, 33, 0.3) !important;
+    color: #4D9A00 !important;
+}
+
+.task-timeline-status2-important .task-timeline-body {
+    border: 1px solid rgba(126, 211, 33, 0.3) !important;
+}
+
+
+/**
+ *
+ * 常用语 自定义样式
+ *
+ */
+
+.task-common-tips.layui-layer-tips i.layui-layer-TipsT,
+.task-common-tips.layui-layer-tips i.layui-layer-TipsB,
+.task-common-tips.layui-layer-tips i.layui-layer-TipsR,
+.task-common-tips.layui-layer-tips i.layui-layer-TipsL {
+    border-color: transparent !important;
+}
+
+.task-common-tips.layui-layer-tips .layui-layer-content {
+    background-color: #fff;
+    color: #575757;
+    max-width: 160px;
+    max-height: 170px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.task-common-tips.layui-layer-tips .layui-layer-content li {
+    border-top: 1px solid #f0f0f0;
+    padding: 4px 0;
+    cursor: pointer;
+}
+
+.task-common-tips.layui-layer-tips .layui-layer-content li:first-of-type {
+    border: none;
+}
+
+.task-common-tips.layui-layer-tips .layui-layer-content a {
+    color: #575757;
+}
+
+.task-common-tips.layui-layer-tips .layui-layer-content li:hover {
+    opacity: 0.7;
+}
+.task-container .layui-radio-disbaled>i {
+    color: #c2c2c2!important;
+}
+input::-webkit-input-placeholder {
+    color: #d4dce7!important;
+}

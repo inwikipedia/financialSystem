@@ -1,0 +1,549 @@
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+
+    .btn-width {
+        width: 90px;
+    }
+
+    /*body{*/
+    /*overflow-y: hidden;*/
+    /*}*/
+    .accountManage .layui-table-box {
+        height: 90% !important;
+    }
+
+    .accountManage .layui-table-body {
+        height: 93.5% !important;
+    }
+
+    .accountManage .layui-form.layui-border-box.layui-table-view {
+        /*height: 490px !important;*/
+    }
+
+    .accountManage .layui-form-item .layui-inline {
+        margin-right: 0px;
+    }
+</style>
+
+<div class="layui-row layui-col-space15 accountManage">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">科研项目到账信息表</div>
+            <div class="layui-card-body">
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar">
+
+                        <div class="layui-inline">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:auto;">科研项目ID:</label>
+                                <div class="layui-inline" style="margin-left:-10px">
+                                    <input type="text" id="researchProjectIdX" placeholder="输入科研项目ID"
+                                        class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:auto;">科研项目编号:</label>
+                                <div class="layui-inline" style="margin-left:-10px">
+                                    <input type="text" id="projectNoX" placeholder="输入科研项目编号" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btn_search_user" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit
+                                    title="查询"> <i class="layui-icon layui-icon-search"></i>查询</button>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btn_reset_user" class="layui-btn layui-btn-sm layui-btn-primary" lay-submit
+                                    title="重置">重置</button>
+                            </div>
+                        </div>
+                        <div class="layui-inline" style="float: right;">
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-submit title="新建"
+                                    id="btn-create">
+                                    <i class="layui-icon layui-icon-add-1"></i>
+                                    新建
+                                </button>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-submit title="删除"
+                                    id="checkData">
+                                    <i class="layui-icon layui-icon-delete"></i>
+                                    删除
+                                </button>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-submit
+                                    title="删除全部" id="deleteAll" style="width: 95px;">
+                                    <i class="layui-icon layui-icon-delete"></i>
+                                    删除全部
+                                </button>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-submit
+                                    title="下载模板" id="btn_download_project" style="width: 95px;">
+                                    <i class="layui-icon layui-icon-download-circle"></i>下载模板
+                                </button>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"
+                                    id="crm-customer-btn-import" lay-submit title="导入">
+                                    <i class="layui-icon layui-icon-upload-drag"></i>导入
+                                </button>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-submit title="导出"
+                                    id="btn_download_out">
+                                    <i class="layui-icon layui-icon-download-circle"></i>
+                                    导出
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <table id="tableContent-form" lay-filter="tableContent-form"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+    <a class="table-control-btn table-control-btn-danger" lay-event="del">删除</a>
+</script>
+<script src="/assetsInfo/js/tempDown.js"></script>
+<script>
+    layui.use(['table', 'upload'], function () {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer;
+        var upload = layui.upload;
+        var heightTable = $(document).height() - 140;
+        var eidtIdNew;
+        // 渲染表格
+        var renderTable = function (search) {
+            if (!search) {
+                search = {};
+            }
+            table.render({
+                elem: '#tableContent-form',
+                id: 'tableContent-form',
+                url: admin.formatUrl('/api/research/resProArriveFee/page'),
+                parseData: function (res) {
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                // height: heightTable,
+                cols: [
+                    [{
+                            type: 'checkbox'
+                        },
+                        {
+                            field: 'researchProjectId',
+                            title: '科研项目ID',
+                            align: 'center',
+                            templet: function (d) {
+                                var text = d.researchProjectId ? d.researchProjectId : "";
+                                return '<div title="' + text + '"><span>' + text +
+                                    '</span></div>'
+                            }
+                        },
+                        {
+                            field: 'projectNo',
+                            title: '科研项目编号',
+                            align: 'center',
+                            templet: function (d) {
+                                var text = d.projectNo ? d.projectNo : "";
+                                return '<div title="' + text + '"><span>' + text +
+                                    '</span></div>'
+                            }
+                        },
+                        {
+                            field: 'projectNo',
+                            title: '科研项目名称',
+                            align: 'center',
+                            templet: function (d) {
+                                var text = d.projectName ? d.projectName : "";
+                                return '<div title="' + text + '"><span>' + text +
+                                    '</span></div>'
+                            }
+                        },
+                        {
+                            field: 'arriveYear',
+                            title: '年份',
+                            align: 'center',
+                            templet: function (d) {
+                                var text = d.arriveYear ? d.arriveYear : "";
+                                return '<div title="' + text + '"><span>' + text +
+                                    '</span></div>'
+                            }
+                        },
+                        {
+                            field: 'arriveMonth',
+                            title: '月份',
+                            align: 'center',
+                            templet: function (d) {
+                                var text = d.arriveMonth ? d.arriveMonth : "";
+                                return '<div title="' + text + '"><span>' + text +
+                                    '</span></div>'
+                            }
+                        },
+                        {
+                            field: 'arriveFee',
+                            title: '到账金额（万元）',
+                            align: 'center',
+                            templet: function (d) {
+                                var text = d.arriveFee ? d.arriveFee : "";
+                                return '<div title="' + text + '"><span>' + text +
+                                    '</span></div>'
+                            }
+                        }, {
+                            field: 'updateTime',
+                            title: '更新日期',
+                            align: 'center',
+                            templet: function (d) {
+                                var text = timestampToTime(d.updateTime)
+                                return '<div title="' + text + '"><span>' + text +
+                                    '</span></div>'
+                            }
+                        }, {
+                            field: 'createUserName',
+                            title: '更新人',
+                            align: 'center',
+                            templet: function (d) {
+                                var text = d.createUserName ? d.createUserName : "";
+                                return '<div title="' + text + '"><span>' + text +
+                                    '</span></div>'
+                            }
+                        }, {
+                            templet: '#control-1',
+                            title: '操作',
+                            align: 'center',
+                            unresize: true
+                        }
+                    ]
+                ],
+                cellMinWidth: 120,
+                page: {
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                },
+                request: {
+                    page: 'pageNo',
+                    limitName: 'pageSize'
+                },
+                where: search,
+                text: {
+                    none: '暂无数据'
+                },
+                done: function (res, curr, count) {
+                    if (curr > 1 && res.data.length == 0) {
+                        var pageValue = curr - 1;
+                        table.reload('tableContent-form', {
+                            page: {
+                                curr: pageValue
+                            }, // 修改页码
+                        });
+                    }
+                }
+            });
+        };
+        renderTable();
+        $('#btn_search_user').off('click').on('click', function () {
+            var data = {};
+            if ($('#researchProjectIdX').val()) {
+                data.researchProjectId = $('#researchProjectIdX').val()
+            }
+            if ($('#projectNoX').val()) {
+                data.projectNo = $('#projectNoX').val()
+            }
+            renderTable(data);
+        });
+        $('#btn_reset_user').off('click').on('click', function () {
+
+            $('#researchProjectIdX').val('');
+            $('#projectNoX').val('');
+            renderTable();
+        });
+        // 删除数据
+        $('#checkData').click(() => {
+            var checkStatus = layui.table.checkStatus('tableContent-form').data;
+            var delids = '';
+            if (checkStatus.length == 0 || checkStatus == []) {
+                layer.msg('请先选取删除数据');
+            } else {
+                for (let i = 0; i < checkStatus.length; i++) {
+                    if (checkStatus.length > 1) {
+                        delids += checkStatus[i].id + ',';
+                    } else {
+                        delids = checkStatus[i].id;
+                    }
+                }
+                checkDelets(delids, '您确定要删除选中的数据吗？')
+            }
+        })
+        $('#deleteAll').click(() => {
+            layer.confirm('您确定要清空数据吗?', {
+                icon: 3,
+                title: '提示'
+            }, function () {
+                admin.req('/api/research/resProArriveFee/deleteAll', {}, function (data) {
+                    if (data.ok) {
+                        layer.msg('清空成功！', {
+                            icon: 1
+                        });
+                        table.reload('tableContent-form', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    } else {
+                        return layer.msg('清空失败：' + data.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: 'delete'
+                });
+                form.render()
+            });
+        })
+
+        function checkDelets(delids, delTitle) {
+            layer.confirm(delTitle, {
+                icon: 3,
+                title: '提示'
+            }, function () {
+                admin.req('/api/research/resProArriveFee/del/' + delids, {}, function (data) {
+                    if (data.ok) {
+                        layer.msg('删除成功！', {
+                            icon: 1
+                        });
+                        table.reload('tableContent-form', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    } else {
+                        return layer.msg('删除失败：' + data.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: 'delete'
+                });
+                form.render()
+            });
+        }
+        // 将 table ID 存入数组
+        layui.admin.addTableCache('tableContent-form');
+        // 新建
+        $('#btn-create').off('click').on('click', function () {
+            popMenu('add', {})
+        });
+        // 导入
+        upload.render({
+            elem: '#crm-customer-btn-import',
+            url: '/api/research/resProArriveFee/import', //上传接口
+            accept: 'file',
+            acceptMime: 'xlsx/xlsm',
+            before: function (obj) {
+                layer.load(); //上传loading
+            },
+            done: function (res) {
+                layer.closeAll();
+
+                if (res.respCode == 0) {
+                    layer.msg('导入成功！', {
+                        icon: 1
+                    });
+                    table.reload('tableContent-form', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                } else {
+                    return layer.msg('导入失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            },
+            error: function () {
+                //请求异常回调
+                layer.closeAll();
+                return layer.msg('导入出现错误，请重试！', {
+                    icon: 5
+                });
+            }
+        });
+        // 导出 下载模板
+        $('#btn_download_project').off("click").on('click', function () {
+            // window.open(admin.formatUrl('/api/carsales/carSales/excelExportCarSales'))
+            // console.log('模板下载')
+            tempDownByDicCode("research_projects_arrive_template");
+        });
+        $('#btn_download_out').on('click', function () {
+            window.open(admin.formatUrl('/ADC_info/api/research/resProArriveFee/export'))
+        });
+        // 监听工具条事件 查看、编辑、删除
+        table.on('tool(tableContent-form)', function (obj) {
+            // 获取点击列的数据
+            var data = obj.data;
+            var layEvent = obj.event;
+            // 判断操作类型
+            if (layEvent === 'edit') {
+                eidtIdNew = data.id
+                popMenu("edit", data);
+            } else {
+                var delId = data.id;
+                checkDelets(delId, '您确定要删除这条数据吗？')
+            }
+        });
+        // 编辑弹框
+        function popMenu(type, data) {
+            var width = 700;
+            if (type === 'add') {
+                var title = '新增科研项目到账信息表';
+                data = {};
+            } else if (type === 'edit') {
+                var title = '编辑科研项目到账信息表'
+            }
+            data.type = type;
+            editId = data.id;
+            admin.popupCenter({
+                title: title,
+                width: width,
+                path: 'components/sicBordManage/accountManageCreate.html',
+                finish: function (isCancle) {
+                    if (!isCancle) {
+                        table.reload('tableContent-form', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    }
+                },
+                success: function () {
+                    $.ajax({
+                        type: "get",
+                        url: "/api/research/researchProject/getResearchProjectIdList",
+                        async: false,
+                        success: function (res) {
+                            if (res.ok) {
+                                var dicData = res.data;
+                                var con = '';
+                                for (var i = 0; i < dicData.length; i++) {
+                                    con += '<option  value="' + dicData[i]
+                                        .researchProjectId + '" id="' + dicData[i]
+                                        .projectNo + '">' + dicData[i]
+                                        .researchProjectId +
+                                        '</option>';
+                                }
+                                // $("input[name='projectNo']").val(dicData[0].projectNo);
+                                $('#researchProjectId').attr("data-id", dicData[0].id);
+                                form.on('select(researchProjectId)', function (data) {
+                                    data.elem.dataset.name = data.elem[data.elem
+                                        .selectedIndex].innerHTML;
+                                    data.elem.dataset.id = data.elem[data.elem
+                                        .selectedIndex].id;
+                                    $("input[name='projectNo']").val(data.elem[
+                                        data.elem.selectedIndex].id);
+                                    form.render("select");
+                                });
+                                $('#researchProjectId').empty().append(con);
+                                form.render();
+                            } else {
+                                return layer.msg(res.message, {
+                                    icon: 5
+                                });
+                            }
+                        },
+                        error: function (error) {
+                            return layer.msg(err.message, {
+                                icon: 5
+                            });
+                        }
+                    });
+                    setFormValue(data);
+                    form.render()
+                }
+            });
+        }
+        // 设置表单内容
+        function setFormValue(obj) {
+            $(".amountCreate #sicId").val(obj.id);
+            $(".amountCreate #sicType").val(obj.type);
+            if (obj.type == "edit") {
+
+            }
+            for (var item in obj) {
+                if (obj[item]) {
+                    $('.amountCreate  input[name="' + item + '"]').val(obj[item]);
+                    if (item == "researchProjectId") {
+                        $('.amountCreate  select[name="' + item + '"]').val(obj[item])
+                    }
+                } else {
+                    $('.amountCreate  input[name="' + item + '"]').val('');
+                }
+            }
+        }
+        // 表单提交
+        form.on('submit(btn-cost-sure)', function (data) {
+            // 获取表单数据
+            var d = data.field,
+                elem = data.elem;
+            // 判断是编辑还是新增
+            var ajaxName = '';
+            var urlType = '';
+            var api = '';
+            if (d.sicType === 'add') {
+                ajaxName = '新增科研项目到账信息表';
+                urlType = 'POST';
+                api = '/api/research/resProArriveFee';
+            } else if (d.sicType === 'edit') {
+                ajaxName = '编辑科研项目到账信息表';
+                urlType = 'PUT';
+                d.id = eidtIdNew;
+                api = '/api/research/resProArriveFee';
+            }
+            // 发送请求
+            admin.req(api, d, function (data) {
+                if (data.ok) {
+                    layer.msg(ajaxName + '成功！', {
+                        icon: 1
+                    });
+                    admin.finishPopupCenter();
+                } else {
+                    admin.closePopupCenter();
+                    return layer.msg(ajaxName + '失败：' + data.message, {
+                        icon: 5
+                    });
+                    admin.finishPopupCenter();
+                }
+            }, {
+                method: urlType
+            });
+
+        });
+        //时间戳转换年月日
+        function timestampToTime(timestamp) {
+            var date = new Date(timestamp);
+            Y = date.getFullYear() + '-';
+            M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+            D = (date.getDate() + 1 < 10 ? '0' + date.getDate() : date.getDate());
+            return Y + M + D;
+
+        }
+    });
+</script>

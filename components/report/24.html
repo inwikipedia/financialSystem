@@ -1,0 +1,140 @@
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<script src="../../assetsInfo/js/FormMerge.js"></script>
+<link rel="stylesheet" href="../../assetsInfo/css/report.css">
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+    
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+    
+    .titDivbox {
+        width: 90%;
+        margin: auto;
+        position: relative;
+    }
+    
+    .titDiv {
+        width: 100%;
+        font-size: 16px;
+        font-weight: bold;
+        color: #888;
+        position: absolute;
+        top: 25px;
+    }
+    
+    .tit01,
+    .tit02 {
+        width: 50%;
+        float: left;
+        text-align: center;
+    }
+    
+    .botTable {
+        padding-bottom: 10px;
+    }
+    
+    @media screen and (min-width: 1366px) and (max-width: 1920px) {
+        .pie-chart {
+            height: 240px;
+        }
+    }
+    
+    @media screen and (min-width: 1920px) {
+        .pie-chart {
+            height: 370px;
+        }
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span class="layui-card-header-title"><strong>2019年已签订合同汇总表</strong></span>
+                <!-- <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-sm exportbtn">导出PPT</a> -->
+            </div>
+
+
+            <div class="botTable">
+
+                <table id="tableContent-form" lay-filter="tableContent-form"></table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+<script>
+    // setTimeout(init(),500);
+    // function init() {
+    layui.use(['table'], function() {
+        var table = layui.table,
+            admin = layui.admin,
+            layer = layui.layer;
+
+        //下面表格
+        table.render({
+            elem: '#tableContent-form',
+            url: '/json/24.json', //数据接口
+            cols: [
+                [ //表头
+                    {
+                        field: 'data1',
+                        title: '本部',
+                        align: 'center',
+                        width: 100
+                    }, {
+                        field: 'data2',
+                        title: '部门',
+                        align: 'center',
+                        width: 130
+                    }, {
+                        field: 'data3',
+                        title: '2018年已签订合同尾款（万元）',
+                        align: 'center',
+                        width: 230
+
+
+                    }, {
+                        field: 'data4',
+                        title: '2019年已签订合同金额（万元）',
+                        align: 'center',
+                        width: 230
+
+                    }, {
+                        field: 'data5',
+                        title: '2019年跟进中合同金额（万元）',
+                        align: 'center',
+                        width: 230
+
+
+                    }, {
+                        field: 'data6',
+                        title: '合计',
+                        align: 'center',
+                        width: 110
+                    }
+                ]
+
+            ],
+            done: function(res, curr, count) {
+                alarmTableRowSpan("data1", 1);
+            }
+
+        })
+
+
+        setTimeout(function() {
+            window.onresize = function() {
+                myChart.resize();
+            }
+        }, 200);
+
+    });
+</script>

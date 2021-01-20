@@ -1,0 +1,9 @@
+.layui-treeselect a {
+    color: #333 !important;
+}
+
+.layui-treeselect .offset {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+}

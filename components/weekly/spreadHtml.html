@@ -1,0 +1,137 @@
+<link rel="stylesheet" href="../../assetsInfo/SpreadJS-master/css/gc.spread.sheets.12.0.0.css">
+<link rel="stylesheet" href="../../assetsInfo/SpreadJS-master/css/gc.spread.sheets.excel2013white.12.0.0.css">
+<!--<button class="layui-btn layui-btn-sm layui-btn-danger"  id="btn-create">-->
+    <!--&lt;!&ndash;<img src="../../assetsInfo/images/yiyue.png" style="position: relative;top: -1px;">&ndash;&gt;-->
+    <!--导入-->
+<!--</button>-->
+<!--<input type="file" name="files[]" id="fileDemo" accept=".xlsx,.xls"/>-->
+<!--<input type="button" id="loadExcel" value="Import" onclick="ImportFile()"/>-->
+<body>
+<div id="ss" style="width:100%;height:98%; border: 1px solid gray;"></div>
+</body>
+<script src="../../assetsInfo/SpreadJS-master/samples/InspectorSample/scripts/FileSaver.min.js"></script>
+<script src="../../assetsInfo/SpreadJS-master/scripts/gc.spread.sheets.all.12.0.0.min.js"></script>
+<script src="../../assetsInfo/SpreadJS-master/samples/InspectorSample/scripts/gc.spread.excelio.12.0.0.min.js"></script>
+<!-- layui 脚本文件 -->
+<script type="text/javascript" src="../../assetsInfo/libs/layui/layui.js"></script>
+<script>
+    // console.log(555555);
+    // // window.onload = function () {
+    //     var spread = new GC.Spread.Sheets.Workbook(document.getElementById('ss'), { sheetCount: 1 });
+    //     console.log(spread,44444444444);
+    //     var sheet = spread.getSheet(0);
+    //     var person = { name: 'Wang feng', age: 25, gender: 'Male', address: { postcode: '710075' } };
+    //     var source = new GC.Spread.Sheets.Bindings.CellBindingSource(person);
+    //     sheet.setBindingPath(2, 2, 'name');
+    //     sheet.setBindingPath(3, 2, 'age');
+    //     sheet.setBindingPath(4, 2, 'gender');
+    //     sheet.setBindingPath(5, 2, 'address.postcode');
+    //     sheet.setDataSource(source);
+    // };
+    // var workbook, excelIO;
+    layui.use('layer', function() {
+        var config =layui.config;
+        var name = sessionStorage.getItem("name");
+        var type = sessionStorage.getItem("type");
+        var savePath = sessionStorage.getItem("savePath");
+        var root = sessionStorage.getItem("root");
+        var id = sessionStorage.getItem("id");
+        var eventReceiveId = sessionStorage.getItem("eventReceiveId");
+        var loginUserId = sessionStorage.getItem("loginUserId");
+        var documentKey = sessionStorage.getItem("documentKey");
+        var loginUsname = sessionStorage.getItem("loginUsname");
+        var ServerIP = sessionStorage.getItem("ServerIP");
+        var port=window.location.port;
+        var domain = document.domain;
+        GC.Spread.Sheets.LicenseKey = "123.127.164.20|192.168.13.123,284313917124569#B05Vv5EZzETQjt6S6kGc8h5KQN7c58UZvFTQ52UM7lUNvEWRoFGcnJWavc6dFNVTYFjQGF6MsBHVwhlaihGeTRHM4EmWJFDVxgmV4YHSsxWdSBTdYVmbxhTRUlXZWp4KwEmQzAVN64mTGNmUihGezEzModzYKlTb5ZDb5E5MvJzY7d4MjNWMGV6Q03yU0FmTRR6NGJDSZp6ZFtCaCh6SmdFUkN6Y624VjtidXR7MhJHWxI5TrZWNIBzYDlUYW94YXt4S05mZ6ZldQxmZvolejBjTyJjRDVzK0J4Qy9ERPJXSu3Ca5o5NG36KyFkV4sERpVHVEVEcSRzLxY5MJdlI0IyUiwiI8MDNBR4QBdjI0ICSiwiNxgDN9kTNwQTM0IicfJye#4Xfd5nIJZUOCJiOiMkIsIiMx8idgMlSgQWYlJHcTJiOi8kI1tlOiQmcQJCLiAzM5MjMwASOxgDM9EDMyIiOiQncDJCLiMjMx8yMx8CO6EjLykTMsAjMuQjNx8yNyEjLzITMiojIz5GRiwiI8+Y9sWY9QmZ0Jyp9u6o9wWp9LWY9+0L0h6Y9lSr9pSa9iojIh94QiwiI9YTN4ITM7ETOzEzM4gjMiojIklkIs4XZzxWYmpjIyNHZisnOiwmbBJye0ICRiwiI34zZZhFZJJESqhDZTNEb0hEZvh5KxQ6KSlkTvU7T6tWZUlTe9hXRwYTNVpnRuJTZ9YmU9JTWkhGdIVHSr24MZZje9R5N5dEM74mMYdTUaZkUuFDZ8dkSOhdT6l";
+        console.log(port,domain,566556);
+        var excelFilePath = 'http://'+domain+':'+port+'/Files/'+savePath;
+        var index = layui.layer.load(2);
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', excelFilePath, true);
+        xhr.responseType = 'blob';
+        xhr.onload = function(e) {
+            var spread = new GC.Spread.Sheets.Workbook(document.getElementById("ss"));
+
+            var excelIo = new GC.Spread.Excel.IO();
+
+            if (this.status == 200) {
+                // get binary data as a response
+                var blob = this.response;
+                // convert Excel to JSON
+                excelIo.open(blob, function (json) {
+                    var workbookObj = json;
+                    spread.fromJSON(workbookObj);
+                    layui.layer.close(index);
+                    let len = spread.getSheetCount();
+                    let indexI=0;
+                    for(indexI=0;indexI<len;indexI++){
+                        let sheet = spread.getSheet(indexI);
+                        sheet.options.isProtected = true;
+                    }
+
+                }, function (e) {
+                    // process error
+                    alert(e.errorMessage);
+                }, {});
+            }
+        };
+
+        xhr.send();
+    });
+
+    // $.ajax({
+    //     url: "http://localhost:8099/Files/2019/08/19/7785184fa35c48df855bbfeb08e1281c.xlsx",
+    //     type: 'get',
+    //     // contentType: 'blob',
+    //     responseType:"blob",
+    //     success: function (res) {
+    //         // var reader = new FileReader();
+    //         // imgUrlBase64 = reader.readAsDataURL(res);
+    //         // var blob = new File([res],{type:"application/vnd.ms-excel"});
+    //         // console.log(blob,667777)
+    //         excelIo.open(res, function (json) {
+    //             var workbookObj = json;
+    //             console.log(workbookObj,544444);
+    //             spread.fromJSON(workbookObj);
+    //         }, function (e) {
+    //             // process error
+    //             alert(e.errorMessage);
+    //             // if (e.errorCode === 2/*noPassword*/ || e.errorCode === 3 /*invalidPassword*/) {
+    //             //     document.getElementById('password').onselect = null;
+    //             // }
+    //         });
+    //         if (res.ok) {
+    //
+    //             console.log(res.data,7777);
+    //
+    //
+    //         }else{
+    //             // return  layer.msg(res.message, {
+    //             //     icon: 5
+    //             // });
+    //         }
+    //     }
+    // });
+    // var spread = new GC.Spread.Sheets.Workbook(document.getElementById("ss"));
+    // // spread.fromJSON(jsonData);
+    // var excelIo = new GC.Spread.Excel.IO();
+    // var sheet = spread.getActiveSheet();
+    //
+    // function ImportFile() {
+    //     var excelFile = document.getElementById("fileDemo").files[0];
+    //     // var password = document.getElementById('password').value;
+    //     // here is excel IO API
+    //     excelIo.open(excelFile, function (json) {
+    //         var workbookObj = json;
+    //         console.log(excelFile,544444);
+    //         spread.fromJSON(workbookObj);
+    //     }, function (e) {
+    //         // process error
+    //         alert(e.errorMessage);
+    //         // if (e.errorCode === 2/*noPassword*/ || e.errorCode === 3 /*invalidPassword*/) {
+    //         //     document.getElementById('password').onselect = null;
+    //         // }
+    //     });
+    // }
+</script>

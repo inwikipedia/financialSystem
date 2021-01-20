@@ -1,0 +1,614 @@
+<!--
+File   : process_history_tpl_view.html
+Created: Friday September 28th 2018 8:23:34 am
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Last Modified: Friday November 23rd 2018 10:51:43 am
+Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+-----
+Description: 
+-----
+HISTORY:
+-->
+<link rel="stylesheet" href="../../assetsInfo/css/form.css">
+<link rel="stylesheet" href="../assetsInfo/css/dragula.css">
+<link rel="stylesheet" href="../assetsInfo/css/duty.css">
+<link rel='stylesheet' href='../assetsInfo/libs/fullcalendar/fullcalendar.css'/>
+<link rel="stylesheet" href="../assetsInfo/css/dashboard.css">
+<link rel="stylesheet" href="../assetsInfo/css/pending_tasks.css">
+<!-- zTree 样式 -->
+<link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../assetsInfo/libs/adcganttchart/jquery.fn.adcganttchart.css">
+<script src='../assetsInfo/libs/fullcalendar/moment.min.js'></script>
+<script src="../../assetsInfo/libs/adcganttchart/jquery.fn.adcganttchart.js"></script>
+<script src='../assetsInfo/libs/fullcalendar/fullcalendar.js'></script>
+<script src="../assetsInfo/libs/fullcalendar/lunar.js"></script>
+<script src="../assetsInfo/libs/fullcalendar/zh-cn.js"></script>
+<script src="../assetsInfo/libs/echarts.js"></script>
+<script src="../assetsInfo/js/dragula.js"></script>
+<script src="../assetsInfo/libs/addtable/addtable.js"></script>
+<!-- zTree js 文件 -->
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+<div class="layui-container task-container">
+    <div class="layui-row">
+        <div class="layui-col-md12 task-container-l">
+            <div class="task-container-l-t">
+                <div class="task-header">
+                    <div class="task-header-title">
+<!--                        <h1>{{name}}</h1>-->
+                        <h3><span>{{assigneeName}}</span>&nbsp;&nbsp;<span>{{createTimeStr}}</span></h3>
+                    </div>
+                    <div class="task-header-control">
+                        <a href="javascript:;" class="layui-hide" lay-filter="task-control-print"><i class="layui-icon layui-icon-set-sm"></i>打印</a>
+                        <a href="javascript:;" class="layui-hide" lay-filter="task-control-appendix"><i class="layui-icon layui-icon-file"></i>附件列表</a>
+                        <a href="javascript:;" class="layui-hide" lay-filter="task-control-find"><i class="layui-icon layui-icon-search"></i>意见查找</a>
+                        <!--<a href="javascript:;" lay-filter="task-control-records"><i class="layui-icon layui-icon-form"></i>明细日志</a>-->
+                        <a href="javascript:;"><i class="layui-icon layui-icon-prev" style="display: none;"></i></a>
+                    </div>
+                </div>
+                <div class="layui-tab layui-tab-card">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">正文</li>
+                        <li>流程</li>
+                    </ul>
+                    <div class="layui-tab-content" style="overflow: auto;">
+                        <div class="layui-tab-item layui-show" id="task-html"></div>
+                        <div class="layui-tab-item" id="task-timeline">
+                        </div>
+                        <input type="text" name="usidNum" id="usidNum" style="display: none;">
+                    </div>
+                </div>
+            </div>
+            <div class="task-container-l-b layui-hide">
+                <div class="task-header">
+                    <img src="../../assetsInfo/images/message3.png">
+                    <h1>处理人意见区</h1>
+                </div>
+                <hr>
+                <div class="task-body" id="task-records">
+                    <span style="font-size: 14px;color: #ccc;line-height: 24px;padding-left: 24px;">暂无处理意见</span>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="../../assetsInfo/js/ADCFormDesignHelper.js"></script>
+<script>
+    var process_history_tpl_view = function (raw_data) {
+        layui.use([], function () {
+            var form = layui.form,
+                config = layui.config,
+                element = layui.element,
+                table = layui.table,
+                tools = layui.tools,
+                admin = layui.admin,
+                // 待办任务 ID
+                id = raw_data.id,
+                // 流程实例 ID
+                processInstanceId = raw_data.processInstanceId,
+                showFlag = raw_data.buttonPrivileges.isShowMultiInsSelectPeopleButton,
+                // 保存处理日志
+                processingRecords = [];
+            //处理左上角人名称回显 取当前登录人
+            var account = config.getAccount();
+            raw_data.assigneeName=account.usname;
+            // 渲染数据
+            $('.task-container').vm(raw_data);
+//日报弹出框表单事件
+            function setFormValueDay(obj) {
+                $('#center-area').hide();
+                //出差
+                if (obj.dailyType == 1) {
+                    //$('#center-area').show();
+                    obj.customerInfo = [obj.customer, obj.dept, obj.contacts];
+
+                }
+                obj.taskChecked = obj.taskIdArray;
+                var elemArray = $('#dailytype-form input:radio');
+                $.each(elemArray, function (index, elem) {
+                    if (elem.value == obj.dailyType) {
+                        $(elem).prop('checked', 'checked');
+
+                    }
+
+                });
+                elemArray.prop('disabled', 'disabled');
+                var custArray = $('#time_form input:radio');
+                $.each(custArray, function (index, value) {
+                    if (value.value == obj.timeSlot) {
+                        $(value).prop('checked', 'checked');
+
+                    }
+                });
+                custArray.prop('disabled', 'disabled');
+
+                var con = obj.workDescription ? obj.workDescription : "";
+                $('.workDescription_new').val(con);
+                $('.workDescription_new').prop('disabled', 'disabled');
+                $('#btn-sumbit-save').css('display', 'none');
+                $('#btn-daily-save').css('display', 'none');
+                $('#btn-daily-cancel').css('display', 'none');
+                form.render();
+                obj.dailyCreateTime=tools.getDate(obj.dailyCreateTime,"YYYY-MM-DD")
+                var title = $('.layui-tpl-container .layui-card-header');
+                var formNames = ['id', 'workDescription', 'handleType', 'customerInfo', 'taskChecked', 'dailyCreateTime', 'usid'];
+                obj.title && title.text(obj.title);
+                for (var i = 0; i < formNames.length; i++) {
+                    if (obj[formNames[i]]) {
+                        $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                    } else {
+                        $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val('');
+                    }
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').prop('disabled', 'disabled');
+                }
+
+            }
+            // 动态确定 Tab 高度
+            $('.task-container .layui-tab-content').css('height', $('.task-container-l').height() - 100);
+            // 获取已办任务正文表单数据
+            if (raw_data.hasOwnProperty('formKey') && raw_data.formKey && raw_data.formKey.indexOf('.html') > 0) {
+
+                config.businessParam.processType = "finish";
+                config.businessParam.departmentName = raw_data.previousTaskName;
+                config.businessParam.processInstanceId = raw_data.processInstanceId;
+                config.businessParam.tableHeight = parseInt($('.task-container-l').css('height')) - 180;
+                    $("#task-html").load(raw_data.formKey);
+                    if (raw_data.formKey == "components/externalForm/closeProject.html") {
+                        setTimeout(function () {
+                            //赋值
+                            var id = raw_data.businessKey
+                            //赋值
+                            $.ajax({
+                                url: "/api/budget/project/query/" + id,
+                                type: 'get',
+                                success: function (res) {
+                                    if (res.ok) {
+                                        var obj = res.data;
+                                        if(obj.businessId.indexOf('rs_')!=-1){
+                                            $('#scientificSearch').css('display','none');
+                                        }
+                                        var formNames = ['name', 'projectStartTime', 'projectLeader', 'projectOwner', 'memberNames', 'budget', 'personInput', 'business', 'contractNo', 'projectDescription'];
+                                        for (var i = 0; i < formNames.length; i++) {
+                                            if (obj[formNames[i]]) {
+                                                $('table input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                            $('#itemName').val("")
+                        }, 500)
+                    } else if (raw_data.formKey == "components/externalForm/closeTask.html") {
+                        //任务表单赋值
+                        setTimeout(function () {
+                            //id是传过来的  字段等待自研给
+                            var id = raw_data.businessKey
+                            //赋值
+                            $.ajax({
+                                url: "/api/budget/task/existTask/" + id,
+                                type: 'get',
+                                success: function (res) {
+                                    if(res.data){//任务存在
+                                        $.ajax({
+                                            url: "/api/budget/task/query/" + id,
+                                            type: 'get',
+                                            success: function (res) {
+                                                if (res.ok) {
+                                                    if (res.data.projectId) {
+                                                        $('#taskType').val("项目任务")
+                                                        $('#belong').html("所属项目")
+                                                        $('#projectName').val(res.data.projectName)
+                                                    } else {
+                                                        $('#taskType').val("业务任务")
+                                                        $('#belong').html("所属业务")
+                                                        $('#projectName').val(res.data.budgetName)
+                                                    }
+                                                    res.data.planStartTime=new Date(parseInt( res.data.planStartTime)).toLocaleString();
+                                                    res.data.planEndTime=new Date(parseInt( res.data.planEndTime)).toLocaleString();
+                                                    $('#itemName').val(res.data.name);
+
+                                                    $('#createTime').val(res.data.planStartTime);
+                                                    $('#planEndTime').val(res.data.planEndTime);
+                                                    var member = res.data.memberNames;
+                                                    $('#personName').val(res.data.memberNames)
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        //赋值
+                                        $.ajax({
+                                            url: "/api/budget/childrentask/query/" + id,
+                                            type: 'get',
+                                            success: function (res) {
+                                                if (res.ok) {
+                                                    if (res.data.projectId) {
+                                                        $('#taskType').val("项目任务")
+                                                        $('#belong').html("所属项目")
+                                                        $('#projectName').val(res.data.projectName)
+                                                    } else {
+                                                        $('#taskType').val("业务任务")
+                                                        $('#belong').html("所属业务")
+                                                        $('#projectName').val(res.data.budgetName)
+                                                    }
+                                                    res.data.planStartTime=new Date(parseInt( res.data.planStartTime)).toLocaleString();
+                                                    res.data.planEndTime=new Date(parseInt( res.data.planEndTime)).toLocaleString();
+                                                    $('#itemName').val(res.data.childTaskName)
+
+                                                    $('#createTime').val(res.data.planStartTime)
+                                                    $('#planEndTime').val(res.data.planEndTime)
+                                                    $('#personName').val(res.data.personName)
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }, 500)
+
+                    }
+                $("#itemName").removeAttr("disabled");
+                $("#itemName").attr("readonly","readonly");
+            }else if(raw_data.processDefinitionKey=="pa0001fb0970341808dd0869ab05c8a3c"){
+                var arrBusinessKey =raw_data.businessKey.split(':');
+                $("#task-html").load('components/researchChangeForm/mainChangeForm.html',function () {
+                    $('#researchProjectId').val(arrBusinessKey[0]);
+                    $('#procBusinessKey').val(arrBusinessKey[1]);
+                    $('#isEdit').val(1);
+                    var elem = '.mainForm';
+                    var inputElem = $(elem + ' input'),
+                        textareaElem = $(elem + ' textarea'),
+                        selectElem = $(elem + ' select'),
+                        buttonElem = $(elem + ' button');
+                    inputElem.attr('disabled', 'disabled');
+                    textareaElem.attr('disabled', 'disabled');
+                    selectElem.attr('disabled', 'disabled');
+                    buttonElem.attr('disabled', 'disabled');
+                    //所有文件控件下载按钮移除只读属性
+                    for (var i = 0; i <buttonElem.length ; i++) {
+                        buttonElem.eq(i).css('display','none');
+                        if(buttonElem.eq(i).html()=='下载'){
+                            buttonElem.eq(i).removeAttr("disabled");
+                        }
+                    }
+                });
+            }else if(raw_data.processDefinitionKey=="p9d12f5b27f9a482c8772de52d2825334"){
+                var arrBusinessKey =raw_data.businessKey.split(':');
+                $("#task-html").load('components/researchEndForm/mainEndForm.html',function () {
+                    $('#researchProjectId').val(arrBusinessKey[0]);
+                    $('#procBusinessKey').val(arrBusinessKey[1]);
+                    $('#isEdit').val(1);
+                    var elem = '.mainForm';
+                    var inputElem = $(elem + ' input'),
+                        textareaElem = $(elem + ' textarea'),
+                        selectElem = $(elem + ' select'),
+                        buttonElem = $(elem + ' button');
+                    inputElem.attr('disabled', 'disabled');
+                    textareaElem.attr('disabled', 'disabled');
+                    selectElem.attr('disabled', 'disabled');
+                    buttonElem.attr('disabled', 'disabled');
+                    //所有文件控件下载按钮移除只读属性
+                    for (var i = 0; i <buttonElem.length ; i++) {
+                        buttonElem.eq(i).css('display','none');
+                        if(buttonElem.eq(i).html()=='下载'){
+                            buttonElem.eq(i).removeAttr("disabled");
+                        }
+                    }
+                });
+            }else if(raw_data.processDefinitionKey == "p478e4b877d504d39a392ba9317bd35e8"){
+                config.businessParam.processType = "finish";
+                config.businessParam.departmentName = raw_data.previousTaskName;
+                config.businessParam.processInstanceId = raw_data.processInstanceId;
+                config.businessParam.tableHeight = parseInt($('.task-container-l').css('height')) - 180;
+                $.ajax({
+                    url: "/api/Daily/findOne/" + raw_data.businessKey,
+                    type: 'get',
+                    success: function (res) {
+                        if(res.data){//任务存在
+                            $('#usidNum').val(res.data.createUserId);
+                            $("#task-html").load('components/tpl/daily_save_form.html');
+                            var id =raw_data.businessKey;
+                            $.ajax({
+                                url: "/api/Daily/findOne/" + id,
+                                type: 'get',
+                                success: function (res) {
+                                    if(res.data){//任务存在
+                                        setFormValueDay(res.data);
+                                        form.render();
+                                    } else {
+                                    }
+                                }
+                            });
+                        } else {
+                        }
+                    }
+                });
+                $("#itemName").removeAttr("disabled");
+                $("#itemName").attr("readonly","readonly");
+            } else {
+                // 获取已办任务正文表单数据
+                admin.req('/api/activiti-task/history/' + id, {}, function (res) {
+                    if (res.ok) {
+                        // 先将表单结构填入容器
+                        $('#task-html').html(ADCFormDesignHelper.formatHtml(res.data.structure));
+                        ADCFormDesignHelper.expandHtmlViewer('#task-html', JSON.parse(res.data.data));
+                        //填入列表控件数据
+                        ADCFormDesignHelper.listctrldataview('#task-html', JSON.parse(res.data.data));
+                        //定制表单填入数据
+                        ADCFormDesignHelper.milepostdataview('#task-html', JSON.parse(res.data.data));
+                        //项目变更表单填入数据
+                        ADCFormDesignHelper.proMilepostdataview('#task-html', JSON.parse(res.data.data));
+                        // 获取权限信息
+                        ADCFormDesignHelper.formatPrivReadonly('#task-html', JSON.parse(res.data.privilege));
+                        // 填入数据
+                        ADCFormDesignHelper.formdataUpdate('#task-html', JSON.parse(res.data.data),JSON.parse(res.data.privilege));
+                        // 渲染表单
+                        form.render();
+                        $('#task-html select[title="项目名称"]').removeAttr('lay-search');
+                        $('#task-html .layui-select-title input').attr('disabled', 'disabled')
+                    } else {
+                        layer.msg('已办任务正文加载失败：' + res.message, {
+                            icon: 5
+                        });
+                    }
+                });
+            }
+
+            // 获取已办任务流程数据，绘制流程图
+            admin.req('/api/customized-branch/progressImageData', {
+                processInstanceId: processInstanceId
+            }, function (res) {
+                if (res.ok) {
+                    var timelineData = res.data,
+                        timelineHtml = '<ul class="task-timeline">';
+                    if (timelineData.length > 0) {
+                        timelineData.reverse();
+                    }
+                    // console.log(timelineData);
+                    // 将流程制作为 HTML
+                    for (var i = 0; i < timelineData.length; i++) {
+                        var item = timelineData[i],
+                            ccTaskItems = item.ccTaskItems;
+                        if (ccTaskItems.length === 1) {
+                            // 简单串行流程
+                            var tmp = ccTaskItems[0],
+                                // 处理时间
+                                // 对日期时间字符串做格式校验
+                                tmpDealTime =
+                                    /^[1-9]\d{3}-(0[1-9]|1[0-2]|[1-9])-(0[1-9]|[1-2][0-9]|3[0-1]|[1-9])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/
+                                        .test(tmp.dealTime) ? tmp.dealTime.split(' ') : ['', '待处理'],
+                                // 处理人姓名
+                                tmpAssigneeRealName = tmp.assigneeRealName ? (' - '+tmp.assigneeRealName) :
+                                    '',
+                                // 备注，处理意见
+                                tmpRemark = tmp.remark ? tmp.remark : '暂无处理意见',
+                                // 状态
+                                tmpStatus = item.status,
+                                // 任务名
+                                tmpTaskDefName = tmp.taskDefName;
+                            timelineHtml += '<li class="task-timeline-item task-timeline-status' +
+                                tmpStatus + '"><div class="task-timeline-time"><h1>' + tmpDealTime[
+                                0] + '</h1><h5>' + tmpDealTime[1] +
+                                '</h5></div><div class="task-timeline-axis"><span>' + (i + 1) +
+                                '</span></div><div class="task-timeline-content"><div class="task-timeline-header">' +
+                                tmpTaskDefName + tmpAssigneeRealName +
+                                '</div><div class="task-timeline-body">' + tmpRemark +
+                                '</div></div></li>';
+                        } else if (ccTaskItems.length > 1) {
+                            // 并行流程
+                            var arrDealTime = [];
+                            for (var k = 0; k < ccTaskItems.length; k++) {
+                                arrDealTime.push(ccTaskItems[k].dealTime);
+                            }
+                            // DONE: 将时间排序，时间越晚越靠前
+                            // TODO: 兼容 IE
+                            arrDealTime.sort(function (a, b) {
+                                if (a === '' && b === '') {
+                                    return 0;
+                                } else if (a === '') {
+                                    return 1;
+                                } else if (b === '') {
+                                    return -1;
+                                } else {
+                                    a = new Date(a).getTime();
+                                    b = new Date(b).getTime();
+                                    return b - a;
+                                }
+                            });
+                            tmpDealTime =
+                                /^[1-9]\d{3}-(0[1-9]|1[0-2]|[1-9])-(0[1-9]|[1-2][0-9]|3[0-1]|[1-9])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/
+                                    .test(arrDealTime[0]) ? arrDealTime[0].split(' ') : ['', '待处理']
+                            timelineHtml += '<li class="task-timeline-item task-timeline-status' +
+                                item.status + '"><div class="task-timeline-time"><h1>' +
+                                tmpDealTime[0] + '</h1><h5>' + tmpDealTime[1] +
+                                '</h5></div><div class="task-timeline-axis"><span>' + (i + 1) +
+                                '</span></div><div class="task-timeline-content">';
+                            for (var j = 0; j < ccTaskItems.length; j++) {
+                                var tmp = ccTaskItems[j],
+                                    // 处理人姓名
+                                    tmpAssigneeRealName = tmp.assigneeRealName ? (' - '+tmp.assigneeRealName) :
+                                        '',
+                                    // 备注，处理意见
+                                    tmpRemark = tmp.remark ? tmp.remark : '暂无处理意见',
+                                    // 状态
+                                    tmpStatus = tmp.status,
+                                    // 任务名
+                                    tmpTaskDefName = tmp.taskDefName;
+                                timelineHtml += '<div class="task-timeline-status' + tmpStatus +
+                                    '-important"><div class="task-timeline-header">' +
+                                    tmpTaskDefName +
+                                    tmpAssigneeRealName +
+                                    '</div><div class="task-timeline-body">' + tmpRemark +
+                                    '</div></div>';
+                            }
+                            timelineHtml += '</div></li>';
+                        }
+                    }
+
+                    timelineHtml += '</ul>';
+                    $('#task-timeline').html(timelineHtml);
+                } else {
+                    layer.msg('待办任务流程加载失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            });
+            // 获取已办任务处理人意见区数据
+            admin.req('/api/activiti-task/processing-records', {
+                processInstanceId: processInstanceId,
+                flag: showFlag
+            }, function (res) {
+                var records = res.data;
+                // 不显示 status 为 0 的数据，0 为待办、1 为已办
+                if (res.ok) {
+                    var recordsHtml = '';
+                    var recordsData=(res.data).filter(function(item){
+                              return item.formKey!=null;
+                          })
+                   processingRecords = recordsData;
+                    for (var i = 0; i < recordsData.length; i++) {
+                        var tmp = recordsData[i];
+                        if (tmp.status === '0') {
+                            continue;
+                        }
+                        var tmpAssigneeName = tmp.assigneeName?tmp.assigneeName:"",
+                            tmpComment = tmp.comment ? tmp.comment : '暂无意见',
+                            tmpFinishTimeStr = tmp.finishTimeStr;
+                        if(tmpComment.toString().indexOf("撤回")>0){
+                            tmpAssigneeName = recordsData[i-1].assigneeName;
+                        }
+                        recordsHtml +=
+                            '<div class="task-body-container"><div><img src="../../assetsInfo/images/avatar.png"><a>' +
+                            tmpAssigneeName + '</a><strong>已阅</strong><span>' + tmpFinishTimeStr +
+                            '</span></div><p>' + tmpComment + '<hr></p></div>';
+                    }
+                    recordsHtml && $('#task-records').html(recordsHtml);
+                } else {
+                    layer.msg('已办任务处理人意见加载失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            });
+
+            // 事件监听
+            $('a[lay-filter^="task-control"]').on('click', function () {
+                var type = $(this).attr('lay-filter').split('-')[2];
+                taskControl[type]();
+            });
+
+            // 事件处理
+            var taskControl = {
+                // 明细日志
+                records: function () {
+                    layer.open({
+                        title: '明细日志',
+                        type: 1,
+                        id: 'process-mine-pending-tasks-records',
+                        content: '<div class="layui-tab">\
+                                        <ul class="layui-tab-title" style="padding: 0 10px;">\
+                                            <li class="layui-this">处理明细</li>\
+                                        </ul>\
+                                        <div class="layui-tab-content" style="height:auto;">\
+                                            <div class="layui-tab-item layui-show"><table id="process-mine-pending-tasks-records-deal" lay-filter="process-mine-pending-tasks-records-deal"></table></div>\
+                                        </div>\
+                                    </div>',
+                        area: ['90%', '80%'],
+                        resize: false,
+                        success: function () {
+                            var h = $('#process-mine-pending-tasks-records').height() -
+                                101;
+                            table.render({
+                                elem: '#process-mine-pending-tasks-records-deal',
+                                id: 'process-mine-pending-tasks-records-deal',
+                                data: processingRecords,
+                                height: h,
+                                cols: [
+                                    [{
+                                        type: 'numbers'
+                                    }, {
+                                        field: 'name',
+                                        title: '节点名称',
+                                        minWidth: 300
+                                    }, {
+                                        field: 'createTimeStr',
+                                        title: '开始时间',
+                                        minWidth: 180
+                                    }, {
+                                        field: 'finishTimeStr',
+                                        title: '结束时间',
+                                        minWidth: 180
+                                    }, {
+                                        field: 'assigneeName',
+                                        title: '负责人',
+                                        minWidth: 100
+                                    }, {
+                                        title: '处理结果',
+                                        templet: function (d) {
+                                            return d.status === '0' ?
+                                                '<span style="color: #F14E10;">处理中</span>' :
+                                                '<span style="color: #4D9A00;">完成</span>';
+                                        },
+                                        minWidth: 100,
+                                        align: 'center'
+                                    }, {
+                                        field: 'comment',
+                                        title: '处理意见',
+                                        minWidth: 180
+                                    }]
+                                ],
+                                cellMinWidth: 60,
+                                page: {
+                                    layout: ['limit', 'count', 'prev', 'page',
+                                        'next'
+                                    ]
+                                },
+                                done: function () {
+                                    // TODO: [BUG] 明细日志中表格滚动条和 Tab容器高度异常
+                                }
+                            });
+                        }
+                    });
+                }
+            };
+
+            function loadWithParams(selector, url, paramsArr) {
+                $.get(url, function (request) {
+                    var requestPage = '<div>' + request + '</div>';
+                    var newPage = $(requestPage);
+                    if (paramsArr && paramsArr instanceof Array) {
+                        $.each(paramsArr, function (index, item) {
+                            newPage.append('<input type="hidden" id="' + item.id + '"/>').find("#" + item.inputId).attr("value", item.inputValue);
+                        });
+                        newPage.end().html();
+                        $(selector).html(newPage);
+                    }
+                });
+            }
+
+        });
+    };
+
+</script>

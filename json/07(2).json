@@ -1,0 +1,46 @@
+{
+    "code": 0,
+    "msg": "",
+    "count": 1000,
+    "data": [{
+            "budgetcounta": "科研费用",
+            "year": 2019,
+            "budget": 2606,
+            "rate": "35%",
+            "colcount": 1246.11,
+            "jan": 1.88,
+            "feb": 5.44,
+            "march": 143.62,
+            "april": "",
+            "may": "",
+            "june": "",
+            "july": "",
+            "aug": "",
+            "sep": "",
+            "oct": "",
+            "nove": "",
+            "dec": ""
+        }, {
+            "budgetcounta": "科研费用",
+            "year": 2018,
+            "budget": 1299,
+            "rate": "50%",
+            "colcount": 825.72,
+            "jan": 1.54,
+            "feb": 2.11,
+            "march": 22.08,
+            "april": 15.97,
+            "may": 6.243,
+            "june": 78.168,
+            "july": 8.301,
+            "aug": 16.977,
+            "sep": 82.91,
+            "oct": 106.54,
+            "nove": 280.46,
+            "dec": 518.45
+        }
+
+    ]
+
+
+}

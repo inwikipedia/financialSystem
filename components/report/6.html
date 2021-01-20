@@ -1,0 +1,373 @@
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<script src="../../assetsInfo/js/FormMerge.js"></script>
+<link rel="stylesheet" href="assetsInfo/css/report.css">
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+    
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+    
+    .titDivbox {
+        width: 90%;
+        margin: auto;
+        position: relative;
+    }
+    
+    .titDiv {
+        width: 100%;
+        font-size: 16px;
+        font-weight: bold;
+        color: #888;
+        position: absolute;
+        top: 25px;
+    }
+    
+    .tit01,
+    .tit02 {
+        width: 50%;
+        float: left;
+        text-align: center;
+    }
+    
+    .botTable {
+        padding-bottom: 50px;
+        /*padding-top: 80px;*/
+        width: 98%;
+    }
+    
+    .botTable1 {
+        overflow: auto;
+        padding: 0 10px;
+    }
+    
+    .chart {
+        height: 360px;
+        width: 96%;
+    }
+    
+    @media screen and (min-width: 1366px) and (max-width: 1920px) {
+        .chart {
+            height: 360px;
+            width: 98%;
+        }
+        .botTable {
+            padding-bottom: 50px;
+            /*padding-top: 80px;*/
+            width: 98%;
+        }
+    }
+    
+    @media screen and (min-width: 1920px) {
+        .chart {
+            height: 370px;
+            width: 96%;
+        }
+        .botTable {
+            padding-bottom: 50px;
+            /*padding-top: 80px;*/
+            width: 100%;
+        }
+        #picture{
+            height: 290px;
+        }
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span class="layui-card-header-title"><strong>成本费用预算执行情况—部门</strong></span>
+                <!-- <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-sm exportbtn">导出PPT</a> -->
+            </div>
+
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <div class="layui-form-item chart" id="picture"></div>
+
+                </div>
+                <div class="layui-col-md6">
+                    <div class="botTable">
+                        <table id="tableContent-form" lay-filter="tableContent-form"></table>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div  class="layui-row">
+                <div class="layui-col-md12">
+                    <div>
+                        <table id="tableContent-form1" lay-filter="tableContent-form1"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+</script>
+<script>
+    layui.use(['table'], function() {
+        var table = layui.table,
+            admin = layui.admin,
+            layer = layui.layer;
+
+        // 渲染表格
+        function rendrTable(data, cols) {
+            table.render({
+                elem: '#tableContent-form',
+                id: 'tableContent-form',
+                data: data,
+                cols: cols,
+                cellMinWidth: 120
+            });
+        };
+        layui.admin.addTableCache('tableContent-form');
+
+        table.render({
+            elem: '#tableContent-form1',
+            url: '/json/coltable.json', //数据接口
+            cols: [
+                [ //表头
+                    {
+                        field: 'department',
+                        title: '本部',
+                        align: 'center',
+                        width: 100
+
+                    }, {
+                        field: 'branch',
+                        title: '部门',
+                        align: 'center',
+                        width: 140
+
+                    }, {
+                        field: 'budget',
+                        title: '预算数',
+                        align: 'center'
+                    }, {
+                        field: 'actual',
+                        title: '执行数',
+                        align: 'center'
+
+                    }, {
+                        field: 'budgetachive',
+                        title: '预算完成率',
+                        align: 'center'
+
+                    }
+                ]
+            ],
+            done: function(res, curr, count) {
+                alarmTableRowSpan("department", 1);
+            }
+
+        })
+
+        //调取数据
+        admin.req('/json/report.json', {}, function(res) {
+            var depObject = res.costbudgetpart[0];
+            var xData = [];
+            var tableCol = [];
+            var yData = ["财务部", "管理部", "市场发展部", "团委", "软件业务本部", "咨询业务本部", "数据业务本部", "综合业务本部"]
+            for (var key in depObject) {
+                xData.push(depObject[key])
+            }
+
+            //动态创建表格列
+            for (var i in xData) {
+                var one = {
+                    title: xData[i],
+                    field: 'data' + (i - 0 + 1),
+                    align: 'center'
+                }
+                tableCol.push(one);
+            }
+            // tableCol[0].width = '200',
+            res.costbudgetpart.shift();
+            var cols = [tableCol]
+            rendrTable(res.costbudgetpart, cols);
+
+            var yData1 = [],
+                yData2 = [],
+                yData3 = [];
+            for (var key in res.costbudgetpart1[0]) {
+                yData1.push(res.costbudgetpart1[0][key])
+
+            }
+            for (var key in res.costbudgetpart1[1]) {
+                yData2.push(res.costbudgetpart1[1][key])
+
+            }
+            for (var key in res.costbudgetpart1[2]) {
+                var value = res.costbudgetpart1[2][key];
+                var rate = value.toString().replace('%', "");
+                yData3.push(rate)
+            }
+            showUpL(yData, yData1, yData2, yData3)
+
+        }, {
+            method: 'get'
+
+        });
+
+
+        var showUpL = function(xData, data1, data2, data3) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("picture"));
+            // 图表配置项
+            var option = {
+                title: {
+                    left: 'center',
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    textStyle: {　　
+                        align: 'left'　　　　
+                    },
+                    axisPointer: {
+                        type: 'shadow',
+                        crossStyle: {
+                            color: '#999'
+                        }
+
+                    }
+                },
+                grid: {
+                    top:20,
+                    left: 40,
+                    right: 65,
+                    bottom:90,
+                },
+                legend: {
+                    data: [{
+                        name: '预算目标',
+                        icon: "roundRect"
+
+                    }, {
+                        name: '预算执行',
+                        icon: "roundRect"
+
+                    }, {
+                        name: '预算完成率',
+                        itemWidth: '15'
+
+                    }],
+                    left: 'center',
+                    bottom: 10,
+                    padding: [7, 0, 0, 0],
+                    itemWidth: 10,
+                    itemHeight: 10
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: xData,
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    axisLabel: {
+                        rotate: 35
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#949494'
+                        }
+                    }
+                }],
+                yAxis: [{
+                        type: 'value',
+
+                        axisLabel: {
+                            formatter: '{value}'
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#999'
+                            }
+                        },
+                    splitLine: {
+                        show: true,
+                        lineStyle:{
+                            type:'dashed',
+                            color:"#E8E8E8"
+                        }
+                    },
+                        scale: true,
+                        splitNumber: 3,
+
+                    },
+                    {
+                        type: 'value',
+
+                        axisLabel: {
+                            formatter: '{value}%'
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#949494',
+                            }
+                        },
+                        splitLine: {
+                            show: false
+                        },
+                        splitNumber: 4,
+
+                    },
+
+                ],
+                series: [{
+                        name: '预算目标',
+                        type: 'bar',
+                        barMaxWidth: 30,
+                        data: data1,
+                    color: 'RGBA(124,190,253,0.8)',
+                    }, {
+                        name: '预算执行',
+                        type: 'bar',
+                    barMaxWidth: 30,
+
+                    color: 'RGBA(255,233, 133,0.8)',
+                        data: data2
+                    }, {
+                        name: '预算完成率',
+                        type: 'line',
+                    color: 'RGB(51,204,0)',
+                        yAxisIndex: 1,
+                        data: data3,
+                        itemStyle: { //设置折线拐点处数值
+                            normal: {
+                                label: {
+                                    show: true,
+                                    formatter: '{c}%'
+                                }
+                            }
+                        }
+                    },
+
+                ]
+            };
+            myChart.setOption(option);
+        };
+
+        setTimeout(function() {
+            window.onresize = function() {
+                myChart.resize();
+                //myChartLine.resize();
+                //GantChart.resize();
+                // myChartPie.resize();
+            }
+        }, 200);
+
+    });
+</script>

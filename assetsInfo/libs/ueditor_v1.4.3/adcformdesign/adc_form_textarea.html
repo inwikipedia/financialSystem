@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>多行文本框</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-ie6.css">
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/ie.css">
+    <![endif]-->
+    <script type="text/javascript" src="../dialogs/internal.js"></script>
+    <script src="./utils.js"></script>
+</head>
+
+<body>
+    <div class="content">
+        <table class="table table-bordered table-striped table-hover">
+            <tr>
+                <th>控件名称（建议使用中文，易辨识）<span class="label label-important">*</span></th>
+                <th>字体大小</th>
+            </tr>
+            <tr>
+                <td><input id="adcform_title" type="text" placeholder="必填" /></td>
+                <td><input id="adcform_fontsize" type="text" value="14" class="input-small span1" placeholder="auto" />
+                    px</td>
+            </tr>
+            <tr>
+                <th>输入框样式</th>
+                <th>增强</th>
+            </tr>
+            <tr>
+                <td>
+                    宽 <input id="adcform_width" type="text" value="300" class="input-small span1" placeholder="auto" />
+                    px
+                    &nbsp;&nbsp;
+                    高 <input id="adcform_height" type="text" value="80" class="input-small span1" placeholder="auto" />
+                    px
+                </td>
+                <td><label class="checkbox"><input id="adcform_rich" type="checkbox" />富文本形式</label></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <label for="adcform_value">默认值</label>
+                    <textarea class="input-block-level" rows="3" id="adcform_value" placeholder="多行文本框默认值..."></textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        var oNode = null,
+            thePlugins = 'adc_form_textarea';
+        window.onload = function () {
+            if (UE.plugins[thePlugins].editdom) {
+                oNode = UE.plugins[thePlugins].editdom;
+                var gValue = oNode.getAttribute('value').replace(/&quot;/g, "\""),
+                    gTitle = oNode.getAttribute('title').replace(/&quot;/g, "\""),
+                    gFontSize = oNode.getAttribute('adcform_fontsize'),
+                    gWidth = oNode.getAttribute('adcform_width'),
+                    gHeight = oNode.getAttribute('adcform_height'),
+                    gRich = oNode.getAttribute('adcform_rich');
+                gValue = gValue == null ? '' : gValue;
+                gTitle = gTitle == null ? '' : gTitle;
+                $G('adcform_value').value = gValue;
+                $G('adcform_title').value = gTitle;
+                if (gRich == '1') {
+                    $G('adcform_rich').checked = true;
+                }
+                $G('adcform_fontsize').value = gFontSize;
+                $G('adcform_width').value = gWidth;
+                $G('adcform_height').value = gHeight;
+            }
+        }
+        dialog.oncancel = function () {
+            if (UE.plugins[thePlugins].editdom) {
+                delete UE.plugins[thePlugins].editdom;
+            }
+        };
+        dialog.onok = function () {
+            if ($G('adcform_title').value == '') {
+                alert('请输入控件名称');
+                return false;
+            }
+            var gValue = $G('adcform_value').value.replace(/\"/g, "&quot;"),
+                gTitle = $G('adcform_title').value.replace(/\"/g, "&quot;"),
+                gFontSize = $G('adcform_fontsize').value,
+                gWidth = $G('adcform_width').value,
+                gHeight = $G('adcform_height').value;
+
+            if (!oNode) {
+                try {
+                    oNode = createElement('textarea', 'textarea');
+                    oNode.setAttribute('title', gTitle);
+                    oNode.setAttribute('value', gValue);
+                    oNode.setAttribute('adcform', thePlugins);
+                    // 
+                    oNode.setAttribute('class', 'layui-textarea');
+                    oNode.setAttribute('placeholder', gTitle);
+                    oNode.style.boxSizing = 'border-box';
+
+                    if ($G('adcform_rich').checked) {
+                        oNode.setAttribute('adcform_rich', '1');
+                    } else {
+                        oNode.setAttribute('adcform_rich', '0');
+                    }
+                    if (gFontSize != '') {
+                        oNode.style.fontSize = gFontSize + 'px';
+                        oNode.setAttribute('adcform_fontsize', gFontSize);
+                    }
+                    if (gWidth != '') {
+                        oNode.style.width = gWidth + 'px';
+                        oNode.setAttribute('adcform_width', gWidth);
+                    }
+                    if (gHeight != '') {
+                        oNode.style.height = gHeight + 'px';
+                        oNode.setAttribute('adcform_height', gHeight);
+                    }
+                    editor.execCommand('insertHtml', oNode.outerHTML);
+                } catch (e) {
+                    try {
+                        editor.execCommand('error');
+                    } catch (e) {
+                        alert('控件异常！');
+                    }
+                    return false;
+                }
+            } else {
+                oNode.setAttribute('title', gTitle);
+                oNode.setAttribute('value', gValue);
+                oNode.innerHTML = gValue;
+                if ($G('adcform_rich').checked) {
+                    oNode.setAttribute('adcform_rich', '1');
+                } else {
+                    oNode.setAttribute('adcform_rich', '0');
+                }
+                if (gFontSize != '') {
+                    oNode.style.fontSize = gFontSize + 'px';
+                    oNode.setAttribute('adcform_fontsize', gFontSize);
+                } else {
+                    oNode.setAttribute('adcform_fontsize', '');
+                }
+                if (gWidth != '') {
+                    oNode.style.width = gWidth + 'px';
+                    oNode.setAttribute('adcform_width', gWidth);
+                } else {
+                    oNode.setAttribute('adcform_width', '');
+                }
+                if (gHeight != '') {
+                    oNode.style.height = gHeight + 'px';
+                    oNode.setAttribute('adcform_height', gHeight);
+                } else {
+                    oNode.setAttribute('adcform_height', '');
+                }
+                delete UE.plugins[thePlugins].editdom;
+                alert(UE.plugins[thePlugins].editdom);
+            }
+        };
+    </script>
+</body>
+
+</html>

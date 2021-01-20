@@ -1,0 +1,730 @@
+<style>
+    .layui-tpl-container {
+        width: 652px;
+        padding: 20px;
+        margin: 0 auto;
+        box-shadow: 1px 1px 7px #ccc;
+    }
+
+    .project_change_form {
+        width: 100%;
+    }
+
+    .project_change_form .project_title_info {
+        margin-bottom: 15px;
+    }
+
+    .project_change_form .project_box_info {
+        padding: 10px;
+        box-shadow: 1px 1px 7px #e8edff;
+        margin-bottom: 15px;
+        display: none;
+    }
+
+    .project_change_form .project_box_info .project_row {
+        position: relative;
+    }
+
+    .project_change_form .project_box_info .project_col {
+        display: inline-block;
+        width: calc(50% - 5px);
+    }
+
+    .project_change_form .project_box_info .project_col:first-child {
+        margin-right: 10px;
+    }
+
+    .project_change_form .project_box_info .project_row {
+        margin-bottom: 10px;
+    }
+    .project_change_form .project_box_info .project_row:last-child{
+        margin-bottom: 0px;
+    }
+    .project_change_form .project_box_info .project_label {
+        display: inline-block;
+        width: 24%;
+        font-size: 14px;
+        font-family: MicrosoftYaHei;
+        font-weight: 400;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .project_change_form .project_box_info .project_textarea {
+        display: inline-block;
+        width: 24%;
+        height: 30px;
+    }
+
+    .project_change_form .project_box_info .project_textarea .project_label {
+        position: absolute;
+        top: -5px;
+    }
+
+    .project_change_form .project_box_info .project_input {
+        display: inline-block;
+        width: 76%;
+    }
+
+    .project_change_form .project_box_info .project_input .project_input_date {
+        display: inline-block;
+        width: calc(50% - 30px);
+    }
+
+    .project_change_form .project_box_info .project_input .project_input_span {
+        display: inline-block;
+        width: 60px;
+        text-align: center;
+    }
+
+    .project_change_form .project_box_info .project_input span {
+        width: 100%;
+    }
+
+    .project_change_form .project_title_info .project_title {
+        color: black;
+        font-size: 16px;
+        font-family: MicrosoftYaHei;
+        font-weight: 400;
+        display: inline-block;
+        width: 25%;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .project_change_form .project_title_info .project_box {
+        display: inline-block;
+        width: 75%;
+    }
+
+    .project_col_row_label {
+        width: 40%;
+        display: inline-block;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .project_col_row_input {
+        width: 60%;
+        display: inline-block;
+    }
+    .project_col_row{
+        margin-bottom: 5px;
+    }
+    .project_change_form .layui-form-checkbox[lay-skin=primary] {
+        padding-right: 23px;
+    }
+    .project_change_form .layui-form-checkbox[lay-skin=primary] i {
+        width: 12px;
+        height: 12px;
+        line-height: 12px;
+        top: 2px;
+    }
+    .proMilepost{
+        height: 565px;
+        overflow-y: auto;
+    }
+</style>
+<div class="layui-tpl-container">
+    <div class="project_change_form">
+        <div class="project_title_info">
+            <h3 class="project_title">项目名称</h3>
+            <div class="project_box">
+                <br>
+            </div>
+        </div>
+        <div class="project_title_info">
+            <h3 class="project_title">项目承担部门变更</h3>
+            <div class="project_box" id="proDepartment">
+                <br>
+            </div>
+        </div>
+        <div class="project_box_info proDepartment">
+            <div class="project_row">
+                <label class="project_label">原承担部门:</label>
+                <div class="project_input">
+                    <br>
+                </div>
+            </div>
+            <div class="project_row">
+                <label class="project_label">新承担部门:</label>
+                <div class="project_input">
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="project_title_info">
+            <h3 class="project_title">项目组成员变更</h3>
+            <div class="project_box" id="proMember">
+                <br>
+            </div>
+        </div>
+        <div class="project_box_info proMember">
+            <div class="project_row">
+                <label class="project_label">原项目组成员:</label>
+                <div class="project_input">
+                    <br>
+                </div>
+            </div>
+            <div class="project_row">
+                <label class="project_label">新项目组成员:</label>
+                <div class="project_input">
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="project_title_info">
+            <h3 class="project_title">项目基本情况变更</h3>
+            <div class="project_box" id="proSituation">
+                <br>
+            </div>
+        </div>
+        <div class="project_box_info proSituation">
+            <div class="project_row">
+                <div class="project_textarea">
+                    <label class="project_label">原项目基本情况:</label>
+                </div>
+                <div class="project_input">
+                    <br>
+                </div>
+            </div>
+            <div class="project_row">
+                <div class="project_textarea">
+                    <label class="project_label">新项目基本情况:</label>
+                </div>
+                <div class="project_input">
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="project_title_info">
+            <h3 class="project_title">项目起止时间变更</h3>
+            <div class="project_box" id="proDate">
+                <br>
+            </div>
+        </div>
+        <div class="project_box_info proDate">
+            <div class="project_row">
+                <label class="project_label">原起止时间:</label>
+                <div class="project_input">
+                    <div class="project_input_date">
+                        <br>
+                    </div>
+                    <span class="project_input_span">至</span>
+                    <div class="project_input_date">
+                        <br>
+                    </div>
+                </div>
+            </div>
+            <div class="project_row">
+                <label class="project_label">新起止时间:</label>
+                <div class="project_input">
+                    <div class="project_input_date">
+                        <br>
+                    </div>
+                    <span class="project_input_span">至</span>
+                    <div class="project_input_date">
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="project_title_info">
+            <h3 class="project_title">项目成本预算变更</h3>
+            <div class="project_box" id="proBudget">
+                <br>
+            </div>
+        </div>
+        <div class="project_box_info proBudget">
+            <div class="project_col">
+                <div class="project_col_row">
+                    <label class="project_col_row_label">原人工成本:</label>
+                    <div class="project_col_row_input">
+                        <br>
+                    </div>
+                </div>
+                <div class="project_col_row">
+                    <label class="project_col_row_label">原采购成本:</label>
+                    <div class="project_col_row_input">
+                        <br>
+                    </div>
+                </div>
+                <div class="project_col_row">
+                    <label class="project_col_row_label">原跨部门协作成本:</label>
+                    <div class="project_col_row_input">
+                        <br>
+                    </div>
+                </div>
+                <div class="project_col_row">
+                    <label class="project_col_row_label">原其他费用:</label>
+                    <div class="project_col_row_input">
+                        <br>
+                    </div>
+                </div>
+                <div class="project_col_row">
+                    <label class="project_col_row_label">原成本预算总金额:</label>
+                    <div class="project_col_row_input">
+                        <br>
+                    </div>
+                </div>
+            </div>
+            <div class="project_col">
+                <div class="project_col_row">
+                    <label class="project_col_row_label">新人工成本:</label>
+                    <div class="project_col_row_input">
+                        <br>
+                    </div>
+                </div>
+                <div class="project_col_row">
+                    <label class="project_col_row_label">新采购成本:</label>
+                    <div class="project_col_row_input">
+                        <br>
+                    </div>
+                </div>
+                <div class="project_col_row">
+                    <label class="project_col_row_label">新跨部门协作成本:</label>
+                    <div class="project_col_row_input">
+                        <br>
+                    </div>
+                </div>
+                <div class="project_col_row">
+                    <label class="project_col_row_label">新其他费用:</label>
+                    <div class="project_col_row_input">
+                        <br>
+                    </div>
+                </div>
+                <div class="project_col_row">
+                    <label class="project_col_row_label">新成本预算总金额:</label>
+                    <div class="project_col_row_input">
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="project_title_info">
+            <h3 class="project_title">项目里程碑变更</h3>
+            <div class="project_box" id="proMilepost">
+                <br>
+            </div>
+            <div style="display: inline-block;float: right;cursor: pointer;" id="del_milepost_btn">
+                <span style="color:#999999">删除</span>
+                <img src="assetsInfo/images/del.png" >
+            </div>
+            <div style="display: inline-block;float: right;cursor: pointer;" id="add_milepost_btn">
+                <span style="color:#999999">添加里程碑</span>
+                <img src="assetsInfo/images/zengjia.png" >
+            </div>
+        </div>
+        <div class="project_box_info proMilepost">
+            <div class="milepost_project_box">
+                <div class="project_row">
+                    <lable class="milepost_project_label">
+                        <input type="checkbox" title="原里程碑名称：" lay-skin="primary"  checked="">
+
+                    </lable>
+                    <div class="project_input">
+                        <br>
+                    </div>
+                </div>
+                <div class="project_row">
+                    <label class="project_label">原负责人:</label>
+                    <div class="project_input">
+                        <br>
+                    </div>
+                </div>
+                <div class="project_row">
+                    <div class="project_textarea">
+                        <label class="project_label">原里程碑目标:</label>
+                    </div>
+                    <div class="project_input">
+                        <br>
+                    </div>
+                </div>
+                <div class="project_row">
+                    <label class="project_label">原预计起止时间:</label>
+                    <div class="project_input">
+                        <div class="project_input_date">
+                            <br>
+                        </div>
+                        <span class="project_input_span">至</span>
+                        <div class="project_input_date">
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                <div class="project_row">
+                    <label class="project_label">原预计成果物:</label>
+                    <div class="project_input">
+                        <br>
+                    </div>
+                </div>
+                <div class="project_row">
+                    <label class="project_label">新里程碑名称:</label>
+                    <div class="project_input">
+                        <br>
+                    </div>
+                </div>
+                <div class="project_row">
+                    <label class="project_label">新负责人:</label>
+                    <div class="project_input">
+                        <br>
+                    </div>
+                </div>
+                <div class="project_row">
+                    <div class="project_textarea">
+                        <label class="project_label">新里程碑目标:</label>
+                    </div>
+                    <div class="project_input">
+                        <br>
+                    </div>
+                </div>
+                <div class="project_row">
+                    <label class="project_label">新预计起止时间:</label>
+                    <div class="project_input">
+                        <div class="project_input_date">
+                            <br>
+                        </div>
+                        <span class="project_input_span">至</span>
+                        <div class="project_input_date">
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                <div class="project_row">
+                    <div class="project_textarea">
+                        <label class="project_label">新预计成果物:</label>
+                    </div>
+                    <div class="project_input">
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var userClick=function (self) {
+        var data = {data: []};
+        var that = self;
+        var dataUsid = that.dataset.usid,
+            dataUsname = that.dataset.usname;
+        if (dataUsid && dataUsname) {
+            dataUsid = dataUsid.split(",");
+            dataUsname = dataUsname.split(",");
+            for (var i = 0; i < dataUsid.length; i++) {
+                data.data.push({
+                    id: dataUsid[i],
+                    name: dataUsname[i]
+                });
+            }
+        }
+        function callback (res) {
+            if (res.length > 0) {
+                var ids = [], names = [];
+                for (var i = 0; i < res.length; i++) {
+                    ids.push(res[i].id);
+                    names.push(res[i].name);
+                }
+                that.dataset.usid = ids.join(",");
+                that.dataset.usname = names.join(",");
+                that.value = names.join(",");
+            } else {
+                that.dataset.usid = "";
+                that.dataset.usname = "";
+                that.value = "";
+            }
+        }
+        ADCFormDesignHelper.personnelSelect(data, callback,"radio");
+    };
+
+    var radioClick = function (name) {
+        layui.form.on('radio(' + name + ')', function (data) {
+            var id = $(".project_name select").data("id");
+                if (data.value == "是") {
+                    $('.' + name).css('display', 'block');
+                    if(name=='proMilepost'){
+                        $('#del_milepost_btn').css('display', 'inline-block');
+                        $('#add_milepost_btn').css('display', 'inline-block');
+                    }
+                } else if (data.value == "否") {
+                    $('.' + name).css('display', 'none');
+                    if(name=='proMilepost'){
+                        $('#del_milepost_btn').css('display', 'none');
+                        $('#add_milepost_btn').css('display', 'none');
+                    }
+                }
+        });
+    };
+    //监听项目名称变化填充数据
+    // var setProjectInfo = function(id){
+    //     layui.admin.req('/api/progress/projectBudgetChange/getByProjectId/'+id, {}, function (res){
+    //         if (res.ok) {
+    //             var  projectData=res.data;
+    //             $(".proSituation").children('.project_row').eq(0).children('project_input').children('textarea').val(projectData.projectDescription);
+    //             var strName ="";
+    //             var strId ="";
+    //             for (var i = 0; i <projectData.mapList.length ; i++) {
+    //                 if(i!=projectData.mapList.length-1){
+    //                     strName+=projectData.mapList[i].name+",";
+    //                     strId+=projectData.mapList[i].id+",";
+    //                 }else{
+    //                     strName+=projectData.mapList[i].name;
+    //                     strId+=projectData.mapList[i].id;
+    //                 }
+    //             }
+    //             $(".proMember").children('.project_row').eq(0).children('.project_input').children('span').children('input').val(strName);
+    //             $(".proMember").children('.project_row').eq(0).children('.project_input').children('span').children('input').data('usname',strName);
+    //             $(".proMember").children('.project_row').eq(0).children('.project_input').children('span').children('input').data('usid',strName);
+    //             $(".proDepartment").children('.project_row').eq(0).children('.project_input').children('span').children('input').data('name',projectData.bearDeptName);
+    //             $(".proDepartment").children('.project_row').eq(0).children('.project_input').children('span').children('input').data('id',projectData.bearDeptId);
+    //             $(".proDepartment").children('.project_row').eq(0).children('.project_input').children('span').children('input').val(projectData.bearDeptName);
+    //             var projectBeginTime = projectData.projectBeginTime?tools.getDate(projectData.projectBeginTime,"YYYY-MM-DD"):'';
+    //             var projectEndTime = projectData.projectEndTime?tools.getDate(projectData.projectEndTime,"YYYY-MM-DD"):'';
+    //             $(".proDate").children('.project_row').eq(0).children('.project_input').children('.project_input_date').eq(0).children('span').children('input').val(projectBeginTime);
+    //             $(".proDate").children('.project_row').eq(0).children('.project_input').children('.project_input_date').eq(1).children('span').children('input').val(projectEndTime);
+    //             if(projectData.projectBudgetChangeEO&&projectData.projectBudgetChangeEO.length!=0){
+    //                 var personCost=projectData.projectBudgetChangeEO.personCost?projectData.projectBudgetChangeEO.personCost.toFixed(2):'';
+    //                 var purchaseCost=projectData.projectBudgetChangeEO.purchaseCost?projectData.projectBudgetChangeEO.purchaseCost.toFixed(2):'';
+    //                 var cooperationCost=projectData.projectBudgetChangeEO.cooperationCost?projectData.projectBudgetChangeEO.cooperationCost.toFixed(2):'';
+    //                 var otherCost=projectData.projectBudgetChangeEO.otherCost?projectData.projectBudgetChangeEO.otherCost.toFixed(2):'';
+    //                 $(".proBudget").children('.project_col').eq(0).children('.project_col_row').eq(0).children('.project_col_row_input').children('input').val(personCost);
+    //                 $(".proBudget").children('.project_col').eq(0).children('.project_col_row').eq(1).children('.project_col_row_input').children('input').val(purchaseCost);
+    //                 $(".proBudget").children('.project_col').eq(0).children('.project_col_row').eq(2).children('.project_col_row_input').children('input').val(cooperationCost);
+    //                 $(".proBudget").children('.project_col').eq(0).children('.project_col_row').eq(3).children('.project_col_row_input').children('input').val(otherCost);
+    //                 var num =parseFloat(personCost,10)+parseFloat(purchaseCost,10)+parseFloat(cooperationCost,10)+parseFloat(otherCost,10);
+    //                 $(".proBudget").children('.project_col').eq(0).children('.project_col_row').eq(4).children('.project_col_row_input').children('input').val(num.toFixed(2));
+    //             }
+    //         } else {
+    //             layer.msg(res.message, {
+    //                 icon: 5
+    //             });
+    //         }
+    //     }, {
+    //         method: 'get'
+    //     });
+    //     layui.admin.req('/api/progress/projectMilepost/page4Tips', {"projectId":id}, function (res){
+    //         if (res.ok) {
+    //             console.log(res.data,566554545454)
+    //
+    //         } else {
+    //             layer.msg(res.message, {
+    //                 icon: 5
+    //             });
+    //         }
+    //     }, {
+    //         method: 'post'
+    //     });
+    //     layui.form.render();
+    // };
+    var sumCose =function(){
+        var personCost=$(".proBudget").children('.project_col').eq(1).children('.project_col_row').eq(0).children('.project_col_row_input').children('input').val();
+        var purchaseCost = $(".proBudget").children('.project_col').eq(1).children('.project_col_row').eq(1).children('.project_col_row_input').children('input').val();
+        var cooperationCost =  $(".proBudget").children('.project_col').eq(1).children('.project_col_row').eq(2).children('.project_col_row_input').children('input').val();
+        var otherCost =  $(".proBudget").children('.project_col').eq(1).children('.project_col_row').eq(3).children('.project_col_row_input').children('input').val();
+        personCost=personCost?personCost:0;
+        purchaseCost=purchaseCost?purchaseCost:0;
+        cooperationCost=cooperationCost?cooperationCost:0;
+        otherCost=otherCost?otherCost:0;
+        var num =parseFloat(personCost,10)+parseFloat(purchaseCost,10)+parseFloat(cooperationCost,10)+parseFloat(otherCost,10);
+        $(".proBudget").children('.project_col').eq(1).children('.project_col_row').eq(4).children('.project_col_row_input').children('input').val(num.toFixed(2));
+    };
+    layui.form.on('select(select_1564650327815)',function (data) {
+        data.elem.dataset.name=data.elem[data.elem.selectedIndex].value;
+        data.elem.dataset.id=data.elem[data.elem.selectedIndex].id;
+        setInfo(data.elem[data.elem.selectedIndex].id);
+    });
+    var setSelect =function (name) {
+        layui.form.on('select('+name+')',function (data) {
+            data.elem.dataset.name=data.elem[data.elem.selectedIndex].value;
+            data.elem.dataset.id=data.elem[data.elem.selectedIndex].id;
+            // setInfo(data.elem[data.elem.selectedIndex].id);
+        });
+    };
+    var arrRadio = ['proDepartment', 'proMember', 'proSituation', 'proDate', 'proBudget','proMilepost'];
+    for (var i = 0; i < arrRadio.length; i++) {
+        radioClick(arrRadio[i]);
+    }
+    var addOutcomes = function (self) {
+        var dateTime = new Date().getTime();
+        var html='<div style="margin-bottom: 5px">' +
+            '<input name="input_'+dateTime+'" type="text" title="新预计成果物" value="" adcform="adc_form_input" class="layui-input" placeholder="新预计成果物" adcform_listctrlmark="" adcform_hide="0" adcform_fontsize="14" adcform_align="left" adcform_height="30" adcform_validate="adcformvalidate_none" style="box-sizing: border-box; font-size: 14px; text-align: left; height: 30px;width: calc(100% - 20px );">' +
+            '<i class="clickImg layui-icon layui-icon-delete" style="font-size: 20px; margin-right:-50px;cursor:pointer" href="javascript:;" onclick="delOutcomes(this)"></i></div>';
+        $(self).parent().parent('.project_input').append(html);
+    };
+    var delOutcomes = function (self) {
+        $(self).parent().remove();
+    };
+    onblur='javascript:numbersum(this)'
+    var addItem = function () {
+        var dateTime = new Date().getTime();
+        var html ='<div class="milepost_project_box">' +
+            '<div class="project_row">' +
+            '<lable class="project_label"><input type="checkbox" title="原里程碑名称：" lay-skin="primary"  style="\n' +
+            ' display: none;\n' +
+            '"></lable>' +
+            '<div class="project_input">' +
+            '<select name="select_'+dateTime+'_milepost_1" lay-filter="select_'+dateTime+'_milepost_1" type="select" title="原里程碑名称" adcform="adc_form_select" adcform_height="30" adcform_width="190" style="height: 30px; width: 190px;">' +
+            '<option value="请选择">请选择</option></select></div></div>' +
+            '<div class="project_row"><label class="project_label">原负责人:</label>' +
+            '<div class="project_input">{|-<span class="layui-input-inline" style="position: relative;">' +
+            '<input name="inputuserselect_'+dateTime+'2" type="text" title="原负责人" adcform="adc_form_user_select" class="layui-input" placeholder="原负责人" readonly="readonly" onclick="" adcform_default="1" adcform_height="30" adcform_fontsize="14" style="box-sizing: border-box; height: 30px; font-size: 14px; cursor: pointer; padding-right: 30px;"><img src="/assetsInfo/images/bumenyuangongguanli.png" style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;" _src="/assetsInfo/images/bumenyuangongguanli.png"></span>-|}' +
+            '<script class="inputuserselect_'+dateTime+'2_script">\
+                (function (that) {\
+                    var adcform_default = that.getAttribute("adcform_default");\
+                    if (adcform_default == "1") {\
+                        var account = layui.config.getAccount();\
+                        that.value = account.usname;\
+                        that.dataset.usname = account.usname;\
+                        that.dataset.usid = account.usid;\
+                    }\
+                })(document.querySelector("input[name=inputuserselect_'+dateTime+'2]"));\
+                        <\/script>' +
+            '</div></div>' +
+            '<div class="project_row">' +
+            '<div class="project_textarea"><label class="project_label">原里程碑目标:</label>' +
+            '</div><div class="project_input">' +
+            '<textarea name="textarea_'+dateTime+'3" title="原里程碑目标" value="" adcform="adc_form_textarea" class="layui-textarea" placeholder="原里程碑目标" adcform_rich="0" adcform_fontsize="14" adcform_height="80" style="box-sizing: border-box; font-size: 14px; height: 80px;"></textarea></div></div>' +
+            '<div class="project_row"><label class="project_label">原预计起止时间:</label>' +
+            '<div class="project_input">' +
+            '<div class="project_input_date">' +
+            '<span style="position: relative;">' +
+            '<input name="datetime_'+dateTime+'4" type="text" title="原预计开始时间" placeholder="原预计开始时间" adcform="adc_form_datetime" adcform_theme="#37ABFF" adcform_type="_" class="datetime_'+dateTime+'4 layui-input" adcform_hide="0" adcform_auto="1" adcform_fontsize="14" adcform_align="left" adcform_height="30" style="box-sizing: border-box; font-size: 14px; text-align: left; height: 30px;"><img src="/assetsInfo/images/riliform.png" style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;" _src="/assetsInfo/images/riliform.png">' +
+            '<script class="datetime_'+dateTime+'4_script">\
+                    (function(){var param = {\
+                        elem: ".datetime_'+dateTime+'4"\
+                    };\
+                    var type = document.querySelector(".datetime_'+dateTime+'4").getAttribute("adcform_type").split("_");\
+                    var theme = document.querySelector(".datetime_'+dateTime+'4").getAttribute("adcform_theme");\
+                    var auto = document.querySelector(".datetime_'+dateTime+'4").getAttribute("adcform_auto");\
+                    if(type[0]!==""){param.type=type[0];}\
+                    if(type[1]!==""){param.range=true;}\
+                    if(theme){param.theme=theme;}\
+                    if(auto == "1" && type[1]==""){param.value = new Date();}\
+                    layui.laydate.render(param);})();\
+                <\/script>\
+            </span>' +
+            '</div>' +
+            '<span class="project_input_span">至</span>' +
+            '<div class="project_input_date">' +
+            '<span style="position: relative;">' +
+            '<input name="datetime_'+dateTime+'5" type="text" title="原预计结束时间" placeholder="原预计结束时间" adcform="adc_form_datetime" adcform_theme="#37ABFF" adcform_type="_" class="datetime_'+dateTime+'5 layui-input" adcform_hide="0" adcform_auto="1" adcform_fontsize="14" adcform_align="left" adcform_height="30" style="box-sizing: border-box; font-size: 14px; text-align: left; height: 30px;">' +
+            '<img src="/assetsInfo/images/riliform.png" style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;" _src="/assetsInfo/images/riliform.png">' +
+            '<script class="datetime_'+dateTime+'5_script">\
+                    (function(){var param = {\
+                        elem: ".datetime_'+dateTime+'5"\
+                    };\
+                    var type = document.querySelector(".datetime_'+dateTime+'5").getAttribute("adcform_type").split("_");\
+                    var theme = document.querySelector(".datetime_'+dateTime+'5").getAttribute("adcform_theme");\
+                    var auto = document.querySelector(".datetime_'+dateTime+'5").getAttribute("adcform_auto");\
+                    if(type[0]!==""){param.type=type[0];}\
+                    if(type[1]!==""){param.range=true;}\
+                    if(theme){param.theme=theme;}\
+                    if(auto == "1" && type[1]==""){param.value = new Date();}\
+                    layui.laydate.render(param);})();\
+                <\/script>\
+            </span>' +
+            '</div></div></div>' +
+            '<div class="project_row">' +
+            '<label class="project_label">原预计成果物:</label>' +
+            '<div class="project_input">' +
+            '<input name="input_'+dateTime+'6" type="text" title="原预计成果物" value="" adcform="adc_form_input" class="layui-input" placeholder="原预计成果物" adcform_listctrlmark="" adcform_hide="0" adcform_fontsize="14" adcform_align="left" adcform_height="30" adcform_validate="adcformvalidate_none" style="box-sizing: border-box; font-size: 14px; text-align: left; height: 30px;"></div></div>' +
+            '<div class="project_row"><label class="project_label">新里程碑名称:</label>' +
+            '<div class="project_input"><input name="input_'+dateTime+'7" type="text" title="新里程碑名称" value="" adcform="adc_form_input" class="layui-input" placeholder="新里程碑名称" adcform_listctrlmark="" adcform_hide="0" adcform_fontsize="14" adcform_align="left" adcform_height="30" adcform_validate="adcformvalidate_none" style="box-sizing: border-box; font-size: 14px; text-align: left; height: 30px;">' +
+            '</div></div>' +
+            '<div class="project_row"><label class="project_label">新负责人:</label>' +
+            '<div class="project_input">{|-<span class="layui-input-inline" style="position: relative;">' +
+            '<input name="inputuserselect_'+dateTime+'8" type="text" title="新负责人" adcform="adc_form_user_select" class="layui-input" placeholder="新负责人" readonly="readonly" onclick="" adcform_default="1" adcform_height="30" adcform_fontsize="14" style="box-sizing: border-box; height: 30px; font-size: 14px; cursor: pointer; padding-right: 30px;"><img src="/assetsInfo/images/bumenyuangongguanli.png" style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;" _src="/assetsInfo/images/bumenyuangongguanli.png"></span>-|}' +
+            '<script class="inputuserselect_'+dateTime+'8_script">\
+                (function (that) {\
+                    var adcform_default = that.getAttribute("adcform_default");\
+                    if (adcform_default == "1") {\
+                        var account = layui.config.getAccount();\
+                        that.value = account.usname;\
+                        that.dataset.usname = account.usname;\
+                        that.dataset.usid = account.usid;\
+                    }\
+                })(document.querySelector("input[name=inputuserselect_'+dateTime+'8]"));\
+                        <\/script>' +
+            '</div></div>' +
+            '<div class="project_row"><div class="project_textarea"><label class="project_label">新里程碑目标:</label>' +
+            '</div><div class="project_input">' +
+            '<textarea name="textarea_'+dateTime+'9" title="新里程碑目标" value="" adcform="adc_form_textarea" class="layui-textarea" placeholder="新里程碑目标" adcform_rich="0" adcform_fontsize="14" adcform_height="80" style="box-sizing: border-box; font-size: 14px; height: 80px;"></textarea></div></div>' +
+            '<div class="project_row"><label class="project_label">新预计起止时间:</label>' +
+            '<div class="project_input"><div class="project_input_date">' +
+            '<span style="position: relative;">' +
+            '<input name="datetime_'+dateTime+'10" type="text" title="新预计开始时间" placeholder="新预计开始时间" adcform="adc_form_datetime" adcform_theme="#37ABFF" adcform_type="_" class="datetime_'+dateTime+'10 layui-input" adcform_hide="0" adcform_auto="1" adcform_fontsize="14" adcform_align="left" adcform_height="30" style="box-sizing: border-box; font-size: 14px; text-align: left; height: 30px;"><img src="/assetsInfo/images/riliform.png" style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;" _src="/assetsInfo/images/riliform.png">' +
+            '<script class="datetime_'+dateTime+'10_script">\
+                    (function(){var param = {\
+                        elem: ".datetime_'+dateTime+'10"\
+                    };\
+                    var type = document.querySelector(".datetime_'+dateTime+'10").getAttribute("adcform_type").split("_");\
+                    var theme = document.querySelector(".datetime_'+dateTime+'10").getAttribute("adcform_theme");\
+                    var auto = document.querySelector(".datetime_'+dateTime+'10").getAttribute("adcform_auto");\
+                    if(type[0]!==""){param.type=type[0];}\
+                    if(type[1]!==""){param.range=true;}\
+                    if(theme){param.theme=theme;}\
+                    if(auto == "1" && type[1]==""){param.value = new Date();}\
+                    layui.laydate.render(param);})();\
+                <\/script></span>' +
+            '</div>' +
+            '<span class="project_input_span">至</span>' +
+            '<div class="project_input_date">' +
+            '<span style="position: relative;">' +
+            '<input name="datetime_'+dateTime+'11" type="text" title="新预计结束时间" placeholder="新预计结束时间" adcform="adc_form_datetime" adcform_theme="#37ABFF" adcform_type="_" class="datetime_'+dateTime+'11 layui-input" adcform_hide="0" adcform_auto="1" adcform_fontsize="14" adcform_align="left" adcform_height="30" style="box-sizing: border-box; font-size: 14px; text-align: left; height: 30px;"><img src="/assetsInfo/images/riliform.png" style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;" _src="/assetsInfo/images/riliform.png">' +
+            '<script class="datetime_'+dateTime+'11_script">\
+                    (function(){var param = {\
+                        elem: ".datetime_'+dateTime+'11"\
+                    };\
+                    var type = document.querySelector(".datetime_'+dateTime+'11").getAttribute("adcform_type").split("_");\
+                    var theme = document.querySelector(".datetime_'+dateTime+'11").getAttribute("adcform_theme");\
+                    var auto = document.querySelector(".datetime_'+dateTime+'11").getAttribute("adcform_auto");\
+                    if(type[0]!==""){param.type=type[0];}\
+                    if(type[1]!==""){param.range=true;}\
+                    if(theme){param.theme=theme;}\
+                    if(auto == "1" && type[1]==""){param.value = new Date();}\
+                    layui.laydate.render(param);})();\
+                <\/script>\
+            </span>' +
+            '</div></div></div' +
+            '><div class="project_row"><div class="project_textarea" style="\n' +
+            '    vertical-align: bottom;\n' +
+            '"><label class="project_label" style="\n' +
+            '    top: 0px;\n' +
+            '">新预计成果物:</label></div>' +
+            '<div class="project_input">' +
+            '<div style="margin-bottom:5px">' +
+            '<input name="input_'+dateTime+'12" type="text" title="新预计成果物" value="" adcform="adc_form_input" class="layui-input" placeholder="新预计成果物" adcform_listctrlmark="" adcform_hide="0" adcform_fontsize="14" adcform_align="left" adcform_height="30" adcform_validate="adcformvalidate_none" style="box-sizing: border-box; font-size: 14px; text-align: left; height: 30px;width: calc(100% - 20px );"><img class="clickImg" onclick="addOutcomes(this)" src="/assetsInfo/images/Group-.png" style="cursor: pointer;" _src="/assetsInfo/images/Group-.png">' +
+            '</div></div></div></div>';
+        $("#proMilepost").append(html);
+      layui.form.render();
+    };
+    $('#add_milepost_btn').off('click').on('click',function () {
+        addItem();
+    });
+    $('#del_milepost_btn').off('click').on('click',function () {
+        var idx=0;
+        var arr=[];
+        for (var i = 0; i < $("#proMilepost input:checkbox").length; i++) {
+            if($("#proMilepost input:checkbox")[i].checked){
+                idx++;
+                arr.push($("#proMilepost input:checkbox").eq(i));
+            }
+        }
+        if(idx==$("#proMilepost input:checkbox").length){
+            return layer.msg('至少要保留一个里程碑，请重新选择！', {
+                icon: 5
+            });
+        }else if(idx==0){
+            return layer.msg('请选择里程碑！', {
+                icon: 5
+            });
+        }
+        delMilepost(arr);
+    });
+    var delMilepost =function (arr) {
+        for (var i = 0; i <arr.length ; i++) {
+            arr[i].parent().parent().parent('.milepost_project_box').remove();
+        }
+    };
+</script>

@@ -1,0 +1,270 @@
+<link rel="stylesheet" href="/assetsInfo/css/newBigScreen.css">
+<div id="bigMain" class="bigMain">
+    <div class="bigHead">
+        <div class="bigHead-content">
+            <img title="返回" src="/assetsInfo/images/bigScreen/fanhuishouye.png" class="goBack" />
+            <div class="bigHead-title">
+                <!--<span class="card-cycle"></span>-->
+                <span class="bigHead-titleCotent">中汽数据经营数据看板</span>
+                <!--<span class="card-cycle"></span>-->
+            </div>
+            <img src="/assetsInfo/images/bigScreen/quanping.png" title="全屏" class="allScreen isAll" />
+            <img src="/assetsInfo/images/bigScreen/tuichuquanping.png" title="退出全屏" class="allScreen noAll" />
+        </div>
+    </div>
+    <div id="bigContent" class="bigContent">
+
+    </div>
+    <div class="leftBtn">
+        <img src="/assetsInfo/images/bigScreen/zuohui.png" title="上一页" />
+    </div>
+    <div class="rightBtn">
+        <img src="/assetsInfo/images/bigScreen/youlan.png" title="下一页" />
+    </div>
+</div>
+<script src="/assetsInfo/libs/echarts.min.js"></script>
+<script src="/assetsInfo/libs/china.js"></script>
+<script>
+    layui.use(['element', 'form', 'layer'], function () {
+        var element = layui.element,
+            admin = layui.admin,
+            config = layui.config,
+            layer = layui.layer,
+            table = layui.table,
+            tools = layui.tools;
+        //  获取url参数
+        function GetYearValue() {
+            var arr = window.location.hash.split('_');
+            var year = arr[arr.length - 1];
+            if (year != '') {
+                sessionStorage.getYear = year;
+            } else {
+                sessionStorage.getYear = new Date().getFullYear();
+            }
+        }
+        GetYearValue();
+        var screenArr = ["bigScreenLoad1", "bigScreenLoad2", "bigScreenLoad3", "bigScreenLoad4"];
+        var screenIndex = 0;
+        function checkBrowser() {
+            var ua = navigator.userAgent.toLocaleLowerCase();
+            var browserType = null;
+            if (ua.match(/msie/) != null || ua.match(/trident/) != null) {
+                browserType = "IE";
+                browserVersion = ua.match(/msie ([\d.]+)/) != null ? ua.match(/msie ([\d.]+)/)[1] : ua.match(/rv:([\d.]+)/)[1];
+            } else if (ua.match(/firefox/) != null) {
+                browserType = "火狐";
+            } else if (ua.match(/ubrowser/) != null) {
+                browserType = "UC";
+            } else if (ua.match(/opera/) != null) {
+                browserType = "欧朋";
+            } else if (ua.match(/bidubrowser/) != null) {
+                browserType = "百度";
+            } else if (ua.match(/metasr/) != null) {
+                browserType = "搜狗";
+            } else if (ua.match(/tencenttraveler/) != null || ua.match(/qqbrowse/) != null) {
+                browserType = "QQ";
+            } else if (ua.match(/maxthon/) != null) {
+                browserType = "遨游";
+            } else if (ua.match(/chrome/) != null) {
+                var is360 = _mime("type", "application/vnd.chromium.remoting-viewer");
+                function _mime(option, value) {
+                    var mimeTypes = navigator.mimeTypes;
+                    for (var mt in mimeTypes) {
+                        if (mimeTypes[mt][option] == value) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                if (is360) {
+                    browserType = '360';
+                } else {
+                    browserType = "谷歌";
+                }
+
+            } else if (ua.match(/safari/) != null) {
+                browserType = "Safari";
+            }
+            return browserType;
+        }
+        //监听退出全屏事件
+        function checkFull() {
+            return document.fullscreenElement ||
+                document.msFullscreenElement ||
+                document.mozFullScreenElement ||
+                document.webkitFullscreenElement || false;
+        }
+        window.onresize = function () {
+            if (checkFull()) {
+                //要执行的动作
+                $(".isAll").css("display", "none");
+                $(".noAll").css("display", "inline-block");
+            } else {
+                $(".isAll").css("display", "inline-block");
+                $(".noAll").css("display", "none");
+                $("#bigMain").parent().css("height", "calc(100vh - 40px )")
+            }
+
+            var myChart = document.getElementsByClassName("canvasBox");
+            for (var i = 0; i < myChart.length; i++) {
+                echarts.init(myChart[i]).resize();
+            }
+            if ($("#departmentTable").length != 0) {
+                table.reload("departmentTable", {
+                    height: $(".tableBox").height() - 5
+                })
+            }
+            // 面板4表格高度变化
+            if ($("#companyCaseP4").length != 0) {
+                table.reload("companyCaseP4", {
+                    height: $(".tablesP4").height()
+                })
+            }
+            if ($("#rankingP4").length != 0) {
+                table.reload("rankingP4", {
+                    height: $(".tablesP4").height()
+                })
+            }
+            if ($("#automobileP4").length != 0) {
+                table.reload("automobileP4", {
+                    height: $(".tablesP42").height()
+                })
+            }
+            if ($("#departmentP4").length != 0) {
+                table.reload("departmentP4", {
+                    height: $(".tablesP4").height()
+                })
+            }
+            if ($("#proceedsP4").length != 0) {
+                table.reload("proceedsP4", {
+                    height: $(".tablesP4").height()
+                })
+            }
+        };
+
+        //全屏显示
+        function fullScreen(el) {
+            var el = $("#bigMain").parent()[0];
+            if (checkBrowser() == "搜狗" || checkBrowser() == "360") {
+                $("#bigMain").parent().css("height", "100%")
+                $("#bigMain").parent().css("width", "100%")
+                // el = $("#bigMain")[0];
+            }
+            var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen,
+                wscript;
+            if (typeof rfs != "undefined" && rfs) {
+                rfs.call(el);
+                return;
+            }
+            if (typeof window.ActiveXObject != "undefined") {
+                wscript = new ActiveXObject("WScript.Shell");
+                if (wscript) {
+                    wscript.SendKeys("{F11}");
+                }
+            }
+        }
+
+        //退出全屏
+        function exitFullScreen(el) {
+            var el = document,
+                cfs = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullScreen,
+                wscript;
+            if (typeof cfs != "undefined" && cfs) {
+                cfs.call(el);
+                return;
+            }
+
+            if (typeof window.ActiveXObject != "undefined") {
+                wscript = new ActiveXObject("WScript.Shell");
+                if (wscript != null) {
+                    wscript.SendKeys("{F11}");
+                }
+            }
+        }
+        $(".isAll").off("click").on("click", function () {
+            fullScreen();
+        });
+        $(".noAll").off("click").on("click", function () {
+            exitFullScreen();
+        });
+        $(".goBack").off("click").on("click", function () {
+            screenIndex--;
+            if (screenIndex < 0) {
+                screenIndex = 0;
+                return;
+            } else if (screenIndex == 0) {
+                $(".leftBtn").find("img").attr("src", "/assetsInfo/images/bigScreen/zuohui.png");
+            } else {
+                $(".leftBtn").find("img").attr("src", "/assetsInfo/images/bigScreen/zuolan.png");
+                $(".rightBtn").find("img").attr("src", "/assetsInfo/images/bigScreen/youlan.png");
+            }
+            getScreenMain();
+        });
+        $(".leftBtn").off("click").on("click", function () {
+            screenIndex--;
+            if (screenIndex < 0) {
+                screenIndex = 0;
+                return;
+            } else if (screenIndex == 0) {
+                $(this).find("img").attr("src", "/assetsInfo/images/bigScreen/zuohui2.png");
+            } else {
+                $(this).find("img").attr("src", "/assetsInfo/images/bigScreen/zuolan2.png");
+                $(".rightBtn").find("img").attr("src", "/assetsInfo/images/bigScreen/youlan.png");
+            }
+            getScreenMain();
+        }).off("mouseenter").on("mouseenter", function () {
+            var srcImg = '/assetsInfo/images/bigScreen/zuolan2.png';
+            if (screenIndex == 0) {
+                srcImg = '/assetsInfo/images/bigScreen/zuohui2.png';
+            }
+            $(this).find("img").attr("src", srcImg);
+        }).off("mouseleave").on("mouseleave", function () {
+            var srcImg = '/assetsInfo/images/bigScreen/zuolan.png';
+            if (screenIndex == 0) {
+                srcImg = '/assetsInfo/images/bigScreen/zuohui.png';
+            }
+            $(this).find("img").attr("src", srcImg);
+        });
+        $(".rightBtn").off("click").on("click", function () {
+            screenIndex++;
+            if (screenIndex > 3) {
+                screenIndex = 3;
+                return;
+            } else if (screenIndex == 3) {
+                $(this).find("img").attr("src", "/assetsInfo/images/bigScreen/youhui2.png");
+            } else {
+                $(this).find("img").attr("src", "/assetsInfo/images/bigScreen/youlan2.png");
+                $(".leftBtn").find("img").attr("src", "/assetsInfo/images/bigScreen/zuolan.png");
+            }
+            getScreenMain();
+        }).off("mouseenter").on("mouseenter", function () {
+            var srcImg = '/assetsInfo/images/bigScreen/youlan2.png';
+            if (screenIndex == 3) {
+                srcImg = '/assetsInfo/images/bigScreen/youhui2.png';
+            }
+            $(this).find("img").attr("src", srcImg);
+        }).off("mouseleave").on("mouseleave", function () {
+            var srcImg = '/assetsInfo/images/bigScreen/youlan.png';
+            if (screenIndex == 3) {
+                srcImg = '/assetsInfo/images/bigScreen/youhui.png';
+            }
+            $(this).find("img").attr("src", srcImg);
+        });
+        var getScreenMain = function () {
+            $("#bigContent").empty().load('components/newBigScreen/' + screenArr[screenIndex] + '.html', function () {
+                if (checkFull()) {
+                    //要执行的动作
+                    $(".isAll").css("display", "none");
+                    $(".noAll").css("display", "inline-block");
+                } else {
+                    $(".isAll").css("display", "inline-block");
+                    $(".noAll").css("display", "none");
+                    $("#bigMain").parent().css("height", "calc(100vh - 40px )")
+                }
+
+            })
+        };
+        getScreenMain();
+    })
+
+</script>

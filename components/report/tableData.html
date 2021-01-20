@@ -1,0 +1,337 @@
+
+<!-- zTree 样式 -->
+<link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/ebizStyle.css">
+<link rel="stylesheet" href="../../assetsInfo/css/report.css">
+<!-- echarts以及甘特图 -->
+<link rel="stylesheet" href="../../assetsInfo/libs/adcganttchart/jquery.fn.adcganttchart.css">
+<!--表格样式-->
+<link rel="stylesheet" href="../../assetsInfo/libs/chosen/chosen.min.css">
+<script src="../../assetsInfo/libs/adcganttchart/jquery.fn.adcganttchart.js"></script>
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<div class="layui-row layui-col-space30 " style="overflow: hidden;height: calc(100% + 30px)!important;">
+    <div class="tree-block">
+
+                    <div id="scrollPage">
+                                <input type="text" style="border:1px solid rgba(255,255,255,0.4);" class="searchInput text" placeholder="请输入关键字" id="key" onfocus="$(this).css('border','1px solid #f3f3f3')" onblur="$(this).css('border','1px solid rgba(255,255,255,0.4)')">
+                            <div style="clear: both"></div>
+                    </div>
+
+                    <div class="layui-tab-content " style="position: inherit!important;overflow-y: inherit;padding:0;padding-top: 35px;">
+                        <div class="layui-tab-item layui-show">
+                            <ul id="select-org" class="ztree"></ul>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div  class="htmlRight">
+        <div id="nodata" style=" background: #fff; width: 100%; height: 100%; text-align: center;">
+
+
+        </div>
+
+    </div>
+    </div>
+
+
+
+
+
+
+
+<!-- zTree js 文件 -->
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+<script src="assetsInfo/libs/chosen/chosen.jquery.min.js"></script>
+<script src="../../assetsInfo/libs/exhide.js"></script>
+<script src="../../assetsInfo/libs/fuzzy.js"></script>
+
+
+
+<script>
+    // 初始化 layui
+    layui.use(['table', 'formSelects', 'laydate', 'tools'], function () {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            formSelects = layui.formSelects,
+            tools = layui.tools,
+            admin = layui.admin,
+            contactAddress = config.getAccount().contactAddress;
+        // 初始化组织机构列表
+        addHtml("allManagement")
+        function addHtml(num) {
+            $('#nodata').load('components/report/'+num+'.html')
+        }
+
+        tree()
+        function tree() {
+            // 生成 zTree
+            setting =
+                {
+
+                    data: {
+                        simpleData: {
+                            enable: true,
+                            idKey: "id",
+                            pIdKey: "parentId",
+                            rootPId: 0
+                        },
+
+                        key: {
+                            title: "nameTitle",
+                            name: 'name'
+                        }
+                    },
+
+                    callback: {
+                        onClick: function (event, treeId, treeNode) {
+                            addHtml(treeNode.id)
+                        },
+                        // onRemove:onRemove
+                    }
+                };
+
+            var zNodes = [
+                {id: "three", name: "部门业务经营预算", parentId: "0", icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file.png"},
+            //     {
+            //     id: "one",
+            //     name: "成本费用预算执行分析",
+            //     parentId: "0",
+            //     icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file.png"
+            // },
+            //     {id: "two", name: "经营统计分析", parentId: "0", icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file.png"},
+            //     {
+            //         id: "1",
+            //         name: "收入预算执行率/成本预算执行率",
+            //         parentId: "one",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "2",
+            //         name: "审批项目执行情况—整体",
+            //         parentId: "one",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "3",
+            //         name: "审批项目执行情况—本部",
+            //         parentId: "one",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "4",
+            //         name: "支出合同执行情况—部门",
+            //         parentId: "one",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "5",
+            //         name: "成本费用预算执行情况—整体",
+            //         parentId: "one",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "6",
+            //         name: "成本费用预算执行情况—部门",
+            //         parentId: "one",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "7",
+            //         name: "专项预算费用监控—科研费用预算执行情况",
+            //         parentId: "one",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "8",
+            //         name: "专项预算费用监控—会议费用预算执行情况",
+            //         parentId: "one",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "9",
+            //         name: "专项预算费用监控—业务招待费预算执行情况",
+            //         parentId: "one",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "10",
+            //         name: "专项预算费用监控—出国费用预算执行情况",
+            //         parentId: "one",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "11",
+            //         name: "纳税情况汇总表",
+            //         parentId: "one",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "12",
+            //         name: "资产情况汇总表",
+            //         parentId: "one",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "13",
+            //         name: "资金情况汇总表",
+            //         parentId: "one",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {id: "14", name: "经营概况", parentId: "two", icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"},
+            //     {
+            //         id: "15",
+            //         name: "经营合同同期对比",
+            //         parentId: "two",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "16",
+            //         name: "开票收入同期对比",
+            //         parentId: "two",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "17",
+            //         name: "三大板块合同签定同期对比",
+            //         parentId: "two",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "18",
+            //         name: "三大板块开票收入同期对比",
+            //         parentId: "two",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "19",
+            //         name: "本部合同签定同期对比",
+            //         parentId: "two",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "20",
+            //         name: "本部开票收入同期对比",
+            //         parentId: "two",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "21",
+            //         name: "应收账款占比分析",
+            //         parentId: "two",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "22",
+            //         name: "收入预算执行分析",
+            //         parentId: "two",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "23",
+            //         name: "合同、开票同期对比",
+            //         parentId: "two",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+            //     {
+            //         id: "24",
+            //         name: "2019年已签订合同汇总表",
+            //         parentId: "two",
+            //         icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+            //     },
+                {
+                    id: "allManagement",
+                    name: "整体经营情况",
+                    parentId: "three",
+                    icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+                },
+                {
+                    id: "businessContract",
+                    name: "经营合同同期对标",
+                    parentId: "three",
+                    icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+                },
+                {
+                    id: "invoiceRevenue",
+                    name: "开票收入同期对标",
+                    parentId: "three",
+                    icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+                },
+                {
+                    id: "accountAdvance",
+                    name: "进账同期对标",
+                    parentId: "three",
+                    icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+                },
+                {
+                    id: "accountsReceivable",
+                    name: "应收账款占比分析",
+                    parentId: "three",
+                    icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+                },
+                {
+                    id: "operationalsituation",
+                    name: "本部经营情况",
+                    parentId: "three",
+                    icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+                },
+                {
+                    id: "departmentManage",
+                    name: "部门经营情况",
+                    parentId: "three",
+                    icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+                },
+                {
+                    id: "businessOperation",
+                    name: "业务经营情况",
+                    parentId: "three",
+                    icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+                },
+                {
+                    id: "officeArticles",
+                    name: "部门成本使用情况-办公用品",
+                    parentId: "three",
+                    icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+                },
+                {
+                    id: "consumables",
+                    name: "部门成本使用情况-耗材",
+                    parentId: "three",
+                    icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+                },
+                {
+                    id: "travelBusiness",
+                    name: "部门成本使用情况-差旅",
+                    parentId: "three",
+                    icon: "../../assetsInfo/libs/zTree/css/metroStyle/img/file1.png"
+                },
+
+                {id: "aaaa", name: "最后一条数据", parentId: "0", type: 3}
+            ]
+
+            zNodes.map(function (item) {
+                item.nameTitle=item.name;
+
+                    if(item.name.length>13){
+                        item.name=item.name.substring(0,13)
+                        item.name=item.name+"..."
+                    }
+            });
+
+            zTreeObj = $.fn.zTree.init($("#select-org"), setting, zNodes);
+
+            var treeObj = $.fn.zTree.getZTreeObj("select-org");
+            //默认展开第一个节点
+            var nodes = treeObj.getNodes();
+            treeObj.expandNode(nodes[0]);
+
+            fuzzySearch('select-org', '#key', false, null, '.tree-block')
+
+
+        };
+
+
+    })
+
+</script>

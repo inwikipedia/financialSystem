@@ -1,0 +1,49 @@
+{
+    "code": 0,
+    "msg": "",
+    "count": 1000,
+    "data": [{
+            "budgetcount": "固定资产",
+            "time": 2968,
+            "jan": 841,
+            "feb": 1142
+
+        }, {
+            "budgetcount": "其中：办公设备",
+            "time": 2437,
+            "jan": 844,
+            "feb": 846
+
+        },
+        {
+            "budgetcount": "其中：科研设备",
+            "time": 331,
+            "jan": 77,
+            "feb": 173
+
+        },
+        {
+            "budgetcount": "无形资产",
+            "time": 765,
+            "jan": 0.0,
+            "feb": 566
+
+        }, {
+            "budgetcount": "库存商品",
+            "time": 214,
+            "jan": 0.0,
+            "feb": 214
+
+        }, {
+            "budgetcount": "合计",
+            "time": 4447,
+            "jan": 941,
+            "feb": 2522
+
+        }
+
+
+    ]
+
+
+}

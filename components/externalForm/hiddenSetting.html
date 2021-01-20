@@ -1,0 +1,290 @@
+<!--隐藏设置页面-->
+<style>
+
+    html {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+    body {
+        width: 100vw;
+        overflow: hidden;
+        /*padding-left: calc(100vw - 100%);*/
+    }
+</style>
+<link rel="stylesheet" href="../../assetsInfo/css/revenueBudgetSearch.css">
+<div class="main ">
+    <div id="nav" class="nav">
+
+        <div  style="font-size: 16px;height: 26px;line-height: 26px;">
+            隐藏设置
+        </div>
+    </div>
+    <div id="budget" style="height: calc(100% - 60px)" >
+        <div class="layui-row">
+            <div class="layui-col-md12" >
+                <div class=" layui-row layui-card layui-form" >
+                    <div class="  layui-col-md12"   ><!--id="budgetItem"-->
+                        <div style="margin:15px 15px 15px 18px;">
+                            <div class="layui-inline ">
+                                <select id="changeShow" name="change"  style="border-radius:4px;"><!--lay-verify="required"-->
+                                    <option value=""></option>
+                                    <option value="all">全部</option>
+                                    <option value="1">显示</option>
+                                    <option value="0">隐藏</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline ">
+                                <input type="text" style="min-width: 300px;border-radius:4px;" id="edtSearch" name="title"  placeholder="请输入" autocomplete="off" class="layui-input"><!--required  lay-verify="required"-->
+                            </div>
+                            <button id="btnSearch" style="background-color: #008CFF;color:#fff;border-radius: 3px"  class="layui-btn layui-btn-sm layui-btn-normal bigBtn" lay-submit title="搜索">搜索</button>
+                            <button  id="btnClearSearch" style="color:#666;border-radius: 3px;margin-left: 0;" class="layui-btn layui-btn-sm layui-btn-normal bigBtn" lay-submit title="重置">重置</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card  botTable" style="padding: 0px 20px">
+
+                    <table id="tableContent-setting" lay-filter="tableContent-setting"></table>
+                    <div id="table-page" class="layui-table-page"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    layui.use(['table','laydate','tools','treeTable'], function() {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer,
+            laypage = layui.laypage,
+            tools = layui.tools,
+            treeTable = layui.treeTable;
+
+
+
+        var optionData = {
+            status: 'all',
+            pageSize:10,
+            pageNo:1,
+            pageByBusiness: true
+
+    };
+        var searchBool = '';
+        var treeId = '';
+        var dataIdArr = [];
+        var tableInit;
+        var tableInitFun =function () {
+            tableInit =  treeTable.render({
+                elem: '#tableContent-setting',
+                height: 'full-285',
+                cols: [
+                    {type: 'numbers',title: '序号',width:'60px'},
+                    {
+                        field: 'name', title: '名称', templet: function (d) {
+                            if (d.type == 2) {
+                                return d.name + '<span> <img src="assetsInfo/images/icon/project.png"></span>'
+                            }
+                            if (d.type == 3) {
+                                return d.name + '<span> <img src="assetsInfo/images/icon/task.png"></span>'
+                            }
+                            return d.name
+                        }
+                    },
+                    {field: 'userName', title: '负责人', width: 120},
+                    {field: 'status', title: '状态',templet: function (d) {
+                            return d.status === '0' ?
+                                '<span style="color: #999999">已隐藏</span>' :
+                                '<span style="color: #666666">显示中</span>';
+                        }, width: 120},
+                    {field: '', title: '操作',templet: function (d) {
+                            return d.status === '0' ?
+                                '<a style="color: #008CFF" href="javascript:void(0)" lay-event="show" class="'+ d.id +'">显示</a>' :
+                                '<a style="color: #008CFF" href="javascript:void(0)" lay-event="hidden" class="'+ d.id +'">隐藏</a>';
+                        }, width: 120}
+                ],
+                tree: {
+                    iconIndex: 1,  // 折叠图标显示在第几列
+                    isPidData: true,
+                    idName: 'id',
+                    pidName: 'parentId'
+                    // arrowType: 'arrow2',   // 自定义箭头风格
+                    // getIcon: function(d) {  // 自定义图标
+                    //     // d是当前行的数据
+                    //     if (d.haveChild) {  // 判断是否有子集
+                    //         return '<i class="ew-tree-icon ew-tree-icon-folder"></i>';
+                    //     } else {
+                    //         return '<i class="ew-tree-icon ew-tree-icon-file"></i>';
+                    //     }
+                    // }
+                },
+                reqData: function(data, callback) {
+                    // 在这里写ajax请求，通过callback方法回调数据;
+                    console.log(optionData,56666)
+                    admin.req('/api/budget/budget/treeCustomPage', optionData, function(data) {
+                        console.log(data.data,"回显321654");
+
+                        if (data.ok) {
+                            // treeData = data.data;
+                            callback(data.data.list);  // 参数是数组类型
+                            if(optionData.pageNo==1){
+                                initPage(optionData.pageNo,data.data.count);
+                            }
+                            if(searchBool == 1){
+                                tableInit.expandAll();
+                            } if(searchBool == 2){
+                                tableInit.foldAll();
+                            }else{
+                                dataIdArr.forEach(function(item){
+                                    tableInit.expand(item);
+                                })
+                            }
+                        } else {
+                            layer.msg('获得业务信息失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: 'post'
+                    });
+                }
+            });
+        };
+        tableInitFun();
+        function initPage(count,pageCount) {
+            // 修改layui page 分页样式 制作简易版 分页 去掉边框，修改选种样式  修改前一页和下一页样式
+            laypage.render({
+                elem: 'table-page',
+                count: pageCount,
+                pages:count,
+                layout: ['limit','count','prev', 'page', 'next', 'skip'],
+                limit: optionData.pageSize,
+                jump: function(obj, first){
+                    $('#table-page .layui-laypage-prev').html("<i class='layui-icon layui-icon-left'></i>");
+                    $('#table-page .layui-laypage-next').html("<i class='layui-icon layui-icon-right'></i>");
+                    if(!first) {
+                        optionData.pageNo=obj.curr;
+                        optionData.pageSize=obj.limit;
+                        tableInitFun();
+                        // searchFile({pageSize:downSize,page:obj.curr,projectId:projectId})
+                    }
+                },
+            });
+        }
+        // var options = [];
+        //查找子集
+        // function findChildData(data,status,option){
+        //     options = option;
+        //     if(data.children){
+        //         data.children.forEach(function(item){
+        //             var obj = {
+        //                 "contractNO": item.contractNO,
+        //                 "contractName": item.contractName,
+        //                 "contractOwner": item.contractOwner,
+        //                 "firstSpell": item.firstSpell,
+        //                 "id": item.id,
+        //                 "name": item.name,
+        //                 "parentId": item.parentId,
+        //                 "projectType": item.projectType,
+        //                 "status": status,
+        //                 "type": item.type,
+        //                 "userId": item.userId,
+        //                 "userName": item.userName
+        //             }
+        //             options.push(obj);
+        //             if(item.children){
+        //                 findChildData(item,status,options)
+        //             }
+        //         })
+        //     }
+        // }
+        // function serchId(id,data){
+        //     var arr = [];
+        //     var arrId = [];
+        //     data.forEach(function(item){
+        //         if(item.parentId == id){
+        //             arr.push(data);
+        //             arrId.push(data.id);
+        //         }
+        //     })
+        //     return arrId
+        // }
+        treeTable.on('tool(tableContent-setting)', function(obj){
+            console.log(555555,obj)
+            var status = ''
+            if(obj.event == 'show'){
+                status = 1
+            }
+            if(obj.event == 'hidden'){
+                status = 0
+            }
+            var data = obj.data;
+            var option = {
+                "contractNO": data.contractNO,
+                "contractName": data.contractName,
+                "contractOwner": data.contractOwner,
+                "firstSpell": data.firstSpell,
+                "id": data.id,
+                "name": data.name,
+                "parentId": data.parentId,
+                "projectType": data.projectType,
+                "status": status,
+                "type": data.type,
+                "userId": data.userId,
+                "userName": data.userName
+            }
+            searchBool = '';
+            treeId = data.id;
+            dataIdArr = [];
+            $('.ew-tree-table-open').each(function(){
+                dataIdArr.push($(this).attr('data-id'));
+            })
+            $.ajax({
+                url: config.base_server + 'api/budget/budget/userProjectCustomInsertUpdate',
+                data: JSON.stringify(option),
+                type: 'put',
+                contentType:"application/json",//设置请求参数类型为json字符串
+                dataType:"json",
+                success: function (res) {
+                    if (res.ok) {
+                        tableInit.refresh();
+                    } else {
+                        return  layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    layer.closeAll('loading');
+                    layer.msg('服务错误！' + xhr.statusText);
+                }
+            });
+        });
+        /** 搜索 */
+        $('#btnSearch').click(function () {
+            var keywords = $('#edtSearch').val();
+            var status = $('#changeShow').val() ? $('#changeShow').val() : 'all';
+            optionData.keyword = keywords;
+            optionData.status = status;
+            optionData.pageNo=1;
+            searchBool = 1;
+            tableInit.refresh();
+
+        });
+
+        /** 重置搜索 */
+        $('#btnClearSearch').click(function () {
+            $('#edtSearch').val('');
+            $('#changeShow').val('');
+            optionData.keyword = '';
+            optionData.pageNo=1;
+            optionData.status = 'all';
+            searchBool = 2;
+            tableInit.refresh();
+            form.render();
+        });
+    });
+</script>

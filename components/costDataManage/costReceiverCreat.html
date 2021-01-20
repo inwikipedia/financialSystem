@@ -1,0 +1,160 @@
+<style>
+    .receiverDataMain {
+        padding: 20px 20px 0px 20px;
+    }
+
+    .receiverDataMain .leftItem, .receiverDataMain .rightItem {
+        display: inline-block;
+        width: 49%;
+    }
+
+    .receiverDataMain .layui-form-item {
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .receiverDataMain .form-input {
+        position: relative;
+        display: inline-block;
+        width: calc(100% - 100px);
+    }
+
+    .receiverDataMain label {
+        display: inline-block;
+        width: 90px;
+        text-align: left;
+    }
+
+    label {
+        font-weight: normal;
+    }
+
+    .redSpan {
+        color: red;
+    }
+    .layui-layer-load{
+        background-color: white;
+    }
+    .receiverDataMain .layui-disabled, .receiverDataMain .layui-disabled:hover {
+        color: rgb(84, 84, 84)!important;
+    }
+    .receiverDataMain .layui-form-selected dl{
+        /*bottom: 32px;*/
+        height: 180px;
+        width: calc(100% - 100px);
+        top: 32px;
+    }
+</style>
+
+<div class="receiverDataMain layui-form">
+    <div>
+
+    </div>
+    <div class="layui-form-item">
+        <label><span class="redSpan">*</span>部门：</label>
+        <div class="form-input ">
+            <input type="text" placeholder="请选择部门" id="orgNameReceiver" style="cursor: pointer" readonly lay-verify="required" class="layui-input"
+                   name="orgName" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label><span class="redSpan">*</span>接收人：</label>
+        <div class="form-input ">
+            <input type="text" placeholder="请选择接收人" id="receiverName" style="cursor: pointer" readonly lay-verify="required" class="layui-input"
+                   name="userNames" >
+        </div>
+    </div>
+
+    <div class="layui-form-item" style="text-align: center;">
+        <button class="layui-btn layui-btn-normal"  lay-submit lay-filter="btn-receiver-sure" id="btn-receiver-sure">确定</button>
+        <button class="layui-btn layui-btn-primary" id="cancleReceiver">取消</button>
+    </div>
+    <input type="text" id="receiverId" readonly style="display: none">
+    <input type="text" id="receiverType" readonly style="display: none">
+</div>
+<script>
+    layui.use('upload', function() {
+        var admin = layui.admin;
+        var layer = layui.layer;
+        var laydate = layui.laydate;
+        // laydate.render({
+        //     elem: '.receiverYear',
+        //     type:"year"
+        // });
+        laydate.render({
+            elem: '#receiverMonth',
+            type:"month"
+        });
+        $('#cancleReceiver').off('click').on('click',function () {
+            admin.finishPopupCenter(true);
+        });
+        $('#receiverName').off('click').on('click',function () {
+            var data={
+                data:[]
+            };
+            var reName=$("#receiverName").val()?$("#receiverName").val().split(","):[];
+            var reId=$("#receiverName").attr("data-id")?$("#receiverName").attr("data-id").split(","):[];
+            for (var i = 0; i < reName.length; i++) {
+                data.data.push({
+                    name:reName[i],
+                    id:reId[i]
+                })
+            }
+            layer.open({
+                type: 2,
+                id: 'personnelSelect',
+                title: '请选择',
+                content: 'components/tpl/personnel_group_select.html',
+                area: ['96%', '80%'],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var finalData = $('#personnelSelect iframe')[0].contentWindow
+                        .task_personnel_select.finish();
+                    var formSelectArr=[];
+                    var formSelectVal=[];
+                    for (var i = 0; i < finalData.length; i++) {
+                        formSelectArr.push(finalData[i].id);
+                        formSelectVal.push(finalData[i].name);
+                    }
+                    $("#receiverName").val(formSelectVal.join(","));
+                    $("#receiverName").attr("data-id",formSelectArr.join(","));
+                    layer.close(index);
+                },
+                success: function () {
+                    // 执行 iframe 内的方法
+                    $('#personnelSelect iframe')[0].contentWindow.task_personnel_select
+                        .init(data);
+                },
+                resize: false
+            });
+        });
+        $('#orgNameReceiver').off('click').on('click',function () {
+            layer.open({
+                type: 2,
+                id: 'orgsSelectReceiver',
+                title: false,
+                moveOut: true,
+                content: 'components/manageYw/caderLayer.html',
+                area: ['50%', '70%'],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var finalData = $('#orgsSelectReceiver iframe')[0].contentWindow.task_orgs_select.finish();
+                    // 获取到数据，执行回掉函数
+                    if (finalData.id == '' || finalData.name == '') {
+                        return layer.msg('请选择组织机构', {
+                            icon: 0
+                        });
+                    }
+                    $('#orgNameReceiver').val(finalData.name);
+                    $('#orgNameReceiver').attr('data-id',finalData.id);
+                    layer.close(index);
+                },
+                resize: false
+            });
+        });
+        $('input[name="amount"]').off("input").on("input",function () {
+            clearNoNum(this);
+        });
+       
+    });
+</script>

@@ -1,0 +1,176 @@
+
+<style>
+    .layui-layer-page .layui-layer-content{
+        overflow: visible !important;
+    }
+    .xm-select{
+        overflow: auto !important;
+        max-height: 160px !important;
+    }
+    .xm-select-label span{
+        font-size: 12px !important;
+    }
+</style>
+<div class="layui-tpl-container">
+
+
+    <div class="layui-form ">
+        <div class="layui-row">
+            <div class="layui-col-md6">
+        <div class="layui-form-item">
+            <label class="layui-form-label">项目名称</label>
+            <div class="layui-input-block">
+                <select name="projectId" id='projectId_blong' xm-select="projectId_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-radio="" xm-select-search>
+                    <option value="">选择项目</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 上会时间</label>
+            <div class="layui-input-block">
+                <input type="text" name="meetingTime"   id="meetingTime" placeholder="预计项目结束时间" class="layui-input" lay-vefify="required">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 预计项目启动时间</label>
+            <div class="layui-input-block">
+                <input type="text" name="expectedStartTime" id="expectedStartTime" placeholder="预计项目开始时间" class="layui-input" lay-vefify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 预计项目结束时间</label>
+            <div class="layui-input-block">
+                <input type="text" name="projectEndTime"   id="projectEndTime" placeholder="预计项目结束时间" class="layui-input" lay-vefify="required">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 最大支出金额（万元）</label>
+            <div class="layui-input-block">
+                <input type="number" name="maxExpenditureAmount" placeholder=" 最大支出金额（万元）" class="layui-input" lay-vefify="required" oninput="if(value.length>4)value=value.slice(0,4)" min="1">
+            </div>
+        </div>
+            </div>
+            <div class="layui-col-md6">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 采购方式</label>
+            <div class="layui-input-block">
+                <select name="purchaseType" id='purchaseType_blong' data-placeholder="选择采购方式"  xm-select="purchaseType_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-radio="" xm-select-search>
+                    <option value="">选择采购方式</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 项目特性</label>
+            <div class="layui-input-block">
+                <select name="projectFeature" id='projectFeature_blong' data-placeholder="选择项目特性"  xm-select="projectFeature_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-radio="" xm-select-search>
+                    <option value="">选择项目特性</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 合同类型</label>
+            <div class="layui-input-block">
+                <!--<select name="projectLeader" xm-select="projectLeader_pop"  xm-select-search  xm-select-skin="normal" xm-select-direction="down" lay-verify="required" xm-select-radio="">-->
+                    
+                <select name="contractType" id='contractType_blong' data-placeholder="选择合同类型"  xm-select="contractType_blong" xm-select-skin="normal" xm-select-direction="down"  xm-select-radio="" xm-select-search>
+                    <option value="">选择合同类型</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span>  本年度投入（万元）</label>
+            <div class="layui-input-block">
+                <input type="number" name="annualInvestment" placeholder=" 本年度投入（万元）" class="layui-input" lay-vefify="required"  oninput="if(value.length>4)value=value.slice(0,4)" min="1" oninput="if(value.length>4)value=value.slice(0,4)" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span>  下年度投入（万元）</label>
+            <div class="layui-input-block">
+                <input type="number" name="nextAnnualInvestment" placeholder=" 下年度投入（万元）" class="layui-input" lay-vefify="required" oninput="if(value.length>4)value=value.slice(0,4)" oninput="if(value.length>4)value=value.slice(0,4)" min="1">
+            </div>
+        </div>
+            </div>
+        </div>
+
+        <!--传递过来的操作类型-->
+        <input type="text" name="handleType" id="handleType" style="display: none;">
+        <!-- 如果是编辑传过来的id-->
+
+        <input type="text" name="id" id="id" style="display: none;">
+        <div class="layui-form-item" style="text-align: center;">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="btn-pro-save">保存</button>
+            <button class="layui-btn layui-btn-primary" id="btn-pro-cancel">取消</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'laydate', 'formSelects'], function() {
+        var admin = layui.admin,
+            laydate = layui.laydate,
+            formSelects = layui.formSelects,
+            form = layui.form;
+
+        // 初始化日期组件
+        laydate.render({
+            elem: '#expectedStartTime',
+            type: 'date'
+        });
+
+        laydate.render({
+            elem: '#projectEndTime',
+            type: 'date'
+        });
+        laydate.render({
+            elem: '#meetingTime',
+            type: 'date'
+        });
+
+
+
+        /*  admin.req('/api/sys/dictype/page?dicId=S3G79EH2ME', {}, function (d) {
+
+          });*/
+        form.on('submit(btn-pro-save)', function(obj) {
+            // console.log($("#projectMember").val());
+            var data = obj.field,
+                elem = data.elem;
+            var ajaxType = 'post';
+            if (data.handleType == 'edit') {
+                ajaxType = 'put';
+            }
+            delete data.handleType;
+
+            admin.req('/api/budget/purchase', data, function(res) {
+                $(elem).attr('disabled', false);
+                if(data.meetingTime>data.expectedStartTime){
+                    alert('上会时间应早于预计项目启动时间')
+                }else if(data.expectedStartTime>data.projectEndTime){
+                    alert('预计项目启动时间应早于预计项目结束时间')
+                }else
+                    if (res.ok) {
+                    layer.msg('保存成功！', {
+                        icon: 1
+                    });
+                    admin.finishPopupCenter();
+                } else {
+                    return layer.msg('保存失败：' + res.message, {
+                        icon: 5
+                    });
+                    admin.finishPopupCenter();
+                }
+            }, {
+                method: ajaxType
+            });
+        });
+        /*
+         取消
+       */
+        $('#btn-pro-cancel').on('click', function() {
+            admin.closePopupCenter();
+        });
+    });
+</script>

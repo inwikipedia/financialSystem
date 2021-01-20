@@ -1,0 +1,236 @@
+<style scoped>
+    #cashs .btn-width {
+        width: 100px;
+    }
+
+    /* #layui-laydate2 .layui-laydate-main .layui-laydate-header{
+        display: none;
+    } */
+    .inputs {
+        margin-left: 0px;
+        margin-top: 10px;
+        font-size: 15px;
+    }
+</style>
+
+<div class="layui-row layui-col-space15" id="cashs">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">现金流量管理</div>
+            <div class="layui-card-body">
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar">
+                        <div class="layui-inline">
+                            <label>业务名称：</label>
+                            <div class="layui-inline">
+                                <input type="text" name="businessName" class="layui-input" placeholder="请输入业务名称"
+                                    id="businessName" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label>年：</label>
+                            <div class="layui-inline">
+                                <input type="text" name="Syear" class="layui-input" placeholder="请选择年" id="Syear" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label>月：</label>
+                            <div class="layui-inline">
+                                <input type="text" name="Smonth" class="layui-input" placeholder="请选择月" id="Smonth" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"
+                                lay-filter="btn_search_form" lay-submit title="查询" id="btn_search_form">
+                                <i class="layui-icon layui-icon-search"></i>查询
+                            </button>
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"
+                                lay-filter="btn_reset_form" id="btn_reset_form" lay-submit title="重置">
+                                <i class="layui-icon layui-icon-refresh"></i>重置
+                            </button>
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="btn_add_form"
+                                lay-submit title="导出" id="btn_download_out">
+                                <i class="layui-icon layui-icon-download-circle"></i>
+                                导出
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <table id="industryTable" lay-filter="industryTable"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/assetsInfo/js/tempDown.js"></script>
+<script>
+    var ADCFormDesign = null;
+
+    layui.use(['table', 'upload', 'laydate'], function () {
+        var table = layui.table,
+            form = layui.form,
+            admin = layui.admin,
+            layer = layui.layer,
+            upload = layui.upload,
+            laydate = layui.laydate;
+        var searchName = '';
+        var searchYear = '';
+        var searchMonth = '';
+        laydate.render({
+            elem: "#Syear",
+            type: "year"
+        });
+        laydate.render({
+            elem: "#Smonth",
+            type: "month",
+            format:'M',
+            ready: function(date){
+                $(".layui-laydate-main .layui-laydate-header").css("display","none")
+            }
+        });
+        // 渲染表格
+        table.render({
+            elem: '#industryTable',
+            id: 'industryTable',
+            url: admin.formatUrl('/api/finance/cashflowManagement/page'),
+            parseData: function (res) {
+                return {
+                    "code": res.respCode, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.list //解析数据列表
+                };
+            },
+            // height: 430,
+            cols: [
+                [
+                    {
+                        type: 'numbers', title: '序号', fixed: 'left'
+                    },
+                    {
+                        field: 'businessGonfigName',
+                        title: '业务名称',
+                        align: 'center',
+                        templet: function (d) {
+                            var text = d.businessGonfigName ? d.businessGonfigName : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    },
+                    {
+                        field: 'cmYear',
+                        title: '年',
+                        align: 'center',
+                        templet: function (d) {
+                            var text = d.cmYear ? d.cmYear : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'cmMonth',
+                        title: '月份',
+                        align: 'center',
+                        templet: function (d) {
+                            var text = d.cmMonth ? d.cmMonth : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'flowInMoney',
+                        title: '现金流入(元)',
+                        align: 'center',
+                        templet: function (d) {
+                            var text = d.flowInMoney;
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'flowOutMoney',
+                        title: '现金流出(元)',
+                        align: 'center',
+                        templet: function (d) {
+                            var text = d.flowOutMoney;
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'surplusMoney',
+                        title: '现金余额(元)',
+                        align: 'center',
+                        templet: function (d) {
+                            var text = d.surplusMoney;
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }]
+            ],
+            cellMinWidth: 120,
+            page: {
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+            },
+            request: {
+                page: 'pageNo',
+                limitName: 'pageSize',
+            },
+            where: {},
+            done: function (res, curr, count) {
+                if (curr > 1 && res.data.length == 0) {
+                    var pageValue = curr - 1;
+                    table.reload('industryTable', {
+                        page: { curr: pageValue },// 修改页码
+                    });
+                }
+            }
+        });
+        // 搜索
+        form.on('submit(btn_search_form)', function () {
+            searchData();
+        });
+        // 重置
+        form.on('submit(btn_reset_form)', function () {
+            restData();
+        });
+        function searchData() {
+            var businessName = $('#businessName').val();
+            var Syear = $('#Syear').val();
+            var Smonth = $('#Smonth').val();
+            searchName = businessName;
+            searchYear = Syear;
+            searchMonth = Smonth;
+            table.reload('industryTable', {
+                where: {
+                    businessGonfigName: businessName,
+                    cmYear: Syear,
+                    cmMonth: Smonth
+                }
+            });
+        }
+        function restData() {
+            searchName = '';
+            searchYear = '';
+            searchMonth = '';
+            var businessName = $('#businessName').val('');
+            var Syear = $('#Syear').val('');
+            var Smonth = $('#Smonth').val('');
+            table.reload('industryTable', {
+                where: {
+                    businessGonfigName: '',
+                    cmYear: '',
+                    cmMonth: ''
+                }
+            });
+        }
+        $('#btn_download_out').off("click").on('click', function () {
+            window.open(admin.formatUrl('/ADC_info/api/finance/cashflowManagement/exportCashflowManagement?businessGonfigName='+searchName+'&cmYear='+searchYear+'&cmMonth='+searchMonth))
+        });
+        // 同步阻塞加载 JS 文件
+        function loadJS(url, success) {
+            var domScript = document.createElement('script');
+            domScript.src = url;
+            success = success || function () { };
+            domScript.onload = domScript.onreadystatechange = function () {
+                if (!this.readyState || 'loaded' === this.readyState || 'complete' === this.readyState) {
+                    success();
+                    this.onload = this.onreadystatechange = null;
+                    this.parentNode.removeChild(this);
+                }
+            }
+            document.getElementsByTagName('head')[0].appendChild(domScript);
+        }
+    });
+</script>

@@ -1,0 +1,8 @@
+<div ng-controller="KisBpmProcessIdPropertyCtrl">
+    <span ng-if='property.value==&apos;${actMultiInsCompleteService.complete(execution,"all")}&apos;'>All</span>
+    <span ng-if='property.value==&apos;${actMultiInsCompleteService.complete(execution,"half")}&apos;'>Half</span>
+    <span ng-if='property.value==&apos;${actMultiInsCompleteService.complete(execution,"one")}&apos;'>One</span>
+    <span ng-if='!property.noValue&&property.value!=&apos;${actMultiInsCompleteService.complete(execution,"all")}&apos;&&property.value!=&apos;${actMultiInsCompleteService.complete(execution,"half")}&apos;&&property.value!=&apos;${actMultiInsCompleteService.complete(execution,"one")}&apos;'>{{property.value|limitTo:20}}</span>
+    <span ng-if='!property.noValue && property.value != null && property.value.length > 20&&property.value!=&apos;${actMultiInsCompleteService.complete(execution,"all")}&apos;&&property.value!=&apos;${actMultiInsCompleteService.complete(execution,"half")}&apos;&&property.value!=&apos;${actMultiInsCompleteService.complete(execution,"one")}&apos;'>...</span>
+    <span ng-if="property.noValue" translate>PROPERTY.EMPTY</span>
+</div>

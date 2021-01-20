@@ -1,0 +1,7 @@
+<div ng-controller="KisBpmMultiInstancePassCtrl">
+    <select ng-model="property.value" ng-change="multiInstancePassChanged()">
+        <option selected="selected" value='${actMultiInsCompleteService.complete(execution,"all")}'>All</option>
+        <option value='${actMultiInsCompleteService.complete(execution,"half")}'>Half</option>
+        <option value='${actMultiInsCompleteService.complete(execution,"one")}'>One</option>
+    </select>
+</div>

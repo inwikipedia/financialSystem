@@ -1,0 +1,405 @@
+<style>
+    .layui-layer-page .layui-layer-content {
+        overflow: visible !important;
+    }
+
+    .xm-select {
+        overflow: auto !important;
+        max-height: 160px !important;
+    }
+
+    .xm-select-label span {
+        font-size: 12px !important;
+    }
+
+    .layui-tpl-container {
+        padding: 25px;
+    }
+    .manageBox .layui-form-label {
+        width: 136px;!important;
+    }
+    .manageBox .layui-input-block {
+        margin-left: 140px;
+    }
+    .contractTableStyle .layui-table-view{
+        float: right;
+    }
+    .projectMemberBox{
+        position: relative;
+    }
+    .projectMemberBox .icon{
+        position: absolute;
+        right: 40px;
+        bottom: 5px;
+        z-index: 100;
+        width: 27px;
+    }
+</style>
+<div class="layui-tpl-container contractTableStyle" style="height: 500px;overflow: auto">
+
+
+    <div class="layui-form manageBox">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span>项目名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" id="name" placeholder="请输入项目名称" class="layui-input" lay-verify="required"
+                       adcform="adc_form_input" maxlength="50">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span>合同编号</label>
+            <div class="layui-input-block">
+                <input autocomplete="off" type="text" name="contractNo" readonly id="contractNo" placeholder="合同编号" lay-verify="required"
+                       class="layui-input" maxlength="20">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span>合同企业名称</label>
+            <div class="layui-input-block">
+                <input autocomplete="off" type="text" name="projectOwner" id="projectOwner" placeholder="合同企业名称" lay-verify="required"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span>合同金额（元）</label>
+            <div class="layui-input-block">
+                <input autocomplete="off" type="text" name="contractAmount" id="contractAmount" placeholder="合同金额" lay-verify="required|number"
+                       class="layui-input" maxlength="9">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 合同签订时间</label>
+            <div class="layui-input-block">
+                <input autocomplete="off" type="text" name="startTime" id="startTime" placeholder="合同签订时间"
+                       class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span>合同内部联系人</label>
+            <div class="layui-input-block projectMemberBox">
+                <select name="projectLeader" xm-select="projectLeader_pop" xm-select-search xm-select-skin="normal"
+                        xm-select-direction="down" lay-verify="required" xm-select-radio="">
+                    <option value="">合同内部联系人</option>
+                </select>
+                <div class="icon" id="projectLeaderSelect">
+                    <img src="/assetsInfo/images/zudui.png" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span>项目组成员</label>
+            <div class="layui-input-block projectMemberBox">
+                <select name="projectMemberIds" xm-select="projectMemberIds_pop" xm-select-search
+                        xm-select-skin="normal" xm-select-direction="down" lay-verify="required">
+                    <option value="">项目组成员</option>
+                </select>
+                <div class="icon" id="projectMemberSelect">
+                    <img src="/assetsInfo/images/zudui.png" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span>业务类型</label>
+            <div class="layui-input-block">
+                <select name="business" xm-select="business_pop" xm-select-skin="normal" xm-select-direction="down"
+                        xm-select-radio="" xm-select-search lay-verify="required">
+                    <option value="">选择业务类型</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span>所属业务</label>
+            <div class="layui-input-block">
+                <!-- 2019-04-22 将input 改为 select   name由budget改为budgetId -->
+                <!-- <input type="text" name="budget" id='business_blong' placeholder="选择所属业务"  class="layui-input" lay-verify="required"
+                       maxlength="50" disabled="disabled"> -->
+                <select class="layui-layer-page" name="budgetId" lay-verify="required" id='business_blong_project'
+                        xm-select="business_blong_project" xm-select-skin="normal" xm-select-direction="down" xm-select-radio=""
+                        xm-select-search>
+                    <option value="">选择所属业务</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="padding: 0;width: 123px;line-height: 28px;">预计人力投入(人天)</label>
+            <div class="layui-input-block">
+                <input type="text" name="personInput" id="personInput" placeholder="预计人力投入（人天）" class="layui-input"
+                       maxlength="9" autocomplete="off">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">项目描述</label>
+            <div class="layui-input-block">
+                <textarea autocomplete="off" type="text" name="projectDescription" maxlength="200" style="resize:none;height:100px"  id="projectDescription"
+                          class="layui-input"></textarea>
+            </div>
+        </div>
+        <!--<div style="text-align: right;">-->
+
+        <!--&lt;!&ndash;<em class="layui-icon layui-icon-add-circler" >添加</em>&ndash;&gt;-->
+        <!--</div>-->
+        <div class="layui-form-item table-contract_addBox">
+            <span class = 'pull-right' style="position: relative;top:-6px">
+                <i class='layui-icon layui-icon-add-circle'id="table_contract_add" style = 'font-size: 30px;cursor:pointer'></i>
+            </span>
+            <div  id="contractTableEdit" lay-filter="contractTableEdit"></div>
+        </div>
+        <!--传递过来的操作类型-->
+        <input type="text" name="handleType" id="handleType" style="display: none;">
+        <!-- 如果是编辑传过来的id-->
+
+        <input type="text" name="id" id="id" style="display: none;">
+        <input type="text" name="projectId" id="projectId" style="display: none">
+        <div class="layui-form-item" style="text-align: center;">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="btn-pro-save">保存</button>
+            <button class="layui-btn layui-btn-primary" id="btn-pro-cancel">取消</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'laydate', 'formSelects'], function () {
+        var admin = layui.admin,
+            laydate = layui.laydate,
+            table = layui.table,
+            formSelects = layui.formSelects,
+            form = layui.form;
+        // 初始化日期组件
+        laydate.render({
+            elem: '#startTime',
+            type: 'datetime'
+        });
+        $('#projectMemberSelect').off('click').on('click',function () {
+            console.log();
+            var data={
+                data:[]
+            };
+            for (var i = 0; i < formSelects.value('projectMemberIds_pop').length; i++) {
+                data.data.push({
+                    name:formSelects.value('projectMemberIds_pop')[i].name,
+                    id:formSelects.value('projectMemberIds_pop')[i].value
+                })
+            }
+            layer.open({
+                type: 2,
+                id: 'personnelSelect',
+                title: '请选择',
+                content: 'components/tpl/personnel_group_select.html',
+                area: ['96%', '80%'],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var finalData = $('#personnelSelect iframe')[0].contentWindow
+                        .task_personnel_select.finish();
+                    var formSelectArr=[];
+                    for (var i = 0; i < finalData.length; i++) {
+                        formSelectArr.push(finalData[i].id);
+                    }
+                    formSelects.value('projectMemberIds_pop', formSelectArr);
+                    layer.close(index);
+                },
+                success: function () {
+                    // 执行 iframe 内的方法
+                    $('#personnelSelect iframe')[0].contentWindow.task_personnel_select
+                        .init(data);
+                },
+                resize: false
+            });
+        });
+        $('#projectLeaderSelect').off('click').on('click',function () {
+            console.log();
+            var data={
+                data:[]
+            };
+            for (var i = 0; i < formSelects.value('projectLeader_pop').length; i++) {
+                data.data.push({
+                    name:formSelects.value('projectLeader_pop')[i].name,
+                    id:formSelects.value('projectLeader_pop')[i].value
+                })
+            }
+            layer.open({
+                type: 2,
+                id: 'personnelSelect',
+                title: '请选择',
+                content: 'components/tpl/personnel_group_select.html',
+                area: ['96%', '80%'],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var finalData = $('#personnelSelect iframe')[0].contentWindow
+                        .task_personnel_select.finish();
+                    var formSelectArr=[];
+                    for (var i = 0; i < finalData.length; i++) {
+                        formSelectArr.push(finalData[i].id);
+                    }
+                    formSelects.value('projectLeader_pop', formSelectArr);
+                    layer.close(index);
+                },
+                success: function () {
+                    // 执行 iframe 内的方法
+                    $('#personnelSelect iframe')[0].contentWindow.task_personnel_select
+                        .init(data,'radio');
+                },
+                resize: false
+            });
+        });
+        /*  admin.req('/api/sys/dictype/page?dicId=S3G79EH2ME', {}, function (d) {
+
+          });*/
+        //添加成本中心
+        $("#table_contract_add").click(function () {
+            var obj = {
+                "contractAmount": 0,
+                "contractId": null,
+                "delflag": 0,
+                "ext01": null,
+                "ext02": null,
+                "ext03": null,
+                "ext04": null,
+                "ext05": null,
+                "ext06": null,
+                "id": null,
+                "invoiceAmount": null,
+                "invoiceDate": null,
+                "projectId": $('#projectId').val(),
+                "recieveMoneyDate": null
+            };
+            var  cbList = table.cache.contractTableEdit;
+            cbList.push(obj);
+            table.reload("contractTableEdit", {
+                data: cbList,
+            })
+
+        });
+        $('#startTime').off('mouseenter').on('mouseenter',function () {
+            if($('#startTime').is(':focus')){
+                $('#startTime').blur()
+            }
+        })
+        form.on('submit(btn-pro-save)', function (obj) {
+            // console.log($("#projectMember").val());
+            var data = obj.field,
+                elem = data.elem;
+            if (data.projectMemberIds) {
+                data.projectMemberIds = data.projectMemberIds.split(',');
+            }
+            var re = new RegExp("[\\u4e00-\\u9fa5]+","g");
+            if(!re.test(data.name)){
+                $('#name').css('border-color','red');
+                return layer.msg('项目名称必须包含汉字！',{
+                    icon:5
+                })
+            }
+            data.personInput  = data.personInput ? data.personInput : 0;
+            data.personInput = Number(data.personInput) ;
+            var reg=/^[0-9]{1,12}$/;
+            if(reg.test(data.personInput)){
+            }else{
+                $('#personInput').css('border-color','red');
+                return layer.msg('仅支持整数数字',{
+                    icon:5
+                })
+            }
+            var regx = /^[0-9a-zA-Z]{0,20}$/;
+            if(regx.test(data.contractNo)) {
+            }else{
+                $('#contractNo').css('border-color','red');
+                return layer.msg('仅可输入字母与数字', {
+                    icon: 5
+                });
+            }
+            var ajaxType = 'post';
+            if (data.handleType == 'edit') {
+                ajaxType = 'put';
+            }
+            data.businessId = data.business;
+            if (data.businessId) {
+                ajaxType = 'put';
+            }
+            delete data.handleType;
+            for (var i = 0; i <table.cache.contractTableEdit.length; i++) {
+                delete table.cache.contractTableEdit[i].LAY_TABLE_INDEX;
+            }
+            var loadList=false;
+            var loadTable=false;
+            data.contractAmountStr = data.contractAmount ;
+
+            console.log(data,'编辑项目时修改后的数据');
+
+            admin.req('/api/budget/project', data, function (res) {
+                $(elem).attr('disabled', false);
+                loadList=true;
+                if (res.ok) {
+                    if(loadTable&&loadList) {
+                        layer.msg('保存成功！', {
+                            icon: 1
+                        });
+                        admin.finishPopupCenter(res.data);
+                    }
+                } else {
+                    if(loadTable&&loadList) {
+                        return layer.msg('保存失败：' + res.message, {
+                            icon: 5
+                        });
+                        admin.finishPopupCenter();
+                    }
+                }
+            }, {
+                method: ajaxType
+            });
+            // console.log(table.cache.contractTableEdit);
+            var regxNum = /^[0-9]{0,12}$/;
+            var box;
+
+            for (var i = 0 ; i <table.cache.contractTableEdit.length; i++ ){
+                // console.log(RegExp('^[0-9]{0,12}$').test(table.cache.contractTableEdit[i].invoiceAmount));
+                // if( table.cache.contractTableEdit[i].invoiceAmount && !RegExp('^[0-9]{0,12}$').test(table.cache.contractTableEdit[i].invoiceAmount)) {
+                //     return layer.msg('收款金额只能为12位以内的数字', {
+                //         icon: 5
+                //     });
+                // }
+                box = table.cache.contractTableEdit[i].invoiceAmount;
+                if (box && (box.length > 12)){
+                    return layer.msg('收款金额只能为12位以内的数字', {
+                        icon: 5
+                    });
+                }
+                // console.log(RegExp(/^(0|([1-9]\d*))(\.\d+)?$/g).test(box),box,'12121212');
+                var sult = RegExp(/^(0|([1-9]\d*))(\.\d+)?$/g).test(box);
+                if( box && !sult) {
+                    return layer.msg('收款金额只能为12位以内的数字', {
+                        icon: 5
+                    });
+                }
+            } 
+            
+            
+            admin.req('/api/processform/projectContractInvoice/updateAndInsertList', table.cache.contractTableEdit, function (res) {
+                $(elem).attr('disabled', false);
+                loadTable=true;
+                if (res.ok) {
+
+                    if(loadTable&&loadList){
+                        layer.msg('保存成功！', {
+                            icon: 1
+                        });
+                        admin.finishPopupCenter(res.data);
+                    }
+                } else {
+                    if(loadTable&&loadList){
+                        return layer.msg('保存失败：' + res.message, {
+                            icon: 5
+                        });
+                        admin.finishPopupCenter();
+                    }
+                }
+            }, {
+                method: ajaxType
+            });
+        });
+        /*
+               取消
+             */
+        $('#btn-pro-cancel').off('click').on('click', function () {
+            admin.closePopupCenter();
+        });
+    });
+</script>

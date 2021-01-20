@@ -1,0 +1,312 @@
+<style>
+    #submitBtn{
+        /*position: absolute;*/
+        /*bottom: 20px;*/
+        /*left: 50%;*/
+        /*margin-left: -71px;*/
+        margin-top: 20px;
+    }
+    #downFile{
+        display: none;
+    }
+    .noticeForm .p-form .layui-form-item .layui-input-block {
+        margin-left: 100px !important;
+    }
+    .noticeForm .p-form .layui-disabled, .noticeForm .p-form .layui-disabled:hover{
+        color:#000 !important;
+    }
+    .noticeForm .p-form .layui-input{
+        border-radius: 0;
+    }
+    .noticeForm .p-form .layui-form-label{
+        text-align: right;
+    }
+    .noticeForm .p-form .layui-form-item {
+        margin-bottom: 0px;
+    }
+    .noticeForm .p-form .briefingBtn{
+        width: 50px;
+        height: 24px !important;
+        color: white;
+        line-height: 24px !important;
+        padding: 0px !important;
+        margin-left: 5px !important;
+    }
+</style>
+<div class="layui-tpl-container noticeForm">
+    <!-- 新增和编辑表单 -->
+    <div class="layui-form p-form " style="overflow:hidden">
+        <input type="text" name="noticeType" id="type" style="display: none;" />
+        <input type="text" name="fileId" id="fileId" style="display: none;" />
+        <input type="text" name="id" id="id" style="display: none;" />
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: 90px;padding: 5px 0;"><span style="color: red;">*</span> 名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="noticeName" placeholder="请输入名称" class="layui-input" maxlength="20" />
+            </div>
+        </div>
+        <div class="layui-form-item" style="display: none">
+            <label class="layui-form-label" style="width: 90px;padding: 5px 0;"><span style="color: red;">*</span> 全部人可见</label>
+            <div class="layui-input-block ">
+                <input type="radio" name="noticeIsLook" lay-filter="noticeIsLook" value="1" title="是" checked="">
+                <input type="radio" name="noticeIsLook" lay-filter="noticeIsLook" value="0" title="否">
+            </div>
+        </div>
+        <div class="layui-form-item" style="display: none">
+            <label class="layui-form-label" style="width: 90px;padding: 5px 0;"><span style="color: red;">*</span>接收人</label>
+            <div class="layui-input-block">
+                <input type="text" id="receiveUserIds" placeholder="请选择接收人" class="layui-input" readonly  />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: 90px;padding: 5px 0;"><span style="color: red;">*</span> 类型</label>
+            <div class="layui-input-block userState-loading">
+                <select name="noticeTypeId" lay-filter="userState_pop" xm-select="userState_pop" xm-select-skin="normal" xm-select-direction="down"
+                        xm-select-radio="" id="selectCode">
+                    <!--<option value="">选择类型</option>-->
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item" id="shangchuan" style="display: none;">
+            <label class="layui-form-label labelWidth" style="width: 90px;padding: 5px 0;"><span style="color: red;">*</span><span> 附件</span>
+            </label>
+            <div class="layui-input-block reduceMarginL" style="position: relative">
+                <input type="text" placeholder="请上传附件" id="fileName" style="width: 200px;display: inline-block" class="layui-input" readonly />
+                <button class="layui-btn briefingBtn layui-btn-normal" style="background-color: #87C459;" id="chooseFile">选择</button>
+                <button class="layui-btn briefingBtn layui-btn-normal" style="background-color: #FD6567;" id="delFile">删除</button>
+                <button class="layui-btn briefingBtn layui-btn-normal" style="background-color: #2293F9;" id="upload">上传</button>
+                <button class="layui-btn briefingBtn layui-btn-normal" style="background-color: #2293F9;" id="downFile">下载</button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"  style="width: 90px;padding: 5px 0;">内容</label>
+            <div class="layui-input-block">
+                <textarea type="text" name="noticeContent" style="height: 200px" placeholder="请输入内容" class="layui-textarea" maxlength="500"></textarea>
+            </div>
+        </div>
+        <!-- 提交按钮 -->
+        <!-- 取消按钮 -->
+        <div class="layui-form-item" style="text-align: center;" id="submitBtn">
+            <button class="layui-btn layui-btn-normal b-b-b" lay-submit lay-filter="menuSave_menu">
+                保存
+            </button>
+            <button class="layui-btn layui-btn-primary" lay-submit lay-filter="menuCancle_menu" id="cancelBriefing">
+                取消
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(
+        ["laydate", "table", "upload", "formSelects", "upload", "form"],
+        function () {
+            var admin = layui.admin,
+                formSelects = layui.formSelects,
+                laydate = layui.laydate,
+                upload = layui.upload,
+                admin = layui.admin,
+                config = layui.config,
+                form = layui.form;
+            form.on('radio(noticeIsLook)',function(data){
+                if(data.value==0){
+                    $("#receiveUserIds").parent().parent().show();
+                }else{
+                    $("#receiveUserIds").parent().parent().hide();
+                }
+            });
+            $('#receiveUserIds').off('click').on('click',function () {
+                var data={
+                    data:[]
+                };
+                if($('#receiveUserIds').attr('data-name')){
+                    var arrName = $('#receiveUserIds').attr('data-name').split(",");
+                    var arrId = $('#receiveUserIds').attr('data-id').split(",");
+                    for(var i =0;i<arrName.length;i++){
+                        data.data.push({
+                            name:arrName[i],
+                            id:arrId[i]
+                        })
+                    }
+                }
+                layer.open({
+                    type: 2,
+                    id: 'personnelSelect',
+                    title: '请选择',
+                    content: 'components/tpl/personnel_group_select.html',
+                    area: ['96%', '80%'],
+                    btn: ['确定', '取消'],
+                    yes: function (index, layero) {
+                        var finalData = $('#personnelSelect iframe')[0].contentWindow
+                            .task_personnel_select.finish();
+                        var userName =[];
+                        var userId = [];
+                        if(finalData.length>150){
+                            return layer.msg('最多只能选择150人！', {
+                                icon: 5
+                            });
+                        }
+                        for (var i = 0; i < finalData.length; i++) {
+                            userName.push(finalData[i].name);
+                            userId.push(finalData[i].id);
+                        }
+                        $('#receiveUserIds').attr('data-name',userName.join(","));
+                        $('#receiveUserIds').attr('title',userName.join(","));
+                        $('#receiveUserIds').val(userName.join(","));
+                        $('#receiveUserIds').attr('data-id',userId.join(","));
+                        layer.close(index);
+                    },
+                    success: function () {
+                        // 执行 iframe 内的方法
+                        $('#personnelSelect iframe')[0].contentWindow.task_personnel_select
+                            .init(data);
+                    },
+                    resize: false
+                });
+            });
+            //取消
+            $("#cancelBriefing")
+                .off("click")
+                .on("click", function () {
+                    admin.closePopupCenter()
+                })
+            $("#delFile")
+                .off("click")
+                .on("click", function () {
+                    if (!$("#fileName").val()) {
+                        return layer.msg("请先选择文件", {
+                            icon: 5
+                        })
+                    } else {
+                        $.ajax({
+                            url: "/api/knowledge/paper/deleteFile/" + fileId,
+                            type: "delete",
+                            success: function (data) {
+                                if (data.ok) {
+                                    $("#fileName").val("")
+                                    $("#fileId").val("")
+                                    fileId = ""
+                                } else {
+                                    return layer.msg(data.reason, {
+                                        icon: 5
+                                    })
+                                }
+                            }
+                        })
+                    }
+                })
+            var files
+            // 清空文件队列
+            function clearFile() {
+                for (var x in files) {
+                    delete files[x]
+                }
+            }
+            var index;
+            $("#delFile")
+                .off("click")
+                .on("click", function () {
+                    if (!$("#fileName").val()) {
+                        return layer.msg("请先选择文件", {
+                            icon: 5
+                        })
+                    }
+                })
+            $("#upload")
+                .off("click")
+                .on("click", function () {
+                    if (!$("#fileName").val()) {
+                        return layer.msg("请先选择文件", {
+                            icon: 5
+                        })
+                    }
+                })
+            // 上传
+            var uploadRender = upload.render({
+                elem: "#chooseFile",
+                url: "/api/sys/file/upload",
+                field: "file",
+                accept: "file", // 所有文件
+                auto: false, // 自动上传
+                exts: "pdf|doc|docx|xlsx|xls|zip|rar|ppt|pptx", // 允许上传的文件后缀
+                bindAction: "#upload",
+                choose: function (obj) {
+                    uploadRender.config.elem.next()[0].value = "" // 防止choose方法只触发一次
+                    $("#fileId").val("");
+                    files = obj.pushFile() // 文件队列
+                    clearFile()
+                    obj.preview(function (index, file, result) {
+                        // file:准备上传的文件对象
+                        files = obj.pushFile()
+                        $("#fileName").val(file.name)
+                        $("#delFile")
+                            .off("click")
+                            .on("click", function () {
+                                if (!$("#fileName").val()) {
+                                    return layer.msg("请先选择文件", {
+                                        icon: 5
+                                    })
+                                } else {
+                                    delete files[index] // 删除列表中对应的文件，一般在某个事件中使用
+                                    $("#fileName").val("")
+                                    $("#fileId").val("")
+                                }
+                            })
+                    })
+                },
+                before: function () {
+                    if ($("#fileName").val()) {
+                        index = layer.load(2)
+                    } else {
+                        return layer.msg("请先选择文件", {
+                            icon: 5
+                        })
+                    }
+                },
+                done: function (res, indexs) {
+                    // 上传完毕回调
+                    layer.close(index)
+                    if (res.ok) {
+                        layer.msg("文件上传成功！", {
+                            icon: 1
+                        })
+                        $('#fileId').val(res.data.fileId)
+                        file = res.data.fileId
+                        //删除附件
+                        $("#delFile")
+                            .off("click")
+                            .on("click", function () {
+                                if ($("#fileName").val()) {
+                                    $.ajax({
+                                        url: "/api/sys/file/deleteFileByFileId/" + file,
+                                        type: "delete",
+                                        success: function (data) {
+                                            if (data.ok) {
+                                                delete files[indexs]
+                                                $("#fileName").val("")
+                                                $("#fileId").val("")
+
+                                                file = ""
+                                            } else {
+                                                return layer.msg(data.reason, {
+                                                    icon: 5
+                                                })
+                                            }
+                                        }
+                                    })
+                                } else {
+                                    return layer.msg("请先选择文件", {
+                                        icon: 5
+                                    })
+                                }
+                            })
+                    } else {
+                        layer.msg("文件上传失败：" + res.message, {
+                            icon: 5
+                        })
+                    }
+                }
+            })
+
+        }
+    )
+</script>

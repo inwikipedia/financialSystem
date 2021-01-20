@@ -1,0 +1,144 @@
+/*
+ * File   : form.css
+ * Created: Tuesday September 11th 2018 4:09:59 pm
+ * Author : yuchunyu97
+ * License: MIT License
+ * 
+ * Copyright (c) 2018 yuchunyu97
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * -----
+ * Last Modified: Saturday September 29th 2018 5:26:33 pm
+ * Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+ * -----
+ * Description: 查看时弹层内的表单样式
+ * -----
+ * HISTORY:
+ */
+#formView {
+    padding: 20px;
+    overflow-y: auto;
+}
+
+#formView .selectTdClass {
+    background-color: #edf5fa !important
+}
+
+#formView table.noBorderTable td,
+#formView table.noBorderTable th,
+#formView table.noBorderTable caption {
+    border: 1px dashed #ddd !important
+}
+
+#formView table {
+    margin-bottom: 10px;
+    border-collapse: collapse;
+    display: table;
+}
+
+#formView td,
+#formView th {
+    padding: 5px 10px;
+    border: 1px solid #DDD;
+}
+
+#formView caption {
+    border: 1px dashed #DDD;
+    border-bottom: 0;
+    padding: 3px;
+    text-align: center;
+}
+
+#formView th {
+    border-top: 1px solid #BBB;
+    background-color: #F7F7F7;
+}
+
+#formView table tr.firstRow th {
+    border-top-width: 2px;
+}
+
+#formView .ue-table-interlace-color-single {
+    background-color: #fcfcfc;
+}
+
+#formView .ue-table-interlace-color-double {
+    background-color: #f7faff;
+}
+
+#formView td p {
+    margin: 0;
+    padding: 0;
+}
+
+.formView {
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.formView .selectTdClass {
+    background-color: #edf5fa !important
+}
+
+.formView table.noBorderTable td,
+.formView table.noBorderTable th,
+.formView table.noBorderTable caption {
+    border: 1px dashed #ddd !important
+}
+
+.formView table {
+    margin-bottom: 10px;
+    border-collapse: collapse;
+    display: table;
+}
+
+.formView td,
+.formView th {
+    padding: 5px 10px;
+    border: 1px solid #DDD;
+}
+
+.formView caption {
+    border: 1px dashed #DDD;
+    border-bottom: 0;
+    padding: 3px;
+    text-align: center;
+}
+
+.formView th {
+    border-top: 1px solid #BBB;
+    background-color: #F7F7F7;
+}
+
+.formView table tr.firstRow th {
+    border-top-width: 2px;
+}
+
+.formView .ue-table-interlace-color-single {
+    background-color: #fcfcfc;
+}
+
+.formView .ue-table-interlace-color-double {
+    background-color: #f7faff;
+}
+
+.formView td p {
+    margin: 0;
+    padding: 0;
+}

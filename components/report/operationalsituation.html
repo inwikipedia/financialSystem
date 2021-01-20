@@ -1,0 +1,370 @@
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<link rel="stylesheet" href="assetsInfo/css/report.css">
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+
+    .titDivbox {
+        width: 90%;
+        margin: auto;
+        position: relative;
+    }
+
+    .titDiv {
+        width: 100%;
+        font-size: 16px;
+        font-weight: bold;
+        color: #888;
+        position: absolute;
+        top: 25px;
+    }
+
+    .tit01,
+    .tit02 {
+        width: 50%;
+        float: left;
+        text-align: center;
+    }
+
+    .botTable {
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+
+    .pieChart {
+        height: 240px;
+        width: 90%;
+        margin:auto;
+        /*min-width: 435px;*/
+    }
+
+    @media screen and (min-width: 1366px) and (max-width: 1920px) {
+        .pieChart {
+            height: 240px;
+            width: 90%;
+        }
+    }
+
+    @media screen and (min-width: 1920px) {
+        .pieChart {
+            height: 370px;
+            width: 90%;
+        }
+    }
+    /*兼容自适应高度问题*/
+    @media screen and (max-width: 1366px) {
+
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span class="layui-card-header-title"><strong>本部经营情况</strong></span>
+                <!-- <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-sm exportbtn">导出PPT</a> -->
+            </div>
+            <div class="layui-row" style="text-align: left">
+                数据业务本部：
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md4">
+                    <div id="dataContract"  class="pieChart" ></div>
+                </div>
+                <div class="layui-col-md4">
+                    <div id="dataInvoice" class="pieChart"></div>
+                </div>
+                <div class="layui-col-md4">
+                    <div id="dataProfit" class="pieChart"></div>
+                </div>
+            </div>
+            <div class="layui-row" style="text-align: left">
+                软件业务本部：
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md4">
+                    <div id="softContract" class="pieChart"></div>
+                </div>
+                <div class="layui-col-md4">
+                    <div id="softInvoice" class="pieChart"></div>
+                </div>
+                <div class="layui-col-md4">
+                    <div id="softProfit" class="pieChart"></div>
+                </div>
+            </div>
+            <div class="layui-row" style="text-align: left">
+                咨询业务本部：
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md4">
+                    <div id="infoContract" class="pieChart"></div>
+                </div>
+                <div class="layui-col-md4">
+                    <div id="infoInvoice" class="pieChart"></div>
+                </div>
+                <div class="layui-col-md4">
+                    <div id="infoProfit" class="pieChart"></div>
+                </div>
+            </div>
+            <div class="layui-row" style="text-align: left">
+                智能业务本部：
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md4">
+                    <div id="intellectContract" class="pieChart"></div>
+                </div>
+                <div class="layui-col-md4">
+                    <div id="intellectInvoice" class="pieChart"></div>
+                </div>
+                <div class="layui-col-md4">
+                    <div id="intellectProfit" class="pieChart"></div>
+                </div>
+            </div>
+
+            <div class="botTable">
+
+                <table id="tableContent-form" lay-filter="tableContent-form"></table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+
+<script>
+    layui.use(['table'], function() {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer,
+            thisYear=new Date().getFullYear();
+
+        admin.req('/api/business/tableReport/getBigDeptOperatingStatus?thisYear='+(thisYear-1), {}, function(data) {
+            var index = layer.load(2);
+            var tabledata =[];
+            for (var i = 0; i <data.data.length ; i++) {
+                tabledata.push({
+                    deptName:data.data[i].deptName,
+                    lastContractAmount:data.data[i].bigDeptContractAmount,
+                    lastInvoiceAmount:data.data[i].bigDeptInvoiceAmountByYear,
+                    thisContractAmount:Number,
+                    thisInvoiceAmount:Number,
+                });
+            }
+            // 渲染表格
+            table.render({
+                elem: '#tableContent-form',
+                url: admin.formatUrl('/api/business/tableReport/getBigDeptOperatingStatus?thisYear='+thisYear), //数据接口
+                method: 'GET',
+                parseData: function (res) { //res 即为原始返回的数据
+                    layer.close(index);
+                    //echart数据处理
+                    var xData ;
+                    var yData1 = [];
+                    for (var i = 0; i <res.data.length ; i++) {
+                        tabledata[i].thisContractAmount=res.data[i].bigDeptContractAmount;
+                        tabledata[i].thisInvoiceAmount=res.data[i].bigDeptInvoiceAmountByYear;
+                        tabledata[i].thisProfit=res.data[i].bigDeptProfit;
+                        tabledata[i].thisProfit=res.data[i].bigDeptProfit
+                        tabledata[i].contractAmount=((tabledata[i].lastContractAmount/tabledata[i].thisContractAmount)*100).toFixed(2)+'%';
+                        tabledata[i].invoiceAmount=((tabledata[i].lastInvoiceAmount/tabledata[i].thisInvoiceAmount)*100).toFixed(2)+'%';
+                    }
+
+                    //合同
+                    for (var i = 0; i <res.data.length ; i++) {
+                        yData1=[]
+                        xData=[res.data[i].deptName,'数据中心'];
+                        yData1.push({name:res.data[i].deptName,value:res.data[i].bigDeptContractAmount});
+                        yData1.push({name:'数据中心',value:res.data[i].contractAmount});
+                        if(res.data[i].deptName=='数据业务本部'){
+                            chartInit(xData, yData1,'dataContract',thisYear+'年合同');
+                        }else if(res.data[i].deptName=='软件业务本部'){
+                            chartInit(xData, yData1,'softContract',thisYear+'年合同');
+                        }else if(res.data[i].deptName=='咨询业务本部'){
+                            chartInit(xData, yData1,'infoContract',thisYear+'年合同');
+                        }else if(res.data[i].deptName=='智能业务本部'){
+                            chartInit(xData, yData1,'intellectContract',thisYear+'年合同');
+                        }
+                    }
+                    for (var i = 0; i <res.data.length ; i++) {
+                        yData1=[]
+                        xData=[res.data[i].deptName,'数据中心'];
+                        yData1.push({name:res.data[i].deptName,value:res.data[i].bigDeptInvoiceAmountByYear});
+                        yData1.push({name:'数据中心',value:res.data[i].invoiceAmount});
+                        if(res.data[i].deptName=='数据业务本部'){
+                            chartInit(xData, yData1,'dataInvoice',thisYear+'年开票');
+                        }else if(res.data[i].deptName=='软件业务本部'){
+                            chartInit(xData, yData1,'softInvoice',thisYear+'年开票');
+                        }else if(res.data[i].deptName=='咨询业务本部'){
+                            chartInit(xData, yData1,'infoInvoice',thisYear+'年开票');
+                        }else if(res.data[i].deptName=='智能业务本部'){
+                            chartInit(xData, yData1,'intellectInvoice',thisYear+'年开票');
+                        }
+                    }
+                    for (var i = 0; i <res.data.length ; i++) {
+                        yData1=[]
+                        xData=[res.data[i].deptName,'数据中心'];
+                        yData1.push({name:res.data[i].deptName,value:res.data[i].bigDeptProfit});
+                        yData1.push({name:'数据中心',value:res.data[i].centerProfit});
+                        if(res.data[i].deptName=='数据业务本部'){
+                            chartInit(xData, yData1,'dataProfit',thisYear+'年利润');
+                        }else if(res.data[i].deptName=='软件业务本部'){
+                            chartInit(xData, yData1,'softProfit',thisYear+'年利润');
+                        }else if(res.data[i].deptName=='咨询业务本部'){
+                            chartInit(xData, yData1,'infoProfit',thisYear+'年利润');
+                        }else if(res.data[i].deptName=='智能业务本部'){
+                            chartInit(xData, yData1,'intellectProfit',thisYear+'年利润');
+                        }
+                    }
+                    //表格数据处理
+                    for (var key in res.data[1]) {
+                        if(typeof res.data[1][key]=='number'){
+                            res.data[1][key] = (res.data[1][key]*100).toFixed(2)+'%';
+                        }
+                    }
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "data": tabledata //解析数据列表
+                    };
+                },
+                cols: [
+                    [{
+                        title: '部门',
+                        field: 'deptName',
+                        align: 'center'
+                        // templet: '<div><span title="{{d.type}}">{{d.type}}</span></div>'
+                    },{
+                        title: '当年合同',
+                        field: 'thisContractAmount',
+                        align: 'center'
+                        // templet: '<div><span title="{{d.type}}">{{d.type}}</span></div>'
+                    }, {
+                        title: '上年合同',
+                        field: 'lastContractAmount',
+                        align: 'center'
+                    }, {
+                        title: '同期对比',
+                        field: 'contractAmount',
+                        align: 'center'
+                    }, {
+                        title: '当年开票',
+                        field: 'thisInvoiceAmount',
+                        align: 'center'
+                    }, {
+                        title: '上年开票',
+                        field: 'lastInvoiceAmount',
+                        align: 'center'
+                    }, {
+                        title: '同期对比',
+                        field: 'invoiceAmount',
+                        align: 'center'
+                    }, {
+                        title: '当年利润',
+                        field: 'thisProfit',
+                        align: 'center'
+                    }]
+                ],
+
+
+            });
+
+
+        }, {
+            method: 'get'
+        });
+
+
+        var chartInit = function(xData, data1, data2,title) {
+            var myChart= echarts.init(document.getElementById(data2));
+            // 图表初始化
+            // 图表配置项
+            var option = {
+                title: {
+                    text: title,
+                    x: 'center',
+                    y:"10px",
+                    textStyle: {
+                        fontSize: 16
+                    },
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (obj) {
+                        if(obj.name!=='数据中心'){
+                          return obj.name+':'+obj.value+'('+obj.percent+'%)';
+                        }
+                    }
+                },
+                grid: {
+                    top:"2%"
+                },
+                color: ['#5b9bd5','#ed7d31'],
+                legend: {
+                    data:xData,
+                    type: 'scroll',
+                    orient: 'vertical',
+                    right: 0,
+                    y:'center',
+                    icon: "roundRect",
+                    itemWidth: 10,
+                    itemHeight: 10
+                },
+                series: [{
+                    type: 'pie',
+                    radius: '50%',
+                    center: ['50%', '46%'],
+                    data: data1,
+                    label: {
+                        normal: {
+                            show: true,
+                            formatter: function (obj) {
+                                if(obj.name=='数据中心'){
+                                    return obj.name+':\n'+obj.value;
+                                }else{
+                                    return obj.name+':\n'+obj.value+'\n('+obj.percent+'%)';
+                                }
+                            } //自定义显示格式(b:name, c:value, d:百分比)
+                        }
+
+                    },
+                    labelLine: {
+                        length: 10,
+                        // length2: 10
+                        show:true
+                    },
+                }]
+            };
+            myChart.setOption(option);
+        };
+        setTimeout(function() {
+            window.onresize = function() {
+                echarts.init(document.getElementById('dataContract')).resize();
+                echarts.init(document.getElementById('dataInvoice')).resize();
+                echarts.init(document.getElementById('dataProfit')).resize();
+                echarts.init(document.getElementById('softContract')).resize();
+                echarts.init(document.getElementById('softInvoice')).resize();
+                echarts.init(document.getElementById('softProfit')).resize();
+                echarts.init(document.getElementById('intellectContract')).resize();
+                echarts.init(document.getElementById('intellectInvoice')).resize();
+                echarts.init(document.getElementById('intellectProfit')).resize();
+                echarts.init(document.getElementById('infoContract')).resize();
+                echarts.init(document.getElementById('infoInvoice')).resize();
+                echarts.init(document.getElementById('infoProfit')).resize();
+                //myChartLine.resize();
+                //GantChart.resize();
+                // myChartPie.resize();
+            }
+        }, 200);
+    });
+</script>

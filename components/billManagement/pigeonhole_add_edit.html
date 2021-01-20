@@ -1,0 +1,179 @@
+<!--
+File   : user.html
+Created: Tuesday September 18th 2020 9:15:20 am
+Author : hetengfei
+License: MIT License
+
+Copyright (c) 2020 hetengfei
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Modified By  : hetengfei
+-----
+-----
+HISTORY:
+-->
+<style>
+    .layui-layer-page .layui-layer-content{
+        overflow: visible;
+    }
+    .pigeonhole .layui-form-label{
+        width:154px;
+    }
+    .pigeonhole .layui-input-block{
+        margin-left:186px;
+    }
+    .pigeonhole #layui-laydate6 .laydate-set-ym{
+        display: none;
+    }
+</style>
+<div class="layui-tpl-container pigeonhole layui-form" style="padding-bottom: 60px;">
+    <div class="layui-row" id="user-area">
+        <div class="layui-col-md6">
+            <!-- 新增和编辑表单 -->
+
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label"><span style="color: red;">*</span> 年</label>-->
+<!--                <div class="layui-input-block">-->
+<!--                    <input type="text" lay-verify='year' name="year" class="layui-input" id="year" placeholder="请输入年份" autocomplete="off">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label"><span style="color: red;">*</span> 月</label>-->
+<!--                <div class="layui-input-block">-->
+<!--                    <input type="text" lay-verify='month' name="month" placeholder="请输入月份"  id="month" class="layui-input" autocomplete="off">-->
+<!--                </div>-->
+<!--            </div>-->
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red;">*</span> 年月</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify='month1' name="month1" class="layui-input" id="month1" placeholder="请输入年月" autocomplete="off">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red;">*</span> 公司</label>
+                <div class="layui-input-block">
+                    <select name="company" lay-verify='company'  class="layui-input company" style="display: block">
+                        <option value="">--请选择公司--</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red;">*</span> 区域</label>
+                <div class="layui-input-block">
+                    <select name="area" lay-verify='areaName'  class="layui-input areaName" style="display: block">
+                        <option value="">--请选择区域--</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">当月应收账款余额（元）</label>
+                <div class="layui-input-block">
+                    <input type="text" maxlength='12' id="receivableBalance" name="receivableBalance" placeholder="请输入当月应收账款余额" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label labelWidth">当月进账额（元）</label>
+                <div class="layui-input-block reduceMarginL" style="position: relative">
+                    <input type="text" maxlength='12'  id="income" placeholder="请输入当月进账额" class="layui-input" id="money2" name="income">
+                </div>
+            </div>
+        </div>
+        <!-- 提交按钮 -->
+        <!-- 取消按钮 -->
+        <div class="layui-form-item" style="text-align: center;position: absolute;bottom: 0;left: 0;right: 0;">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="menuSave_user">保存</button>
+            <button class="layui-btn layui-btn-primary" id="menuCancle_user">取消</button>
+        </div>
+    </div>
+</div>
+<script>
+    // 初始化 layui
+    layui.use(['laydate'], function() {
+        var laydate = layui.laydate;
+
+        // //年选择器
+        // laydate.render({
+        //     elem: '#year'
+        //     ,type: 'year'
+        // });
+        // //月选择器
+        // laydate.render({
+        //     elem: '#month'
+        //     ,type: 'month',
+        //     format:'M'
+        // });
+        //年月选择器
+        laydate.render({
+            elem: '#month1'
+            ,type: 'month'
+            ,format:'yyyy-M'
+        });
+        //当月应收账款余额
+        $('input[name=receivableBalance]').on('input', function (e) {
+            var inputData = e.target.value;
+            inputData = inputData.replace(/[^\d.]/g,'');
+            inputData = inputData.replace(/^[.]/g, ""); //禁止第一个字符为.
+            inputData = inputData.replace(/\.{2,}/g, ".");//只保留第一个., 清除多余的
+            inputData = inputData.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            inputData = inputData.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数
+            $('#receivableBalance').val(inputData);
+        });
+        //当月进账额
+        $('input[name=income]').on('input', function (e) {
+            var inputData = e.target.value;
+            inputData = inputData.replace(/[^\d.]/g,'');
+            inputData = inputData.replace(/^[.]/g, ""); //禁止第一个字符为.
+            inputData = inputData.replace(/\.{2,}/g, ".");//只保留第一个., 清除多余的
+            inputData = inputData.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            inputData = inputData.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数
+            $('#income').val(inputData);
+        });
+
+//公司
+        $.ajax({
+            type: "get",
+            url: "/api/sys/dictype/list?dicCode=companyListData",
+            success: function (res) {
+                var list = res.data;
+                list.forEach((item,index)=>{
+                    $('.company').append(`<option value=${item.id}>${item.dicTypeName}</option>`)
+                })
+            }
+        });
+        //区域
+        $.ajax({
+            type: "get",
+            url: "/api/sys/dictype/list?dicCode=area",
+            success: function (res) {
+                var list = res.data;
+                list.forEach((item,index)=>{
+                    $('.areaName').append(`<option value=${item.id}>${item.dicTypeName}</option>`)
+                })
+            }
+        });
+    })
+
+
+    // 取消按钮
+    $('#menuCancle_user').on('click', function () {
+        // layui.admin.closePopupCenter();
+        layer.closeAll();
+    });
+</script>

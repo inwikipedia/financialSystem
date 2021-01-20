@@ -1,0 +1,232 @@
+<style>
+    table{
+        margin: 0 auto;
+    }
+    .sicFormTable, .sicFormTable tr, .sicFormTable td{
+        border: 1px solid black;
+    }
+    .sicFormBox .layui-disabled,.sicFormBox .layui-disabled:hover{
+        color: #545454!important
+    }
+</style>
+<div class="layui-form sicFormBox" style="margin-top: 10px">
+    <table class="sicFormTable"  cellspacing="0" width="940">
+        <tbody>
+        <tr class="firstRow">
+            <td width="113" valign="center" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p style="text-align:center">
+                    <strong><span style="font-size: 19px">项目名称</span></strong>
+                </p>
+            </td>
+            <td width="529" class="layui-form-item" valign="center" colspan="3" style="padding: 5px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <input maxlength="100" lay-verify="required" type="text" placeholder="请输入项目名称" name="projectName" id="projectName" class=" layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td width="113" valign="center" style="padding: 5px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p style="text-align:center">
+                    <strong><span style="font-size: 19px">负责人</span></strong>
+                </p>
+            </td>
+            <td width="208" valign="center" class="layui-form-item" style="padding: 5px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <input type="text" placeholder="请选择负责人" readonly maxlength="50" lay-verify="required" style="cursor: pointer" class="layui-input" name="leaderId" id="leaderId" >
+            </td>
+            <td width="123" valign="center" style="padding: 5px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p style="text-align:center">
+                    <strong><span style="font-size: 19px">主申报部门</span></strong>
+                </p>
+            </td>
+            <td width="198" valign="center" class="layui-form-item" style="padding: 5px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <input type="text" style="cursor: pointer" lay-verify="required" placeholder="请选择部门" class="layui-input" name="deptId" id="deptId" readonly>
+            </td>
+        </tr>
+        <tr>
+            <td width="113" valign="center" style="padding: 5px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p style=";text-align:center">
+                    <strong><span style="font-size: 19px">项目类型</span></strong>
+                </p>
+            </td>
+            <td width="208" valign="center" class="layui-form-item" style="padding: 5px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <select lay-verify="required" placeholder="请选择项目类型" lay-filter="projectTypeId" name="projectTypeId" id="projectTypeId"></select>
+            </td>
+            <td width="123" valign="center" style="padding: 5px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p style=";text-align:center">
+                    <strong><span style="font-size: 19px">承担方式</span></strong>
+                </p>
+            </td>
+            <td width="450" valign="center"  style="padding: 5px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <div style="display: inline-block;width: 450px" class="undertakingId">
+                    <select  lay-verify="required" placeholder="请选择承担方式" lay-filter="undertakingId" name="undertakingId" id="undertakingId"></select>
+                </div>
+                <div style="width: 220px;display: none" class="extInfo2">
+                    <input  type="text" placeholder="请输入"  maxlength="100" id="extInfo2" class=" layui-input">
+                </div>
+            </td>
+        </tr>
+        <tr class="otheTr" style="display: none">
+            <td width="113" valign="center" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p style="text-align:center">
+                    <strong><span class="other"  style="font-size: 19px">具体说明</span></strong>
+                </p>
+            </td>
+            <td width="529"  valign="center" colspan="3" style="padding: 5px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <input  type="text" placeholder="请输入具体说明" maxlength="100" id="extInfo1" class=" layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td width="113" valign="center" style="padding: 5px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p style="text-align:center">
+                    <strong><span style="font-size: 19px">研究时间</span></strong>
+                </p>
+            </td>
+            <td width="208" valign="center" class="layui-form-item" style="padding: 5px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <input lay-verify="required" name="timeArea" readonly id="timeArea" type="text" placeholder=""  class=" layui-input">
+            </td>
+            <td width="123" valign="center" style="padding: 5px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p style="text-align:center">
+                    <strong><span style="font-size: 19px">经费预算</span></strong>
+                </p>
+                <p style=";text-align:center">
+                    <span style="font-size:16px">（万元）</span>
+                </p>
+            </td>
+            <td width="198" valign="center" class="layui-form-item" style="padding: 5px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <input lay-verify="required" maxlength="9" type="text" onkeyup="replaceit(this)" id="amount" name="amount" class=" layui-input">
+            </td>
+        </tr>
+        <tr style="height:516px">
+            <td width="113" valign="center" style="padding: 5px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p style="text-align:center">
+                    <strong><span style="font-size: 19px">项</span></strong>
+                </p>
+                <p style="text-align:center">
+                    <strong><span style="font-size: 19px">目</span></strong>
+                </p>
+                <p style="text-align:center">
+                    <strong><span style="font-size: 19px">概</span></strong>
+                </p>
+                <p style="text-align:center">
+                    <strong><span style="font-size: 19px">要</span></strong>
+                </p>
+            </td>
+            <td width="529" valign="center"  colspan="3" style="padding: 5px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p style="line-height: 27px">
+                    <span style="font-weight:bold;font-size:16px">一、</span><strong><span style="font-size: 16px">项目背景及意义</span></strong>
+                </p>
+                <p style="line-height: 27px" class="layui-form-item">
+                    <textarea  name="summaryDoc01" id="summaryDoc01" maxlength="400"  style="display: inline;" lay-verify="required" placeholder="请输入项目背景及意义,最多不超过400字" class="layui-textarea"></textarea>
+                </p>
+                <p style="margin-left: 0;text-indent: 0;line-height: 27px">
+                    <span style="font-weight:bold;font-size:16px">二、</span><strong><span style="font-size: 16px">研究总体目标</span></strong>
+                </p>
+                <p style="line-height: 27px" class="layui-form-item">
+                    <textarea  name="summaryDoc02" id="summaryDoc02" maxlength="400"  style="display: inline;" lay-verify="required" placeholder="请输入研究总体目标,最多不超过400字" class="layui-textarea"></textarea>
+                </p>
+                <p style="margin-left: 0;text-indent: 0;line-height: 27px">
+                    <span style="font-weight:bold;font-size:16px">三、</span><strong><span style="font-size: 16px">项目研究内容</span></strong>
+                </p>
+                <p style="line-height: 27px" class="layui-form-item">
+                    <textarea  name="summaryDoc03" id="summaryDoc03" maxlength="400"  style="display: inline;" lay-verify="required" placeholder="请输入项目研究内容,最多不超过400字" class="layui-textarea"></textarea>
+                </p>
+                <p style="line-height: 27px">
+                    <strong><span style="font-size: 16px">四、研究成果及创新点</span></strong>
+                </p>
+                <p style="line-height: 27px" class="layui-form-item">
+                    <textarea  name="summaryDoc04" id="summaryDoc04" maxlength="400"  style="display: inline;" lay-verify="required" placeholder="请输入研究成果及创新点,最多不超过400字" class="layui-textarea"></textarea>
+                </p>
+                <p style="line-height: 27px">
+                    <strong><span style="font-size: 16px">五、项目拟申请经费</span></strong><strong><span style="font-size: 16px">（分项）</span></strong>
+                </p>
+                <p style="line-height: 27px" class="layui-form-item">
+                    <textarea  name="summaryDoc05" id="summaryDoc05" maxlength="400"  style="display: inline;" lay-verify="required" placeholder="请输入项目拟申请经费,最多不超过400字" class="layui-textarea"></textarea>
+                </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="layui-form-item" style="text-align: center;margin-top: 10px">
+        <button class="layui-btn layui-btn-normal" lay-submit  lay-filter="btn-save" id="btn-save">保存</button>
+        <button class="layui-btn layui-btn-normal"  lay-submit lay-filter="btn-submit" id="btn-submit">保存并提交</button>
+        <button class="layui-btn layui-btn-primary" id="cancleBox">取消</button>
+    </div>
+</div>
+
+<script>
+    layui.use(['table', 'config'], function () {
+        var config = layui.config,
+            admin = layui.admin,
+            form = layui.form,
+            layer = layui.layer,
+            laydate = layui.laydate,
+            table = layui.table,
+            tools = layui.tools;
+
+        var account = config.getAccount();
+        $('#leaderId').off('click').on('click', function () {
+            var data = {
+                data: []
+            };
+            if ($('#leaderId').attr('data-name')) {
+                data.data.push({
+                    name: $('#leaderId').attr('data-name'),
+                    id: $('#leaderId').attr('data-id')
+                })
+            }
+            layer.open({
+                type: 2,
+                id: 'personnelSelect',
+                title: '请选择',
+                content: 'components/tpl/personnel_group_select.html',
+                area: ['96%', '80%'],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var finalData = $('#personnelSelect iframe')[0].contentWindow
+                        .task_personnel_select.finish();
+                    for (var i = 0; i < finalData.length; i++) {
+                        $('#leaderId').attr('data-name', finalData[i].name);
+                        $('#leaderId').val(finalData[i].name);
+                        $('#leaderId').attr('data-id', finalData[i].id);
+                    }
+                    layer.close(index);
+                },
+                success: function () {
+                    // 执行 iframe 内的方法
+                    $('#personnelSelect iframe')[0].contentWindow.task_personnel_select
+                        .init(data, 'radio');
+                },
+                resize: false
+            });
+        });
+        $('#deptId').off('click').on('click', function () {
+            layer.open({
+                type: 2,
+                id: 'orgsSelect',
+                title: false,
+                moveOut: true,
+                content: 'components/tpl/dept_select.html',
+                area: ['50%', '70%'],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var finalData = $('#orgsSelect iframe')[0].contentWindow.task_orgs_select.finish();
+                    // 获取到数据，执行回掉函数
+                    if (finalData.id == '' || finalData.name == '') {
+                        return layer.msg('请选择组织机构', {
+                            icon: 0
+                        });
+                    }
+                    $('#deptId').val(finalData.name);
+                    $('#deptId').attr('data-id', finalData.id);
+                    layer.close(index);
+                },
+                resize: false
+            });
+        });
+        $("#cancleBox").off("click").on("click", function () {
+            layer.closeAll();
+        })
+        laydate.render({
+            elem: "#timeArea",
+            range:true
+        });
+    })
+</script>

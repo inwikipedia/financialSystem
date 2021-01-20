@@ -1,0 +1,64 @@
+{
+    "code": 0,
+    "msg": "",
+    "count": 1000,
+    "data": [{
+            "type": "工信部",
+            "budgetall": 56,
+            "budget2018": 56,
+            "budget2019": 0,
+            "budget2020": 0
+        },
+        {
+            "type": "科委",
+            "budgetall": 988,
+            "budget2018": 793,
+            "budget2019": 295,
+            "budget2020": 0
+        },
+        {
+            "type": "重点课题",
+            "budgetall": 556,
+            "budget2018": 339,
+            "budget2019": 109,
+            "budget2020": 5
+        },
+        {
+            "type": "青年基金课题",
+            "budgetall": 17,
+            "budget2018": 17,
+            "budget2019": 0,
+            "budget2020": 0
+        },
+        {
+            "type": "培育课题",
+            "budgetall": 60,
+            "budget2018": 40,
+            "budget2019": 20,
+            "budget2020": 0
+        },
+        {
+            "type": "自立课题",
+            "budgetall": 1299,
+            "budget2018": 870,
+            "budget2019": 314,
+            "budget2020": 35
+        },
+        {
+            "type": "跨年课题",
+            "budgetall": 930.5,
+            "budget2018": 930.5,
+            "budget2019": 0,
+            "budget2020": 0
+        },
+        {
+            "type": "总计",
+            "budgetall": 3887,
+            "budget2018": 2606,
+            "budget2019": 958,
+            "budget2020": 13
+        }
+    ]
+
+
+}

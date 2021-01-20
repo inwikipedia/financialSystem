@@ -1,0 +1,17 @@
+{
+    "key": "ybKd6kzXsTVac7SntLJ3",
+    "url": "http://192.168.13.231/ds-vpath/cache/files/ybKd6kzXsTVac7SntLJ3_7423/output.docx/output.docx?md5=f9QSU4wvrmdvkqdTyy3NJw==&expires=1558507065&disposition=attachment&ooname=output.docx",
+    "changesurl": "http://192.168.13.231/ds-vpath/cache/files/ybKd6kzXsTVac7SntLJ3_7423/changes.zip/changes.zip?md5=HM9wf5N-g4cSeRae9VytEg==&expires=1558507065&disposition=attachment&ooname=output.zip",
+    "history": {
+        "serverVersion": "5.2.8",
+        "changes": [{
+            "created": "2019-05-22 06:22:12",
+            "user": {
+                "id": "uid-1558506094264",
+                "name": "匿名"
+            }
+        }]
+    },
+    "users": ["uid-1558506094264"]
+
+}

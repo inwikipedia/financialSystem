@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>日期选择</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-ie6.css">
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/ie.css">
+    <![endif]-->
+    <script type="text/javascript" src="../dialogs/internal.js"></script>
+    <script src="./utils.js"></script>
+</head>
+
+<body>
+    <div class="content">
+        <table class="table table-bordered table-striped table-hover">
+            <tr>
+                <th>控件名称<span class="label label-important">*</span></th>
+                <th>默认值</th>
+            </tr>
+            <tr>
+                <td><input type="text" id="adcform_title" placeholder="必填"></td>
+                <td>
+                    <label class="checkbox inline"><input id="adcform_auto" type="checkbox" checked="checked" /> 显示当前日期 </label>
+                </td>
+            </tr>
+            <tr>
+                <th>主题颜色</th>
+                <th>控件类型</th>
+            </tr>
+            <tr>
+                <td><input type="text" id="adcform_theme" placeholder="必填" value="#37ABFF"></td>
+                <td>
+                    <select id="adcform_type">
+                        <!-- 常规用法 -->
+                        <option value="_">默认选择器</option>
+                        <!-- 其它选择器 -->
+                        <option value="year_">年选择器</option>
+                        <option value="month_">年月选择器</option>
+                        <option value="time_">时间选择器</option>
+                        <option value="datetime_">日期时间选择器</option>
+                        <!-- 范围选择 -->
+                        <option value="_range">日期范围</option>
+                        <option value="year_range">年范围</option>
+                        <option value="month_range">年月范围</option>
+                        <option value="time_range">时间范围</option>
+                        <option value="datetime_range">日期时间范围</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>&nbsp;&nbsp;&nbsp;&nbsp;长&nbsp;&nbsp;X&nbsp;&nbsp;宽&nbsp;&nbsp;&nbsp;&&nbsp;&nbsp;&nbsp;字体大小</th>
+                <th>可见性</th>
+            </tr>
+            <tr>
+                <td>
+                    <input id="adcform_width" type="text" value="190" class="input-small span1" placeholder="auto" />
+                    X
+                    <input id="adcform_height" type="text" value="30" class="input-small span1" placeholder="auto" />
+                    &
+                    <input id="adcform_fontsize" type="text" value="14" class="input-small span1" placeholder="auto" />
+                    px
+
+                </td>
+                <td>
+                    <label class="checkbox inline"><input id="adcform_hide" type="checkbox" /> 隐藏 </label>
+                </td>
+            </tr>
+            <tr>
+                <th>对齐方式</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>
+                    <select id="adcform_align">
+                        <option value="left">左对齐</option>
+                        <option value="center">居中对齐</option>
+                        <option value="right">右对齐</option>
+                    </select>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        var oNode = null,
+            thePlugins = 'adc_form_datetime',
+            datetimeName = '';
+        window.onload = function () {
+            if (UE.plugins[thePlugins].editdom) {
+                oNode = UE.plugins[thePlugins].editdom;
+                var gTitle = oNode.getAttribute('title').replace(/&quot;/g, "\""),
+                    gHidden = oNode.getAttribute('adcform_hide'),
+                    gAuto = oNode.getAttribute('adcform_auto'),
+                    gFontSize = oNode.getAttribute('adcform_fontsize'),
+                    gAlign = oNode.getAttribute('adcform_align'),
+                    gType = oNode.getAttribute('adcform_type'),
+                    gWidth = oNode.getAttribute('adcform_width'),
+                    gHeight = oNode.getAttribute('adcform_height'),
+                    gTheme = oNode.getAttribute('adcform_theme');
+                gTitle = gTitle == null ? '' : gTitle;
+                $G('adcform_title').value = gTitle;
+                if (gHidden == '1') {
+                    $G('adcform_hide').checked = true;
+                }
+                if (gAuto == '1') {
+                    $G('adcform_auto').checked = true;
+                } else {
+                    $G('adcform_auto').checked = false;
+                }
+                $G('adcform_fontsize').value = gFontSize;
+                $G('adcform_width').value = gWidth;
+                $G('adcform_height').value = gHeight;
+                $G('adcform_align').value = gAlign;
+                $G('adcform_type').value = gType;
+                $G('adcform_theme').value = gTheme;
+            }
+        }
+        dialog.oncancel = function () {
+            if (UE.plugins[thePlugins].editdom) {
+                delete UE.plugins[thePlugins].editdom;
+            }
+        };
+        dialog.onok = function () {
+            if ($G('adcform_title').value == '') {
+                alert('请输入控件名称');
+                return false;
+            }
+            var gTitle = $G('adcform_title').value.replace(
+                    /\"/g,
+                    "&quot;"),
+                gFontSize = $G('adcform_fontsize').value,
+                gAlign = $G('adcform_align').value,
+                gType = $G('adcform_type').value,
+                gWidth = $G('adcform_width').value,
+                gHeight = $G('adcform_height').value,
+                gTheme = $G('adcform_theme').value;
+
+            if (!oNode) {
+                try {
+                    oNode = createElement('input', 'datetime');
+                    oNode.setAttribute('type', 'text');
+                    oNode.setAttribute('title', gTitle);
+                    oNode.setAttribute('placeholder', gTitle);
+                    oNode.setAttribute('adcform', thePlugins);
+                    oNode.setAttribute('adcform_theme', gTheme);
+                    oNode.setAttribute('adcform_type', gType);
+                    datetimeName = oNode.getAttribute('name');
+                    oNode.setAttribute('class', datetimeName + ' layui-input');
+                    oNode.style.boxSizing = 'border-box';
+                    if ($G('adcform_hide').checked) {
+                        oNode.setAttribute('adcform_hide', 1);
+                    } else {
+                        oNode.setAttribute('adcform_hide', 0);
+                    }
+                    if ($G('adcform_auto').checked) {
+                        oNode.setAttribute('adcform_auto', 1);
+                    } else {
+                        oNode.setAttribute('adcform_auto', 0);
+                    }
+                    if (gFontSize != '') {
+                        oNode.style.fontSize = gFontSize + 'px';
+                        oNode.setAttribute('adcform_fontsize', gFontSize);
+                    }
+                    if (gAlign != '') {
+                        oNode.style.textAlign = gAlign;
+                        oNode.setAttribute('adcform_align', gAlign);
+                    }
+                    if (gWidth != '') {
+                        oNode.style.width = gWidth + 'px';
+                        oNode.setAttribute('adcform_width', gWidth);
+                    }
+                    if (gHeight != '') {
+                        oNode.style.height = gHeight + 'px';
+                        oNode.setAttribute('adcform_height', gHeight);
+                    }
+                    var html ='<span style="position: relative;">'+oNode.outerHTML+'<img src="/assetsInfo/images/riliform.png" style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;"/></span>'
+                    // TODO: 如何使用 laydate ???
+                    // editor.execCommand('insertHtml', '<script src="/assetsInfo/libs/laydate/laydate.js"><\/script>');
+                    var script = '<script class="'+datetimeName+'_script">\
+                            (function(){var param = {\
+                                elem: ".'+datetimeName+'"\
+                            };\
+                            var type = document.querySelector(".'+datetimeName+'").getAttribute("adcform_type").split("_");\
+                            var theme = document.querySelector(".'+datetimeName+'").getAttribute("adcform_theme");\
+                            var auto = document.querySelector(".'+datetimeName+'").getAttribute("adcform_auto");\
+                            if(type[0]!==""){param.type=type[0];}\
+                            if(type[1]!==""){param.range=true;}\
+                            if(theme){param.theme=theme;}\
+                            if(auto == "1" && type[1]==""){param.value = new Date();}\
+                            layui.laydate.render(param);})();\
+                        <\/script>';
+                    
+                    editor.execCommand('insertHtml', html);
+                    editor.execCommand('insertHtml', script);
+                } catch (e) {
+                    try {
+                        editor.execCommand('error');
+                    } catch (e) {
+                        alert('控件异常！');
+                    }
+                    return false;
+                }
+            } else {
+                oNode.setAttribute('title', gTitle);
+                oNode.setAttribute('adcform_theme', gTheme);
+                oNode.setAttribute('adcform_type', gType);
+                if ($G('adcform_hide').checked) {
+                    oNode.setAttribute('adcform_hide', 1);
+                } else {
+                    oNode.setAttribute('adcform_hide', 0);
+                }
+                if ($G('adcform_auto').checked) {
+                        oNode.setAttribute('adcform_auto', 1);
+                    } else {
+                        oNode.setAttribute('adcform_auto', 0);
+                    }
+                if (gFontSize != '') {
+                    oNode.style.fontSize = gFontSize + 'px';
+                    oNode.setAttribute('adcform_fontsize', gFontSize);
+                } else {
+                    oNode.style.fontSize = '';
+                    oNode.setAttribute('adcform_fontsize', '');
+                }
+                if (gAlign != '') {
+                    oNode.style.textAlign = gAlign;
+                    oNode.setAttribute('adcform_align', gAlign);
+                } else {
+                    oNode.setAttribute('adcform_align', '');
+                }
+                if (gWidth != '') {
+                    oNode.style.width = gWidth + 'px';
+                    oNode.setAttribute('adcform_width', gWidth);
+                } else {
+                    oNode.style.width = '';
+                    oNode.setAttribute('adcform_width', '');
+                }
+                if (gHeight != '') {
+                    oNode.style.height = gHeight + 'px';
+                    oNode.setAttribute('adcform_height', gHeight);
+                } else {
+                    oNode.style.height = '';
+                    oNode.setAttribute('adcform_height', '');
+                }
+                delete UE.plugins[thePlugins].editdom;
+            }
+        };
+    </script>
+</body>
+
+</html>

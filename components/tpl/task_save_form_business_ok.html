@@ -1,0 +1,362 @@
+<style>
+    .layui-layer{
+        top:10px !important;
+    }
+    .layui-layer-page .layui-layer-content{
+        overflow: visible !important;
+    }
+    .xm-select{
+        overflow: auto !important;
+        max-height: 160px !important;
+    }
+    .xm-select-label span{
+        font-size: 12px !important;
+    }
+    .xm-select-parent .xm-form-select dl{
+
+        margin-bottom: 20px !important;
+    }
+    #taskForm{
+       max-height: 600px!important;
+         overflow: auto!important;
+    }
+    /*#memberIds_blong{*/
+        /*height: 100px!important;*/
+        /*overflow: auto!important;*/
+    /*}*/
+    .xm-form-select{
+        border: 0.5px solid #e6e6e6;
+        /*top: auto!important;*/
+        /*bottom: 42px!important;*/
+    }
+   #taskForm .layui-input-block{
+       margin-left:120px;
+    }
+    body #taskForm .layui-form-label {
+        width: 120px;
+        padding: 5px 5px 5px 0px;
+    }
+    /* textarea placeholder样式调整(兼容处理) */
+    #taskTarget::-webkit-input-placeholder{
+        position: relative!important;
+        top:6px!important;
+    }
+    #taskTarget:-moz-placeholder{
+        position: relative!important;
+        top:6px!important;
+    }
+    #taskTarget::-moz-placeholder{
+        position: relative!important;
+        top:6px!important;
+    }
+    #taskTarget:-ms-input-placeholder{
+        position: relative!important;
+        top:6px!important;
+    }
+</style>
+<div class="layui-tpl-container" id="taskForm">
+    <div class="layui-form ">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 任务名称</label>
+            <div class="layui-input-block">
+                <input id='task-name' type="text" name="name" placeholder="请输入任务名称" class="layui-input"  maxlength="50" autocomplete = "off" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 任务目标</label>
+            <div class="layui-input-block">
+                <textarea type="text" placeholder="请填写，字数限制在200字以内。" style="height:100px" maxlength="200" lay-verify="required" class="layui-input" name="taskTarget" id="taskTarget" ></textarea>
+                <!--<input id='task-name' type="text" name="name" placeholder="请输入任务名称" class="layui-input"  maxlength="50">-->
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" id="tasktype"><span style="color: red;">*</span> 任务类型</label>
+            <div class="layui-input-block" >
+                <input type="radio" name="type" value="0" title="项目任务"  lay-filter="type" checked>
+                <input type="radio" name="type" value="1" title="业务任务" lay-filter="type">
+                <!--<input type="radio" name="type" value="2" title="下级任务"  lay-filter="type">-->
+
+            </div>
+        </div>
+
+        <div class="layui-form-item" id="project_form">
+            <label class="layui-form-label"><span style="color: red;">*</span>  所属项目</label>
+            <div class="layui-input-block">
+                <select name="projectId" id='project_blong' xm-select="project_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-radio="" xm-select-search>
+                    <option value="">选择所属项目</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item" id="business_form">
+            <label class="layui-form-label"><span style="color: red;">*</span> 所属业务</label>
+            <div class="layui-input-block">
+<!--                <select name="budgetId" id='business_blong' xm-select="business_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-radio="" xm-select-search>-->
+                <select name="budgetId" id='business_blong' xm-select="business_blong" xm-select-skin="normal" xm-select-direction="down"xm-select-search>
+                    <option value="">选择所属业务</option>
+                </select>
+            </div>
+        </div>
+        <!--<div class="layui-form-item" id="task_form">-->
+            <!--<label class="layui-form-label"><span style="color: red;">*</span>  所属任务</label>-->
+            <!--<div class="layui-input-block">-->
+                <!--<select name="projectId" id='task_blong' xm-select="project_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-radio="" xm-select-search>-->
+                    <!--<option value="">选择所属项目</option>-->
+                <!--</select>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="layui-form-item" >
+            <label class="layui-form-label" ><span style="color: red;">*</span>  任务负责人</label>
+            <div class="layui-input-block" >
+                <select name="approveUserId" id='approveUserId_blong' xm-select="approveUserId_blong" xm-select-skin="normal" xm-select-radio="" xm-select-search>
+                    <option value="">选择任务负责人</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item" >
+            <label class="layui-form-label" ><span style="color: red;">*</span>  任务成员s</label>
+            <div class="layui-input-block" >
+<!--                <select name="memberIds" id='memberIds_blong' xm-select="memberIds_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-search>-->
+<!--                    <option value="">选择任务成员</option>-->
+<!--                </select>-->
+                <div name="memberIds" id='memberIds_blong'>
+                    <option value="">选择任务成员</option>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 任务状态</label>
+            <div class="layui-input-block">
+                <select name="taskStatus" id='taskStatus_blong' data-placeholder="选择任务状态"  xm-select="taskStatus_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-radio="" xm-select-search>
+                    <option value="">选择任务状态</option>
+                </select>
+            </div>
+        </div> -->
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 开始时间</label>
+            <div class="layui-input-block">
+                <input autocomplete="off" type="text" name="planStartTime" id="planStartTaskTime" placeholder="开始时间" class="layui-input" >
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 结束时间</label>
+            <div class="layui-input-block">
+                <input  autocomplete="off" type="text" name="planEndTime" id="planEndTaskTime" placeholder="结束时间" class="layui-input" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 优先级</label>
+            <div class="layui-input-block layui-layer-page">
+                <select name="priority" class="layui-layer-page" id='priority_blong'  xm-select="priority_blong" xm-select-skin="normal"  xm-select-radio="" xm-select-search >
+                    <option value="">选择优先级</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+<!--            <label class="layui-form-label"><span style="color: red;">*</span> 任务预计交付物s</label>-->
+            <label class="layui-form-label"> 任务预计交付物</label>
+            <div class="layui-input-block" id="planAddBox">
+                <div style="display: inline-block;width: 100%;">
+<!--                    <input  autocomplete="off" type="text" maxlength="50" lay-verify="required"  style="width: calc(100% - 25px);display: inline-block;" placeholder="请填写交付物" class="layui-input planOutcomesData" >-->
+                    <input  autocomplete="off" type="text" maxlength="50"  style="width: calc(100% - 25px);display: inline-block;" placeholder="请填写交付物" class="layui-input planOutcomesData" >
+                    <img class="clickImg" onclick="addPlanOutcomes(this)" src="/assetsInfo/images/Group-.png" style="cursor: pointer;" _src="/assetsInfo/images/Group-.png">
+                </div>
+
+            </div>
+        </div>
+        <!--传递过来的操作类型-->
+        <input type="text" name="handleType" id="handleType" style="display: none;">
+        <!-- 如果是编辑传过来的id-->
+        <input type="text" name="id" id="id" style="display: none;">
+        <input type="text" name="taskStatus" id="taskStatus" style="display: none;">
+        <div class="layui-form-item" style="text-align: center;">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="btn-task-save">保存</button>
+            <button class="layui-btn layui-btn-primary" id="btn-task-cancel">取消</button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var addPlanOutcomes = function(){
+        var html='<div style="display: inline-block;width: 100%;margin-top: 5px">\n' +
+            '        <input  lay-verify="required" maxlength="50" autocomplete="off" type="text"  style="width: calc(100% - 40px);display: inline-block;" placeholder="请填写交付物" class="layui-input planOutcomesData" >\n' +
+            '        <i class="clickImg layui-icon layui-icon-delete" style="font-size: 20px; margin-right:-50px;cursor:pointer" href="javascript:;" onclick="delPlanOutcomes(this)"></i>\n' +
+            '     </div>';
+        $('#planAddBox').append(html);
+    };
+    var delPlanOutcomes = function(that){
+        // if($(that).siblings('input').attr('data-id')) {
+        //     $(that).parent().remove();
+        // }
+        layer.confirm('确定删除该条交付物吗', {
+            icon: 3,
+            title: '提示'
+        }, function(index) {
+            $.ajax({
+                url: "/api/budget/taskResult/"+$(that).siblings('input').attr('data-id'),
+                type: 'delete',
+                success: function (res) {
+                    if(res.ok){
+                        $(that).parent().remove();
+                        layer.close(index);
+                        return layer.msg('删除成功', {
+                            icon: 1
+                        });
+                    }else{
+                        return layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                }
+            });
+        });
+    };
+    layui.use(['form', 'laydate','xmSelect'], function() {
+        var admin = layui.admin,
+            laydate = layui.laydate,
+            form = layui.form,
+            xmSelect= layui.xmSelect;
+        // 初始化日期组件
+
+        laydate.render({
+
+
+            elem: '#planStartTaskTime',
+            type: 'datetime',
+        });
+        laydate.render({
+            elem: '#planEndTaskTime',
+            type: 'datetime',
+        });
+        $('#planStartTaskTime').off('mouseenter').on('mouseenter',function () {
+            if($('#planStartTaskTime').is(':focus')){
+                $('#planStartTaskTime').blur()
+            }
+        })
+        $('#planEndTaskTime').off('mouseenter').on('mouseenter',function () {
+            if($('#planEndTaskTime').is(':focus')){
+                $('#planEndTaskTime').blur()
+            }
+        })
+        form.on('submit(btn-task-save)', function(obj) {
+            console.log(obj,"保存")
+            var data = obj.field,
+                elem = data.elem;
+                var judgeData=[{elem:'#task-name',message:'请输入任务名称'}];
+               if( !verifyEmpty(judgeData)) {
+                   return;
+               };
+
+          
+
+            if (data.type==0) {
+                if (data.projectId=='') {
+                    return layer.msg('请选择所属项目', {
+                        icon: 5
+                    });
+                }
+                delete data.budgetId;
+            }
+            else {
+                if (data.budgetId=='') {
+                    return layer.msg('请选择所属业务', {
+                        icon: 5
+                    });
+                }
+                delete data.projectId;
+            }
+
+            if(data.memberIds=='')
+            {
+                return layer.msg('请选择任务成员', {
+                        icon: 5
+                    });
+            }
+
+           
+            // data.memberIds = data.memberIds.split(',');
+
+             judgeData=[{elem:'#planStartTaskTime',message:'请输入起始时间'},{elem:'#planEndTaskTime',message:'请输入结束时间'}];
+               if( !verifyEmpty(judgeData))
+               {
+                   return;
+               }
+
+            if (new Date(data.planStartTime).getTime() - (new Date(data.planEndTime).getTime()) > 0) {
+                return layer.msg('开始时间不能大于结束时间', {
+                    icon: 5
+                });
+            }
+
+            if(data.priority=='')
+            {
+                return layer.msg('请选择任务优先级', {
+                        icon: 5
+                    });
+
+            }
+            var ajaxType = 'post';
+            if (data.handleType == 'edit') {
+                ajaxType = 'put';
+            }
+            data.taskStatus=data.taskStatus?data.taskStatus:'进行中';
+            var taskResultEOList = [];
+            if ($('.planOutcomesData').eq(0).val()) {
+                for (var i = 0; i < $('.planOutcomesData').length; i++) {
+                    taskResultEOList.push(
+                        {
+                            taskId: data.id,
+                            resultName: $('.planOutcomesData').eq(i).val(),
+                            id: $('.planOutcomesData').eq(i).attr('data-id')
+                        }
+                    );
+                }
+            }
+            data.taskResultEOList=taskResultEOList;
+            delete data.handleType;
+            admin.req('/api/budget/task', data, function(res) {
+                $(elem).attr('disabled', false);
+                if (res.ok) {
+                    layer.msg('保存成功！', {
+                        icon: 1
+                    });
+                    admin.finishPopupCenter(res.data);
+                } else {
+                    return layer.msg('保存失败：' + res.message, {
+                        icon: 5
+                    });
+                    admin.finishPopupCenter();
+                }
+            }, {method: ajaxType});
+        });
+
+
+        function verifyEmpty(data) {
+            var isTrue=true;
+            for(var item of data) {
+                if($(item.elem).val()=='') {
+                    $(item.elem).addClass('layui-form-danger'); 
+                     layer.msg(item.message?item.message:'必填项不能为空', {
+                        icon: 5
+                    });
+                    $(item.elem).focus();
+                    isTrue= false;
+                    break;
+                }
+            }
+            return isTrue;
+        }
+        /*
+        * 取消
+        * */
+        $('#btn-task-cancel').on('click', function() {
+            admin.closePopupCenter();
+        });
+
+    });
+</script>

@@ -1,0 +1,197 @@
+<style>
+    .costDataMain {
+        padding: 20px;
+    }
+
+    .costDataMain .leftItem, .costDataMain .rightItem {
+        display: inline-block;
+        width: 49%;
+    }
+
+    .costDataMain .layui-form-item {
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .costDataMain .form-input {
+        position: relative;
+        display: inline-block;
+        width: calc(100% - 115px);
+    }
+
+    .costDataMain label {
+        display: inline-block;
+        width: 105px;
+        text-align: right;
+    }
+
+    label {
+        font-weight: normal;
+    }
+
+    .redSpan {
+        color: red;
+    }
+    .layui-layer-load{
+        background-color: white;
+    }
+    .costDataMain .layui-disabled, .costDataMain .layui-disabled:hover {
+        color: rgb(84, 84, 84)!important;
+    }
+</style>
+
+<div class="costDataMain layui-form">
+    <div class="leftItem">
+        <div class="layui-form-item">
+            <label><span class="redSpan">*</span>年月日：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请选择年月日" readonly  lay-verify="required" class="dateCost layui-input"
+                       name="dateCost" >
+
+            </div>
+        </div>
+        <!--<div class="layui-form-item">-->
+            <!--<label> <span class="redSpan">*</span>日：</label>-->
+            <!--<div class="form-input ">-->
+                <!--<input type="text" placeholder="请输入日" readonly lay-verify="required" class="dayCost layui-input"-->
+                       <!--name="day" >-->
+
+            <!--</div>-->
+        <!--</div>-->
+        <div class="layui-form-item">
+            <label><span class="redSpan">*</span>部门：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请选择部门" style="cursor: pointer" readonly lay-verify="required" class="layui-input"
+                       name="orgName" id="orgNameCost">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>金额（元）：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入金额"  lay-verify="required" maxlength="12" class="layui-input"
+                       name="amount" >
+            </div>
+        </div>
+        <div class="layui-form-item" style="height: 100px">
+            <label style="vertical-align: top;">摘要：</label>
+            <div class="form-input ">
+                <textarea type="text" style="height: 100px" maxlength="200" placeholder="请输入摘要"  class="layui-input introText" name="abstractInfo"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="rightItem" style="vertical-align: top">
+        <!--<div class="layui-form-item">-->
+            <!--<label><span class="redSpan">*</span>月：</label>-->
+            <!--<div class="form-input ">-->
+                <!--<input type="text" placeholder="请选择月" readonly  lay-verify="required"  class="monthCost layui-input"-->
+                       <!--name="month">-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="layui-form-item">
+            <label> 科目名称：</label>
+            <div class="form-input">
+                <input type="text" placeholder="请输入科目名称" maxlength="80"   class="layui-input"
+                       name="subjectName" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> 凭证号：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入凭证号" maxlength="80" class="layui-input"
+                       name="certificationNumber">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> 对方科目：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入对方科目" maxlength="80" class="layui-input"
+                       name="otherSubjectName" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label><span class="redSpan">*</span>截止认领时间：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请选日期" readonly  lay-verify="required"  class="layui-input"
+                       name="deadlineTime" id="deadlineTimeCost">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" style="text-align: center">
+        <button class="layui-btn layui-btn-normal"  lay-submit lay-filter="btn-cost-sure" id="btn-cost-sure">确定</button>
+        <button class="layui-btn layui-btn-primary" id="cancleCost">取消</button>
+    </div>
+    <input type="text" id="costId" readonly style="display: none">
+    <input type="text" id="cosType" readonly style="display: none">
+</div>
+<script>
+    layui.use('upload', function() {
+        var admin = layui.admin;
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '.dateCost'
+        });
+        laydate.render({
+            elem: '#deadlineTimeCost'
+        });
+        $('#cancleCost').off('click').on('click',function () {
+            admin.finishPopupCenter(true);
+        });
+        $('#orgNameCost').off('click').on('click',function () {
+            layer.open({
+                type: 2,
+                id: 'orgsSelectCost',
+                title: false,
+                moveOut: true,
+                content: 'components/manageYw/caderLayer.html',
+                area: ['50%', '70%'],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var finalData = $('#orgsSelectCost iframe')[0].contentWindow.task_orgs_select.finish();
+                    // 获取到数据，执行回掉函数
+                    if (finalData.id == '' || finalData.name == '') {
+                        return layer.msg('请选择组织机构', {
+                            icon: 0
+                        });
+                    }
+                    $('#orgNameCost').val(finalData.name);
+                    $('#orgNameCost').attr('data-id',finalData.id);
+                    layer.close(index);
+                },
+                resize: false
+            });
+        });
+        $('input[name="amount"]').off("input").on("input",function (e) {
+            clearNoNum(this);
+        });
+        function clearNoNum(obj) {
+            if(obj.value.indexOf('.')>-1){ //判断有没有输入小数点
+            }else{
+                var p11 = /[^\d|^\-]/g;
+                var p22 = /(\d{9})\d*$/g;
+                var p44 = /(\d*)\9/g; //删除当我输入第七位的整数时候进行删除
+                obj.value = obj.value.replace(p11, "").replace(p22, "$1").replace(p44,"$1$9");
+            }
+            obj.value = obj.value.replace(/[^\d|^\-|^.]/g, ""); //清除“数字”和“.”以外的字符
+            obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+            obj.value = obj.value.replace(/\-{2,}/g, "-"); //只保留第一个. 清除多余的
+            obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            obj.value = obj.value.replace("-", "$#$").replace(/\-/g, "").replace("$#$", "-");
+            obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'); //只能输入两个小数
+            obj.value = obj.value.replace(/\^/g, ""); //只能输入两个小数
+            if (obj.value.indexOf("-") < 0&&obj.value.indexOf(".") < 0 && obj.value != "") { //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+                obj.value = parseFloat(obj.value);
+            }
+            if (obj.value.indexOf(".") == 0 && obj.value != "") { //首位输入.的按0处理
+                obj.value = parseFloat(obj.value.length==1?0:obj.value);
+            }
+            if(obj.value.indexOf("-")==0&&obj.value.indexOf(".") == 1 && obj.value != ""){
+                obj.value = obj.value.length==2?0:obj.value;
+            }
+            if (obj.value.indexOf("-") > -1 &&obj.value.indexOf("-") !=0&& obj.value != "") { //首位输入.的按0处理
+                obj.value = obj.value.replace(/\-/g, "");
+            }
+        }
+    });
+</script>

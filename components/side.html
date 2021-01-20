@@ -1,0 +1,260 @@
+<!--<div class="admin-user">-->
+    <!--&lt;!&ndash; 正常模式 &ndash;&gt;-->
+    <!--<div class="admin-user-show">-->
+        <!--<div class="avatar">-->
+            <!--<div style="margin: 14px auto;width: 65px;height: 65px;line-height: 61px;font-size: 10px;">-->
+                <!--<div class="avatar-text"></div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<span>{{ usname }}</span>-->
+        <!--&lt;!&ndash;<p>-->
+            <!--<i class="layui-icon layui-icon-circle-dot"></i>当前在线人数 - -->
+        <!--</p>&ndash;&gt;-->
+        <!--&lt;!&ndash; <i class="layui-icon layui-icon-shrink-right side-hide" ew-event="flexible"></i> &ndash;&gt;-->
+    <!--</div>-->
+    <!--&lt;!&ndash; 侧边栏隐藏模式 &ndash;&gt;-->
+    <!--<div class="admin-user-hide">-->
+        <!--<div class="avatar">-->
+            <!--<div ew-event="flexible" style="margin: 8px auto;width: 40px;height: 40px;line-height: 36px;font-size: 6px;">-->
+                <!--<div class="avatar-text"></div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<style>
+    .more{
+        position: absolute;
+        top: 12px;
+        left: 100%;
+        z-index: 10;
+        display: none;
+    }
+    .moreNav{
+        position: absolute;
+        top: 40px;
+        right: -27px;
+    }
+    .layui-nav-tree .layui-nav-item dd a {
+        height: 34px;
+    }
+    .layui-nav-child dd dl{
+        margin-bottom: 0;
+    }
+    .moreNav a .layui-nav-more{
+        display: none;
+    }
+    .moreNav li a div{
+        position: absolute;
+        top:0px;
+        right:10px;
+    }
+    .rotate{
+        transform: rotate(180deg);
+    }
+    #navBox .layui-nav a{
+        padding: 0 17px;
+    }
+    .noticeNumber{
+        position: absolute;
+        width: 30px;
+        text-align: center;
+        font-size: 12px;
+        height:16px;
+        line-height: 16px;
+        display: inline-block;
+        color: white;
+        background-color: #FF6D6D;
+        border-radius: 8px;
+        right: 12px;
+        top: 3px;
+        display: none;
+    }
+    .noticeNumberItem{
+        top: 7px;
+        right: 12px;
+    }
+</style>
+<div id="navBox">
+    <ul class="layui-nav  arrow2 " lay-filter = "filterCon" style="background: #008FC3;height: 40px;padding: 0px">
+        <script id="sideNav" type="text/html">
+            {{#  layui.each(d, function(index, item){ }}
+            {{# if(!item.hidden){ }}
+
+                {{# if(item.name=="日程管理"){ }}
+            <li class="layui-nav-item noticeNumberTitle">
+                {{# } else { }}
+            <li class="layui-nav-item">
+                {{# } }}
+                <a href="{{item.url}}"><img src="../assetsInfo/images/icon/{{item.icon}}.png" alt="icon" style="width: 14px;height: 15px;margin-right: 5px;margin-top: -2px" onerror='this.src="../assetsInfo/images/icon/icon-default.png"'><cite>{{ item.name }}</cite>
+
+                    {{# if(item.name=="日程管理"){ }}
+                    <div class="noticeNumber noticeNumberFirst"></div>
+                    {{# } }}
+                </a>
+                {{# if(item.subMenus&&item.subMenus.length>0){ }}
+                <dl class="layui-nav-child ">
+                    {{# layui.each(item.subMenus, function(index, subItem){ }}
+                    {{# if(!subItem.hidden){ }}
+                    <dd>
+                        <a href="{{ subItem.url }}" title="{{ subItem.name }}">
+                            {{ subItem.name }}
+                            {{# if(subItem.name=="日报审批"){ }}
+                            <div class="noticeNumber noticeNumberItem"></div>
+                            {{# } }}
+                        </a>
+
+                        {{# if(subItem.subMenus&&subItem.subMenus.length>0){ }}
+                        <dl class="layui-nav-third-child " >
+                            {{# layui.each(subItem.subMenus, function(index, thrItem){ }}
+                            {{# if(!thrItem.hidden){ }}
+                            <dd  style="padding-left: 10px">
+                                <a href="{{ thrItem.url }}"  >{{ thrItem.name }}</a>
+                                {{# if(thrItem.subMenus&&thrItem.subMenus.length>0){ }}
+                                <dl class="layui-nav-third-child " >
+                                    {{# layui.each(thrItem.subMenus, function(index, forItem){ }}
+                                    {{# if(!thrItem.hidden){ }}
+                                    <dd style="padding-left: 10px">
+                                        <a href="{{ forItem.url }}"  >{{ forItem.name }}</a>
+                                        {{# if(forItem.subMenus&&forItem.subMenus.length>0){ }}
+                                        <dl class="layui-nav-third-child " >
+                                            {{# layui.each(forItem.subMenus, function(index, fiveItem){ }}
+                                            {{# if(!fiveItem.hidden){ }}
+                                            <dd style="padding-left: 10px">
+                                                <a href="{{ fiveItem.url }}" >{{ fiveItem.name }}</a>
+
+                                            </dd>
+                                            {{# } }}
+                                            {{# }); }}
+                                        </dl>
+                                        {{# } }}
+                                    </dd>
+                                    {{# } }}
+                                    {{# }); }}
+                                </dl>
+                                {{# } }}
+                            </dd>
+                            {{# } }}
+                            {{# }); }}
+                        </dl>
+                        {{# } }}
+                    </dd>
+                    {{# } }}
+                    {{# }); }}
+                </dl>
+                {{# } }}
+            </li>
+            {{# } }}
+            {{#  }); }}
+        </script>
+    </ul>
+
+    <div class="more" style="width: 45px;">
+        <!--<i class="open layui-icon layui-icon-set-sm"></i>-->
+
+        <!-- <img class="open" style="width: 14px;height: 14px;" src="../assetsInfo/images/icon/setIcon.png" alt=""/> -->
+        <!--<img class="close" src="/assetsInfo/images/shang.png" alt="" style="display: none"/>-->
+    </div>
+</div>
+
+<script>
+    layui.use(['element'], function () {
+        var config = layui.config,
+            layer = layui.layer,
+            element = layui.element;
+            userInfo = config.getAccount();
+
+        // 设置头像
+        element.on('nav(filterCon)', function(elem){
+            if(elem[0].hash.indexOf("bigScreen_bigLoad_html") > -1){
+                sessionStorage.setItem("getYear","");
+            }else{
+                sessionStorage.removeItem("getYear");
+            }
+        });
+        (function () {
+            if (userInfo.avatar) {
+                $('.avatar').empty();
+                var image = $('<img/>');
+                var imageSrc = userInfo.avatar.indexOf('/') < 0 ? '/ADC_info/api/sys/file/' + userInfo.avatar + '/download' : userInfo.avatar;
+                image.attr('src', imageSrc);
+                $('.avatar').html(image);
+                $('.admin-user-hide').find('img').attr('ew-event', 'flexible');
+            } else {
+                //$('.avatar .avatar-text').text(userInfo.usname.charAt(0));
+				$('.avatar').empty();
+				var image = $('<img/>');
+				var imageSrc = "/assetsInfo/images/avatar/girl3.png";
+				image.attr('src', imageSrc);
+				$('.avatar').html(image);
+				$('.admin-user-hide').find('img').attr('ew-event', 'flexible');
+            }
+        })();
+    });
+    showNav();
+    function showNav(){
+      var time2 = setTimeout(function(){
+            var navWidth = $(window).width() - 24 -$('#hearder-right').outerWidth(true) - $('.layui-logo').outerWidth(true);
+//            $('.arrow2').css('width', navWidth);
+            var liNodes = $('.arrow2').find('li');
+            var liWidth = 119 * (liNodes.length-1)+91;
+            if($('.moreNav').find('li').length){
+                // $('.more').css('display', 'block')
+            }
+            if(liWidth > navWidth){
+                var n = Math.floor((0.98*navWidth-91)/119);
+                // $('.more').css('display', 'block');
+                // $('.arrow2').find('li').eq(n).nextAll().css('display', 'none');
+                $('.open').css('display', 'block').css('cursor', 'pointer').on('click', function(){
+                    // $('.open').css('display', 'none');
+                    // $('.close').css('display', '');
+                    $('.arrow2').find('li').eq(n).nextAll().css('display', 'block');
+                    $('#navBox').append('<ul class="moreNav layui-nav layui-nav-tree layui-inline" lay-filter="demo" style="width: 160px;"></ul>');
+                    $('#navBox').children('.moreNav').append($('.arrow2').find('li').eq(n).nextAll());
+                    $('.moreNav').children('li').css('background', '#008FC3');
+                    $('.moreNav').children('li').children('dl').css('top', '0').css('margin-bottom', '0');
+                    for (var i = 0; i <$('.moreNav').children('li').length ; i++) {
+                        if($('.moreNav').children('li').eq(i).children('dl').length>0){
+                            $('.moreNav').children('li').eq(i).children('a').append('<div><img src="/assetsInfo/images/xia.png"></div>');
+                        }
+                    }
+                    $('.arrow2').find('li').eq(n).nextAll().remove();
+                    $('.moreNav').children('li').children('a').children('span').css('border', 'none');
+                    $('.moreNav').children('li').off('mouseenter');
+                    $('.moreNav').children('li').off('click').on('click', function () {
+                        $(this).siblings('li').removeClass('layui-nav-itemed');
+                        $(this).children('a').children('div').toggleClass('rotate');
+                        $(this).siblings('li').children('a').children('div').removeClass('rotate');
+                    });
+                    $('.moreNav').off('mouseleave').on('mouseleave', function () {
+                        var time=setTimeout(function () {
+                            $('.moreNav').children('li').removeClass('layui-nav-itemed');
+                            $('.moreNav').children('li').children('a').find('div').remove();
+                            $('.moreNav').find('li').css('display', 'none');
+                            $('.arrow2').append($('.moreNav').find('li'));
+                            $('.arrow2').find('li').eq(n+1).prevAll('li').css('display', '');
+                            $('.moreNav').remove();
+                            clearTimeout(time);
+                        },400)
+                    })
+                });
+                // $('.close').on('click', function(){
+                //     $('.moreNav').children('li').removeClass('layui-nav-itemed');
+                //     $('.open').css('display', '');
+                //     $('.close').css('display', 'none');
+                //     $('.moreNav').children('li').children('a').find('div').remove();
+                //     $('.moreNav').find('li').css('display', 'none');
+                //     $('.arrow2').append($('.moreNav').find('li'));
+                //     $('.arrow2').find('li').eq(n+1).prevAll('li').css('display', '');
+                //     $('.moreNav').remove();
+                // });
+
+                $('.arrow2').find('li').eq(n+1).prevAll('li').css('display', '');
+            }else{
+                $('.arrow2').find('li').css('display', '');
+            }
+          clearTimeout(time2);
+        },10)
+    }
+
+
+</script>

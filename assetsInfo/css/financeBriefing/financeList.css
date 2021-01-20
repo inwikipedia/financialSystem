@@ -1,0 +1,49 @@
+#btn-create{
+    display: none;
+}
+.layui-tpl-container .p-form,
+.layui-layout-body .layui-layer-page .layui-layer-content {
+    overflow: visible !important;
+}
+.briefing-btn{
+    height: 28px;
+    line-height: 28px;
+}
+.upload-label{
+    display: inline-block;
+    width: 80px;
+    text-align: left;
+}
+.upload-box{
+    display: inline-block;
+    width: calc(100% - 90px);
+}
+.briefingForm .layui-btn:not(.layui-btn-lg):not(.layui-btn-sm):not(.layui-btn-xs){
+    height: 30px;
+    line-height: 30px;
+}
+.briefingForm .briefingBtn{
+    width: 50px;
+    height: 24px !important;
+    color: white;
+    line-height: 24px !important;
+    padding: 0px !important;
+    margin-left: 5px !important;
+}
+/*下拉框间隙太大问题修改*/
+.briefingForm .layui-form-selected dl{
+    top:32px;
+}
+.briefingForm .layui-form-selectup dl{
+    top: auto;
+    margin-bottom: 0;
+    bottom: 32px;
+}
+.otherBtn{
+    background-color: white;
+    color: #333;
+    border: 1px solid #229FFF;
+}
+.otherBtn:hover{
+    color: #229FFF;
+}

@@ -1,0 +1,329 @@
+<div class="bigScreenLoad1">
+    <div class="infoTop">
+        <div class="infoImg hetong">
+            <div class="infoBox">
+                <div class="infoTitle">
+                    累计合同额
+                    <span class="infoTi" id="yearContractAmount"></span> 万
+                    <!-- <span class="infoPer" id="yearContractAmountRate"></span>%
+                    <span class="infoPer" id="totalContractArr">↑</span> -->
+                </div>
+                <div class="infoTitle">
+                    本月合同额
+                    <span class="infoTi" id="monthContractAmount"></span> 万
+                    <!--<span class="infoPer" id="monthContractAmountRate"></span>%-->
+                    <!--<span class="infoPer" id="monthContractArr">↑</span>-->
+                </div>
+            </div>
+        </div>
+        <div class="infoImg kaipiao">
+            <div class="infoBox">
+                <div class="infoTitle">
+                    累计开票额
+                    <span class="infoTi" id="yearInvoiceAmount"></span> 万
+                    <!-- <span class="infoPer" id="yearInvoiceAmountRate"></span>%
+                    <span class="infoPer" id="totalInvoiceArr">↑</span> -->
+                </div>
+                <div class="infoTitle">
+                    本月开票额
+                    <span class="infoTi" id="monthInvoiceAmount"></span> 万
+                    <!--<span class="infoPer" id="monthInvoiceAmountRate"></span>%-->
+                    <!--<span class="infoPer" id="monthInvoiceArr">↑</span>-->
+                </div>
+            </div>
+        </div>
+        <div class="infoImg jinzhang">
+            <div class="infoBox">
+                <div class="infoTitle">
+                    累计进账额
+                    <span class="infoTi" id="yearIncomeAmount"></span> 万
+                    <!-- <span class="infoPer" id="yearIncomeAmountRate"></span>%
+                    <span class="infoPer" id="totalBillingArr">↑</span> -->
+                </div>
+                <div class="infoTitle">
+                    本月进账额
+                    <span class="infoTi" id="monthIncomeAmount"></span> 万
+                    <!--<span class="infoPer" id="monthIncomeAmountRate"></span>%-->
+                    <!--<span class="infoPer" id="monthBillingArr">↑</span>-->
+                </div>
+            </div>
+        </div>
+        <div class="infoImg yingshou">
+            <div class="infoBox">
+                <div class="infoTitle">
+                    累计应收余额
+                    <span class="infoTi" id="receivableAmount"></span> 万
+
+                </div>
+                <!-- <div class="infoTitle">
+                    同比
+                    <span id="monthReceivable">6000</span> 万
+                    <span class="infoPer" id="receivableAmountRate"></span>%
+                    <span class="infoPer" id="monthReceivableArr">↑</span>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="infoBottom">
+        <div class="layui-row noBusiness">
+            <div class="layui-col-md12 paddingCard">
+                <div class="layui-card-header lc-header cart-title" style="padding: 0 10px 0px 5px;border-bottom: 1px solid #E1E1E1;">
+                    <img src="/assetsInfo/images/bigScreen/shujufenxi.png"/>
+                    &nbsp;月度数据
+                    <ul id="tableTab" class="tableTab">
+                        <li name="table-left" value="0" class="actives">月度合同额</li>
+                        <li name="table-left" value="1">月度开票额</li>
+                        <li name="table-left" value="2">月度进账额</li>
+                    </ul>
+                </div>
+                <div class="lineBarCanvas1 canvasBox" id="lineBarCanvas1">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['element', 'form', 'layer'], function () {
+        var element = layui.element,
+            admin = layui.admin,
+            config = layui.config,
+            layer = layui.layer,
+            tools = layui.tools;
+        //绘制月度图
+        var monthDate = new Date().getMonth();
+        // console.log(monthDate);
+        var xAxisData = []
+        for(var i = 1;i <= monthDate; i++) {
+            xAxisData.push(i + '月')
+        }
+        // console.log(xAxisData)
+        var setLineBarCanvas = function (lineData) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("lineBarCanvas1"));
+            myChart.resize();
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: '{b}<br />{a0}:{c0}<br />{a1}:{c1}<br />{a2}:{c2}%'
+                },
+                legend: {
+                    data: [String(lineData.currentYear), String(lineData.lastYear), '增长率'],
+                    top:'5%',
+                    icon:"roundRect",
+                    itemWidth:40,
+                    itemHeight:10,
+                    textStyle:{
+                        padding:[3, 0, 0, 0]
+                    },
+
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    top:'18%',
+                    containLabel: true
+                },
+                color: ["#479EF8", "#FFCC99", "#10EC00"],
+                xAxis: {
+                    type: 'category',
+                    // boundaryGap: false,
+                    data: xAxisData,
+                    axisTick: {
+                        lineStyle: {color: '#e8e8e8'}    // x轴刻度的颜色
+                    },
+                    axisLabel: {color: '#3B4961'},
+                    axisLine: {
+                        lineStyle: {
+                            color: '#e8e8e8',
+                        },
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name:"万元",
+                        nameTextStyle: {
+                            padding: [0, 0, 0, -40],
+                            color:'#3B4961'
+                        },
+                        nameGap:10,
+                        axisTick:{
+                            lineStyle:{color:'#e8e8e8'}    // x轴刻度的颜色
+                        },
+                        axisLabel:{color:'#3B4961'},
+                        axisLine: {
+                            lineStyle: {
+                                color: '#e8e8e8',
+                            },
+                        }
+                    },
+                    {
+                        type: 'value',
+                        nameTextStyle: {
+                            padding: [0, 0, 0, -40]
+                        },
+                        nameGap:10,
+                        axisTick:{
+                            lineStyle:{color:'#e8e8e8'}    // x轴刻度的颜色
+                        },
+                        axisLabel:{
+                            color:'#3B4961',
+                            formatter:'{value}%'
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#e8e8e8',
+                            },
+                        }
+                    }
+                ],
+                series: [
+
+                    {
+                        name: lineData.lastYear,
+                        type: 'bar',
+                        yAxisIndex:0,
+                        label: {
+                            show: true,
+                            position: 'top'
+                        },
+                        barWidth: 20,
+                        data: lineData.lastTimeDataList
+                    },
+                    {
+                        name: lineData.currentYear,
+                        type: 'bar',
+                        yAxisIndex:0,
+                        label: {
+                            show: true,
+                            position: 'top'
+                        },
+                        barWidth: 20,
+                        data: lineData.currentTimeDataList
+                    },
+                    {
+                        name: '增长率',
+                        type: 'line',
+                        yAxisIndex:1,
+                        label: {
+                            show: true,
+                            position: 'top',
+                            formatter:'{c}%'
+                        },
+                        data: lineData.rateList
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        /**
+        * 功能:获取图表信息
+        * 时间:2020/4/8
+        * 作者:lijiacheng
+        * @param
+        */
+        var getInfoData = function (dataType) {
+            var load2 =layer.load(2);
+            $.ajax({
+                url: "/api/dashboard/getContractDashBoardBodyVO/" + dataType,
+                type: 'get',
+                success: function (res) {
+                    layer.close(load2);
+                    if (res.ok) {
+                        setLineBarCanvas(res.data)
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.close(load2)
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        /**
+        * 功能:获取头部金额信息
+        * 时间:2020/4/8
+        * 作者:lijiacheng
+        * @param
+        */
+        var getActInfo = function () {
+            $.ajax({
+                url: "/api/dashboard/getContractDashBoardHeaderVO",
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        res.data["yearContractAmount"]=res.data["yearContractAmount"]?Math.round(res.data["yearContractAmount"]):0;
+                        res.data["monthContractAmount"]=res.data["monthContractAmount"]?Math.round(res.data["monthContractAmount"]):0;
+                        res.data["yearInvoiceAmount"]=res.data["yearInvoiceAmount"]?Math.round(res.data["yearInvoiceAmount"]):0;
+                        res.data["monthInvoiceAmount"]=res.data["monthInvoiceAmount"]?Math.round(res.data["monthInvoiceAmount"]):0;
+                        res.data["yearIncomeAmount"]=res.data["yearIncomeAmount"]?Math.round(res.data["yearIncomeAmount"]):0;
+                        res.data["monthIncomeAmount"]=res.data["monthIncomeAmount"]?Math.round(res.data["monthIncomeAmount"]):0;
+                        res.data["receivableAmount"]=res.data["receivableAmount"]?Math.round(res.data["receivableAmount"]):0;
+                        if(res.data["yearContractAmountRate"]>=0){
+                            $("#totalContractArr").empty().html("↑")
+                        }else{
+                            $("#totalContractArr").empty().html("↓")
+                        }
+                        if(res.data["monthContractAmountRate"]>=0){
+                            $("#monthContractArr").empty().html("↑")
+                        }else{
+                            $("#monthContractArr").empty().html("↓")
+                        }
+                        if(res.data["yearInvoiceAmountRate"]>=0){
+                            $("#totalInvoiceArr").empty().html("↑")
+                        }else{
+                            $("#totalInvoiceArr").empty().html("↓")
+                        }
+                        if(res.data["monthInvoiceAmountRate"]>=0){
+                            $("#monthInvoiceArr").empty().html("↑")
+                        }else{
+                            $("#monthInvoiceArr").empty().html("↓")
+                        }
+                        if(res.data["yearIncomeAmountRate"]>=0){
+                            $("#totalBillingArr").empty().html("↑")
+                        }else{
+                            $("#totalBillingArr").empty().html("↓")
+                        }
+                        if(res.data["monthIncomeAmountRate"]>=0){
+                            $("#monthBillingArr").empty().html("↑")
+                        }else{
+                            $("#monthBillingArr").empty().html("↓")
+                        }
+                        if(res.data["receivableAmountRate"]>=0){
+                            $("#monthReceivableArr").empty().html("↑")
+                        }else{
+                            $("#monthReceivableArr").empty().html("↓")
+                        }
+                        for(var item in res.data){
+                            $("#"+item).empty().html(res.data[item]);
+                        }
+                        // setLineBarCanvas(res.data)
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        $("#tableTab li").off("click").on('click', function () {
+            $(this).attr("class", "actives");
+            $(this).siblings().attr("class", "");
+            getInfoData($(this).attr('value'));
+        });
+        getActInfo();
+        getInfoData(0);
+    })
+
+</script>

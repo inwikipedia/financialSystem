@@ -1,0 +1,242 @@
+<!--
+File   : log.html
+Created: Wednesday August 29th 2018 3:12:18 pm
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Last Modified: Sunday September 30th 2018 3:34:03 pm
+Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+-----
+Description: 系统管理 - 日志管理
+-----
+HISTORY:
+2018-09-06	yuchunyu97	日期组件设置最大日期为当天
+-->
+<style>
+    body{
+        overflow-y: hidden;
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 单列普通表格 -->
+    <div class="layui-col-md12">
+        <div class="layui-card p-main">
+            <!-- 卡片容器 -->
+            <div class="layui-card-body">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar">
+                        <!-- 左侧 -->
+                        <div class="layui-inline">
+                            <div class="layui-inline search-item">
+                                <i class="layui-icon layui-icon-search"></i>
+                                <input type="text" name="account" placeholder="输入用户名" class="layui-input">
+                            </div>
+                            <div class="layui-inline search-item">
+                                <i class="layui-icon layui-icon-date"></i>
+                                <input type="text" name="startTime" id="startTime" placeholder="开始时间" class="layui-input">
+                            </div>
+                            <div class="layui-inline search-item">
+                                <i class="layui-icon layui-icon-date"></i>
+                                <input type="text" name="endTime" id="endTime" placeholder="结束时间" class="layui-input">
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="search_log" title="查询"><span>查询</span></button>
+                                <button class="layui-btn layui-btn-sm layui-btn-primary" lay-submit lay-filter="reset_log" title="重置"><span>重置</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 下部表格容器 -->
+                <table id="tableContent-log" lay-filter="tableContent-log"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 初始化 layui
+    layui.use(['laydate', 'table'], function () {
+        var table = layui.table,
+            form = layui.form,
+            laydate = layui.laydate,
+            config = layui.config,
+            admin = layui.admin;
+
+        // 初始化日期组件
+        laydate.render({
+            elem: '#startTime',
+            max: 0
+        });
+        laydate.render({
+            elem: '#endTime',
+            max: 0
+        });
+
+        // 渲染左侧表格
+        var renderTable = function (search) {
+            var heightTable = $(document).height()-140
+            if (!search) {
+                search = {};
+            }
+            // 渲染表格
+            table.render({
+                elem: '#tableContent-log',
+                id: 'tableContent-log',
+                url: admin.formatUrl('/api/log/log'),
+                // 格式化后台返回的数据
+                parseData: function (res) { //res 即为原始返回的数据
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                height: heightTable,
+                cols: [
+                    [{
+                        type: 'numbers'
+                    }, {
+                        field: 'account',
+                        title: '用户名',
+                        templet:function(d) {
+                            var text= d.account ? d.account : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }, {
+                        field: 'className',
+                        title: '类名',
+                        templet:function(d) {
+                            var text= d.className ? d.className : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }, {
+                        field: 'method',
+                        title: '方法名',
+                        templet:function(d) {
+                            var text= d.method ? d.method : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }, {
+                        field: 'description',
+                        title: '描述',
+                        templet:function(d) {
+                            var text= d.description ? d.description : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }, {
+                        field: 'ipAddress',
+                        title: 'IP 地址',
+                        templet:function(d) {
+                            var text= d.ipAddress ? d.ipAddress : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }, {
+                        field: 'operateTime',
+                        title: '操作时间',
+                        templet:function(d) {
+                            var text= d.operateTime ? d.operateTime : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }, {
+                        field: 'startTime',
+                        title: '开始时间',
+                        width: 180,
+                        sort: true,
+                        templet:function(d) {
+                            var text= d.startTime ? d.startTime : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }, {
+                        field: 'endTime',
+                        title: '结束时间',
+                        width: 180,
+                        sort: true,
+                        templet:function(d) {
+                            var text= d.endTime ? d.endTime : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }]
+                ],
+                cellMinWidth: 90,
+                page: {
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                },
+                request: {
+                    pageName: 'pageNo',
+                    limitName: 'pageSize'
+                },
+                where: search
+            });
+        }
+
+        // 初始化，执行一次渲染表格
+        renderTable();
+        // DONE: 侧边栏变化时刷新数据表格
+        // 将 table ID 存入数组
+        layui.admin.addTableCache('tableContent-log');
+
+        // 表单提交，查询与重置
+        form.on('submit(search_log)', function (data) {
+            // 获取表单数据
+            var d = data.field;
+            d.account = $.trim(d.account);
+            d.startTime = $.trim(d.startTime);
+            d.endTime = $.trim(d.endTime);
+
+            if (d.account === '' && d.startTime === '' && d.endTime === '') {
+                reset();
+            } else {
+                // 判断开始时间早于结束时间
+                if (d.startTime !== '' && d.endTime !== '') {
+                    var s = d.startTime.split('-'),
+                        e = d.endTime.split('-'),
+                        sDate = new Date(parseInt(s[0]), parseInt(s[1]) - 1, parseInt(s[2])).getTime(),
+                        eDate = new Date(parseInt(e[0]), parseInt(e[1]) - 1, parseInt(e[2])).getTime();
+                    if (sDate > eDate) {
+                        return layer.msg('开始时间不能晚于结束时间！', {
+                            icon: 5
+                        });
+                    }
+
+                }
+                renderTable(d);
+            }
+        });
+        form.on('submit(reset_log)', function (data) {
+            reset();
+        });
+
+        // 重置查询表单
+        function reset() {
+            $('input[name="account"]').val('');
+            $('input[name="startTime"]').val('');
+            $('input[name="endTime"]').val('');
+            renderTable();
+        }
+
+    });
+</script>

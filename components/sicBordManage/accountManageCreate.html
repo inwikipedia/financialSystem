@@ -1,0 +1,238 @@
+<style>
+    .amountCreate {
+        padding: 20px;
+        overflow: hidden;
+    }
+
+    .amountCreate .leftItem,
+    .amountCreate .rightItem {
+        display: inline-block;
+        width: 49%;
+    }
+
+    .amountCreate .layui-form-item {
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .amountCreate .form-input {
+        position: relative;
+        display: inline-block;
+        width: calc(100% - 185px);
+    }
+
+    .amountCreate label {
+        display: inline-block;
+        width: 170px;
+        text-align: right;
+    }
+
+    label {
+        font-weight: normal;
+    }
+
+    .redSpan {
+        color: red;
+    }
+
+    .layui-layer-load {
+        background-color: white;
+    }
+
+    .amountCreate .layui-disabled,
+    .amountCreate .layui-disabled:hover {
+        color: rgb(84, 84, 84) !important;
+    }
+
+    .layui-layer-iframe iframe {
+        width: 99% !important;
+    }
+
+    .amountCreate .layui-form-select dl {
+        top: 32px;
+        bottom: auto;
+        max-height: 120px;
+    }
+</style>
+
+<div class="amountCreate layui-form">
+    <div class="leftItem">
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>科研项目ID：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请选择科研项目" readonly maxlength="20" class="layui-input" id="select-project"
+                    class="researchProjectId" name="researchProjectId">
+                <!-- <select id="researchProjectId" lay-search placeholder="请选择科研项目ID" lay-verify="required"
+                    lay-filter="researchProjectId" name="researchProjectId">
+                </select> -->
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>科研项目编号：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入科研项目编号" readonly lay-verify="required" maxlength="20"
+                    class="layui-input" name="projectNo" class="projectNo">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label><span class="redSpan">*</span>年份：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请选择年份" readonly lay-verify="required" class="arriveYear layui-input"
+                    name="arriveYear">
+            </div>
+        </div>
+
+    </div>
+    <div class="rightItem" style="vertical-align: top">
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>科研项目名称：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入科研项目名称" lay-verify="required" readonly maxlength="12"
+                    class="layui-input amount" name="projectName" class="projectName">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>到账金额（万元）：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入到账金额" lay-verify="required" maxlength="12" class="layui-input amount"
+                    name="arriveFee">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label><span class="redSpan">*</span>月份：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请选择月份" readonly lay-verify="required" class="arriveMonth layui-input"
+                    name="arriveMonth">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" style="text-align: center">
+        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="btn-cost-sure" id="btn-cost-sure">确定</button>
+        <button class="layui-btn layui-btn-primary" id="cancleCost">取消</button>
+    </div>
+    <input type="text" name="sicId" id="sicId" readonly style="display: none">
+    <input type="text" name="sicType" id="sicType" readonly style="display: none">
+</div>
+
+<script>
+    layui.use('upload', function () {
+        var admin = layui.admin;
+        var laydate = layui.laydate;
+        var windowHeight;
+        //判断窗口分辨率
+        $(document).ready(function () {
+            if (screen.width == 1920) {
+                windowHeight = '60%';
+            }
+            if (screen.width <= 1366) {
+                windowHeight = '90%';
+            }
+        });
+        laydate.render({
+            elem: '.arriveMonth',
+            type: "month",
+            format: 'M',
+            ready: function (date) {
+                $(".layui-laydate-main .layui-laydate-header").css("display", "none")
+            }
+        });
+        laydate.render({
+            elem: '.arriveYear',
+            type: "year"
+        });
+        // 选择科研项目
+        $('#select-project').off('click').on('click', function () {
+            //   $("input[name='projectNo']").val('111');
+            layer.open({
+                type: 2,
+                id: 'supplierTableInput',
+                title: '请选择科研项目',
+                content: 'components/sicBordManage/accountManageTable.html',
+                area: ['56%', windowHeight],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+
+                    // onclick="javascript:projectNumSelect(this)"
+                    row = window["layui-layer-iframe" + index].callbackdata();
+                    if (!row) {
+                        layer.msg('请选择科研项目');
+                        return false;
+                    }
+                    $("input[name='researchProjectId']").val(row[0].researchProjectId);
+                    $("input[name='projectName']").val(row[0].projectName);
+                    $("input[name='projectNo']").val(row[0].projectNo);
+
+                    $("input[name='sicId']").val(row[0].id);
+                    layer.close(index);
+                },
+                success: function () {
+
+                },
+                resize: false
+            });
+
+        });
+        $('#cancleCost').off('click').on('click', function () {
+            admin.finishPopupCenter(true);
+        });
+        $('#chargeOrgName').off('click').on('click', function () {
+            layer.open({
+                type: 2,
+                id: 'orgsSelectCost',
+                title: false,
+                moveOut: true,
+                content: 'components/manageYw/caderLayer.html',
+                area: ['50%', '70%'],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var finalData = $('#orgsSelectCost iframe')[0].contentWindow
+                        .task_orgs_select.finish();
+                    // 获取到数据，执行回掉函数
+                    if (finalData.id == '' || finalData.name == '') {
+                        return layer.msg('请选择组织机构', {
+                            icon: 0
+                        });
+                    }
+                    $('#chargeOrgName').val(finalData.name);
+                    $('#chargeOrgName').attr('data-id', finalData.id);
+                    layer.close(index);
+                },
+                resize: false
+            });
+        });
+        $('.amount').off("input").on("input", function (e) {
+            clearNoNum(this);
+        });
+
+        function clearNoNum(obj) {
+            if (obj.value.indexOf('.') > -1) { //判断有没有输入小数点
+            } else {
+                var p11 = /[^\d|^\-]/g;
+                var p22 = /(\d{9})\d*$/g;
+                var p44 = /(\d*)\9/g; //删除当我输入第七位的整数时候进行删除
+                obj.value = obj.value.replace(p11, "").replace(p22, "$1").replace(p44, "$1$9");
+            }
+            obj.value = obj.value.replace(/[^\d|^\-|^.]/g, ""); //清除“数字”和“.”以外的字符
+            obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+            obj.value = obj.value.replace(/\-{2,}/g, "-"); //只保留第一个. 清除多余的
+            obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            obj.value = obj.value.replace("-", "$#$").replace(/\-/g, "").replace("$#$", "-");
+            obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/, '$1$2.$3'); //只能输入两个小数
+            obj.value = obj.value.replace(/\^/g, ""); //只能输入两个小数
+            if (obj.value.indexOf("-") < 0 && obj.value.indexOf(".") < 0 && obj.value !=
+                "") { //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+                obj.value = parseFloat(obj.value);
+            }
+            if (obj.value.indexOf(".") == 0 && obj.value != "") { //首位输入.的按0处理
+                obj.value = parseFloat(obj.value.length == 1 ? 0 : obj.value);
+            }
+            if (obj.value.indexOf("-") == 0 && obj.value.indexOf(".") == 1 && obj.value != "") {
+                obj.value = obj.value.length == 2 ? 0 : obj.value;
+            }
+            if (obj.value.indexOf("-") > -1 && obj.value.indexOf("-") != 0 && obj.value != "") { //首位输入.的按0处理
+                obj.value = obj.value.replace(/\-/g, "");
+            }
+        }
+    });
+</script>

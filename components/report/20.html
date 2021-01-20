@@ -1,0 +1,289 @@
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<script src="../../assetsInfo/js/FormMerge.js"></script>
+<link rel="stylesheet" href="assetsInfo/css/report.css">
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+    
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+    
+    .titDivbox {
+        width: 90%;
+        margin: auto;
+        position: relative;
+    }
+    
+    .titDiv {
+        width: 100%;
+        font-size: 16px;
+        font-weight: bold;
+        color: #888;
+        position: absolute;
+        top: 25px;
+    }
+    
+    .tit01,
+    .tit02 {
+        width: 50%;
+        float: left;
+        text-align: center;
+    }
+    
+    .chart {
+        height: 360px;
+        width: 96%;
+    }
+    
+    .form-bottom {
+        overflow: auto
+    }
+    
+    .botTable {
+        width: 70%;
+    }
+    
+    .chart {
+        padding-bottom: 10px;
+    }
+    
+    @media screen and (min-width: 1366px) and (max-width: 1920px) {
+        .chart {
+            height: 360px;
+            width: 96%;
+        }
+        .botTable {
+            width: 70%;
+        }
+    }
+    
+    @media screen and (min-width: 1920px) {
+        .chart {
+            height: 370px;
+            width: 96%;
+        }
+        .botTable {
+            width: 70%;
+        }
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span class="layui-card-header-title"><strong>本部开票收入同期对比
+                    </strong></span>
+                <!-- <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-sm exportbtn">导出PPT</a> -->
+            </div>
+            <div class="layui-row">
+                <div id="picture" class="chart"></div>
+            </div>
+
+            <div class="botTable">
+                <table id="tableContent-form3" lay-filter="tableContent-form3"></table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+</script>
+<script>
+    layui.use(['table'], function() {
+        var table = layui.table,
+            admin = layui.admin,
+            layer = layui.layer;
+
+        //下面表格
+        table.render({
+            elem: '#tableContent-form3',
+            url: '/json/20.json', //数据接口
+            cols: [
+                [ //表头
+                    {
+                        field: 'plate',
+                        title: '本部',
+                        align: 'center',
+                        width: 120
+                    }, {
+                        field: 'year',
+                        title: '年度',
+                        align: 'center'
+
+                    }, {
+                        field: 'one',
+                        title: '一季度',
+                        align: 'center'
+
+                    }, {
+                        field: 'two',
+                        title: '二季度',
+                        align: 'center'
+
+
+                    }, {
+                        field: 'three',
+                        title: '三季度',
+                        align: 'center'
+
+                    }, {
+                        field: 'four',
+                        title: '四季度',
+                        align: 'center'
+
+
+                    }, {
+                        field: 'count',
+                        title: '合计',
+                        align: 'center'
+
+                    }
+                ]
+
+            ],
+            done: function(res, curr, count) {
+                alarmTableRowSpan("plate", 1);
+            }
+        })
+
+        //图表
+        admin.req('/json/report.json', {}, function(res) {
+            var depObject = res.moai[0];
+            var xData = [];
+            var tableCol = [];
+            for (var key in depObject) {
+                xData.push(depObject[key])
+            }
+            var yData1 = [],
+                yData2 = [],
+                yData3 = [],
+                yData4 = [];
+            for (var key in res.moai[1]) {
+                yData1.push(res.moai[1][key])
+            }
+            for (var key in res.moai[2]) {
+                yData2.push(res.moai[2][key])
+
+            }
+            for (var key in res.moai[3]) {
+                yData3.push(res.moai[3][key])
+            }
+            for (var key in res.moai[4]) {
+                yData4.push(res.moai[4][key])
+
+            }
+            showUpL(xData, yData1, yData2, yData3, yData4)
+
+        }, {
+            method: 'get'
+        });
+        //echart
+        var showUpL = function(xData, data1, data2, data3, data4) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("picture"));
+            // 图表配置项
+            option = {
+                tooltip: {
+                    trigger: 'axis',
+                    textStyle: {　　
+                        align: 'left'　　　　
+                    },
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
+                },
+                legend: {
+
+                    data: ['第一季度', '第二季度', '第三季度', '第四季度'],
+                    bottom: 'bottom',
+                },
+                // toolbox: {
+                //     feature: {
+                //         saveAsImage: {}
+                //     }
+                // },
+                grid: {
+                    left: 3,
+                    right: 20,
+                    bottom: 50,
+                    containLabel: true
+                },
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: false,
+
+                    data: ['2018年', '2019年', '2018年', '2019年', '2018年', '2019年', '2018年', '2019年']
+                }],
+                yAxis: [{
+                    type: 'value',
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'dashed',
+                            color: "#E8E8E8"
+                        }
+                    },
+                }],
+                series: [{
+                    name: '第一季度',
+                    type: 'line',
+                    stack: '总量',
+                    color: 'RGBA(124,190,253,.8)',
+                    areaStyle: {
+                        color: 'RGBA(124,190,253,.8)'
+                    },
+                    data: [176, 167, 2339, 999, 1242, 1370, 1217, 556]
+                }, {
+                    name: '第二季度',
+                    type: 'line',
+                    stack: '总量',
+                    color: 'RGBA(255,233, 133,.8)',
+                    areaStyle: {
+                        color: 'RGBA(255,233, 133,.8)'
+                    },
+                    data: [271, 0, 2155, 0, 1918, 0, 1031, 0]
+                }, {
+                    name: '第三季度',
+                    type: 'line',
+                    stack: '总量',
+                    color: 'RGB(136,217,160)',
+                    areaStyle: {
+                        color: 'RGB(136,217,160)'
+                    },
+                    data: [229, 0, 2760, 0, 1062, 0, 1071, 0]
+                }, {
+                    name: '第四季度',
+                    type: 'line',
+                    stack: '总量',
+                    color: 'RGB(255,172, 218)',
+                    areaStyle: {
+                        normal: {
+                            color: 'RGB(255,172, 218)'
+                        }
+                    },
+                    data: [578, 0, 2201, 0, 1093, 0, 1294, 0]
+                }]
+            };
+            myChart.setOption(option);
+        };
+
+        setTimeout(function() {
+            window.onresize = function() {
+                myChart.resize();
+            }
+        }, 200);
+
+    });
+</script>

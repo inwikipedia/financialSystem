@@ -1,0 +1,624 @@
+<style>
+    .layui-tpl-container .p-form,
+    .layui-layout-body .layui-layer-page .layui-layer-content {
+        overflow: visible !important;
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 左侧 -->
+    <div class="layui-col-md12 autoScrollLeft">
+        <div class="layui-card p-main">
+            <div class="layui-card-header">目录列表</div>
+            <!-- 卡片容器 -->
+            <div class="layui-card-body">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar">
+                        <!-- 左侧 -->
+                        <div class="layui-inline">
+                            <div class="layui-inline search-item">
+                                <i class="layui-icon layui-icon-search"></i>
+                                <input type="text" name="menuName" placeholder="输入目录名称" class="layui-input">
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-normal" lay-filter="btn_search_menu002" lay-submit>查询</button>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_reset_menu002" lay-submit>重置</button>
+                            </div>
+                        </div>
+                        <!-- 右侧 -->
+                        <div class="layui-inline layui-pull-right">
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_add_menu002" lay-submit>
+                                    <i class="layui-icon layui-icon-add-1"></i>新增目录项
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 下部表格容器 -->
+                <table id="tableContent-menu002" lay-filter="tableContent-menu002"></table>
+            </div>
+        </div>
+    </div>
+    <!-- 右侧目录对应子菜单列表 -->
+    <div class="layui-col-md8 layui-hide autoScrollRight-detail">
+        <div class="layui-card p-form">
+            <div class="layui-card-header">子菜单</div>
+            <!-- 卡片右上角关闭按钮 -->
+            <i class="layui-icon layui-icon-close layui-card-close"></i>
+            <!-- 卡片容器 -->
+            <div class="layui-card-body">
+                <input type="text" name="id" id="id" class="layui-hide">
+                <input type="text" name="menuName" id="menuName" class="layui-hide">
+                <input type="hidden" id="testId" value="" />
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar">
+                        <!-- 左侧 -->
+                        <div class="layui-inline">
+                            <div class="layui-inline search-item">
+                                <i class="layui-icon layui-icon-search"></i>
+                                <input type="text" name="name2" placeholder="输入文件名称" class="layui-input">
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-normal" lay-filter="btn_search_detail" lay-submit>查询</button>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_reset_detail" lay-submit>重置</button>
+                            </div>
+                        </div>
+                        <!-- 右侧 -->
+                        <div class="layui-inline layui-pull-right">
+                            <div class="layui-inline">
+                                <button id="btn_add_menu002_detail" class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_add_menu002_detail" lay-submit>
+                                    <i class="layui-icon layui-icon-upload"></i>新增文件
+                                </button>
+                                <button id="btn_del_menu0002_detail" class="layui-btn layui-btn-sm layui-btn-danger" lay-filter="btn_del_menu002_detail" lay-submit>
+                                    <i class="layui-icon layui-icon-delete"></i>批量移除
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 表格容器 -->
+                <table id="tableContent-detail" lay-filter="tableContent-detail"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="detailinfo">文件</a>
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+    <a class="table-control-btn table-control-btn-danger" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="control-2">
+    <a class="table-control-btn" lay-event="edit">预览</a>
+    <a class="table-control-btn" lay-event="download">下载</a>
+    <a class="table-control-btn table-control-btn-danger" lay-event="del">移除</a>
+</script>
+
+<script>
+    // 初始化 layui
+    layui.use(['treetable', 'treeSelect'], function() {
+        var table = layui.table,
+            treetable = layui.treetable,
+            treeSelect = layui.treeSelect,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin;
+
+        // 渲染左侧表格树
+        var renderTable = function(where) {
+            treetable.render({
+                // treetable 新增的参数
+                treeColIndex: 1, // treetable新增参数
+                treeSpid: '0', // treetable新增参数
+                treeIdName: 'id', // treetable新增参数
+                treePidName: 'parentId', // treetable新增参数
+                treeDefaultClose: false, // treetable新增参数
+                treeLinkage: false, // treetable新增参数
+                // table 原有的一些参数
+                elem: '#tableContent-menu002',
+                id: 'tableContent-menu002',
+                url: admin.formatUrl('/api/detailMenu/menu002/listMenu002EOByMenuNameOrId'),
+                height: 472,
+                cols: [
+                    [{
+                        type: 'numbers'
+                    }, {
+                        field: 'menuName',
+                        title: '目录名称',
+                    }, {
+                        templet: '#control-1',
+                        title: '操作',
+                        align: 'center',
+                        unresize: true,
+                        width: 200
+                    }]
+                ],
+
+
+                where: where,
+                // 列宽最少 120，防止在小屏幕上显示不全列标题
+                cellMinWidth: 240,
+
+
+
+
+            });
+        }
+
+        // 初始化，执行一次渲染表格树
+        renderTable();
+        // DONE: 侧边栏变化时刷新数据表格
+        // 将 table ID 存入数组
+        layui.admin.addTableCache('tableContent-menu002');
+
+        // 搜索
+        form.on('submit(btn_search_menu002)', function(data) {
+            var searchValue = data.field;
+            renderTable(searchValue);
+        });
+        // 重置
+        form.on('submit(btn_reset_menu002)', function() {
+            $('input[name="menuName"]').val('');
+            renderTable({
+                menuName: ''
+            });
+        });
+
+        // 新增
+        form.on('submit(btn_add_menu002)', function() {
+            popMenu('add');
+
+        });
+
+        //子菜单搜索重置
+        form.on('submit(btn_reset_detail)', function() {
+            $('input[name="name2"]').val('');
+            renderTable({
+                name2: ''
+            });
+        });
+
+        // 新增目录子菜单
+        form.on('submit(btn_add_menu002_detail)', function() {
+
+
+            popMenuAddDetail();
+
+        });
+        // 批量删除
+        form.on('submit(btn_del_menu002_detail)', function() {
+            var checkStatus = table.checkStatus('tableContent-detail');
+            if (checkStatus.data.length === 0) {
+                return layer.msg('请选择要移除的文件', {
+                    icon: 0
+                });
+            }
+            var delArr = [];
+            for (var i = 0; i < checkStatus.data.length; i++) {
+                delArr.push(checkStatus.data[i].id);
+            }
+
+            layer.confirm('确定移除选中的目录内的 ' + checkStatus.data.length + ' 个文件吗？', {
+                icon: 3,
+                title: '提示'
+            }, function() {
+                admin.req('/api/detail/detail/delete' + delArr.join(',') + '/' +
+                    $('#menu002id').val(), {},
+                    function(data) {
+                        if (data.ok) {
+                            layer.msg('批量移除文件成功！', {
+                                icon: 1
+                            });
+                            table.reload('tableContent-detail', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        } else {
+                            return layer.msg('批量移除文件失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: 'delete'
+                    });
+            });
+        });
+
+        // 监听表格工具条事件
+        table.on('tool(tableContent-menu002)', function(obj) {
+            // 获取点击列的数据
+            var data = obj.data;
+            var layEvent = obj.event;
+            $("#testId").val(data.id);
+
+
+            // 判断操作类型
+            if (layEvent === 'del') {
+                // 删除
+                layer.confirm('确定删除目录：' + data.menuName + ' 吗？', {
+                    icon: 3,
+                    title: '提示'
+                }, function() {
+                    admin.req('/api/detailMenu/menu002/delete/' + data.id, {}, function(data) {
+                        if (data.ok) {
+                            layer.msg('删除目录成功！', {
+                                icon: 1
+                            });
+                            renderTable();
+                        } else {
+                            return layer.msg('删除目录失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: 'delete'
+                    });
+                });
+            } else if (layEvent === 'edit') {
+                // 编辑
+                popMenu('edit', data);
+            } else if (layEvent === 'detailinfo') {
+                // 查看目录对应的文件
+                showRightMenu('detailinfo', data);
+            }
+        });
+
+        // 弹出框
+        function popMenu(type, data) {
+            // 判断操作事件
+            if (type === 'add') {
+                var title = '新增目录项';
+                data = {};
+            } else if (type === 'edit') {
+                var title = '编辑目录：' + data.menuName
+            }
+            data.type = type;
+            admin.popupCenter({
+                title: title,
+                path: 'components/tpl/menu_add_file.html',
+                finish: function() {
+                    renderTable();
+                },
+                success: function() {
+                    setFormValue(data);
+                    // 初始化
+                    // 获取树形下拉栏内的数据
+                    admin.req('/api/detailMenu/menu002/listMenu002EOByMenuNameOrId', {}, function(
+                        d) {
+                        var menus = d.data;
+                        treeSelect.render({
+                            elem: '#selectFDs',
+                            data: menus,
+                            dataFilter: function(data) {
+                                var menus = [];
+                                for (var i = 0; i <
+                                    data.length; i++) {
+                                    var valueNow = data[
+                                        i];
+                                    // 写入数据
+                                    menus.push({
+                                        id: valueNow['id'],
+                                        pid: valueNow['parentId'],
+                                        name: valueNow['menuName'],
+                                    });
+                                }
+                                return menus;
+                            },
+                            // 节点点击回调函数
+                            click: function(d) {
+                                $(
+                                    'input[name="parentId"]'
+                                ).val(d.id);
+                            }
+                        });
+                        if (type === 'edit') {
+                            treeSelect.checkNode('selectFDs', data.parentId);
+                        }
+                    });
+                }
+            });
+        }
+
+        // 设置表单内容
+        function setFormValue(obj) {
+            var inputs = $('.p-form').find('input'),
+                title = $('.p-form .layui-card-header'),
+                formNames = ['id', 'menuName', 'parentId'];
+
+            obj.title && title.text(obj.title);
+            for (var i = 0; i < formNames.length; i++) {
+                if (obj[formNames[i]]) {
+                    $('.p-form  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                } else {
+                    $('.p-form  input[name="' + formNames[i] + '"]').val('');
+                }
+            }
+        }
+
+        // 保存新增/编辑的信息
+        form.on('submit(menuSave-menu002)', function(data) {
+            var field = data.field;
+            if (field.menuName === '' || field.parentId === '') {
+                return layer.msg('请填写必填项', {
+                    icon: 5
+                });
+            }
+            var method = field.type === 'add' ? 'POST' : 'PUT';
+            submitDicData(field, method, function() {
+                admin.finishPopupCenter();
+            });
+        });
+        // 弹出框取消按钮
+        form.on('submit(popmenuCancle)', function() {
+            admin.closePopupCenter();
+        });
+
+        // 新增和修改请求的封装
+        function submitDicData(d, ajaxType, success, error) {
+            var ajaxName = ajaxType.toUpperCase() === 'POST' ? '新增' : '修改';
+            // 发送请求
+            delete d.selectFDs;
+            delete d.type;
+            admin.req('/api/detailMenu/menu002', d, function(data) {
+                if (data.ok) {
+                    layer.msg(ajaxName + '目录信息成功！', {
+                        icon: 1
+                    });
+                    success(data);
+                } else {
+                    layer.msg(ajaxName + '目录信息失败：' + data.message, {
+                        icon: 5
+                    });
+                    error && error(data);
+                }
+            }, {
+                method: ajaxType
+            });
+        }
+
+        // 展示右侧表单菜单
+        function showRightMenu(type, data) {
+            // 判断操作类型
+            if (type === 'detailinfo') {
+                setFormValue({
+                    title: data.menuName + ' 中的文件'
+                });
+                // 显示右侧菜单
+                $('.autoScrollLeft').removeClass('layui-col-md12');
+                $('.autoScrollLeft').addClass('layui-col-md4');
+                setTimeout(function() {
+                    $('.autoScrollRight-detail').removeClass('layui-hide');
+                    admin.resize();
+                    $('#id').val(data.id);
+                    $('#menuName').val(data.name);
+                    table.render({
+                        elem: '#tableContent-detail',
+                        id: 'tableContent-detail',
+                        url: admin.formatUrl('/api/detail/detail?menu002Id=' + data.id),
+                        // 格式化后台返回的数据
+                        parseData: function(res) { //res 即为原始返回的数据
+                            // 返回结果，进行渲染表格
+                            return {
+                                "code": res.respCode, //解析接口状态
+                                "msg": res.message, //解析提示文本
+                                "count": res.data.count, //解析数据长度
+                                "data": res.data.list //解析数据列表
+                            };
+                        },
+                        page: false,
+                        height: 472,
+                        cols: [
+                            [{
+                                type: 'checkbox'
+                            }, {
+                                field: 'name',
+                                title: '文件名'
+                            }, {
+                                field: 'id',
+                                title: 'id'
+                            }, {
+                                field: 'type',
+                                title: '类型'
+                            }, {
+                                field: 'size',
+                                title: '大小'
+                            }, {
+                                field: 'founder',
+                                title: '创建者'
+                            }, {
+                                field: 'creationTime',
+                                templet: function(d) {
+                                    return new Date(d.creationTime).toLocaleString('chinese', {
+                                        hour12: false
+                                    });
+                                },
+                                title: '创建时间',
+                                width: 160,
+                            }, {
+                                field: 'modificationTime',
+                                title: '修改时间'
+                            }, {
+                                templet: '#control-2',
+                                title: '操作',
+                                align: 'center',
+                                width: 160,
+                                unresize: true
+                            }]
+                        ],
+                        cellMinWidth: 80,
+                        page: {
+                            layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                        },
+                        request: {
+                            pageName: 'pageNo',
+                            limitName: 'pageSize'
+                        }
+
+
+                    });
+
+                    // 监听工具条事件
+                    // 主要是编辑、删除和配置角色菜单
+                    table.on('tool(tableContent-detail)', function(obj) {
+                        // 获取点击列的数据
+                        var data = obj.data;
+                        var layEvent = obj.event;
+                        // 判断操作类型
+                        if (layEvent === 'del') {
+                            // 移除
+                            layer.confirm('确定移除目录内文件：' + data.name + ' 吗？', {
+                                icon: 3,
+                                title: '提示'
+                            }, function() {
+                                admin.req('/api/detail/detail/deleteDetailByMenu002Id/' + data.id + '/' +
+                                    $('#menu002Id').val(), {},
+                                    function(
+                                        data) {
+                                        if (data.ok) {
+                                            layer.msg('移除文件成功！', {
+                                                icon: 1
+                                            });
+                                            table.reload('tableContent-detail', {
+                                                where: {
+                                                    reload: new Date().getTime()
+                                                }
+                                            });
+                                        } else {
+                                            return layer.msg('移除文件失败：' + data.message, {
+                                                icon: 5
+                                            });
+                                        }
+                                    }, {
+                                        method: 'delete'
+                                    });
+                            });
+                        } else if (layEvent === 'edit') {
+                            if (data.savePath2 != null) {
+                                window.open("components/file/Files/before/" + data.savePath2, "", "dialogWidth:300px;dialogHeight:300px;scroll:no;status:no")
+                            } else {
+                                $.ajax({
+
+                                    url: '/api/detail/detail/wordToPdf?id=' + data.id + '&path=' + data.savePath.replace(/\\/g, "\/"),
+                                    type: "post",
+
+
+                                    success: function(rec) {
+                                        table.reload('tableContent-detail', {
+                                            where: {
+                                                reload: new Date().getTime()
+                                            }
+                                        });
+                                        window.open("components/file/Files/before/" + rec.data, "", "dialogWidth:300px;dialogHeight:300px;scroll:no;status:no")
+
+
+                                    }
+
+
+                                })
+
+                            }
+                        } else if (layEvent === 'download') {
+                            var $eleForm = $("<form method='get'></form>");
+
+                            $eleForm.attr("action", "/api/detail/detail/" + data.name + "/download");
+
+                            $(document.body).append($eleForm);
+
+                            $eleForm.submit();
+                        }
+
+                    });
+                }, 300);
+            }
+        }
+        // 隐藏右侧表单菜单
+        function hideRightMenu(reRender) {
+            // 将表单内的数据清空
+            setFormValue({
+                title: '文件'
+            });
+            // 隐藏右侧菜单
+            $('.autoScrollRight-detail').addClass('layui-hide');
+            $('.autoScrollLeft').removeClass('layui-col-md4');
+            $('.autoScrollLeft').addClass('layui-col-md12');
+            if (reRender) {
+                setTimeout(function() {
+                    admin.resize();
+                }, 300);
+            }
+        }
+
+        // 关闭右侧菜单 点击事件
+        $('.layui-card-close').on('click', function() {
+            hideRightMenu(true);
+        });
+
+        function fmtDate(obj) {
+            var date = new Date(obj);
+            var y = 1900 + date.getYear();
+            var m = "0" + (date.getMonth() + 1);
+            var d = "0" + date.getDate();
+            return y + "-" + m.substring(m.length - 2, m.length) + "-" + d.substring(d.length - 2, d.length);
+        }
+
+        //弹出框
+        function popMenuAddDetail() {
+
+            var id = document.getElementById("testId").value;
+
+            var title = '新增文件';
+            admin.popupCenter({
+                title: title,
+                path: 'components/file/button.html',
+                finish: function() {
+
+                    var detailId = sessionStorage.getItem("detailId");
+
+                    $.ajax({
+
+                        url: '/api/detail/detail/saveDetail/' + detailId + '/' + id,
+                        type: "post",
+                    })
+                    table.reload('tableContent-detail', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                },
+
+            });
+        }
+        // 搜索
+        form.on('submit(btn_search_detail)', function(data) {
+            var searchValue = data.field;
+            var _menu002Id = $('#menu002Id').val()
+            admin.req('/api/detail/detail', {
+                    pageNo: 1,
+                    pageSize: 10000,
+                    name2: searchValue.name2
+                },
+                function(res) {
+
+                    table.reload('tableContent-detail', {
+                        where: {
+
+                            data: res.data
+                        }
+                    });
+
+                });
+
+        });
+    });
+</script>

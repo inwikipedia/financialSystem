@@ -1,0 +1,57 @@
+<h3>GC-Spread-Sheets</h3>
+<div>
+    <p>以下示例展示如何绑定 Workbook 上的属性。</p>
+</div>
+
+<div>
+    <gc-spread-sheets [hostStyle]="hostStyle" [newTabVisible]="newTabVisible" [tabStripVisible]="tabStripVisible"
+                      [showHorizontalScrollbar]="showHorizontalScrollbar"
+                      [showVerticalScrollbar]="showVerticalScrollbar" [backColor]="spreadBackColor"
+                      [grayAreaBackColor]="grayAreaBackColor" [allowUserZoom]="allowUserZoom"
+                      [allowUserResize]="allowUserResize" hostClass="spreadContainer">
+        <gc-worksheet [dataSource]="data" [autoGenerateColumns]="autoGenerateColumns">
+            <gc-column width=150 dataField="Name"></gc-column>
+            <gc-column width=150 dataField="CountryRegionCode"></gc-column>
+            <gc-column width=100 dataField="City"></gc-column>
+            <gc-column width=200 dataField="AddressLine"></gc-column>
+            <gc-column width=100 dataField="PostalCode"></gc-column>
+        </gc-worksheet>
+    </gc-spread-sheets>
+</div>
+
+<div class="settingContainer">
+    <table>
+        <tr>
+            <td>
+                <label><input type="checkbox" [(ngModel)]="newTabVisible" />显示 new 标签页</label>
+            </td>
+            <td>
+                <label><input type="checkbox" [(ngModel)]="tabStripVisible" />显示标签页</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label><input type="checkbox" [(ngModel)]="showHorizontalScrollbar" />显示横向滚动条</label>
+            </td>
+            <td>
+                <label><input type="checkbox" [(ngModel)]="showVerticalScrollbar" />显示竖向滚动条</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label><input type="checkbox" [(ngModel)]="allowUserZoom">允许用户缩放</label>
+            </td>
+            <td>
+                <label><input type="checkbox" [(ngModel)]="allowUserResize">允许用户改变行列宽高</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="color" [(ngModel)]="spreadBackColor" /> 背景色
+            </td>
+            <td>
+                <input type="color" [(ngModel)]="grayAreaBackColor" /> 灰色区域背景色
+            </td>
+        </tr>
+    </table>
+</div>

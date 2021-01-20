@@ -1,0 +1,6 @@
+
+<!-- Just need to instantiate the controller, and it will take care of showing the modal dialog -->
+<div ng-controller="KisBpmFormKeyDefinitionCtrl">
+    <select ng-model="property.value" ng-options="f.id as f.formName for f in formItems" ng-change="formKeyDefinitionChanged()">
+    </select>
+</div>

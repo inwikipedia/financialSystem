@@ -1,0 +1,497 @@
+<!--
+File   : task_personnel_select.html
+Created: Thursday September 27th 2018 4:10:07 pm
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Last Modified: Sunday September 30th 2018 11:57:45 am
+Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+-----
+Description: 人员选择，弹出框插件，请使用 iframe 弹出；
+调用方法请查看 process_pending_tpl_handle.html 中的 taskControl.personnelSelect(data, callback) 方法
+-----
+HISTORY:
+2018-09-28	yuchunyu97	初始化结构
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>请选择组织机构</title>
+
+    <link rel="stylesheet" href="../../assetsInfo/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../../assetsInfo/css/style.css">
+    <link rel="stylesheet" href="../../assetsInfo/css/theme.css"/>
+    <link rel="stylesheet" href="../../assetsInfo/css/task_personnel_select.css">
+
+    <!-- zTree 样式 -->
+    <link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/metroStyle.css">
+</head>
+<style>
+    .person-select-box-b, .person-select-box-t {
+        height: 100% !important;
+    }
+</style>
+<body>
+
+<div class="layui-fluid layui-tab" lay-filter="person-tab">
+    <div class="layui-row person-container">
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md3 person-container-l leftTree">
+            <div class="layui-row">
+                <div class="layui-col-xs10 layui-col-sm10 layui-col-md11">
+                    <!-- tab 切换 -->
+                    <div class="layui-tab-content">
+                        <!-- 组织机构 -->
+                        <div class="layui-tab-item layui-show">
+                            <div class="layui-form person-search">
+                                <div class="layui-form-item">
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="value" placeholder="请输入人员名称" class="layui-input"
+                                               id="searchName">
+                                        <i class="layui-icon layui-icon-search" layui-submit id="search"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="person-select-box">
+                                <div class="person-select-box-t">
+                                    <ul id="select-org" class="ztree"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-xs2 layui-col-sm2 layui-col-md1">
+                </div>
+            </div>
+        </div>
+        <ul class="layui-col-xs12 layui-col-sm12 layui-col-md9 person-container-l personList layui-row"
+            id="select-box-org">
+
+        </ul>
+    </div>
+</div>
+
+<!-- jQuery 1.x 版本兼容 IE8 -->
+<script type="text/javascript" src="../../assetsInfo/libs/jquery-1.12.4.min.js"></script>
+<!-- Q.js 轻量路由框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/q.js"></script>
+<!-- jQuery 轻量级 MVVM 框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/pandyle.min.js"></script>
+<!-- layui 脚本文件 -->
+<script type="text/javascript" src="../../assetsInfo/libs/layui/layui.js"></script>
+<!-- zTree js 文件 -->
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+
+<script>
+
+    //        选择对象
+    CheckboxArr = [];
+    //        选择id为了避免重复
+    CheckboxArrId = [];
+    var task_personnel_select = {
+        init: function (datas) {
+            var this_data = datas.data;
+            CheckboxArr = this_data ? this_data : [];
+            if (this_data.length > 0) {
+                for (var i = 0; i < this_data.length; i++) {
+                    CheckboxArrId.push(this_data[i].id)
+                }
+            }
+        },
+        finish: function () {
+            this.selectedData = CheckboxArr;
+            return this.selectedData;
+        },
+        /*
+         * 数据格式为：
+         * {
+         *     id: 'ZDTNTHTKVS',
+         *     name: 'XXX'
+         * }
+         */
+        selectedData: [],
+        // 检查是否有重复的数据
+        // 重复则返回 true
+        checkRepeatData: function (id) {
+            for (var i = 0; i < this.selectedData.length; i++) {
+                if (this.selectedData[i].id === id) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        // 增加数据
+        addData: function (data) {
+            this.selectedData.push(data);
+        },
+        // 移除数据
+        removeData: function (data) {
+            console.log(data)
+            for (var i = 0; i < this, this.selectedData.length; i++) {
+                if (this.selectedData[i].id === data.id) {
+                    this.selectedData.splice(i, 1);
+                    break;
+                }
+            }
+        }
+    };
+    layui.config({
+        base: '../../module/'
+    }).use(['element', 'index'], function () {
+        var element = layui.element,
+            $ = layui.jquery,
+            admin = layui.admin;
+
+        // 手动完成 Tab 页切换
+        element.on('tab(person-tab)', function (data) {
+            var index = data.index,
+                contentElem = $('.layui-tab-content').children();
+            contentElem.removeClass('layui-show');
+            $(contentElem[index]).addClass('layui-show');
+
+            // 清空待选框数据
+            var selectBox = $('[id^="select-box"]');
+            for (var i = 0; i < selectBox.length; i++) {
+                $(selectBox[i]).html('');
+            }
+        });
+        $("#search").on("click", function () {
+            admin.req("/api/user/newSelectUserEO", {
+                usName: $("#searchName").val(),
+            }, function (res) {
+                if (!res.ok) {
+                    return layer.msg('获取组织机构用户列表失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+
+                var userHtml = '',
+                    userData = res.data.list;
+                for (var i = 0; i < userData.length; i++) {
+                    var tmp = userData[i],
+                        tmpRoles = [];
+                    // 剔除重复数据
+                    if (task_personnel_select.checkRepeatData(tmp.usid))
+                        continue;
+                    for (var j = 0; j < tmp.roles.length; j++) {
+                        tmpRoles.push(tmp.roles[j].name);
+                    }
+                    userHtml += '<li class="layui-col-md2">\n' +
+                        '                        <p><img src="../../assetsInfo/images/tx.png" alt="" width="50"></p>\n' +
+                        '                        <p>\n' +
+                        '                          <input type="checkbox" name="check"  value="' + tmp.usid + '"remark="' + tmpRoles.join(",") + '" usname="' + tmp.usname + '"/> <span>' + tmp.usname + '</span> <span>(' + tmp.contactAddress + ')</span>\n' +
+                        '                        </p>\n' +
+                        '                    </li>';
+                }
+                $('#select-box-org').html(userHtml);
+                if (userData.length === 0) {
+                    return layer.msg(' 无用户', {
+                        icon: 0
+                    });
+                }
+            })
+        });
+        $('body').on('keyup', function (e) {
+            if (e.keyCode == 13) {
+                admin.req("/api/user/newSelectUserEO", {
+                    usName: $("#searchName").val(),
+                }, function (res) {
+                    if (!res.ok) {
+                        return layer.msg('获取组织机构用户列表失败：' + res.message, {
+                            icon: 5
+                        });
+                    }
+
+                    var userHtml = '',
+                        userData = res.data.list;
+                    for (var i = 0; i < userData.length; i++) {
+                        var tmp = userData[i],
+                            tmpRoles = [];
+                        // 剔除重复数据
+                        if (task_personnel_select.checkRepeatData(tmp.usid))
+                            continue;
+                        for (var j = 0; j < tmp.roles.length; j++) {
+                            tmpRoles.push(tmp.roles[j].name);
+                        }
+                        var contactAddress = tmp.contactAddress;
+                        if (contactAddress === null) {
+                            contactAddress = '';
+                        }
+                        //选中回显
+                        if (CheckboxArrId.indexOf(tmp.usid) > -1) {
+                            var check = ' checked ';
+                        } else {
+                            var check = ""
+                        }
+
+                        userHtml += '<li class="layui-col-md2">\n' +
+                            '                        <p><img src="../../assetsInfo/images/tx.png" alt="" width="50"></p>\n' +
+                            '                        <p>\n' +
+                            '                          <input ' + check + ' type="radio" name="check" value="' + tmp.usid + '"remark="' + contactAddress + '" usname="' + tmp.usname + '" /> <span>' + tmp.usname + '</span> <span>(' + contactAddress + ')</span>\n' +
+                            '                        </p>\n' +
+                            '                    </li>';
+                    }
+                    $('#select-box-org').html(userHtml);
+                    $("#select-box-org li").on("click", "p:first-child", function () {
+                        $(this).next("p").children("input").click();
+                    })
+                    $('input:radio').click(function () {
+                        CheckboxArrId = this.value;
+                        CheckboxArr={
+                            name: this.getAttribute('usname'),
+                            id: this.value,
+                            remark: this.getAttribute('remark')
+                        };
+                        console.log(CheckboxArr)
+
+                    });
+
+                    if (userData.length === 0) {
+                        return layer.msg(' 无用户', {
+                            icon: 0
+                        });
+                    }
+                })
+            }
+        })
+        //我这里是监控空格和回车键
+        // 初始化组织机构列表
+        var url = "/api/budget/project/query/org/adc/own";
+        // var url='/api/sys/org/listOrgByOrgName',
+        admin.req(url, {
+            orgName: ''
+        }, function (d) {
+            if (!d.ok) {
+                return layer.msg('获取组织机构列表失败：' + d.message, {
+                    icon: 5
+                });
+            }
+            // 生成 zTree
+            var setting = {
+                data: {
+                    simpleData: {
+                        enable: true,
+                        idKey: "id",
+                        pIdKey: "parentId",
+                        rootPId: '0'
+                    }
+                },
+                view: {
+                    showIcon: false
+                },
+                callback: {
+                    onClick: function (event, treeId, treeNode) {
+                        var id = treeNode.id;
+                        // 获取组织机构对应用户
+                        // admin.req('/api/user/selectUserEO', {
+                        admin.req('/api/user/selectAllUserVOByOrgId', {
+                            orgId: id
+                        }, function (res) {
+                            if (!res.ok) {
+                                return layer.msg('获取组织机构用户列表失败：' + res.message, {
+                                    icon: 5
+                                });
+                            }
+
+                            var userHtml = '',
+                                userData = res.data,
+                                names = [];
+                            for (var i = 0; i < userData.length; i++) {
+                                var tmp = userData[i],
+                                    tmpRoles = [];
+                                names.push(tmp.usname);
+                                // 剔除重复数据
+                                if (task_personnel_select.checkRepeatData(tmp.usid))
+                                    continue;
+                                for (var j = 0; j < tmp.roles.length; j++) {
+                                    tmpRoles.push(tmp.roles[j].name);
+                                }
+                                //职级为空的情况
+                                var contactAddress = tmp.contactAddress;
+                                if (contactAddress === null) {
+                                    contactAddress = '';
+                                }
+                                //选中回显
+                                if (CheckboxArrId.indexOf(tmp.usid) > -1) {
+                                    var check = ' checked ';
+                                } else {
+                                    var check = ""
+                                }
+
+                                userHtml += '<li class="layui-col-md2">\n' +
+                                    '                        <p><img src="../../assetsInfo/images/tx.png" alt="" width="50"></p>\n' +
+                                    '                        <p>\n' +
+                                    '                          <input ' + check + ' type="radio" name="check" id="' + tmp.usid + '" value="' + tmp.usid + '" remark="' + contactAddress + '" usname="' + tmp.usname + '" /> <span>' + tmp.usname + '</span> <span>(' + contactAddress + ')</span>\n' +
+                                    '                        </p>\n' +
+                                    '                    </li>';
+                            }
+                            $('#select-box-org').html(userHtml);
+                            $("#select-box-org li").on("click", "p:first-child", function () {
+                                console.log(1111)
+                                $(this).next("p").children("input").click();
+                            })
+
+
+                            $('input:radio').click(function () {
+                                CheckboxArrId = this.value;
+                                CheckboxArr={
+                                        name: this.getAttribute('usname'),
+                                        id: this.value,
+                                        remark: this.getAttribute('remark')
+                                    };
+                                console.log(CheckboxArr)
+
+                            });
+
+
+                            if (userData.length === 0) {
+                                return layer.msg(treeNode.name + ' 无用户', {
+                                    icon: 0
+                                });
+                            }
+                        });
+                    }
+                }
+            };
+
+            var zNodes = d.data;
+            zTreeObj = $.fn.zTree.init($("#select-org"), setting, zNodes);
+            var nodeList = zTreeObj.getNodes();　　 //展开第一个根节点
+            for (var i = 0; i < nodeList.length; i++) { //设置节点展开第二级节点
+                zTreeObj.expandNode(nodeList[i], true, true, true);
+                var nodespan = nodeList[i].children;
+                for (var j = 0; j < nodespan.length; j++) { //设置节点展开第三级节点
+                    zTreeObj.expandNode(nodespan[j], true, true, true);
+                }
+            }
+        });
+
+        // 初始化用户角色列表
+        admin.req('/api/sys/role', {
+            userId: ''
+        }, function (d) {
+            if (!d.ok) {
+                return layer.msg('获取用户角色列表失败：' + d.message, {
+                    icon: 5
+                });
+            }
+            // 生成 zTree
+            var setting = {
+                data: {
+                    simpleData: {
+                        enable: true,
+                        idKey: "id",
+                        pIdKey: "parentId",
+                        rootPId: '0'
+                    }
+                },
+                view: {
+                    showIcon: false
+                },
+                callback: {
+                    onClick: function (event, treeId, treeNode) {
+                        var name = treeNode.name;
+                        // 获取用户角色对应用户
+                        admin.req('/api/sys/user', {
+                            pageNo: 1,
+                            pageSize: 10000,
+                            roleName: name
+                        }, function (res) {
+                            if (!res.ok) {
+                                return layer.msg('获取用户角色用户列表失败：' + res.message, {
+                                    icon: 5
+                                });
+                            }
+
+                            var userHtml = '',
+                                userData = res.data.list;
+                            for (var i = 0; i < userData.length; i++) {
+                                var tmp = userData[i],
+                                    tmpOrgs = [];
+                                // 剔除重复数据
+                                if (task_personnel_select.checkRepeatData(tmp.usid))
+                                    continue;
+                                for (var j = 0; j < tmp.orgs.length; j++) {
+                                    tmpOrgs.push(tmp.orgs[j].name);
+                                }
+                                userHtml +=
+                                    '<tr data-id="' + tmp.usid + '" data-name="' +
+                                    tmp.usname + '"><td>' +
+                                    tmp.usname + '</td><td>' + tmpOrgs.join('，') +
+                                    '</td></tr>';
+                            }
+                            $('#select-box-role').html(userHtml);
+                            $('input:radio').click(function () {
+                                CheckboxArrId = this.value;
+                                CheckboxArr={
+                                    name: this.getAttribute('usname'),
+                                    id: this.value,
+                                    remark: this.getAttribute('remark')
+                                };
+                                console.log(CheckboxArr)
+
+                            });
+                            if (userData.length === 0) {
+                                return layer.msg(treeNode.name + ' 无用户', {
+                                    icon: 0
+                                });
+                            }
+                        });
+                    }
+                }
+            };
+            var zNodes = d.data.map(function (item) {
+                return {
+                    id: item.rid,
+                    name: item.rname,
+                    pid: '0'
+                };
+            });
+            zTreeObj = $.fn.zTree.init($("#select-role"), setting, zNodes);
+        });
+
+        // 初始化已选框列表
+        (function () {
+            var selectedDatas = task_personnel_select.selectedData,
+                selectedHtml = '';
+            console.log(selectedDatas)
+            for (var i = 0; i < selectedDatas.length; i++) {
+                var tmp = selectedDatas[i];
+                selectedHtml += '<tr data-id="' + tmp.id + '" " data-remark="' + tmp.remark + '" data-name="' + tmp.name + '" style="width: 33%!important;display: inline-block;text-align: center">' +
+                    '<td>' + tmp.name + '</td>' +
+                    '</tr>';
+            }
+            $('#selectd-box-selected').append(selectedHtml);
+        })();
+
+    });
+
+    // TODO: 移动端适配
+</script>
+</body>
+
+</html>

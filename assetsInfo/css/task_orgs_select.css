@@ -1,0 +1,265 @@
+/*
+ * File   : task_orgs_select.css
+ * Created: Saturday September 29th 2018 9:43:24 am
+ * Author : yuchunyu97
+ * License: MIT License
+ * 
+ * Copyright (c) 2018 yuchunyu97
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * -----
+ * Last Modified: Tuesday October 30th 2018 1:40:25 pm
+ * Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+ * -----
+ * Description: 组织机构选择插件样式表
+ * -----
+ * HISTORY:
+ */
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    background-color: #fbfbfb;
+}
+
+.layui-fluid {
+    height: 100%;
+    margin: 0;
+    padding: 15px 0;
+    box-sizing: border-box;
+}
+
+/**
+ *
+ * 卡片风格DIY
+ *
+ */
+
+
+.layui-fluid .layui-tab-title {
+    padding-left: 95px;
+    padding-left: 15px;
+    border-color: #6cb4e2;
+    border-bottom-width: 2px;
+}
+
+.layui-fluid .layui-tab-title .layui-this {
+    color: #fff;
+    background-color: #6cb4e2;
+}
+
+.layui-fluid .layui-tab-title .layui-this:after {
+    border-color: #6cb4e2;
+}
+
+/**
+ *
+ * 布局DIY
+ *
+ */
+
+
+.layui-fluid .person-container {
+    height: calc(100% - 42px);
+    box-sizing: border-box;
+}
+
+.layui-fluid .person-container .person-container-l {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.layui-fluid .person-container .person-container-l .layui-tab-content {
+    height: 100%;
+    box-sizing: border-box;
+    padding: 15px;
+}
+
+.layui-fluid .person-container .person-container-l .layui-tab-content .layui-tab-item {
+    height: 100%;
+}
+
+.layui-fluid .person-container .person-container-r {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.layui-fluid .person-container .person-container-l .layui-row,
+.layui-fluid .person-container .person-container-l .layui-row>div,
+.layui-fluid .person-container .person-container-r .layui-row,
+.layui-fluid .person-container .person-container-r .layui-row>div {
+    height: 100%;
+}
+
+
+/**
+ *
+ * 搜索框
+ *
+ */
+
+.layui-fluid .person-container .person-container-l .layui-tab-content .layui-input-inline {
+    width: 100%;
+}
+
+.layui-fluid .person-container .person-container-l .layui-tab-content .layui-input-inline .layui-icon-search {
+    /* background-color: #e6e6e6; */
+    color: #8db9d6;
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+/**
+ *
+ * 选择方向
+ *
+ */
+.person-selected-direction {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-40px);
+    width: 100%;
+}
+
+.person-container-r .person-selected-direction {
+    left: -5px;
+}
+
+.person-selected-direction i {
+    background-color: #c3d5e3;
+    display: block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 30px;
+    font-weight: 900;
+    color: #fff;
+    margin: 20px auto;
+    cursor: pointer;
+}
+
+.person-selected-direction i:hover {
+    opacity: 0.7;
+}
+
+/**
+ *
+ * 已选中
+ *
+ */
+.person-selected-container {
+    padding: 15px;
+    padding-top: 60px;
+}
+
+.person-selected {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid #e6e6e6;
+    overflow: auto;
+    background-color: #fff;
+}
+
+
+/**
+ *
+ * 待选择
+ *
+ */
+
+.person-select-box {
+    width: 100%;
+    height: calc(100% - 45px);
+}
+
+.person-select-box .person-select-box-t {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    border: 1px solid #e6e6e6;
+    overflow: auto;
+    transition: all .3s;
+    box-sizing: border-box;
+    padding: 15px;
+}
+
+/* .person-select-box .person-select-box-t {
+    margin-bottom: 4%;
+    padding: 15px;
+} */
+
+/* 左侧待选框中选中行的样式 */
+
+/* .person-select-box .person-select-box-b .person-selected-tobe {
+    color: #67C23A;
+} */
+
+/* 右侧已选框中选中行的样式 */
+.person-selected-del {
+    color: #F56C6C;
+}
+
+
+/**
+ *
+ * 表格样式重写
+ *
+ */
+.layui-table {
+    margin: 0;
+}
+
+.layui-table tr {
+    cursor: pointer;
+}
+
+/**
+ *
+ * zTree 样式重写
+ *
+ */
+
+.ztree * {
+    font: 14px Helvetica Neue, Helvetica, PingFang SC, Tahoma, Arial, sans-serif !important;
+}
+
+
+/**
+ *
+ * 移动端适配
+ *
+ */
+@media screen and (max-width: 768px) {
+    .layui-form-item .layui-input-inline {
+        margin: 0;
+        left: 0;
+    }
+}

@@ -1,0 +1,1736 @@
+<style>
+    .vehicleRepair, .propertyId_select {
+        height: 30px;
+        border: 1px solid #999;
+        border-radius: 3px;
+    }
+
+    body {
+        overflow-y: hidden;
+    }
+    /*导航隐藏*/
+    .layui-layout-admin .admin-breadcrumb{
+        display: none;
+    }
+    /*.ztree li span.button.switch {*/
+    /*width: 18px;!important;*/
+    /*height: 18px;!important;*/
+    /*}*/
+    /*.ztree li span.button.center_docu {*/
+    /*background-position: -56px -18px;!important;*/
+    /*}*/
+    /*.ztree li span.button {*/
+    /*background-image:url("../../assetsInfo/libs/zTree/css/metroStyle/img/zTreeStandard.png") !important;*/
+    /**/
+    /*}*/
+    .tree-block{
+        width: 240px;
+        height: 100%;
+        float: left;
+        color: #F5F5F5;
+        background-color: #333  !important;
+        padding: 15px 0;
+        position: fixed;
+        overflow: hidden;
+    }
+    .ztree li span.button.switch {
+        width: 30px;
+        height: 21px;
+        float: right;
+    }
+    html ,body,.layui-layout.layui-layout-admin ,.layui-body,.layui-row,.tree-block{
+        height: 100%;
+    }
+
+    .dofer .layui-this{
+        background: #00B1FF!important;
+        color:#cecece!important;
+    }
+    .ztree li a{
+        color: #fff!important;
+    }
+    .searchInput{
+        margin-top: 7px;
+        width: 100px;border:none;border-radius: 20px;
+        background: #00B1FF;
+        border:1px solid #f3f3f3;
+        font-size: 12px;
+        height: 20px;
+        padding-left: 5px;
+    }
+    .dofer li:hover{
+        background: #00B1FF!important;
+        color:#cecece!important;
+    }
+    .dofer button{
+        background: #F6BA12!important;
+        margin: 0.5px 0;
+        color:#fff;
+        border: none;
+        width: 95%!important;
+    }
+    .dropdown-menu{
+        min-width: 0!important;
+    }
+    .ownerBox button{
+        padding: 0;
+        display: inline-block;
+        background: transparent;
+        border: none!important;
+        color: #fff!important;
+        font-size: 12px;
+        padding-top: 4px;
+        float: right;
+        padding-right: 10px;
+    }
+    .ztree button{
+        width: auto!important;
+        padding: 0!important;
+        margin: 0!important;
+        background-color: transparent!important;
+        height: 21px;
+    }
+    body .ztree li a.curSelectedNode {
+        padding-top: 0px;
+        background-color: transparent;
+        color: black;
+        height: 21px;
+        opacity: 1;
+    }
+    body .ztree li span.button {
+        line-height: 0;
+        margin: 0;
+        padding: 0;
+        width: 21px;
+        height: 21px;
+        display: inline-block;
+        vertical-align: middle;
+        border: 0 none;
+        cursor: pointer;
+        outline: none;
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        background-image: url(../../assetsInfo/libs/zTree/css/metroStyle/img/metrotree.png);
+    }
+    /*body .ztree li ul.line {*/
+    /*background: url(../../assetsInfo/libs/zTree/css/metroStyle/img/line_connsolid.png) 0 0 repeat-y;*/
+    /*}*/
+    body .ztree li span.button.roots_open {
+        background-position: -87px 0;
+    }
+    body .ztree li span.button.roots_close {
+        background-position:-110px 0;
+    }
+    body .ztree li span.button.center_close {
+        background-position:-110px 0;
+    }
+    body .ztree li span.button.center_open {
+        background-position: -87px 0;
+    }
+    .ztree li span.button.roots_close {
+        background-position:-110px 0 !important;
+    }
+    body  .ztree li span.button.center_docu {
+        background-position: -101px -187px;
+    }
+    body  .ztree li span.button.ico_open, body .ztree li span.button.ico_close,body .ztree li span.button.ico_docu {
+        background-position: -110px -18px;
+
+    }
+    body .ztree li ul {
+        margin: 0;
+        padding: 0 0 0 13px;
+    }
+    body  .ztree li span.button.bottom_docu {
+        background-position: -84px -119px;
+    }
+    body .ztree li.level0  a.level0 .button{
+        background-position: center center !important;
+    }
+    .ztree li.level0  a.level0  span.button.add {
+        margin-left: 2px;
+        margin-right: -1px;
+        background-position: -189px 0  !important;
+        vertical-align: top;
+    }
+    .ztree li.level0  a.level0  span.button.remove {
+        margin-left: 2px;
+        margin-right: -1px;
+        background-position: -189px -42px !important;
+        vertical-align: top;
+    }
+</style>
+<!-- zTree 样式 -->
+<link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+
+<div class="layui-row layui-col-space30">
+    <div class="tree-block">
+        <div class="grid-demo grid-demo-bg1" style="width: 240px">
+            <div class="layui-card-body" style="padding:0;">
+                <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="min-height: 100vh;background: #4275A4;overflow: unset">
+                    <div style="background-color: #00B1FF;">
+                        <div style="float: left; padding: 2px 6px 2px 10px;background: #00B1FF" >
+                            <input type="text" class="searchInput" placeholder="请输入关键字">
+                        </div>
+                        <div style="float: left;width: 10%;padding:7px 0 0 0 ;background: #00B1FF" >
+                            <i class="layui-icon layui-icon-search" style="font-size: 18px"></i>
+                        </div>
+                        <div style="float: left;width: 40%;text-align: center;margin-top: 3px" >
+                            <div class="btn-group dofer">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="    padding: 2px 14px;
+    margin-top: 5px;">新增
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu" style="text-align: center">
+                                    <li>
+                                        <button id="btn_addBuss" type="button" class="layui-btn layui-btn-sm layui-import">
+                                            <i class="layui-icon layui-icon-edit"></i>业务
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button id="btn_add" type="button" class="layui-btn layui-btn-sm layui-import">
+                                            <i class="layui-icon layui-icon-edit"></i>项目
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button id="btn_addTaks" type="button" class="layui-btn layui-btn-sm layui-import">
+                                            <i class="layui-icon layui-icon-edit"></i>任务
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div style="clear: both"></div>
+                    </div>
+                    <ul class="layui-tab-title dofer" style="position: inherit!important;background: #00B1FF!important;">
+                        <li class="layui-this">全部</li>
+                        <li>仅看我的</li>
+                        <li>我的关注</li>
+                    </ul>
+                    <div style="border-bottom: 1px solid #4275A4;">
+                        <div style="width: 35%;float: left">
+                            <h5 style="padding-left: 10px; font-size: 18px; color: #fff;">
+                                业务领域
+                            </h5>
+                        </div>
+                        <div style="width: 65%;float: left" class="ownerBox">
+
+                            <button id="closeAll" type="button" class="layui-btn layui-btn-sm layui-import" style="margin: 0!important;">
+                                关闭全部 <img src="../../assetsInfo/images/close.png" alt="" style="    padding: 2px 2px 6px 2px;">
+                            </button>
+                            <button id="expandAll" type="button" class="layui-btn layui-btn-sm layui-import">
+                                展开全部 <img src="../../assetsInfo/images/close.png" alt="" style="    padding: 2px 2px 6px 2px;">
+                            </button>
+                        </div>
+                        <div style="clear: both"></div>
+                    </div>
+                    <div class="layui-tab-content dofer" style="position: inherit!important;overflow-y: inherit;padding:0;">
+                        <div class="layui-tab-item layui-show">
+                            <ul id="select-org" class="ztree"></ul>
+                        </div>
+                        <!--<div class="layui-tab-item">内容2</div>-->
+                        <!--<div class="layui-tab-item">内容3</div>-->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div  style=" height: 100%;width: calc(100vw - 355px); float: right;">
+        <div id="t1" style="margin-bottom: 50px;display: none">
+            <img src="../../assetsInfo/images/xiangmu.png" alt="" >
+            <img src="../../assetsInfo/images/xiangmu1.png" alt="" id="">
+        </div>
+
+        <div id="table1">
+            <!-- 默认页下部表格容器 -->
+            <table id="tableContent" layui-hide lay-filter="tableContent"></table>
+        </div>
+    </div>
+
+</div>
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="track">保存</a>
+</script>
+
+<!-- zTree js 文件 -->
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/html" id="propertyId">
+    <input type="hidden" value={{d.propertyId}}>
+    <!--<a class="table-control-btn inuse" lay-event="enable">持续</a>-->
+    <!--<a class="table-control-btn unuse" lay-event="disable">新增</a>-->
+    <select name="vehicleRepair" class="propertyId_select" lay-filter="propertyId_select" lay-ignore="">
+        <option value="">-- 请选择 --</option>
+        <option value="cx">持续</option>
+        <option value="xz">新增</option>
+    </select>
+</script>
+
+<script type="text/html" id="deptId">
+    <!--<select name="orgId" xm-select="orgId" xm-select-skin="normal" xm-select-radio="">-->
+    <select name="deptId" xm-select="deptId" xm-select-skin="normal" xm-select-radio="" id="orgId" lay-filter="orgId">
+        <option value="">选择机构名</option>
+    </select>
+</script>
+
+<script type="text/html" id="vehicleStatus">
+    {{d.status.display}}
+</script>
+
+<script>
+    // 初始化 layui
+    layui.use(['table', 'formSelects', 'laydate'], function () {
+        $('.layui-col-md9').css("width",'calc(100vw - 310px)')
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            formSelects = layui.formSelects,
+
+            admin = layui.admin;
+        // 初始化组织机构列表
+        var url = "/api/budget/budget/tree";
+
+        var BudgetId = ''
+        admin.req(url, {
+            orgName: '',
+        }, function (d)
+        {
+            if (!d.ok) {
+                return layer.msg('获取组织机构列表失败：' + d.message, {
+                    icon: 5
+                });
+            }
+            // 生成 zTree
+            var setting = {
+//                async:{
+//                  enable : true
+//                },
+
+                data: {
+                    simpleData: {
+                        enable: true,
+                        idKey: "id",
+                        pIdKey: "parentId",
+                        rootPId: 0
+                    }
+                },
+                view: {
+                    dblClickExpand: false,
+                    showLine: true,
+                    selectedMulti: false,
+                    addHoverDom: addHoverDom,
+                    removeHoverDom: removeHoverDom,
+                    showIcon:true
+                },
+                edit: {
+                    enable: true,
+                    showRemoveBtn:true,
+                    showRenameBtn:false,
+                    editNameSelectAll: true,
+                    removeTitle:"删除"
+                },
+                callback: {
+                    onClick: function (event, treeId, treeNode) {
+                        console.log(treeNode)
+                        sessionStorage.setItem('changeNode', JSON.stringify(treeNode))
+                        $('#t1').show();
+                        $('#table1').hide();
+                        $('#tableContent').hide();
+
+                    },
+                    onRemove:onRemove
+                }
+            };
+
+            d.data.map(function (item) {
+                if(item.type==1){
+                    item.icon="../../assetsInfo/libs/zTree/css/metroStyle/img/file.png"
+                }
+            })
+            var  zNodes = d.data;
+            zTreeObj = $.fn.zTree.init($("#select-org"), setting, zNodes);
+            var nodeList = zTreeObj.getNodes();　　　　　　 //展开第一个根节点
+            // for(var i = 0; i < nodeList.length; i++) { //设置节点展开第二级节点
+            //     zTreeObj.expandNode(nodeList[i], true, true, true);
+            //     var nodespan = nodeList[i].children;
+            //     for(var j = 0; j < nodespan.length; j++) { //设置节点展开第三级节点
+            //         zTreeObj.expandNode(nodespan[j], true, true, true);
+            //     }
+            // }
+//渲染表格
+            // 渲染左侧表格树 这个表格接口 是post 请求 application.json
+            var renderTable = function(data) {
+                var heightTable = $(document).height()-145;
+                if (!data) {
+                    data = {};
+                }
+//                var processType = $("#loadWithParams").val();
+//                //判断事项类型
+//                var editFlag = true;
+//                if (processType == "finish") {
+//                    editFlag = false;
+//                    $(".layui-pull-right").hide();
+//                }
+
+//
+                var tableIns = table.render({
+                    // table参数
+                    elem: '#tableContent',
+                    url: admin.formatUrl('/api/budget/budget/page'),
+                    where: data,
+                    parseData: function(res) { //res 即为原始返回的数据
+                        return {
+                            "code": res.respCode, //解析接口状态
+                            "msg": res.message, //解析提示文本
+                            "count": res.data.count, //解析数据长度
+                            "data": res.data.list //解析数据列表
+                        };
+                    },
+                    method:'post',
+                    contentType : "application/json",
+                    page: {
+                        layout: ['prev', 'page', 'next', 'skip']
+                    },
+                    request: {
+                        pageName: 'page',
+                        limitName: 'pageSize'
+                    },
+                    text: {
+                        none: '当前未创建业务'
+                    },
+                    cols: [
+                        [ {
+                            type: 'numbers',
+                            title: '序号',
+                            fixed: 'left',
+                            rowspan: '2'
+                        }, {
+                            field: 'id',
+                            hide: true
+                        }, {
+                            field: 'deptName',
+                            // templet:'#deptId',
+                            title: '责任部门',
+                            align: 'center',
+                            rowspan: '2',
+                            width: 150,
+                            templet:function(d) {
+                                var text= d.deptName ? d.deptName : "";
+                                return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                            }
+                        }, {
+                            field: 'projectName',
+                            title: '业务名称',
+                            align: 'center',
+                            rowspan: '2',
+                            width: 200,
+                            //edit: editFlag,
+                            templet:function(d) {
+                                var text= d.projectName ? d.projectName : "";
+                                return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                            }
+                        }, {
+                            field: 'teamName',
+                            title: '项目组名称',
+                            align: 'center',
+                            rowspan: '2',
+                            width: 200,
+                            //edit: editFlag,
+                            templet:function(d) {
+                                var text= d.teamName ? d.teamName : "";
+                                return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                            }
+                        }, {
+                            field: 'propertyId',
+                            title: '业务性质',
+                            align: 'center',
+                            width: 125,
+                            rowspan: '2',
+                            templet:function(d) {
+                                var text= d.propertyId=='cx' ?'持续': "新增";
+                                return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                            }
+                        }, {
+                            field: 'usname',
+                            title: '业务经理',
+                            align: 'center',
+                            rowspan: '2',
+                            //edit: editFlag,
+                            templet:function(d) {
+                                var text= d.usname ? d.usname : "";
+                                return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                            }
+                        },
+                            {
+                                title: '业务周期',
+                                align: 'center',
+                                colspan: '2'
+                            },
+                            {
+                                field: 'currentYearEstimate',
+                                title: '2018年收入实际预估（万元）',
+                                align: 'center',
+                                width: '200',
+                                rowspan: '2',
+                                //edit: editFlag
+                            }, {
+                            field: 'contractBudget',
+                            title: '2019年合同预算（万元）',
+                            align: 'center',
+                            width: '200',
+                            rowspan: '2',
+                            templet: function(d){
+                                var num=0;
+                                for(var i=0;i<12;i++)
+                                {
+                                    if (d['nextYear'+i+'Deal'])
+                                    {
+                                        num+=d['nextYear'+i+'Deal'];
+                                    }
+                                }
+                                return num;
+                            }
+                        }, {
+                            field: 'incomeBudget',
+                            title: '2019年收入预算（万元）',
+                            align: 'center',
+                            width: '200',
+                            rowspan: '2',
+                            templet: function(d){
+                                var num=0;
+                                for(var i=0;i<12;i++)
+                                {
+                                    if (d['nextYear'+i+'Income'])
+                                    {
+                                        num+=d['nextYear'+i+'Income'];
+                                    }
+                                }
+                                return num;
+                            }
+                        }, {
+                            field: 'season1',
+                            title: '2019年1月',
+                            align: 'center',
+                            colspan: '2'
+                        }, {
+                            field: 'season2',
+                            title: '2019年2月',
+                            align: 'center',
+                            colspan: '2'
+                        }, {
+                            field: 'season3',
+                            title: '2019年3月',
+                            align: 'center',
+                            colspan: '2'
+                        }, {
+                            field: 'season4',
+                            title: '2019年4月',
+                            align: 'center',
+                            colspan: '2'
+                        },
+
+                            {
+                                field: 'season1',
+                                title: '2019年5月',
+                                align: 'center',
+                                colspan: '2'
+                            }, {
+                            field: 'season2',
+                            title: '2019年6月',
+                            align: 'center',
+                            colspan: '2'
+                        }, {
+                            field: 'season3',
+                            title: '2019年7月',
+                            align: 'center',
+                            colspan: '2'
+                        }, {
+                            field: 'season4',
+                            title: '2019年8月',
+                            align: 'center',
+                            colspan: '2'
+                        },
+                            {
+                                field: 'season1',
+                                title: '2019年9月',
+                                align: 'center',
+                                colspan: '2'
+                            }, {
+                            field: 'season2',
+                            title: '2019年10月',
+                            align: 'center',
+                            colspan: '2'
+                        }, {
+                            field: 'season3',
+                            title: '2019年11月',
+                            align: 'center',
+                            colspan: '2'
+                        }, {
+                            field: 'season4',
+                            title: '2019年12月',
+                            align: 'center',
+                            colspan: '2'
+                        },
+                            {
+                                field: 'remark',
+                                title: '备注',
+                                align: 'center',
+                                rowspan: '2',
+                                //edit: editFlag
+                                templet: function(d) {
+                                    var text = d.remark ? d.remark:"";
+                                    return '<div title="'+text+'"><span>'+text+'</span></div>'
+                                },
+
+                            }],
+                        [{
+                            field: 'cycleBegin',
+                            title: '开始',
+                            align: 'center',
+                            templet: function(d) {
+                                if (!d.cycleBegin)
+                                {
+                                    return "";
+                                }
+                                var time= d.cycleBegin ? new Date(parseInt(d.cycleBegin)).toLocaleDate() : "";
+                                return '<div title="'+time+'"><span>'+ time +'</span></div>'
+                            },
+                            //edit: editFlag
+                        }, {
+                            field: 'cycleEnd',
+                            title: '结束',
+                            align: 'center',
+                            templet: function(d) {
+                                if (!d.cycleEnd)
+                                {
+                                    return "";
+                                }
+                                var time= d.cycleEnd ? new Date(parseInt(d.cycleEnd)).toLocaleDate() : "";
+                                return '<div title="'+time+'"><span>'+ time +'</span></div>'
+                            },
+                            //edit: editFlag
+                        },
+                            {
+                                field: 'nextYear1Deal',
+                                title: '合同（万元）',
+                                align: 'center',
+                                //edit: editFlag
+                            }, {
+                            field: 'nextYear1Income',
+                            title: '收入（万元）',
+                            align: 'center',
+                            //edit: editFlag
+                        },
+                            {
+                                field: 'nextYear2Deal',
+                                title: '合同（万元）',
+                                align: 'center',
+                                //edit: editFlag
+                            }, {
+                            field: 'nextYear2Income',
+                            title: '收入（万元）',
+                            align: 'center',
+                            //edit: editFlag
+                        }, {
+                            field: 'nextYear3Deal',
+                            title: '合同（万元）',
+                            align: 'center',
+                            //edit: editFlag
+                        }, {
+                            field: 'nextYear3Income',
+                            title: '收入（万元）',
+                            align: 'center',
+                            //edit: editFlag
+                        }, {
+                            field: 'nextYear4Deal',
+                            title: '合同（万元）',
+                            align: 'center',
+                            //edit: editFlag
+                        }, {
+                            field: 'nextYear4Income',
+                            title: '收入（万元）',
+                            align: 'center',
+                            //edit: editFlag
+                        },
+
+                            {
+                                field: 'nextYear5Deal',
+                                title: '合同（万元）',
+                                align: 'center',
+                                //edit: editFlag
+                            }, {
+                            field: 'nextYear5Income',
+                            title: '收入（万元）',
+                            align: 'center',
+                            //edit: editFlag
+                        },
+                            {
+                                field: 'nextYear6Deal',
+                                title: '合同（万元）',
+                                align: 'center',
+                                //edit: editFlag
+                            }, {
+                            field: 'nextYear6Income',
+                            title: '收入（万元）',
+                            align: 'center',
+                            //edit: editFlag
+                        },
+                            {
+                                field: 'nextYear7Deal',
+                                title: '合同（万元）',
+                                align: 'center',
+                                //edit: editFlag
+                            },
+                            {
+                                field: 'nextYear7Income',
+                                title: '收入（万元）',
+                                align: 'center',
+                                //edit: editFlag
+                            }, {
+                            field: 'nextYear8Deal',
+                            title: '合同（万元）',
+                            align: 'center',
+                            //edit: editFlag
+                        }, {
+                            field: 'nextYear8Income',
+                            title: '收入（万元）',
+                            align: 'center',
+                            //edit: editFlag
+                        }, {
+                            field: 'nextYear9Deal',
+                            title: '合同（万元）',
+                            align: 'center',
+                            //edit: editFlag
+                        }, {
+                            field: 'nextYear9Income',
+                            title: '收入（万元）',
+                            align: 'center',
+                            //edit: editFlag
+                        },
+                            {
+                                field: 'nextYear10Deal',
+                                title: '合同（万元）',
+                                align: 'center',
+                                //edit: editFlag
+                            }, {
+                            field: 'nextYear10Income',
+                            title: '收入（万元）',
+                            align: 'center',
+                            //edit: editFlag
+                        },
+                            {
+                                field: 'nextYear11Deal',
+                                title: '合同（万元）',
+                                align: 'center',
+                                //edit: editFlag
+                            }, {
+                            field: 'nextYear11Income',
+                            title: '收入（万元）',
+                            align: 'center',
+                            //edit: editFlag
+                        },
+                            {
+                                field: 'nextYear12Deal',
+                                title: '合同（万元）',
+                                align: 'center',
+                                //edit: editFlag
+                            }, {
+                            field: 'nextYear12Income',
+                            title: '收入（万元）',
+                            align: 'center',
+                            //edit: editFlag
+                        },
+
+                        ]
+                    ],
+                    height: heightTable,
+                    // 渲染表格完成后，去除加载动画
+                    done: function(res, curr, count) {
+                        $(".vehicleRepair").attr("disabled", "disabled")
+                        $(".propertyId_select").attr("disabled", "disabled")
+
+                        // 回显项目所属平台/领域
+                        $("[data-field = 'domainId']").children().each(function() {
+                            var value = $($(this).find("input")[0]).val();
+                            if (value != "null") {
+                                var select = $(this).children("select")[0];
+                                $(select).val(value);
+                            }
+                        });
+                        //回显业务性质
+                        $("[data-field = 'propertyId']").children().each(function() {
+                            var value = $($(this).find("input")[0]).val();
+                            if (value != "null") {
+                                var select = $(this).children("select")[0];
+                                $(select).val(value);
+                            }
+                        });
+                        //修复表格中放下拉框，下拉框下部被隐藏一部分的bug
+                        var tableElem = this.elem.next('.layui-table-view');
+                        //                count || tableElem.find('.layui-table-header').css('overflow', 'auto');
+                        layui.each(tableElem.find('tbody select'), function(index, item) {
+                            var elem = $(item);
+                            elem.parents('div.layui-table-cell').css('overflow', 'visible');
+                        });
+                        //重新渲染表格下拉框
+                        form.render();
+                        //修复表格固定列的问题
+                        $(window).resize();
+                        //初始化表格编辑校验
+                        LayValidator.init({
+                            filter: 'tableContent', //与待校验table元素的lay-filter属性对应
+                            cols: [ //需要校验的列设置
+                                {
+                                    field: 'projectName',
+                                    maxLength: 40 //非必填，限制输入长度
+                                }, {
+                                    field: 'teamName',
+                                    maxLength: 10
+                                }, {
+                                    field: 'pm',
+                                    maxLength: 10
+                                }, {
+                                    field: 'currentYearDeal',
+                                    type: 'float2', //非必填，输入类型限制，支持：integer，float（整数+小数），float2（小数点后两位）
+                                    notEmpty: true
+                                }, {
+                                    field: 'currentYearEstimate',
+                                    type: 'float2', //非必填，输入类型限制，支持：integer，float（整数+小数），float2（小数点后两位）
+                                    notEmpty: true
+                                }, {
+                                    field: 'nextYear1Deal',
+                                    type: 'float2',
+                                    notEmpty: true
+                                }, {
+                                    field: 'nextYear2Deal',
+                                    type: 'float2',
+                                    notEmpty: true
+                                }, {
+                                    field: 'nextYear3Deal',
+                                    type: 'float2',
+                                    notEmpty: true
+                                }, {
+                                    field: 'nextYear4Deal',
+                                    type: 'float2',
+                                    notEmpty: true
+                                }, {
+                                    field: 'nextYear1Income',
+                                    type: 'float2',
+                                    notEmpty: true
+                                }, {
+                                    field: 'nextYear2Income',
+                                    type: 'float2',
+                                    notEmpty: true
+                                }, {
+                                    field: 'nextYear3Income',
+                                    type: 'float2',
+                                    notEmpty: true
+                                }, {
+                                    field: 'nextYear4Income',
+                                    type: 'float2',
+                                    notEmpty: true
+                                }, {
+                                    field: 'remark',
+                                    maxLength: 450
+                                }
+                                //some other cols..
+                            ],
+                            success: function(obj) {
+                                var updateData = {
+                                    id: obj.data.id
+                                };
+                                updateData[obj.field] = obj.value;
+                                admin.req('/api/budget/budget', updateData, function(res) {
+                                    if (res.ok) {
+                                        LayCalculator.calc(obj,'{nextYear1Deal}+{nextYear2Deal}+{nextYear3Deal}+{nextYear4Deal}','contractBudget');
+                                        LayCalculator.calc(obj,'{nextYear1Income}+{nextYear2Income}+{nextYear3Income}+{nextYear4Income}','incomeBudget');
+                                    } else {
+                                        layer.msg('更新失败' + res.message, {
+                                            icon: 5
+                                        });
+                                    }
+                                }, {
+                                    method: 'PUT'
+                                });
+                            },
+                            error: function(obj) {
+
+                            },
+                            final: function(obj) {
+                            }
+                        });
+                    },
+                    // 列宽最少 120，防止在小屏幕上显示不全列标题
+                    cellMinWidth: 120
+                });
+            }
+            // 初始化，执行一次渲染表格树
+            setTimeout(function () {
+                renderTable();
+            },300)
+
+
+            var userInfo = config.getAccount();
+
+            if (userInfo.orgs.length > 0) {
+                orgId = userInfo.orgs[0].id;
+            }
+
+            //        编辑按钮
+            $('#btn_edit').on('click', function () {
+                var checkStatus = table.checkStatus('tableContent-task');
+                console.log(checkStatus);
+                var node = JSON.parse(sessionStorage.getItem('changeNode'));
+
+                if (node.type == 1) {
+                    if (node == null) {
+                        return layer.msg('请选择1个要编辑的业务', {
+                            icon: 0
+                        });
+                    }
+                    BudgetpopMenu("edit", node);
+                } else if (node.type == 2) {
+                    if (node == null) {
+                        return layer.msg('请选择1个要编辑的项目', {
+                            icon: 0
+                        });
+                    }
+                    popMenu("edit", checkStatus.data[0]);
+                } else if (node.type == 3) {
+                    BudgetId = node.id
+                    if (node == null) {
+                        return layer.msg('请选择1个要编辑的任务', {
+                            icon: 0
+                        });
+                    }
+                    TaskpopMenu("edit", node);
+                } else if (node.type == 4) {
+                    if (node == null) {
+                        return layer.msg('请选择1个要编辑的子任务', {
+                            icon: 0
+                        });
+                    }
+                    popMenu("edit", checkStatus.data[0]);
+                }
+
+
+            });
+
+            function beforeRemove(treeId, treeNode) {
+                if (confirm("删除  " + treeNode.Name + "?"))
+                    return true;
+                else
+                    return false;
+            };
+
+//刷新树节点
+            function addTree() {
+                admin.req(url, {
+                    orgName: '',
+                }, function (d)
+                {
+                    if (!d.ok) {
+                        return layer.msg('获取组织机构列表失败：' + d.message, {
+                            icon: 5
+                        });
+                    }
+                    // 生成 zTree
+                    var setting = {
+//                async:{
+//                  enable : true
+//                },
+
+                        data: {
+                            simpleData: {
+                                enable: true,
+                                idKey: "id",
+                                pIdKey: "parentId",
+                                rootPId: 0
+                            }
+                        },
+                        view: {
+                            dblClickExpand: false,
+                            showLine: true,
+                            selectedMulti: false,
+                            addHoverDom: addHoverDom,
+                            removeHoverDom: removeHoverDom,
+                            showIcon: true
+                        },
+                        edit: {
+                            enable: true,
+                            showRemoveBtn: true,
+                            showRenameBtn: false,
+                            editNameSelectAll: true,
+                            removeTitle: "删除"
+                        },
+                        callback: {
+                            onClick: function (event, treeId, treeNode) {
+                                console.log(treeNode)
+                                $('#t1').show();
+                                $('#table1').hide();
+                                $('#tableContent').hide();
+
+                                sessionStorage.setItem('changeNode', JSON.stringify(treeNode))
+
+                            },
+                            onRemove: onRemove
+                        }
+                    };
+
+                    d.data.map(function (item) {
+                        if (item.type == 1) {
+                            item.icon = "../../assetsInfo/libs/zTree/css/metroStyle/img/file.png"
+                        }
+                    })
+                    var zNodes = d.data;
+                    zTreeObj = $.fn.zTree.init($("#select-org"), setting, zNodes);
+                })
+            }
+
+            function onRemove(e, treeId, treeNode) {
+                $('#t1').show();
+
+                //如果节点是业务
+                if (treeNode.type == 1) {
+                    budgetDel(treeNode)
+
+                    $('#tableContent').hide();
+                    //如果节点是项目
+                } else if (treeNode.type == 2) {
+                    projectDel(treeNode)
+                    //如果节点是任务
+                } else if (treeNode.type == 3) {
+                    BudgetId = treeNode.id
+                    taskDel(treeNode)
+                    //如果节点是子任务
+                } else if (treeNode.type == 4) {
+
+                    childTaskDel(treeNode)
+                }
+            };
+
+            function addHoverDom(treeId, treeNode) {
+                console.log(treeId, treeNode);
+                var aObj = $("#" + treeNode.tId + "_a");
+                if ($("#diyBtn_"+treeNode.id).length>0) return;
+                var editStr = "<span id='diyBtn_space_" +treeNode.id+ "' ></span>"
+                    + "<button type='button' class='diyBtn1' id='diyBtn_" + treeNode.id
+                    + "' title='编辑' onfocus='this.blur();'><span class=\"button add\" id=\"select-org_4_add\"   ></span></button>";
+                //button 中间添加图片下·
+                aObj.append(editStr);
+                var btn = $("#diyBtn_"+treeNode.id);
+                if (btn) btn.bind("click", function(){
+                    //弹出弹出框
+                    if (treeNode.type == 1) {
+                        if (treeNode == null) {
+                            return layer.msg('请选择1个要编辑的业务', {
+                                icon: 0
+                            });
+                        }
+                        BudgetpopMenu("edit", treeNode);
+                    } else if (treeNode.type == 2) {
+                        if (treeNode == null) {
+                            return layer.msg('请选择1个要编辑的项目', {
+                                icon: 0
+                            });
+                        }
+                        popMenu("edit", treeNode);
+                    } else if (treeNode.type == 3) {
+                        BudgetId = treeNode.id
+                        if (treeNode == null) {
+                            return layer.msg('请选择1个要编辑的任务', {
+                                icon: 0
+                            });
+                        }
+                        TaskpopMenu("edit", treeNode);
+                    } else if (treeNode.type == 4) {
+                        if (treeNode == null) {
+                            return layer.msg('请选择1个要编辑的子任务', {
+                                icon: 0
+                            });
+                        }
+                        popMenu("edit", treeNode);
+                    }
+                });
+            };
+            $("#btn_add").on('click', function () {
+                popMenu("add");
+
+            })
+            $("#btn_addBuss").on('click', function () {
+                localStorage.setItem('type','post');
+                BudgetpopMenu("add");
+            });
+            $("#btn_addTaks").on('click', function () {
+                TaskpopMenu("add");
+            });
+
+
+            function popMenu(type, data) {
+                // 判断操作事件
+                // $("#myrame").attr("src",'components/tpl/project_save_form.html')
+                if (type === 'add') {
+                    var title = '新增项目';
+                    data = {};
+                } else if (type === 'edit') {
+                    var title = '编辑项目：' + data.name
+                }
+                data.handleType = type;
+
+                admin.popupCenter({
+                    title: title,
+                    path: 'components/tpl/project_save_form.html',
+                    finish: function() {
+                        table.reload('tableContent-pro', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    },
+                    success: function() {
+                        // $("#finishedStatus").chosen({
+                        //     disable_search: true
+                        // });
+                        // 初始化人员列表
+                        admin.req('/api/sys/user', {
+                            pageNo: 1,
+                            pageSize: 10000
+                        }, function(res)
+                        {
+                            var arr = res.data.list,
+                                selectArr=[],
+                                formSelectArr = [];
+                            for (var i = 0; i < arr.length; i++) {
+                                formSelectArr.push({
+                                    name: arr[i].usname,
+                                    value: arr[i].usid
+                                });
+                            }
+                            formSelects.data('projectMemberIds_pop', 'local', {
+                                arr: formSelectArr
+                            });
+                            formSelects.data('projectLeader_pop', 'local', {
+                                arr: formSelectArr
+                            });
+                            formSelects.btns('projectMemberIds_pop', ['select', 'remove']);
+                            if(data.mapList)
+                            {
+                                for (var i = 0; i < data.mapList.length; i++) {
+                                    selectArr.push(data.mapList[i].id);
+                                }
+                                layui.formSelects.value('projectMemberIds_pop', selectArr);
+                            }
+                            if ( data.projectLeaderId)
+                            {
+                                layui.formSelects.value('projectLeader_pop', [data.projectLeaderId]);
+                            }
+                            getBusiness(data.businessId);
+                            setFormValue(data);
+                        });
+
+                        admin.req('/api/budget/budget', {
+
+                        }, function(res) {
+                            var arr = res.data,
+                                elem = $('#business_blong');
+                            for (var i = 0; i < arr.length; i++) {
+                                if(arr[i].projectName)
+                                {
+                                    elem.append('<option value="' + arr[i].id + '">' + arr[i].projectName + '</option>');
+
+                                }
+                            }
+                            formSelects.render('business_blong');
+                            formSelects.btns('business_blong', []);
+                            if(data.budgetId)
+                            {
+                                formSelects.value('business_blong', [data.budgetId]);
+                            }
+                        });
+                    }
+                });
+            }
+            function getBusiness(businessId) {
+                admin.req('/api/budget/business/query/all', {}, function(res) {
+                    var arr = res.data,
+                        tmparr = [];
+                    tmparr.push({name:"全部业务",id:"1",parentId:"0"});
+                    for (var i = 0; i < arr.length; i++) {
+
+                        tmparr.push({
+                            name: arr[i].name,
+                            value: arr[i].id,
+                            id: arr[i].id,
+                            parentId: arr[i].parentId?arr[i].parentId:'1'
+                        });
+                    }
+
+                    var formSelectArr = admin.toTree(tmparr);
+                    formSelects.data('business_pop', 'local', {
+                        arr: formSelectArr
+                    });
+                    formSelects.btns('business_pop', []);
+                    if (businessId){
+                        formSelects.value('business_pop', [businessId]);
+                    }
+
+
+                });
+            };
+            function removeHoverDom(treeId, treeNode) {
+                $("#diyBtn_"+treeNode.id).unbind().remove();
+                $("#diyBtn_space_" +treeNode.id).unbind().remove();
+            };
+            //业务弹窗
+            function BudgetpopMenu(type, data) {
+                // $("#myrame").attr("src",'components/tpl/budget_save_form.html ')
+                console.log(type, data);
+                var params = {};
+
+                var title = '新增业务';
+                if (data) {
+                    title = '编辑业务填报' + data.name;
+                    params = data;
+                }
+                params.handleType = type;
+                admin.popupCenter({
+                    title: title,
+                    width: 800,
+                    path: 'components/tpl/budget_save_form.html',
+                    finish: function () {
+                        table.reload('tableContent-pro', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    },
+                    success: function () {
+                        var propertyOption = '   <option value="">-- 请选择 --</option>\n' +
+                            '        <option value="cx">持续</option>\n' +
+                            '        <option value="xz">新增</option>';
+
+                        var propertyElem = $('#property_pop');
+                        propertyElem.append(propertyOption);
+                        formSelects.render('property_pop');
+                        formSelects.btns('property_pop', []);
+                        $('#popmenuCancle').on('click', function () {
+                            admin.closePopupCenter();
+                        });
+                        setBudgetFormValue(params)
+                        getBudgetDepMember(params);
+                    }
+                });
+            }
+            function setFormValue(obj) {
+                var title = $('.layui-tpl-container .layui-card-header');
+                var formNames = ['id', 'handleType', 'name', 'planStartTime', 'planEndTime', 'taskStatus'];
+
+                obj.title && title.text(obj.title);
+                obj.planStartTime = obj.planStartTime ? formatDate(obj.planStartTime) : '';
+                obj.planEndTime = obj.planEndTime ? formatDate(obj.planEndTime) : '';
+                for (var i = 0; i < formNames.length; i++) {
+                    if (obj[formNames[i]]) {
+                        $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                    } else {
+                        $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val('');
+                    }
+                }
+            }
+            //业务
+            function getBudgetDepMember(obj) {
+                var url = url = '/api/budget/budget/users';
+                admin.req(url, {}, function (res) {
+                    var arr = res.data;
+                    elem = $('#leader_blong')
+                    if (arr) {
+                        elem.empty();
+                        for (var i = 0; i < arr.length; i++) {
+                            if (arr[i].name) {
+                                elem.append('<option value="' + arr[i].id + '">' + arr[i].name + '</option>');
+                            }
+                        }
+                    }
+                    formSelects.render('leader_blong');
+                    formSelects.btns('leader_blong', []);
+                    if (obj.pm) {
+                        formSelects.value('leader_blong', [obj.pm])
+                    }
+
+
+                });
+
+            }
+
+            function setBudgetFormValue(obj) {
+                var inputs = $('.layui-tpl-container').find('input'),
+                    title = $('.layui-tpl-container .layui-card-header'),
+                    formNames = ['id', 'handleType', 'projectName', 'remark', 'pm',
+                        'teamName', 'cycle', 'currentYearDeal', 'currentYearEstimate',
+                    ];
+                if (obj.cycleBegin & obj.cycleEnd) {
+
+                    obj.cycleBegin = new Date(parseInt(obj.cycleBegin)).toLocaleDate();
+                    obj.cycleEnd = new Date(parseInt(obj.cycleEnd)).toLocaleDate();
+                    obj.cycle = obj.cycleBegin + ' - ' + obj.cycleEnd;
+                }
+                if (obj.propertyId) {
+                    formSelects.value('property_pop', [obj.propertyId]);
+                }
+                for (i = 1; i < 13; i++) {
+                    var Deal = 'nextYear' + i + "Deal";
+                    var Income = 'nextYear' + i + "Income";
+                    formNames.push(Deal);
+                    formNames.push(Income);
+                }
+                obj.title && title.text(obj.title);
+                for (var i = 0; i < formNames.length; i++) {
+                    if (obj[formNames[i]]) {
+                        $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                    } else {
+                        $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val('');
+                    }
+                }
+                if (obj.remark) {
+                    $('.layui-tpl-container  textarea[name="remark"]').val(obj.remark);
+                }
+                if (obj.handleType == 'add') {
+                    $('.noIncome').hide();
+                }
+                else {
+                    if (obj.property === "0") {
+                        $('.noIncome').hide();
+                    }
+
+                    else {
+                        $("input[name=currentYearEstimate]").val(0);
+                        $("input[name=currentYearDeal]").val(0);
+                        $("input[name=currentYearEstimate]").attr("disabled", "disabled");
+                        $("input[name=currentYearDeal]").attr("disabled", "disabled");
+                        $("input[name=currentYearEstimate]").addClass("layui-disabled");
+                        $("input[name=currentYearDeal]").addClass("layui-disabled");
+                        $(".income").hide();
+                        $(".noIncome").show();
+                        $('input:radio:eq(' + obj.property + ')').prop('checked', 'checked');
+                    }
+                }
+                form.render();
+            }
+
+            form.verify({
+                isRealNumber: function (value) {
+                    if (value != null & value != "" & value != undefined) {
+                        if (isNaN(value)) {
+                            return '请输入合法数字';
+                        }
+                    }
+                },
+            })
+
+            /*
+                     任务弹窗
+                    */
+            function TaskpopMenu(handleType, data) {
+                var params = {};
+                var title = "任务添加";
+                if (handleType === 'edit') {
+                    title = data.name + '任务编辑';
+                    params = data;
+                }
+                params.handleType = handleType;
+                admin.popupCenter({
+                    title: title,
+                    path: 'components/tpl/task_save_form.html',
+                    finish: function () {
+                        $('#projectListSelect').val();
+                        form.render('select');
+                        init();
+
+                    },
+                    success: function () {
+                        setTaskFormValue(params);
+                        console.log(params);
+                    }
+                });
+            };
+
+            /*
+        初始化表单
+      */
+            function setTaskFormValue(obj) {
+                var title = $('.layui-tpl-container .layui-card-header');
+                var formNames = ['id', 'handleType', 'name', 'planStartTime', 'planEndTime', 'taskStatus'];
+                // $("input:radio").attr("disabled","disabled");
+                obj.title && title.text(obj.title);
+                obj.planStartTime = obj.planStartTime ? formatDate(obj.planStartTime) : '';
+                obj.planEndTime = obj.planEndTime ? formatDate(obj.planEndTime) : '';
+                for (var i = 0; i < formNames.length; i++) {
+                    if (obj[formNames[i]]) {
+                        $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                    } else {
+                        $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val('');
+                    }
+                }
+
+                //初始化项目
+                setTaskMember(obj);
+                formSelects.data('taskStatus_blong', 'local', {
+                    arr: [{name: '未完成', value: '未完成',}, {name: '已完成', value: '已完成'}]
+                });
+
+                if (obj.taskStatus) {
+                    formSelects.value('taskStatus_blong', [obj.taskStatus]);
+                    form.render();
+                }
+
+                formSelects.data('priority_blong', 'local', {
+                    arr: [{name: '普通', value: '普通'}, {name: '紧急', value: '紧急'}, {name: '十分紧急', value: '十分紧急'}]
+                });
+
+                if (obj.priority) {
+                    formSelects.value('priority_blong', [obj.priority]);
+                    form.render();
+                }
+
+
+                $('input:radio:first').prop('checked', 'checked');
+                $('input:radio:last').prop('disabled', 'disabled');
+                $('#project_form').hide();
+                obj.type = 1;
+                setBudgetData(obj);
+                if (obj.budgetId) {
+
+                    setTaskMember(1, obj.budgetId, obj);
+
+                }
+                // else if (obj.projectId){
+                //     $('#business_form').hide();
+                //     setProjectData(obj);
+                //     setTaskMember(0,obj.projectId,obj);
+                //     obj.type=0;
+                //     $('input:radio:last').prop('checked', 'checked');
+                //
+                // }
+                form.render('radio');
+                itemData = obj;
+
+            };
+
+            $("#closeAll").on('click', function () {
+                closeTree();
+
+            })
+
+//收起树：只展开根节点下的一级节点
+            function closeTree() {
+                var tree = $.fn.zTree.getZTreeObj('select-org');
+                //获取 zTree 的全部节点数据将节点数据转换为简单 Array 格式
+                var nodes = tree.transformToArray(tree.getNodes());
+                for (var i = 0; i < nodes.length; i++) {
+
+                    tree.expandNode(nodes[i], false, true, false)
+
+                }
+            }
+
+
+            $("#expandAll").on('click', function () {
+                var treeObj = $.fn.zTree.getZTreeObj("select-org");
+                expandNodes(treeObj.getNodes());
+
+            })
+
+            function expandNodes(nodes) {
+                //如果nodes为null 则return
+                if (!nodes) return;
+//将状态设置为expand
+                curStatus = 'expand';
+                //获取当前的树
+                var treeObj = $.fn.zTree.getZTreeObj("select-org");
+                //循环展开节点
+                for (var i = 0; i < nodes.length; i++) {
+                    treeObj.expandNode(nodes[i], true, false, false);
+                    //递归 如果子节点的是父节点则进行递归操作
+                    if (nodes[i].isParent && nodes[i].zAsync) {
+                        expandNodes(nodes[i].children);
+                    } else {
+                        goAsync = true;
+                    }
+                }
+            }
+
+
+            function formatDate(time) {
+                var now = new Date(time)
+                var year = now.getFullYear(),
+                    month = now.getMonth() + 1,
+                    date = now.getDate(),
+                    hour = now.getHours(),
+                    minute = now.getMinutes(),
+                    second = now.getSeconds();
+                return year + "-" + (month < 10 ? '0' + month : month) + "-" + (date < 10 ? '0' + date : date) + " " + (hour < 10 ? '0' + hour : hour) + ":" + (minute < 10 ? '0' + minute : minute) + ":" + (second < 10 ? '0' + second : second);
+            }
+
+            function setBudgetData(obj) {
+                admin.req('/api/budget/budget', {}, function (res) {
+                    var arr = res.data,
+                        elem = $('#business_blong');
+                    elem.empty().append('');
+
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i].projectName) {
+                            if (i == 0) {
+                                elem.empty().append('<option value="' + arr[i].id + '">' + arr[i].projectName + '</option>')
+                            } else {
+                                elem.append('<option value="' + arr[i].id + '">' + arr[i].projectName + '</option>');
+
+                            }
+
+                        }
+                    }
+                    formSelects.render('business_blong');
+                    formSelects.btns('business_blong', []);
+                    if (obj.budgetId) {
+                        formSelects.value('business_blong', [obj.budgetId]);
+                        //formSelects.disabled('business_blong');
+                    }
+                    if (BudgetId) {
+                        formSelects.disabled('business_blong');
+
+                    }
+                    else {
+                        formSelects.undisabled('business_blong');
+                    }
+
+
+                });
+
+            }
+
+            function setTaskMember(type, id, obj) {
+                if (!id) {
+                    var elem = $('#memberIds_blong');
+                    elem.empty().append('');
+                    formSelects.render('memberIds_blong');
+                    formSelects.btns('memberIds_blong', []);
+                    return;
+                }
+                var url = '';
+                if (type == 0) {
+                    url = '/api/budget/project/query/' + id;
+                }
+                else if (type == 1) {
+                    url = '/api/budget/budget/' + id + '/users';
+                }
+                admin.req(url, {}, function (res) {
+
+                    if (type == 0) {
+                        var arr = res.data.mapList;
+                    }
+                    else {
+                        var arr = res.data;
+                    }
+                    elem = $('#memberIds_blong');
+                    if (arr == null || arr.length == 0) {
+                        elem.empty().append('');
+                    }
+                    else {
+                        elem.empty();
+                        for (var i = 0; i < arr.length; i++) {
+                            if (arr[i].name) {
+                                elem.append('<option value="' + arr[i].id + '">' + arr[i].name + '</option>');
+                            }
+                        }
+                    }
+                    formSelects.render('memberIds_blong');
+                    formSelects.btns('memberIds_blong', []);
+                    console.log(obj);
+                    var goslist = [];
+                    if (obj) {
+                        for (var i in obj.mapsList) {
+                            goslist.push(obj.mapsList[i].id)
+                        }
+                        formSelects.value('memberIds_blong', goslist);
+                    }
+
+
+                });
+
+            }
+
+            //业务删除方法
+            function budgetDel(node){
+                var delArr=[];
+                if (node == null) {
+                    return layer.msg('请选择要删除的业务', {
+                        icon: 0
+                    });
+                };
+                delArr.push(node.id);
+                admin.req('/api/budget/budget/' + delArr.join(','), {},
+                    function(data) {
+                        if (data.ok) {
+                            layer.msg('数据删除成功！', {
+                                icon: 1
+                            });
+                            table.reload('tableContent', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        } else {
+                            return layer.msg('数据删除失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: 'delete'
+                    });
+
+
+            }
+            //项目删除方法
+            function projectDel(node){
+                if (node == null) {
+                    return layer.msg('请选择要删除的项目', {
+                        icon: 0
+                    });
+                };
+                var delArr = [];
+                delArr.push(node.id);
+                admin.req('/api/budget/project/' + delArr.join(','), {},
+                    function(data) {
+                        if (data.ok) {
+                            layer.msg('删除项目成功！', {
+                                icon: 1
+                            });
+                            table.reload('tableContent-pro', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        } else {
+                            return layer.msg('删除项目失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: 'delete'
+                    });
+
+            }
+            //任务删除方法
+            function taskDel(node){
+                if (node == null) {
+                    return layer.msg('请选择要删除的任务', {
+                        icon: 0
+                    });
+                };
+                admin.req('/api/budget/task/' + node.id, {}, function(data) {
+                    if (data.ok) {
+                        layer.msg('删除任务成功！', {
+                            icon: 1
+                        });
+                        table.reload('tableContent-task', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    } else {
+                        return layer.msg('删除角色信息失败：' + data.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: 'delete'
+                });
+            }
+            //子任务删除方法
+            function childTaskDel(node){
+                if (node == null) {
+                    return layer.msg('请选择要删除的子任务', {
+                        icon: 0
+                    });
+                };
+                admin.req('/api/budget/childrentask/' + node.id, {}, function(data) {
+                    if (data.ok) {
+                        layer.msg('删除任务成功！', {
+                            icon: 1
+                        });
+                        // rereshNode(node.id)
+                    } else {
+                        return layer.msg('删除子任务信息失败：' + data.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: 'delete'
+                });
+
+
+            }
+            //保存业务
+            form.on('submit(menuSave-budget)', function(data) {
+                console.log(data);
+                var d = data.field,
+                    elem = data.elem;
+                if(d.cycle)
+                {
+                    var cycle=d.cycle.split(' - ');
+                    if (cycle)
+                    {
+                        d.cycleBegin=cycle[0];
+                        d.cycleEnd=cycle[1];
+                    }
+                }
+                var ajaxType = localStorage.getItem('type');
+                // if (d.handleType == 'edit') {
+                //     ajaxType = 'put';
+                // }
+                console.log(d)
+                admin.req('/api/budget/budget', d, function(res) {
+                    if (res.ok) {
+                        table.reload('tableContent', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                        admin.finishPopupCenter();
+                        addTree();
+                    } else {
+                        layer.msg('保存失败' + res.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: ajaxType
+                });
+            });
+
+            /*
+                 删除事件相关函数结束
+            */
+
+            /**
+             * 刷新树结构
+             */
+
+            //刷新父节点
+
+            function refreshNode(id){
+                var treeObj = $.fn.zTree.getZTreeObj("select-org")
+
+                var node = treeObj.getNodeByParam("id",id,null)
+
+                treeObj.updateNode(node)
+            }
+            //触发选中事件
+
+            // zTreeObj.setting.callback.onClick(null, zTreeObj.setting.treeId, zTreeObj.getNodeByParam("id",zTreeObj.getNodes()[0].id,null));//触发函数
+        });
+    })
+
+</script>

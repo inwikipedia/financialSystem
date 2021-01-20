@@ -1,0 +1,426 @@
+<style>
+   #planType{
+       text-align: center;
+       width: 100%;
+       margin-top: 40px;
+       margin-bottom: 20px;
+   }
+   #planType .btn-active{
+       color:#1E9FFF;
+   }
+
+   .timeline{
+    
+       width: 320px;
+       float: right;
+       padding-right: 10px;
+   }
+   
+   .timeline  li{
+       text-align: end
+
+   }
+   .timeline h3{
+        
+        text-align: end;
+        color:#1E9FFF;
+   }
+   .timeline .line{
+       width:1px;
+       height:30px;
+       background: #1E9FFF;
+       display: inline-block;
+       margin-right: 5px;
+   }
+   .timeline li:last-child .line{
+        display: none;
+   }
+   
+   .point{
+        width:10px;
+        height: 10px;
+        display: inline-block;
+        border-radius: 50%;
+        border: 1px solid #1E9FFF;
+        margin-left: 5px;
+        
+   }
+   .point .choose{
+       background: #1E9FFF;
+      
+   }
+
+   .layui-container{
+       min-height: 600px;
+
+   }
+   .layui-tab-content{
+       height: 600px !important;
+
+
+   }
+   #form-area .layui-tab-title,.task-header{
+        display: none;  
+   }
+   .timeline li {
+      cursor: pointer;
+   }
+   .timeline li h3.active span{
+      background: #F2F6F8;
+      min-width: 130px;
+      display: inline-block;
+      
+   }
+   .timeline li h3:hover span{
+       background: #F2F6F8
+   }
+   #form-area .layui-icon-delete{
+       display: none 
+
+   }
+
+   #form-area .p-main .layui-card-body{
+       min-height: 700px
+   }
+
+   
+</style>
+
+<div class="layui-row layui-col-space15" id="hisplayPlan">
+    <!-- 单列普通表格 -->
+    <div class="layui-col-md12">
+        <div class="layui-card p-main">
+            <!-- 卡片容器 -->
+            <div class="layui-card-body">
+                    <div class="layui-btn-group buttonGroup"  id="planType">
+                            <button class="layui-btn layui-btn-primary  btn-active"
+                                    style="border-top-left-radius: 4px;border-bottom-left-radius:4px;"
+                                    key="weeklyKey">
+                                <i class="layui-icon">周计划 </i>
+                            </button>
+                            <button class="layui-btn layui-btn-primary " key="monthKey">
+                                <i class="layui-icon">月计划</i>
+                            </button>
+                            <button class="layui-btn layui-btn-primary " 
+                                   style="border-top-right-radius: 4px;border-bottom-right-radius:4px;"
+                                   key="seasonKey">
+                                <i class="layui-icon">季计划</i>
+                            </button>
+
+                        <br/>
+                        <br/>
+
+
+
+                        <div id="downDOM" align="center">
+                        </div>
+                 </div>
+                 <div class="layui-row">
+                    
+                        <div class="layui-col-md2" style="overflow:hidden">
+                                <ul  p-each='timeArray' class="timeline">
+                                        <li p-bind="id:{{id}} ^ processInstanceId:{{processInstanceId}}">
+                                            <h3><span>{{time}}</span><i class="point choose"></i></h3>
+                                            <div class="line"></div>
+                                         </li>
+                                 </ul>
+                        </div>
+
+
+                        <div class="layui-col-md9" style="text-align:center" >
+
+                         <div id='form-area'></div>
+                        </div>
+
+                 </div>
+             </div>
+        </div>
+   </div>
+ </div>
+ 
+<script src="../../assetsInfo/js/ADCFormDesignHelper.js"></script>
+ <script>
+     layui.use([ 'table','form'], function() {
+         var admin=layui.admin,
+            form=layui.form,
+            config=layui.config;
+         var vmData={
+               timeArray:[]
+         };
+         var vm=$('#hisplayPlan').vm(vmData);
+
+         $("#planType").on("click","button",function(){     
+                window.key=$(this).attr('key');
+
+                console.log(window.key+"click") ;
+                $("#planType button").removeClass('btn-active');
+                $(this).addClass('btn-active');
+                search();
+
+            });
+            $(".timeline").on("click","li",function(){     
+                $(this).parent().find('h3').removeClass('active');
+                $(this).find('h3').addClass('active');
+                var  id=$(this).attr('id');
+                var  processinstanceid=$(this).attr('processinstanceid');
+                config.businessParam.processInstanceId=processinstanceid;
+
+                window.file_Name = $(this).find('h3').find('span').html();
+                window.processinstance_Id = processinstanceid;
+                console.log(window.file_Name);
+                console.log(window.processinstance_Id);
+                loadForm(id,window.key);
+            });
+
+         search();
+
+         function search(){
+            var key=$("#planType .btn-active").attr('key');
+            var data={
+                processDefinitionKey:config[key],
+                assignee:config.getAccount().usid,
+                pageNo:1,
+                pageSize:10000,
+            }
+            admin.req('/api/customized-branch/history-special-process', data, function (res) {
+                if(!res.ok)
+                {
+
+
+                }
+                if(res.data.list.length) {
+                    window.processinstance_Id = res.data.list[0].processInstanceId;
+                    window.file_Name = res.data.list[0].processInstanceName;
+                    // if(!window.file_Name){
+                    //     window.file_Name = $('.timeline').find('li').find('h3').find('span').html();
+                    //     console.log(file_Name+"file_Name");
+                    // }
+
+                }
+                if(key=='weeklyKey')
+                {
+                    if(!res.data.list.length){
+                        loadForm("isNull",key);
+                        return;
+                    }
+                    var ids=[];
+                    for(var item of res.data.list)
+                    {
+                        ids.push(item.id);
+
+                    }
+                    getWeeklyDateData(ids);
+                    loadForm(res.data.list[0].id,key);
+
+                }
+                else if(key=='monthKey')
+                {
+                    if(!res.data.list.length){
+                        loadForm("isNull",key);
+                        return;
+                    }
+                    var timeArray=[];
+                    for(var item of res.data.list)
+                    {
+                        var time= item.processInstanceName;
+                        //console.log(time);
+                       timeArray.push({time:time,id:item.formKey,processInstanceId:item.processInstanceId});
+                    }
+                    config.businessParam.processInstanceId=res.data.list[0].processInstanceId;
+                    vm.set({timeArray:timeArray});
+                    loadForm(res.data.list[0].formKey,key);
+
+
+                }
+                else if(key=='seasonKey')
+                {
+                    if(!res.data.list.length){
+                        loadForm("isNull",key);
+                        return;
+                    }
+                    var timeArray=[];
+                    for(var item of res.data.list)
+                    {
+                        var time= item.processInstanceName;
+                       timeArray.push({time:time,id:item.formKey,processInstanceId:item.processInstanceId})
+                    }
+                    config.businessParam.processInstanceId=res.data.list[0].processInstanceId;
+                    vm.set({timeArray:timeArray});
+                    loadForm(res.data.list[0].formKey,key);
+                }
+                setTimeout(function(){
+                    $('.timeline li:first h3 ').addClass('active');
+                },500)
+              
+                 
+               
+             })
+         }
+
+         function getWeeklyDateData(ids){
+            admin.req('/api/customized-branch/history/'+ids.join(','), {}, function (res) {
+                if(res.ok) {
+                    var timeArray=[];
+                    for(var item of res.data) {
+                        var data=JSON.parse(item.data);
+                        var time=data.datetime_1556239092300+" 至 "+data.datetime_1555504372891;
+                        timeArray.push({time:time,id:item.id,processInstanceId:''});
+                    }
+                    vm.set({timeArray:timeArray})
+                }
+             });
+         }
+
+         function loadForm(id,key) {
+             console.log(key);
+             if(key=='weeklyKey'){
+                 flag = 1;
+
+             } else if(key=='monthKey'){
+                 flag = 2;
+
+             } else if(key=='seasonKey'){
+                 flag = 3;
+             }
+             form_area = '#form-area';
+
+
+             if (flag == 1) {
+                 $('#downDOM').html('<div style="font-size: 16px ; height: 30px ; text-align: center" onclick="downLoadWeekReport();"><img style="width: 30px ; height: 30px ;" src="assetsInfo/images/download.png">下载本页面周计划</div>');
+             }else if(flag == 2){
+                 $('#downDOM').html('<div style="font-size: 16px ; height: 30px ; text-align: center" onclick="downLoadMonthReport();"><img style="width: 30px ; height: 30px ;" src="assetsInfo/images/download.png">下载本页面月计划</div>');
+             }else if(flag == 3){
+                 $('#downDOM').html('<div style="font-size: 16px ; height: 30px ; text-align: center" onclick="downLoadSeasonReport();"><img style="width: 30px ; height: 30px ;" src="assetsInfo/images/download.png">下载本页面季计划</div>');
+             }
+
+             if(id.indexOf('.html')!=-1) {
+                $(form_area).load(id,function(){
+                     $(form_area+'.p-main .layui-card-body').css('height','auto')
+
+                });
+                return;
+             }else if(id.indexOf('isNull') != -1){
+                $(form_area).html('');
+                $('.timeline').find('li').remove();
+                return;
+             }
+               // 获取已办任务正文表单数据
+               admin.req('/api/activiti-task/history/' + id, {}, function (res) {
+                    if (res.ok) {
+                        // 先将表单结构填入容器
+                        $(form_area).html(ADCFormDesignHelper.formatHtml(res.data.structure));
+                        ADCFormDesignHelper.expandHtmlViewer(form_area, JSON.parse(res.data.data));
+                        // 获取权限信息
+                        ADCFormDesignHelper.formatPrivReadonly(form_area, JSON.parse(res.data.privilege));
+                        // 填入数据
+                        ADCFormDesignHelper.formdataUpdate(form_area, JSON.parse(res.data.data));
+                        // 渲染表单
+                        form.render();
+                    } else {
+                        layer.msg('已办任务正文加载失败：' + res.message, {
+                            icon: 5
+                        });
+                    }
+                });
+         };
+     });
+
+     function downLoadWeekReport(){
+
+         if(! $('input').length){
+             alert("你当前没有可下载的周报 ！");
+             return ;
+         }
+
+         //开始时间
+         start_time = $('input')[0].value;
+         end_time = $('input')[1].value;
+         //把所有有的变量名存起来提交给后台，便于后台取值
+         window.variable_name = "start_time#end_time#" ;
+
+         //将数据模拟为表单提交，因为数据量太大，普通get提交不上去
+         start_time_input = '<input type="text" name="start_time" value="'+start_time+'"/>' ;
+         end_time_input = '<input type="text" name="end_time" value="'+end_time+'"/>' ;
+
+         window.file_Name = start_time + '至' +  end_time + '数据资源中心_各部门周度工作计划汇总' ;
+
+         if ( !window.file_Name ){
+             alert("请在左边的时间线选择要导出的月份！");
+             return ;
+         }
+
+         file_Name_input = '<input type="text" name="fileName" value="'+window.file_Name+'"/>' ;
+         textAreaList = $('textarea');
+         // for (var value of textAreaList){
+         //     if(true) {
+         //         window.variable_name += value.title + "#";
+         //         window.data_input += '<input type="text" name="' + value.title + '" value="' + value.value + '"/>';
+         //     }
+         // }
+
+         for( var i = 0 ; i < textAreaList.length ; i ++) {
+
+             if ( textAreaList.eq(i).css('display') != ('none') ) {
+                 window.variable_name += textAreaList.eq(i).attr('title') + "#";
+                 window.data_input += '<input type="text" name="' + textAreaList.eq(i).attr('title') + '" value="' + textAreaList.eq(i).val() + '"/>';
+
+                 console.log(textAreaList.eq(i).css('display'));
+                 console.log(textAreaList.eq(i).attr('title'));
+                 console.log(textAreaList.eq(i).val());
+             }
+         }
+
+         window.data_input += '<input type="text" name="variable_name" value="'+ window.variable_name + '"/>' ;
+
+         url = "/api/project/downLoadReportController/downLoadWeekReport";
+        // 文件下载
+         jQuery('<form action="'+url+'" method="'+'post'+'">' +  // 请求路径及推送方法
+                 start_time_input +
+                 end_time_input +
+                 window.data_input +
+                 file_Name_input +
+             '</form>')
+             .appendTo('body').submit().remove();
+         window.file_Name = null ;
+     }
+
+     function downLoadMonthReport(){
+         if ( !window.file_Name || !window.processinstance_Id){
+             alert("请在左边的时间线选择要导出的月份！");
+             return ;
+         }
+         file_Name_input = '<input type="text" name="fileName" value="'+window.file_Name+'"/>' ;
+         processinstance_Id_input = '<input type="text" name="processInstanceId" value="'+window.processinstance_Id+'"/>' ;
+         url = "/api/project/downLoadReportController/downLoadMonthReport";
+         // 文件下载
+         jQuery('<form action="'+url+'" method="'+'post'+'">' +  // 请求路径及推送方法
+             file_Name_input +
+             processinstance_Id_input +
+             '</form>')
+             .appendTo('body').submit().remove();
+         window.file_Name = null ;
+         window.processinstance_Id =null ;
+     }
+
+     function downLoadSeasonReport(){
+         if ( !window.file_Name || !window.processinstance_Id){
+             alert("请在左边的时间线选择要导出的月份！");
+             return ;
+         }
+         file_Name_input = '<input type="text" name="fileName" value="'+window.file_Name+'"/>' ;
+         processinstance_Id_input = '<input type="text" name="processInstanceId" value="'+window.processinstance_Id+'"/>' ;
+
+         url = "/api/project/downLoadReportController/downLoadSeasonReport";
+         // 文件下载
+         jQuery('<form action="'+url+'" method="'+'post'+'">' +  // 请求路径及推送方法
+             file_Name_input +
+             processinstance_Id_input +
+             '</form>')
+             .appendTo('body').submit().remove();
+         window.file_Name = null ;
+         window.processinstance_Id =null ;
+     }
+
+
+ </script>
+ 

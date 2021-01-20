@@ -1,0 +1,401 @@
+<style>
+    #add-copyright input{
+        height: 32px;
+    }
+    #add-copyright .reduceMarginL{
+        margin-left: 115px;
+    }
+    #add-copyright .reduceMarginL button{
+        width: 63px;
+        height: 26px;
+        line-height: 26px;
+    }
+    #add-copyright .labelWidth{
+        width: 85px;
+    }
+    #add-copyright .layui-form-select dl dd.layui-this{
+        background-color: #229FFF
+    }
+    .layui-layer-load{
+        background-color: white;
+    }
+</style>
+
+<link rel="stylesheet" href="../../assetsInfo/libs/layui/css/layui.css" />
+<link rel="stylesheet" href="../../assetsInfo/css/style.css">
+
+<div class="layui-tpl-container" style="padding-top: 20px">
+    <div class="layui-form" id="add-copyright">
+        <div class="layui-row">
+            <div style="width: 50%;float: left">
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"><span style="color: red;">*</span> 软件名称</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" name="softwareName" placeholder="请输入软件名称" class="layui-input"  lay-verify="required" maxlength="50">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"><span style="color: red;">*</span> 类型</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <!--<input type="text" placeholder="请输入类型" class="layui-input" name="copyrightType">-->
+                        <select name="copyrightType" id="copyrightType" lay-verify="required">
+
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"><span style="color: red;">*</span> 状态</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <!--<input type="text" placeholder="请输入状态1" class="layui-input" name="state">-->
+                        <select name="state" id="state" lay-verify="required">
+
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">著作权人</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" id="announcement" placeholder="请输入著作权人" class="layui-input" name="belongUserName" maxlength="50">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">登记号</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入登记号" class="layui-input" name="registerNum" maxlength="50">
+                    </div>
+                </div>
+            </div>
+            <div style="width: 50%;float: left">
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">申请日期</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" id="application" placeholder="请输入申请日期" class="layui-input" name="applyDate">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"><span style="color: red;">*</span> 登记日期</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入登记日期" class="layui-input" name="registerDate" id="registerDate" lay-verify="required">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"><span>部门</span> </label>
+                    <div class="layui-input-block reduceMarginL" style="position: relative">
+                        <input type="text" placeholder="请输入部门" class="layui-input" name="deptName" id="deptName" readonly>
+                        <img class="deptName" src="/assetsInfo/images/bumen.png" alt="" style="position:absolute; right:23px;top:6px">
+
+                        <!--<select id="deptSelect"  name="deptName">
+                            <option value="">请选择部门</option>
+                        </select>-->
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"><span style="color: red;">*</span><span> 附件</span> </label>
+                    <div class="layui-input-block reduceMarginL" style="position: relative">
+                        <input type="text" placeholder="请上传附件" id="fileName" class="layui-input" readonly>
+                    </div>
+                    <div class="layui-inline reduceMarginL" style="margin-top: 12px">
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" title="选择" id="chooseFile">选择</button>
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" title="删除" id="delFile" style="margin-left: 13px">删除</button>
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" title="上传" id="upload" style="margin-left: 13px">上传</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="layui-form-item" style="left: 50%;position: absolute;bottom: 10px; margin-left: -72px">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="menuSave">确定</button>
+            <button class="layui-btn layui-btn-primary"  id="cancle">取消</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../../assetsInfo/libs/jquery-1.12.4.min.js"></script>
+<!-- Q.js 轻量路由框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/q.js"></script>
+<!-- jQuery 轻量级 MVVM 框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/pandyle.min.js"></script>
+<!-- layui 脚本文件 -->
+<script type="text/javascript" src="../../assetsInfo/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../module/config.js"></script>
+<script type="text/javascript" src="/assetsInfo/js/jsencrypt.min.js"></script>
+<script type="text/javascript" src="../../module/ajaxSet.js"></script>
+<script src="/assetsInfo/js/ADCFormDesignHelper.js"></script>
+<script>
+    layui.use(['form','laydate','upload','table','util'], function() {
+        var laydate = layui.laydate,
+            upload = layui.upload,
+            admin = layui.admin,
+            config = layui.config,
+            form = layui.form;
+        var deptId = '';
+        var account = config.getAccount();
+        var fileId;
+        laydate.render({
+            elem: '#application',
+        });
+        laydate.render({
+            elem: '#registerDate',
+        });
+        var file = '';
+        //组织机构选择
+        $('#deptName').on('click', function(){
+            function deptName(data){
+                $('#deptName').val(data.name);
+                deptId = data.id;
+            }
+            parent.dept(deptName)
+        })
+        $('.deptName').on('click', function(){
+            console.log(123)
+            function deptName(data){
+                $('#deptName').val(data.name);
+                deptId = data.id;
+            }
+            parent.dept(deptName)
+        })
+
+        //下拉框
+        $.ajax({
+            url: "/ADC_info/api/sys/dictype/list?dicCode=softState",
+            success: function (data) {
+                var list = data.data;
+                var con = '<option value="">请选择</option>';
+                for(i=0;i<list.length;i++){
+                    con += '<option value='+list[i].id+'>'+list[i].dicTypeName+'</option>'
+                }
+                $('#state').html()
+                $('#state').html(con)
+                form.render("select");
+            }
+        })
+        $.ajax({
+            url: "/ADC_info/api/sys/dictype/list?dicCode=softClass",
+            success: function (data) {
+                var list = data.data;
+                var con = '<option value="">请选择</option>';
+                for(i=0;i<list.length;i++){
+                    con += '<option value='+list[i].id+'>'+list[i].dicTypeName+'</option>'
+                }
+                $('#copyrightType').html()
+                $('#copyrightType').html(con)
+                form.render("select");
+            }
+        })
+        //编辑回显
+        if(parent.$('.layui-layer-title').text()=='编辑软件著作权'){
+            var id = parent.$('.editCopyright').attr('name');
+            $.ajax({
+                url: "/ADC_info/api/knowledge/copyright/"+id,
+                success: function (data) {
+                    for(var item in data.data){
+                        if(data.data[item]){
+                            data.data[item] = ADCFormDesignHelper.htmlDecodeByRegExp(data.data[item])
+                        }
+                    }
+                    deptId = data.data.deptId
+                    var registerDate = data.data.registerDate?layui.util.toDateString(data.data.registerDate,'yyyy-MM-dd'):'';
+                    var applyDate = data.data.applyDate?layui.util.toDateString(data.data.applyDate,'yyyy-MM-dd'):'';
+                    $('input[name=softwareName]').val(data.data.softwareName);
+                    $('input[name=applyDate]').val(applyDate);
+                    $('input[name=registerDate]').val(registerDate);
+                    $('input[name=registerNum]').val(data.data.registerNum);
+                    $('input[name=belongUserName]').val(data.data.belongUserName);
+                    $('input[name=deptName]').val(data.data.deptName);
+                    $('input[id=fileName]').val(data.data.fileName);
+                    $("select[name=state]").find("option:contains("+data.data.state+")").attr("selected",true);
+                    $("select[name=copyrightType]").find("option:contains("+data.data.copyrightType+")").attr("selected",true);
+                    form.render('select')
+                    fileId = data.data.fileId;
+                    $('#delFile').off('click').on('click',function () {
+                        if(!$('#fileName').val()){
+                            return layer.msg('请先选择文件', {
+                                icon: 5
+                            });
+                        }else{
+                            $.ajax({
+                                url: "/ADC_info/api/knowledge/copyright/deleteFile/"+fileId,
+                                type: 'delete',
+                                success: function (data) {
+                                    if (data.ok) {
+                                        $('#fileName').val('');
+                                        fileId = '';
+                                    } else {
+                                        return layer.msg(data.reason, {
+                                            icon: 5
+                                        });
+                                    }
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+
+        }
+
+        var files
+        // 清空文件队列
+        function clearFile(){
+            for (var x in files) {
+                delete files[x];
+            }
+        }
+        var index;
+        $('#delFile').off('click').on('click',function () {
+            if(!$('#fileName').val()){
+                return layer.msg('请先选择文件', {
+                    icon: 5
+                });
+            }
+        });
+        $('#upload').off('click').on('click',function () {
+            if(!$('#fileName').val()){
+                return layer.msg('请先选择文件', {
+                    icon: 5
+                });
+            }
+        });
+            //上传
+        var uploadRender=upload.render({
+            elem: '#chooseFile',
+            url: '/ADC_info/api/sys/file/upload',
+            field: 'file',
+            accept: 'file',
+            auto: false,
+            exts:'pdf|doc|docx|xlsx|xls|zip|rar|jpg|jpeg|png|gif|ppt|pptx',
+            bindAction: '#upload',
+            choose:function(obj){
+                uploadRender.config.elem.next()[0].value = '';// 防止choose方法只触发一次
+                files = obj.pushFile();// 文件队列
+                clearFile();
+                obj.preview(function(index, file, result){// file:准备上传的文件对象
+                    files = obj.pushFile();
+                    $('#fileName').val(file.name);
+                    $('#delFile').off('click').on('click',function () {
+                        if(!$('#fileName').val()){
+                            return layer.msg('请先选择文件', {
+                                icon: 5
+                            });
+                        }else{
+                            delete files[index];// 删除列表中对应的文件，一般在某个事件中使用
+                            $('#fileName').val('');
+                        }
+                    })
+                });
+            },
+            before:function (obj) {
+                if($('#fileName').val()){
+                    index = layer.load(2);
+                }else{
+                    return layer.msg('请先选择文件', {
+                        icon: 5
+                    });
+                }
+            },
+            done: function(res,indexs,upload) {
+                layer.close(index);
+                if (res.ok) {
+                    layer.msg('文件上传成功！', {
+                        icon: 1
+                    });
+                    file = res.data.fileId;
+                    //删除附件
+                    $('#delFile').off('click').on('click',function () {
+                        if($('#fileName').val()){
+                            $.ajax({
+                                url: "/ADC_info/api/knowledge/paper/deleteFile/"+file,
+                                type: 'delete',
+                                success: function (data) {
+                                    if (data.ok) {
+                                        delete files[indexs];
+                                        $('#fileName').val('');
+                                        file = '';
+                                    } else {
+                                        return layer.msg(data.reason, {
+                                            icon: 5
+                                        });
+                                    }
+                                }
+                            })
+                        }else {
+                            return layer.msg('请先选择文件', {
+                                icon: 5
+                            });
+                        }
+                    })
+                } else {
+                    layer.msg('文件上传失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            }
+        });
+        $('#cancle').on('click',function () {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        });
+        form.on('submit(menuSave)', function(data){
+            data.field.fileId = file;
+            data.field.deptId = deptId;
+            delete data.field.file;
+            data.field.uploadUserId = account.usid;
+            data.field.uploadUserName = account.usname;
+            data.field.extInfo2 = data.field.copyrightType;
+            data.field.copyrightType = $('#copyrightType option:selected').text();
+            if(data.field.copyrightType=='请选择'){
+                return layer.msg('请选择类型！', {
+                    icon: 0
+                });
+            }
+            data.field.extInfo1 = data.field.state
+            data.field.state = $('#state option:selected').text();
+            if(data.field.state=='请选择'){
+                return layer.msg('请选择状态！', {
+                    icon: 0
+                });
+            }
+//            data.field.updateTime = layui.util.toDateString();
+            var url= "/ADC_info/api/knowledge/copyright/create";
+            var type = "post";
+            if(parent.$('.layui-layer-title').text()=='编辑软件著作权'){
+                if(!file){
+                    console.log(fileId,143)
+                    data.field.fileId = fileId;
+                }
+                data.field.id = id;
+                url = "/ADC_info/api/knowledge/copyright/update";
+                type = "put"
+            }
+            if(!data.field.fileId ){
+                return layer.msg('请上传一个文件！', {
+                    icon: 0
+                });
+            }
+            $.ajax({
+                type: type,
+                url: url,
+                data: JSON.stringify(data.field),
+                contentType: 'application/json; charset=UTF-8',
+                success: function (data) {
+                    if (data.ok) {
+                        layer.msg('保存成功', {
+                            icon: 1
+                        });
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        parent.$('.copyright-refresh').click()
+                    } else {
+                        layer.msg('保存失败' +data.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error: function () {
+                    layer.alert("获取数据错误");
+                }
+            })
+        })
+    })
+</script>

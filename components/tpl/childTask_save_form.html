@@ -1,0 +1,685 @@
+<style>
+    .layui-form-label{
+        width: 100px;
+    }
+    .layui-input-block{
+        margin-left: 140px;
+    }
+    body .layui-form-label {
+        width: 140px;
+    }
+    .chosen-single span{
+        color: #000;
+    }
+    .layui-layer-page .layui-layer-content{
+        overflow: visible !important;
+    }
+    #taskForm{
+        max-height: 600px!important;
+        overflow: auto!important;
+        padding: 20px 0 ;
+    }
+    /*#memberIds_blong{*/
+    /*height: 100px!important;*/
+    /*overflow: auto!important;*/
+    /*}*/
+    .xm-form-select{
+        border: 0.5px solid #e6e6e6;
+        /*top: auto!important;*/
+        /*bottom: 42px!important;*/
+    }
+    #taskForm .layui-input-block{
+        margin-left:120px;
+    }
+    body #taskForm .layui-form-label {
+        width: 120px;
+        padding: 5px 5px 5px 0px;
+    }
+
+    /* textarea placeholder样式调整(兼容处理) */
+    #taskTarget::-webkit-input-placeholder{
+        position: relative!important;
+        top:6px!important;
+    }
+    #taskTarget:-moz-placeholder{
+        position: relative!important;
+        top:6px!important;
+    }
+    #taskTarget::-moz-placeholder{
+        position: relative!important;
+        top:6px!important;
+    }
+    #taskTarget:-ms-input-placeholder{
+        position: relative!important;
+        top:6px!important;
+    }
+    .taskDiv{
+        width: 49%;
+        float: left;
+        height: 240px;
+        display: inline-block;
+    }
+    .taskDiv .layui-form-item{
+        margin-bottom: 15px;
+    }
+    .taskTop{
+        height: 240px;
+        margin-bottom: 15px;
+        width: 723px;
+    }
+    .taskBottom{
+        min-height: 50px;
+        margin-bottom: 15px;
+        width: 723px;
+    }
+    #taskForm .layui-input-block{
+        padding-right: 8px;
+    }
+    #taskForm .scroll-body{
+        max-height: 180px!important;
+    }
+    #taskForm .xm-select-parent .xm-form-select dl{
+        max-height: 285px!important;
+    }
+  #taskForm  .layui-disabled, #taskForm .layui-disabled:hover{
+        color: rgb(84, 84, 84)!important;
+    }
+</style>
+
+<div class="layui-tpl-container" id="taskForm">
+    <input type="hidden" name="projectId">
+    <input type="hidden" name="taskId">
+    <input type="hidden" name="taskIdText">
+    <div class="layui-form " style="overflow: auto;height: 350px;flex-wrap: wrap;width: 740px;">
+
+        <div class="taskTop ">
+            <div class="taskLeft taskDiv">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 下级任务名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="childTaskName" placeholder="请输入下级任务名称" class="layui-input" lay-verify="required" maxlength="20">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 任务目标</label>
+                    <div class="layui-input-block">
+                        <textarea type="text" placeholder="请填写，字数限制在200字以内。" style="height:137px" maxlength="200" lay-verify="required" class="layui-input" name="taskTarget" id="taskTarget" ></textarea>
+                        <!--<input id='task-name' type="text" name="name" placeholder="请输入任务名称" class="layui-input"  maxlength="50">-->
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" id="tasktype"><span style="color: red;">*</span> 所属任务类型</label>
+                    <div class="layui-input-block" >
+                        <input type="radio" class="typeClass" name="type" value="0" title="项目任务"  lay-filter="type" checked>
+
+                        <input type="radio" class="typeClass" name="type" value="1" title="业务任务" lay-filter="type">
+                        <!--<input type="radio" name="type" value="2" title="下级任务"  lay-filter="type">-->
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="taskRight taskDiv">
+                <div class="layui-form-item" id="business_form" style="display: none">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 所属业务</label>
+                    <div class="layui-input-block">
+                        <!--<select name="budgetId" id='business_blong' xm-select="business_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-radio="" xm-select-search>-->
+                        <!--</select>-->
+                        <select name="projectId" id="business_blong2" lay-ignore data-placeholder="请选择"></select>
+                        <input type="text" name="budgetName"  class="layui-input layui-disabled" id="budgetName" style='display:none' disabled='true'>
+
+                    </div>
+                </div>
+                <div class="layui-form-item" id="project_form">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 所属项目</label>
+                    <div class="layui-input-block memberNames-loading">
+                        <select name="projectId" id="projectId2" lay-ignore data-placeholder="请选择"></select>
+                        <input type="text" name="projectName"  class="layui-input layui-disabled" id="projectName" style='display:none' disabled='true'>
+
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 所属任务</label>
+                    <div class="layui-input-block memberNames-loading">
+                        <select name="taskId" id="taskId" lay-ignore data-placeholder="请选择"></select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 分配人员</label>
+                    <div class="layui-input-block memberNames-loading">
+                        <div name="personId" id='personId' ></div>
+                        <!--<select name="personId" id="personId" lay-ignore data-placeholder="选择人员" ></select>-->
+                    </div>
+                </div>
+                <!--<div class="layui-form-item">-->
+                <!--<label class="layui-form-label"><span style="color: red;">*</span> 任务状态</label>-->
+                <!--<div class="layui-input-block">-->
+                <!--<select name="status" id="status" data-placeholder="选择任务状态">-->
+                <!--<option value=""></option>-->
+                <!--<option value="未完成">未完成</option>-->
+                <!--<option value="完成">完成</option>-->
+                <!--</select>-->
+                <!--</div>-->
+                <!--</div>-->
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 计划开始时间</label>
+                    <div class="layui-input-block">
+                        <input autocomplete="off" type="text" name="planStartTime" id="planStartTime" placeholder="计划开始时间" class="layui-input" lay-verify="required">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 计划完成时间</label>
+                    <div class="layui-input-block">
+                        <input autocomplete="off" type="text" name="planEndTime" id="planEndTime" placeholder="计划完成时间" class="layui-input" lay-verify="required">
+                    </div>
+                </div>
+                <!-- <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 下级任务实际完成时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="actualFinishedTime" id="actualFinishedTime" placeholder="下级任务实际完成时间" class="layui-input">
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+
+
+
+
+
+        <div  class=" taskBottom">
+            <div class="layui-form-item">
+                <label class="layui-form-label">&nbsp;任务预计交付物</label>
+                <div class="layui-input-block" id="planAddBox">
+                    <div style="display: inline-block;width: 100%;">
+                        <input maxlength="50" autocomplete="off" type="text" style="width: calc(100% - 40px);display: inline-block;" placeholder="请填写交付物" class="layui-input planOutcomesData" >
+                        <img class="clickImg" onclick="addPlanOutcomes(this)" src="/assetsInfo/images/Group-.png" style="cursor: pointer;" _src="/assetsInfo/images/Group-.png">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!--传递过来的操作类型-->
+        <input type="text" name="type" id="type" style="display: none;">
+        <input type="text" name="parentTask" id='parentTask' style="display: none;">
+        <input type="text" name="budgetId" id='budgetId' style="display: none;">
+        <!-- 如果是编辑传过来的id-->
+
+        <input type="text" name="id" id="id" style="display: none;">
+        <!--position: absolute;bottom: 0;left: 0;right: 0;-->
+        <div class="layui-form-item" style="text-align: center; visibility:hidden;position: absolute;">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="btn-childTask-save" id="btn-childTask-save">保存</button>
+            <button class="layui-btn layui-btn-primary" id="btn-childTask-cancel">取消</button>
+        </div>
+    </div>
+    <div class="layui-form-item" style="text-align: center;">
+        <button class="layui-btn layui-btn-normal btn-childTask-save">保存</button>
+        <button class="layui-btn layui-btn-primary btn-childTask-cancel" >取消</button>
+    </div>
+</div>
+
+<script>
+    var addPlanOutcomes = function(){
+        var html='<div style="display: inline-block;width: 100%;margin-top: 5px">\n' +
+            '         <input maxlength="50" autocomplete="off" type="text"  style="width: calc(100% - 40px);display: inline-block;" placeholder="请填写交付物" class="layui-input planOutcomesData" >\n' +
+            '         <i class="clickImg layui-icon layui-icon-delete" style="font-size: 20px; margin-right:-50px;cursor:pointer" href="javascript:;" onclick="delPlanOutcomes(this)"></i>\n' +
+            '     </div>';
+        $('#planAddBox').append(html);
+    };
+    var delPlanOutcomes =function(that){
+        // if($(that).siblings('input').attr('data-id')){
+        //     $(that).parent().remove();
+        // }
+        layer.confirm('确定删除该条交付物吗', {
+            icon: 3,
+            title: '提示'
+        }, function(index) {
+            $.ajax({
+                url: "/api/budget/taskResult/"+$(that).siblings('input').attr('data-id'),
+                type: 'delete',
+                success: function (res) {
+                    if(res.ok){
+                        $(that).parent().remove();
+                        layer.close(index);
+                        return layer.msg('删除成功', {
+                            icon: 1
+                        });
+                    }else{
+                        return layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                }
+            });
+        });
+    };
+    layui.use(['form', 'laydate', 'formSelects',"xmSelect"], function() {
+        var admin = layui.admin,
+            laydate = layui.laydate,
+            formSelects = layui.formSelects,
+            xmSelect = layui.xmSelect,
+            form = layui.form;
+
+
+
+        // 初始化日期组件
+        setTimeout(function () {
+
+
+            //日期
+            var sTime= $('#planStartTime').val();
+            var eTime= $('#planEndTime').val();
+            var startTime=laydate.render({
+                elem:'#planStartTime',
+                // type:'datetime',
+                max: eTime != '' ? eTime : '2099-12-30',
+                btns: ['clear','confirm'],
+                done:function(value,date){
+                    endTime.config.min={
+                        year:date.year,
+                        month:date.month-1,//关键
+                        date:date.date
+                    };
+                }
+            })
+            var endTime=laydate.render({
+                elem:'#planEndTime',
+                // type:'datetime',
+                min: sTime != '' ? sTime : '1970-01-01',
+                btns: ['clear','confirm'],
+                done:function(value,date){
+                    if(endTime.config.dateTime.seconds == 0){
+                        var endTimes = new Date(new Date(new Date(value).getTime() + 24 * 60 * 60 * 1000 -1));
+                        endTime.config.dateTime.hours = endTimes.getHours();
+                        endTime.config.dateTime.minutes = endTimes.getMinutes();
+                        endTime.config.dateTime.seconds = endTimes.getSeconds();
+                    }
+                    startTime.config.max={
+                        year:date.year,
+                        month:date.month-1,//关键
+                        date:date.date
+                    }
+                }
+            })
+        }, 600);
+
+        form.render('radio');
+//        form.on('radio(type)',function(data){
+//            if(data.othis[0].textContent.indexOf('业务任务')=='-1'){
+////                项目任务
+//                $('#business_form').hide();
+//                $('#project_form').show();
+//            }else {
+//                $('#business_form').show();
+//                $('#project_form').hide();
+//                console.log(111)
+//            }
+//
+//        })
+        if($('#projectId').val()!=""){
+
+        }
+        setTimeout(function () {
+
+            var data={
+                page:1,
+                size:1000
+            }
+                ,url='';
+            if($('input[name=projectId]').val())
+            {
+                data.projectId=$('input[name=projectId]').val();
+                url='/api/budget/project/query/task/page';
+            }
+
+            else if($('input[name=budgetId]').val())
+            {
+                data.budgetId=$('input[name=budgetId]').val()
+                url='api/budget/task/page';
+            }
+            else{
+                return;
+            }
+            admin.req(url, data, function(res) {
+                var arr = res.data.dataList,
+                    option = '<option value=""></option>';
+                if (arr == null) {
+                    var option = '<option value="">暂无任务!</option>';
+                    $("#taskId").empty().append(option);
+                    $("#taskId").trigger("chosen:updated");
+                    return;
+                }
+                for (var item of arr) {
+                    option += '<option title="'+ item.name +'" value="' + item.id + '">' + item.name + '</option>';
+                }
+
+                $("#taskId").empty().append(option);
+                $('#taskId').val($('#parentTask').val());
+                $("#taskId").trigger("chosen:updated");
+                // $('#taskId').prop('disabled', true).trigger("chosen:updated");
+
+            });
+
+            $('option').each(function(){
+                if(this.value==$('input[name=projectId]').val()){
+                    $('#projectId2_chosen .chosen-single span').html(this.text)
+                }
+                $('#taskId_chosen .chosen-single span').html($('input[name=taskIdText]').val())
+            })
+        },0)
+//         setTimeout(function () {
+//             console.log( $('#projectId2_chosen .chosen-single span').html())
+//             var data={
+//                     "projectId":$('input[name=projectId]').val(),
+//                     page:1,
+//                     size:1000
+//                 }
+//                 admin.req("/api/budget/project/query/task/page", data, function(res) {
+//                     if(res.data.dataList.length>0){
+//                         var arr = res.data.dataList,
+// //                    arr=[{"id":"CLXYW9GL46","name":"立项"}]
+//                             option = '<option value=""></option>';
+//                         if (arr == null) {
+//                             var option = '<option value="">暂无任务!</option>';
+//                             $("#taskId").empty().append(option);
+//                             $("#taskId").trigger("chosen:updated");
+//                             return;
+//                         }
+//                         for (var item of arr) {
+//                             option += '<option value="' + item.id + '">' + item.name + '</option>';
+//                         }
+//                         $("#taskId").empty().append(option);
+//                         $("#taskId").trigger("chosen:updated");
+
+
+//                     }
+
+
+//             });
+
+//             $('option').each(function(){
+//                 if(this.value==$('input[name=projectId]').val()){
+//                     $('#projectId2_chosen .chosen-single span').html(this.text)
+//                 }
+//             })
+//             $('#taskId_chosen .chosen-single span').html($('input[name=taskIdText]').val())
+//         },1000)
+//         setTimeout(function () {
+//             $('#taskId_chosen .chosen-single span').html($('input[name=taskIdText]').val())
+//         },100)
+        $('#planStartTime').off('mouseenter').on('mouseenter',function () {
+            if($('#planStartTime').is(':focus')){
+                $('#planStartTime').blur()
+            }
+        })
+        $('#planEndTime').off('mouseenter').on('mouseenter',function () {
+            if($('#planEndTime').is(':focus')){
+                $('#planEndTime').blur()
+            }
+        })
+
+        $(".btn-childTask-save").click(function(){
+            console.log('保存')
+            $('#btn-childTask-save').click();
+        })
+        $(".btn-childTask-cancel").click(function(){
+            $('#btn-childTask-cancel').click();
+        })
+
+        form.on('submit(btn-childTask-save)', function(obj) {
+            var data = obj.field,
+                elem = data.elem;
+            data.planStartTime = data.planStartTime + ' 00:00:00';
+            data.planEndTime = data.planEndTime + ' 23:59:59';
+            if (new Date(data.planStartTime).getTime() - (new Date(data.planEndTime).getTime()) > 0) {
+                return layer.msg('开始时间不能大于结束时间', {
+                    icon: 5
+                });
+            }
+            var ajaxType = 'post';
+            if (data.id != '') {
+                ajaxType = 'put';
+            }
+            //编辑时如果所属项目返显，并没有放到data里面，手动放进去
+
+            if(data.projectId==""){
+                data.projectId=$('input[name="projectId"]').val();
+            }
+            if(data.taskId==""){
+                data.taskId=$('input[name="taskId"]').val();
+            }
+            var memberIds_blong_xmSelect = xmSelect.get('#personId', true);
+            var selectArr = memberIds_blong_xmSelect.getValue();
+
+            data.memberIds  = [];
+            for (var selectData of selectArr ) {
+                data.memberIds.push(selectData.value);
+            }
+            if(data.projectId ==''&&$(".typeClass:checked").val()==0)
+            {
+                return layer.msg('请选择所属项目', {
+                    icon: 5
+                });
+            }
+            if($("#business_blong2").val() ==''&&$(".typeClass:checked").val()==1)
+
+            {
+                return layer.msg('请选择所属业务', {
+                    icon: 5
+                });
+            }
+            if(data.taskId =='')
+            {
+                return layer.msg('请选择所属任务', {
+                    icon: 5
+                });
+            }
+            if(data.memberIds ==''||data.memberIds.length==0)
+            {
+                return layer.msg('请选择分配人员', {
+                    icon: 5
+                });
+            }
+            data.personId = data.memberIds[0];
+            var taskResultEOList = [];
+            var newPlanOutcomesData = [];
+            for (var i = 0; i <$('.planOutcomesData').length ; i++) {
+              if($('.planOutcomesData').eq(i).val().trim() != ''){
+                newPlanOutcomesData.push({
+                  resultName: $('.planOutcomesData').eq(i).val(),
+                  id: $('.planOutcomesData').eq(i).attr('data-id')
+                })
+              }
+            }
+            for (var i = 0; i < newPlanOutcomesData.length ; i++) {
+                taskResultEOList.push(
+                    {
+                        taskId: data.id,
+                        resultName: newPlanOutcomesData[i].resultName,
+                        id: newPlanOutcomesData[i].id
+                    }
+                );
+            }
+            data.taskResultEOList=taskResultEOList;
+            delete data.type;
+            admin.req('/api/budget/childrentask', data, function(res) {
+                $(elem).attr('disabled', false);
+                if (res.ok) {
+                    layer.msg('保存成功！', {
+                        icon: 1
+                    });
+                    admin.finishPopupCenter(res.data);
+                } else {
+                    return layer.msg('保存失败：' + res.message, {
+                        icon: 5
+                    });
+                    admin.finishPopupCenter();
+                }
+            }, {
+                method: ajaxType
+            });
+            // admin.req('/api/budget/taskResult/updateList', taskResultEOList, function(res) {
+            //     $(elem).attr('disabled', false);
+            //     if (res.ok) {
+            //
+            //     } else {
+            //         return layer.msg('保存失败：' + res.message, {
+            //             icon: 5
+            //         });
+            //     }
+            // }, {
+            //     method: 'put'
+            // });
+
+        });
+        // 取消按钮
+        $("#btn-childTask-cancel").click(function() {
+            admin.closePopupCenter();
+        });
+//选完项目
+        $('#projectId2').on('change', function(e, params) {
+
+            if (!params) {
+                var option = '<option value="">请选择</option>';
+                $("#taskId").empty().append(option);
+                $("#taskId").trigger("chosen:updated");
+                return;
+            }
+            console.log(params)
+            var data={
+                "projectId":params.selected,
+                page:1,
+                size:1000
+            }
+            admin.req('/api/budget/project/hasPermissions/'+params.selected+'/childTask', {}, function (res) {
+                if(res.data!=null){
+                    admin.req("/api/budget/project/query/task/page", data, function(res) {
+                        var arr = res.data.dataList,
+                            option = '<option value=""></option>';
+                        if (arr == null) {
+                            var option = '<option value="">暂无任务!</option>';
+                            $("#taskId").empty().append(option);
+                            $("#taskId").trigger("chosen:updated");
+                            return;
+                        }
+                        for (var item of arr) {
+                            option += '<option title="'+ item.name +'" value="' + item.id + '">' + item.name + '</option>';
+                        }
+                        var options = '<option value="">请选择</option>';
+                        // $("#personId").empty().append(options);
+                        // $("#personId").trigger("chosen:updated");
+                        $("#taskId").empty().append(option);
+                        $("#taskId").trigger("chosen:updated");
+                    });
+                }
+            });
+
+        });
+
+        // 选完业务
+        $('#business_blong2').on('change', function(e, params) {
+            if (!params) {
+                var option = '<option value="">请选择</option>';
+                $("#taskId").empty().append(option);
+                $("#taskId").trigger("chosen:updated");
+                return;
+            }
+            console.log(params)
+            var data={
+                "budgetId":params.selected,
+                page:1,
+                size:1000
+            }
+
+            admin.req("/api/budget/task/page", data, function(res) {
+                var arr = res.data.dataList,
+//                    arr=[{"id":"CLXYW9GL46","name":"立项"}]
+                    option = '<option value=""></option>';
+                if (arr == null) {
+                    var option = '<option value="">暂无任务!</option>';
+                    $("#taskId").empty().append(option);
+                    $("#taskId").trigger("chosen:updated");
+                    return;
+                }
+                for (var item of arr) {
+                    option += '<option value="' + item.id + '">' + item.name + '</option>';
+                }
+                var options = '<option value="">请选择</option>';
+                // $("#personId").empty().append(options);
+                // $("#personId").trigger("chosen:updated");
+                $("#taskId").empty().append(option);
+                $("#taskId").trigger("chosen:updated");
+            });
+        });
+        $('#taskId').on('change', function(e, params) {
+            if (!params) {
+                var option = '<option value="">请选择</option>';
+                // $("#personId").empty().append(option);
+                // $("#personId").trigger("chosen:updated");
+                return;
+            }
+            admin.req("/api/budget/task/query/" + params.selected, {}, function(res) {
+                // var arr = res.data.memberIds,
+                //     arr1 = res.data.memberNames,
+                //     option = '<option value=""></option>';
+                var arr =res.data.mapsList;
+                var arr1 =res.data.userIdDeptNameMapList?res.data.userIdDeptNameMapList:[];
+                var formSelectArr=[];
+                if (arr == null || arr.length == 0) {
+                    // var option = '<option value="">暂无成员!</option>';
+                    // $("#personId").empty().append(option);
+                    // $("#personId").trigger("chosen:updated");
+                    var memberIds_blong_xmSelect = xmSelect.render({
+                        el: '#personId',
+                        filterable: true,
+                        data: [],
+                        show:function(){
+                            $('.layui-laydate').remove();
+                            $('.xm-form-selected').removeClass('xm-form-selected')
+                        }
+                    });
+                    return;
+                }
+                // for (var item of res.data.mapsList) {
+                //     option += '<option title="'+ item.name +'" value="' + item.id + '">' + item.name + '</option>';
+                // }
+
+                for (var i = 0; i < arr.length; i++) {
+                    var title="";
+                    for(var j =0;j<arr1.length;j++){
+                        if(arr1[j].id==arr[i].id){
+                            title=arr1[j].name;
+                        }
+                    }
+                    formSelectArr.push({
+                        name: arr[i].name,
+                        value: arr[i].id,
+                        title:title
+                    });
+                }
+                var memberIds_blong_xmSelect = xmSelect.render({
+                    el: '#personId',
+                    filterable: true,
+                    on: function(data){
+
+                    },
+                    toolbar: {
+                        show: true,
+                    },
+                    data: formSelectArr,
+                    show:function(){
+                        $('.layui-laydate').remove();
+                        $('.xm-form-selected').removeClass('xm-form-selected')
+                    },
+                    template: function(name, value, selected, disabled){
+                        return "<span title="+name.item.title+">"+name.item.name+"</span>";        //返回一个html结构, 用于显示选项
+
+                    },
+                });
+                // $("#personId").empty().append(option);
+                // $("#personId").trigger("chosen:updated");
+            });
+        });
+    });
+</script>

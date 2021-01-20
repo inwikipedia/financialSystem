@@ -1,0 +1,268 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>文件上传</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-ie6.css">
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/ie.css">
+    <![endif]-->
+    <script type="text/javascript" src="../dialogs/internal.js"></script>
+    <script src="./utils.js"></script>
+</head>
+
+<body>
+    <div class="content">
+        <table class="table table-bordered table-striped table-hover">
+            <tr>
+                <th>控件名称（建议使用中文，易辨识）<span class="label label-important">*</span></th>
+                <th>对齐方式</th>
+            </tr>
+            <tr>
+                <td><input type="text" id="adcform_title" placeholder="必填"></td>
+                <td>
+                    <select id="adcform_align">
+                        <option value="left">左对齐</option>
+                        <option value="center">居中对齐</option>
+                        <option value="right">右对齐</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><span>&nbsp;&nbsp;&nbsp;&nbsp;长&nbsp;&nbsp;X&nbsp;&nbsp;宽&nbsp;&nbsp;&nbsp;&&nbsp;&nbsp;&nbsp;字体大小</span>
+                </th>
+                <th><span>可见性</span> </th>
+            </tr>
+            <tr>
+                <td>
+                    <input id="adcform_width" type="text" value="180" class="input-small span1" placeholder="auto" />
+                    X
+                    <input id="adcform_height" type="text" value="" class="input-small span1" placeholder="auto" />
+                    &
+                    <input id="adcform_fontsize" type="text" value="" class="input-small span1" placeholder="auto" />
+                    px
+
+                </td>
+                <td>
+                    <label class="checkbox inline"><input id="adcform_hide" type="checkbox" /> 隐藏 </label>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        var oNode = null,
+            thePlugins = 'adc_form_file',
+            fileName = 'file_' + new Date().getTime();
+        window.onload = function () {
+            if (UE.plugins[thePlugins].editdom) {
+                oNode = UE.plugins[thePlugins].editdom;
+                var dangerText = null;
+                var gTitle = oNode.getAttribute('title').replace(/&quot;/g, "\""),
+                    gHidden = oNode.getAttribute('adcform_hide'),
+                    gFontSize = oNode.getAttribute('adcform_fontsize'),
+                    gAlign = oNode.getAttribute('adcform_align'),
+                    gWidth = oNode.getAttribute('adcform_width'),
+                    gHeight = oNode.getAttribute('adcform_height');
+                gTitle = gTitle == null ? '' : gTitle;
+                $G('adcform_title').value = gTitle;
+                if (gHidden == '1') {
+                    $G('adcform_hide').checked = true;
+                }
+                $G('adcform_fontsize').value = gFontSize;
+                $G('adcform_width').value = gWidth;
+                $G('adcform_height').value = gHeight;
+                $G('adcform_align').value = gAlign;
+            }
+        }
+        dialog.oncancel = function () {
+            if (UE.plugins[thePlugins].editdom) {
+                delete UE.plugins[thePlugins].editdom;
+            }
+        };
+        dialog.onok = function () {
+            if ($G('adcform_title').value == '') {
+                alert('请输入控件名称');
+                return false;
+            }
+            var gTitle = $G('adcform_title').value.replace(
+                    /\"/g,
+                    "&quot;"),
+                gFontSize = $G('adcform_fontsize').value,
+                gAlign = $G('adcform_align').value,
+                gWidth = $G('adcform_width').value,
+                gHeight = $G('adcform_height').value;
+
+            if (!oNode) {
+                try {
+                    oNode = createElement('input', 'file');
+                    oNode.setAttribute('type', 'file');
+                    oNode.setAttribute('title', gTitle);
+                    oNode.setAttribute('name', fileName);
+                    oNode.setAttribute('adcform', thePlugins);
+                    if ($G('adcform_hide').checked) {
+                        oNode.setAttribute('adcform_hide', 1);
+                    } else {
+                        oNode.setAttribute('adcform_hide', 0);
+                    }
+                    if (gFontSize != '') {
+                        oNode.style.fontSize = gFontSize + 'px';
+                        oNode.setAttribute('adcform_fontsize', gFontSize);
+                    }
+                    if (gAlign != '') {
+                        oNode.style.textAlign = gAlign;
+                        oNode.setAttribute('adcform_align', gAlign);
+                    }
+                    if (gWidth != '') {
+                        oNode.style.width = gWidth + 'px';
+                        oNode.setAttribute('adcform_width', gWidth);
+                    }
+                    if (gHeight != '') {
+                        oNode.style.height = gHeight + 'px';
+                        oNode.setAttribute('adcform_height', gHeight);
+                    }
+
+                    // 保存上传文件返回的ID
+                    var fileidNode = document.createElement("input");
+                    fileidNode.setAttribute('style', 'display: none !important;');
+                    fileidNode.setAttribute('name', fileName + '_fileid');
+                    // 上传
+                    var uploadNode = document.createElement('button');
+                    uploadNode.className = 'layui-btn layui-btn-sm layui-btn-primary';
+                    uploadNode.appendChild(document.createTextNode('上传'));
+                    var exts='pdf|doc|docx|xlsx|xls|zip|rar|jpg|jpeg|png|gif|ppt|pptx';
+                    uploadNode.setAttribute('onclick',
+                        '{\
+                        if(document.querySelector("input[name=' +fileName +']").files.length<=0)return layui.layer.msg("请先选择文件",{icon:0});\
+                        var fileText=document.querySelector("input[name=' +fileName +']").files[0].name.toLowerCase();\
+                        if(!RegExp("\\\\w\\\\.('+exts+')$","i").test(escape(fileText))){\
+                            return layui.layer.msg("上传文件格式错误，请重新选择文件！",{icon:0});\
+                        };\
+                        var xhr = new XMLHttpRequest();\
+                        xhr.open("POST", "/api/sys/file/upload");\
+                        var index = layer.load(2);\
+                        var fd = new FormData();\
+                        fd.append("file", document.querySelector("input[name=' +fileName +']").files[0]);\
+                        xhr.onload = function(e){\
+                            layer.close(index);\
+                            if(xhr.status===200){\
+                                if(JSON.parse(xhr.responseText).ok){\
+                                document.querySelector("input[name=\'' +fileName +'\']").style.display="none";\
+                                document.querySelector("input[name=\'' +fileName +'\']").dataset.filename=document.querySelector("input[name=\'' +fileName +'\']").value;\
+                                document.querySelector("button[name=\'' +fileName +'_upload\']").style.display="none";\
+                                document.querySelector("button[name=\'' +fileName +'_download\']").style.display="inherit";\
+                                document.querySelector("button[name=\'' +fileName +'_del\']").style.display="inherit";\
+                                document.querySelector("input[name=\'' +fileName +'_fileid\']").value= JSON.parse(xhr.responseText).data.fileId;\
+                                }else{\
+                                layui.layer.msg(JSON.parse(xhr.responseText).message,{icon:0});\
+                                }\
+                            }else if(xhr.status===413){\
+                                layui.layer.msg("上传失败！上传文件大小不能超过 50M",{icon:0});\
+                            }\
+                            else{\
+                                layui.layer.msg("上传失败！请在控制台查看错误日志",{icon:5});\
+                                console.error(xhr);\
+                            }\
+                        };\
+                        xhr.send(fd);\
+                    }'
+                    );
+                    uploadNode.setAttribute('name', fileName + '_upload');
+                    // 下载
+                    var downloadNode = document.createElement('button');
+                    downloadNode.className = 'layui-btn layui-btn-sm layui-btn-primary';
+                    downloadNode.appendChild(document.createTextNode('下载'));
+                    downloadNode.setAttribute('onclick',
+                        '{\
+                        var fileId = document.querySelector("input[name=\'' +
+                        fileName +
+                        '_fileid\']").value;\
+                        console.log(fileId,45454);\
+                        window.open("/api/sys/file/"+fileId+"/download");\
+                    }'
+                    );
+                    downloadNode.setAttribute('name', fileName + '_download');
+                    downloadNode.setAttribute('style', 'display: none;');
+                    // 删除
+                    var delNode = document.createElement('button');
+                    delNode.className = 'layui-btn layui-btn-sm layui-btn-danger';
+                    delNode.appendChild(document.createTextNode('删除'));
+                    delNode.setAttribute('onclick',
+                        '{\
+                        document.querySelector("input[name=\'' + fileName + '\']").style.display="inherit";\
+                        document.querySelector("input[name=\'' + fileName + '\']").outerHTML=document.querySelector("input[name=\'' + fileName + '\']").outerHTML;\
+                        document.querySelector("button[name=\'' +
+                        fileName +
+                        '_upload\']").style.display="inherit";\
+                        document.querySelector("button[name=\'' +
+                        fileName +
+                        '_download\']").style.display="none";\
+                        document.querySelector("button[name=\'' +
+                        fileName +
+                        '_del\']").style.display="none";\
+                        document.querySelector("input[name=\'' +
+                        fileName + '_fileid\']").value="";\
+                    }');
+                    delNode.setAttribute('name', fileName + '_del');
+                    delNode.setAttribute('style', 'display: none;');
+
+                    var html = '<span adcform="' + thePlugins + '" name="' + fileName + '" title="' + gTitle + '">' +
+                        oNode.outerHTML + uploadNode.outerHTML + downloadNode.outerHTML + delNode
+                        .outerHTML + fileidNode.outerHTML + '</span>';
+
+                    editor.execCommand('insertHtml', html);
+
+                } catch (e) {
+                    try {
+                        editor.execCommand('error');
+                    } catch (e) {
+                        alert('控件异常！');
+                    }
+                    return false;
+                }
+            } else {
+                oNode.setAttribute('title', gTitle);
+                if ($G('adcform_hide').checked) {
+                    oNode.setAttribute('adcform_hide', 1);
+                } else {
+                    oNode.setAttribute('adcform_hide', 0);
+                }
+                if (gFontSize != '') {
+                    oNode.style.fontSize = gFontSize + 'px';
+                    oNode.setAttribute('adcform_fontsize', gFontSize);
+                } else {
+                    oNode.style.fontSize = '';
+                    oNode.setAttribute('adcform_fontsize', '');
+                }
+                if (gAlign != '') {
+                    oNode.style.textAlign = gAlign;
+                    oNode.setAttribute('adcform_align', gAlign);
+                } else {
+                    oNode.setAttribute('adcform_align', '');
+                }
+                if (gWidth != '') {
+                    oNode.style.width = gWidth + 'px';
+                    oNode.setAttribute('adcform_width', gWidth);
+                } else {
+                    oNode.style.width = '';
+                    oNode.setAttribute('adcform_width', '');
+                }
+                if (gHeight != '') {
+                    oNode.style.height = gHeight + 'px';
+                    oNode.setAttribute('adcform_height', gHeight);
+                } else {
+                    oNode.style.height = '';
+                    oNode.setAttribute('adcform_height', '');
+                }
+                delete UE.plugins[thePlugins].editdom;
+            }
+        };
+    </script>
+</body>
+
+</html>

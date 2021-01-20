@@ -1,0 +1,1146 @@
+<link rel='stylesheet' href='../../assetsInfo/libs/fullcalendar/fullcalendar.css' />
+<link rel="stylesheet" href="../../assetsInfo/css/duty.css">
+<!-- zTree 样式 -->
+<link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/metroStyle.css">
+
+<script src='../../assetsInfo/libs/fullcalendar/moment.min.js'></script>
+<script src='../../assetsInfo/libs/fullcalendar/fullcalendar.js'></script>
+<script src="../../assetsInfo/libs/fullcalendar/lunar.js"></script>
+<script src="../../assetsInfo/libs/fullcalendar/zh-cn.js"></script>
+<style>
+
+    element.style{
+        margin-bottom: 20px !important;
+    }
+    .fc .fc-toolbar{
+        margin: 10px;
+        text-align: center;
+        color: #999;
+    }
+    .fc-toolbar .fc-center{
+        padding-right: 0;
+    }
+    .cicle-point{
+        border-radius: 10px;
+        border: 1px solid #ff7168;
+        background: #ff7168;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        color: #FFFFFF;
+
+    }
+    .wz_title{
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+        line-height: 18px;
+        height: 18px;
+    }
+    .searchValue{
+        width: 88%;
+        border-radius: 20px;
+        border: 1px solid #ccc;
+        height: 26px;
+        text-indent: 15px;
+        margin: 10px 20px 0px 15px
+    }
+    .search{
+        font-size: 18px;
+        color: #0D96FF;
+    }
+    .personList{
+        height: 100%;
+        overflow: hidden;
+        padding:0 15px ;
+    }
+    .personListLine{
+        margin-left: 30px;
+        line-height: 40px;
+    }
+    .personListLine:hover{
+        background-color: #F2F6F8;
+    }
+    .personListName{
+        margin-right: 10px;
+        margin-left: 20px;
+    }
+    .backColr{
+        background-color: #F2F6F8;
+    }
+    .backCol{
+        background-color: #E1F1F8 !important;
+    }
+    .text{
+        background:url('../../assetsInfo/images/search.png') no-repeat right center;
+        background-position:95% ;
+        background-size: 16px 16px;
+    }
+    #allWorkCostTime{
+        background:rgba(238,238,238,1);
+    }
+    .FillWorkBox{
+        float: left;
+        text-align: center;
+        width: 133px;
+        padding-top: 5px;
+    }
+    .allFillWorkBox{
+        float: left;
+        text-align: center;
+        width: 133px;
+        padding-top: 5px;
+    }
+    .approveFillWorkCostTime{
+        color: #008FC3;
+        font-weight:bold;
+    }
+    .allFillWorkCostTime{
+        font-weight:bold;
+    }
+    .fc-basicWeek-view .wz_title{
+        height: 58px;
+        line-height: 29px;
+        /*white-space: pre;*/
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        white-space: normal;
+        word-break: break-all;
+    }
+    .fc-day-cnDate, .fc-day-cnTerm{
+        width: auto;
+    }
+    .fc-popover .wz_title{
+        height:27px;
+        -webkit-line-clamp: 1;
+    }
+    /*兼容自适应高度问题*/
+    @media screen and (max-width: 1366px) {
+        .fc-basicWeek-view .wz_title{
+            height: 49px;
+            line-height: 24px;
+        }
+        .FillWorkBox{
+            width: 93px;
+        }
+        .allFillWorkBox{
+            width: 93px;
+        }
+        .fc-popover .wz_title{
+            height:15px;
+            line-height: 17px;
+            -webkit-line-clamp: 1;
+        }
+    }
+    .workStyle{
+        position: relative;
+        left:5px;
+        cursor: pointer;
+    }
+    .layui-layer-tips  .layui-layer-content{
+        white-space: pre-wrap;
+    }
+    .layui-layer-tips .layui-layer-content{
+        background-color: #fff;
+        color: #000;
+    }
+    .finishBtn{
+        border: 1px solid #10ADE8 !important;
+        color: #10ADE8;
+        height: 22px;
+        line-height: 20px;
+        float: left;
+        background: #fff;
+        padding: 0 10px;
+        cursor: pointer;
+        margin: 5px 0px 0px 10px;
+    }
+    .redSpan{
+        color:red;
+    }
+    .personList .layui-table-cell{
+        padding: 0px;
+    }
+</style>
+<style type="text/css" scoped>
+    #main{
+        margin-top: 9px;
+    }
+</style>
+<div class="layui-row layui-col-space15 layui-layout layui-layout-admin" style="height: 100%">
+    <div class="layui-col-md12 card-show-list" style="height: 100%">
+        <div class="layui-card layui-row" style="height: 98%;padding-top: 5px;padding-bottom: 25px;">
+            <div id="left" class="layui-col-md3" style="height: 100%;padding-bottom: 3%;width: 23%">
+                <a class="finishBtn" href="#!ADC_project_staff_html">返回</a>
+                <input type="text" placeholder="请输入姓名" class="searchValue text" id="searchValue" onfocus="$(this).css('border','1px solid #18B1EB')" onblur="$(this).css('border','1px solid #ccc')">
+                <!--<ul id="personList" class="personList"></ul>-->
+                <div class="personList">
+                    <table id="personList" lay-filter="personList" ></table>
+                </div>
+            </div>
+            <div id="main" class="layui-col-md9" ></div>
+        </div>
+    </div>
+</div>
+<!-- 任务列表复选框 -->
+<script type="text/html" id="isCompleteTpl">
+    <input type="checkbox" name="isComplete" value="未完成" lay-filter="isComplete">
+</script>
+
+<!-- zTree js 文件 -->
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+
+<script>
+    // layui初始化
+    layui.use(['admin', 'layer', 'form', 'laydate', 'config','formSelects','upload'], function() {
+        var admin = layui.admin,
+            layer = layui.layer,
+            form = layui.form,
+            formSelects = layui.formSelects,
+            upload = layui.upload,
+            laydate = layui.laydate,
+            config = layui.config,
+            personList=[],
+            table = layui.table;
+        var thisYear=new Date().getFullYear();
+        var maxYear = thisYear+"-12-31";
+        var minYear = thisYear+"-1-1";
+        var isClick=false;
+        // var isFirst=
+        // 人员id
+        var personId = admin.GetRequest().usid;
+        var personName = admin.GetRequest().usname;
+        var lengthAAA;
+        var dateChange=function(data){
+            var str = data.replace(/-/g,'/');
+            var date = new Date(str).getTime();
+            return date;
+        };
+        if (!personId)
+        {
+            personId=config.getAccount().usid;
+        }
+        var orgId = admin.GetRequest().orgId;
+        var limtItem;
+        //判断窗口分辨率
+        $(document).ready(function() {
+            if(screen.width==1920){
+                limtItem=10;
+            }if(screen.width<=1366){
+                limtItem=6;
+            }
+        });
+        if (!orgId)
+        {
+            $('#left').hide();
+            $('#left').removeClass('layui-col-md3');
+            $('#main').removeClass('layui-col-md9');
+            $('#main').addClass('layui-col-md12');
+        }else{
+            // getPersonData();
+        }
+        // 日期框初始化
+        laydate.render({
+            elem: '#startTime'
+        });
+        //渲染左侧人员
+        // $(".search").on('click',function () {
+        //     getPersonData();
+        // });
+        //2019 5.5 优化 前端实现模糊搜索，避免每次都调用接口
+        if(orgId)
+        {
+            // getPersonData();
+
+        }
+     //call lazy load
+        $('#searchValue').bind('input propertychange', function() {
+            var _keywords = $(this).val();
+            var data=personList.filter(function(item){
+
+                return (item.usname).indexOf(_keywords)!=-1;
+            })
+             setOrgUserData(data);
+
+        });
+        function getPersonData(option) {
+            var params= {
+                orgId: orgId ,
+                // pageSize:10000
+            };
+            // if(keyword)
+            // {
+            //     params.usName=keyword;
+            // }
+
+            admin.req('/api/budget/staffCalendar/newQueryWithOrgId', option,function (res) {
+                console.log("2222222");
+
+                personList=res.data;
+                setOrgUserData(personList)
+
+
+            },{method: 'POST'})
+        }
+
+        function setOrgUserData(data)
+        {
+            table.render({
+                elem: '#personList',
+                id: 'personList',
+                data:data,
+                height: 'full-200',
+                cols: [
+                    [{
+                        field: 'usname',
+                        title: '员工姓名',
+                        align: 'center',
+                        event: 'handle',
+                        templet: function (d) {
+                            var text = d.usname ? d.usname : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'contactAddress',
+                        title: '职务',
+                        // width:80,
+                        align: 'center',
+                        event: 'handle',
+                        templet: function (d) {
+                            var text = d.contactAddress ? d.contactAddress : "暂无职级";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'workTime',
+                        title: '有效工时',
+                        align: 'center',
+                        event: 'handle',
+                        templet: function (d) {
+                            var text = d.workTime ? d.workTime.toFixed(2)+"人天" : "0人天";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }]
+                ],
+                limit: data.length,
+                cellMinWidth: 80,
+                skin: 'row',
+                even: true,
+                done: function(res, curr, count){
+                    if(!isClick){
+                        for(var i =0;i<res.data.length;i++){
+                            if(res.data[i].usid==personId){
+                                $(".personList .layui-table-body tr").eq(i).addClass('backCol').siblings().removeClass('backCol');
+                            }
+                        }
+                    }
+                    $(".personList .layui-table-main").scrollTop(lengthAAA);
+                }
+            });
+            table.on('tool(personList)', function (obj,elem) {
+                // 获取点击列的数据
+                var data = obj.data;
+                var layEvent = obj.event;
+                // 判断操作类型
+                if (layEvent === 'handle') {
+                    personId=obj.data.usid;
+                    isClick=true;
+                    obj.tr.addClass('backCol').siblings().removeClass('backCol');
+                    $('#main').fullCalendar('refetchEvents');
+                }
+            });
+        }
+
+
+        // $("ul#personList").on("click","li",function(){      //只需要找到你点击的是哪个ul里面的就行
+        //     personId=$(this).attr('id');
+        //     $('#main').fullCalendar('refetchEvents');
+        //     $(this).addClass('backCol').siblings().removeClass('backCol')
+        // });
+        // $("ul#personList").on("mouseover","li",function(){      //只需要找到你点击的是哪个ul里面的就行
+        //     $(this).addClass('backColr').siblings().removeClass('backColr')
+        // });
+
+        // 渲染任务列表
+        function renderTable(url, data, isEdited) {
+            if (!data) {
+                data = {};
+            }
+            // 加载动画
+            admin.showLoading('.layui-body');
+            table.render({
+                // table参数
+                id: 'task',
+                elem: '#task',
+                url: admin.formatUrl(url),
+                where: data,
+                parseData: function(res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        //"count": res.data.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+                },
+                cols: [
+                    [{
+                        type: 'checkbox'
+                    }, {
+                        type: 'numbers',
+                        title: '序号'
+                    }, {
+                        field: 'childrenName',
+                        title: '任务',
+                        align: 'center'
+                    }, {
+                        field: 'taskName',
+                        title: '任务',
+                        align: 'center',
+                        hide: true
+                    }, {
+                        field: 'workTime',
+                        title: '工时',
+                        align: 'center',
+                        edit: isEdited
+                    }, {
+                        field: 'taskStatus',
+                        title: '是否完成',
+                        templet: '#isCompleteTpl',
+                        align: 'center'
+                    }]
+                ],
+                page: false,
+                // 渲染表格完成后，去除加载动画
+                done: function() {
+                    admin.removeLoading('.layui-body');
+                    $(window).resize();
+                    if (!isEdited) {
+                        $("[name='isComplete']").attr("disabled", "");
+                    }
+                },
+                // 列宽最少 120，防止在小屏幕上显示不全列标题
+                cellMinWidth: 80
+            });
+        }
+
+        $('#main').on('mousewheel DOMMouseScroll', function(e) {
+            var delta = (e.originalEvent.wheelDelta && (e.originalEvent.wheelDelta > 0 ? 1 : -1)) ||  // chrome & ie
+                (e.originalEvent.detail && (e.originalEvent.detail > 0 ? -1 : 1));              // firefox
+
+            console.log(delta)
+            if (delta<0)
+            {
+                $('.fc-next-button').click();
+            }
+            else {
+                $('.fc-prev-button').click();
+            }
+
+        })
+        init();
+        var workTimeMap=[];
+        var workMonthMap=[];
+        var allApproveFillWorkCostTime;
+        var exportOption;
+
+        // 日历部分
+       function init() {
+
+           $('#main').fullCalendar({
+//               customButtons: {
+//                   myCustomButton: {
+//                       text: '添加事件',
+//                       click: function () {
+//                           $("#endTimeBlock").addClass("layui-hide");
+//                           var curDate = new Date().Format('yyyy-MM-dd');
+//                           create(curDate)
+//                       }
+//                   },
+//               },
+               // 日历头部
+               header: {
+                   right: 'prev, next, today, month, basicWeek, listButton',
+                   left: ' myCustomButton',
+                   center: 'title'
+               },
+               // titleFormat:"5666666666",
+               height: "parent",
+               showNonCurrentDates: true,
+               fixedWeekCount: false,
+               eventLimit: true,
+               views: {
+                   basicWeek: {
+                       eventLimit: limtItem // adjust to 6 only for timeGridWeek/timeGridDay
+                   }
+               },
+               defaultView: "basicWeek",
+               eventLimitText: function (data) {
+                   return "还有" + data + "项..."
+               },
+               eventAfterRender: function (event, element, view) {
+                   var $this = $(element);
+                   //通过 操作 $this 可以从新定义dom
+                   // 通过 wz_title wz_name 自定义css样式  例如：
+                   $this.html("<div title='"+event.title+"' id='" + event.obj.id + "' class=\"wz_title\">" +
+                       event.title + "</div>");
+                   // $this.after("<div class=\"wz_name\">" + event.description + "</div>");
+               },
+               eventOrder: "description",
+               // 日历日程活动事件
+               events: function (start, end, timezone, callback) {
+                   lengthAAA=$(".personList .layui-table-main").scrollTop();
+                   // 获得当前日历月份
+                   var date = this.getDate().format('YYYY-MM');
+                   // 搜索框内有内容时，非首次进入时 不刷新 人员列表
+                   if(orgId&&!isClick && !$('#searchValue').val()){
+                       getPersonData({
+                           "createUserId": personId,
+                           "scheduleBeginDate": start.format("YYYY-MM-DD"),
+                           "scheduleEndDate": end.format("YYYY-MM-DD"),
+                           "orgId": orgId
+                       });
+                   }
+                   isClick=false;
+                   // 获得后台数据
+                   admin.req("/api/budget/staffCalendar/newQuery", {
+                       "createUserId": personId,
+                       "scheduleBeginDate": start.format("YYYY-MM-DD"),
+                       "scheduleEndDate": end.format("YYYY-MM-DD")
+                   }, function (json) {
+                       var events = [];
+                       if(json.data.workTimeMap.length==7){
+                           workTimeMap=json.data.workTimeMap;
+                       }else{
+                           workMonthMap=json.data.workTimeMap;
+                       }
+                       allApproveFillWorkCostTime=json.data.allApproveFillWorkCostTime?json.data.allApproveFillWorkCostTime.toFixed(2):0;
+                       // 遍历返回数据
+                       $.each(json.data.resultList, function (i, c) {
+                           var color;
+                           if(c.approveState==0||c.approveState==3||c.approveState==4||c.approveState==5){
+                               color='#eeeeee';
+                           }else if(c.approveState==1){
+                               color='#dee9fb';
+                           }else if(c.approveState==2){
+                               color='#fffbbb';
+                           }else if(c.approveState==6){
+                               color='#ffc9c9'
+                           }
+                           events.push({
+                               title: c.workDescription.length>15?c.workDescription.substring(0,15)+"...": c.workDescription,
+                               start: c.start, // will be parsed
+                               color: color,
+                               obj: c
+                           });
+                       });
+                       callback2 = callback
+                       // 回调函数
+                       callback(events);
+                       // $('.wz_title').each(function (index,item) {
+                       //     $(this).attr('title', $(this).html());
+                       // })
+                   }, {
+                       method: "post"
+                   });
+
+               },
+               eventAfterAllRender: function (view) {
+                   var strAll;
+                   if(view.type=='basicWeek'){
+                       strAll="(本周有效投入：";
+                       if($('#allWorkCostTime').length==0){
+                           $('.fc-bg>table>tbody').append('<tr id="allWorkCostTime" style="height:50px;color: #666666">' +
+                               '</tr>');
+                           for (var i = 0; i <workTimeMap.length ; i++) {
+                               var color;
+                               if(!orgId){
+                                   if(workTimeMap[i]&&workTimeMap[i].approveFillWorkCostTime<8){
+                                       color='#FFB400';
+                                   }else{
+                                       color='#008FC3';
+                                   }
+                                   $('.fc-bg>table>tbody>tr').eq(1).append('<td>' +
+                                       '<div class="FillWorkBox"><div class="approveFillWorkCostTime" style="color:'+color+'">'+(workTimeMap[i]?workTimeMap[i].approveFillWorkCostTime+"h":"--")+'</div><div class="textNow">有效</div></div>' +
+                                       '<div class="allFillWorkBox"><div class="allFillWorkCostTime">'+(workTimeMap[i]?workTimeMap[i].allFillWorkCostTime+"h":"--")+'</div><div class="textAll">累计</div></div>' +
+                                       '</td>');
+                               }else{
+                                   if(workTimeMap[i]&&workTimeMap[i].approveFillWorkCostTime<8){
+                                       color='#e83c42';
+                                   }else{
+                                       color='#179f92';
+                                   }
+                                   $('.fc-bg>table>tbody>tr').eq(1).append('<td>' +
+                                       '<div class="workOrgid" style="height: 50px;text-align: center;line-height: 50px;width: 100%;font-size: 20px;"><div class="approveFillWorkCostTime" style="color:'+color+'">'+(workTimeMap[i]?workTimeMap[i].approveFillWorkCostTime+"h":"--")+
+                                       '</td>');
+                               }
+                           }
+                       }else {
+                           for (var i = 0; i <workTimeMap.length ; i++) {
+                               var color;
+                               if(!orgId){
+                                   if(workTimeMap[i]&&workTimeMap[i].approveFillWorkCostTime<8){
+                                       color='#FFB400';
+                                   }else{
+                                       color='#008FC3';
+                                   }
+                                   $('#allWorkCostTime>td').eq(i).children('.FillWorkBox').children('.approveFillWorkCostTime').html((workTimeMap[i]?workTimeMap[i].approveFillWorkCostTime+"h":"--")).css('color',color);
+                                   $('#allWorkCostTime>td').eq(i).children('.allFillWorkBox').children('.allFillWorkCostTime').html((workTimeMap[i]?workTimeMap[i].allFillWorkCostTime+"h":"--"));
+                               }else{
+                                   if(workTimeMap[i]&&workTimeMap[i].approveFillWorkCostTime<8){
+                                       color='#e83c42';
+                                   }else{
+                                       color='#179f92';
+                                   }
+                                   $('#allWorkCostTime>td').eq(i).children('.workOrgid').children('.approveFillWorkCostTime').css('color',color).html((workTimeMap[i]?workTimeMap[i].approveFillWorkCostTime+"h":"--"));
+                               }
+
+                           }
+                       }
+                   } else if(view.type=='month'){
+                       strAll="(本月有效投入：";
+                       if($('.workStyle').length==0){
+                           for (var i = 0; i <$('.fc-day-grid>.fc-row').length; i++) {
+                               for (var j = 0; j <7 ; j++) {
+                                   $('.fc-day-grid>.fc-row:nth-child('+(i+1)+')>.fc-content-skeleton>table>thead>tr>td:nth-child('+(j+1)+')').append('<div ><img class="workStyle workCost'+((i*7)+j)+'" src="../../assetsInfo/images/shizhong.png" ></div>')
+                               }
+                           }
+                       }
+                       for (var i = 0; i <workMonthMap.length ; i++) {
+                           setMouse(i,workMonthMap[i]);
+                       }
+                   }
+                   var htmlExport ='';
+                   if(!orgId){
+                       htmlExport='<button class="layui-btn briefingBtn layui-btn-normal" style="background-color: #2293F9;width: 70px;height: 25px;line-height: 25px;padding: 0 5px;" id="exportDailyFile">' +
+                           '<img src="../../assetsInfo/images/daochu.png" style=" width: 16px">导出</button>';
+                   }
+                   $("#main").find('.fc-toolbar > div > h2').empty().append(
+                       "<div>"+view.title+strAll+"<span style='color:#008FC3'>"+allApproveFillWorkCostTime+"</span>"+"人天)"+htmlExport+"</div>"
+                   );
+                   $("#exportDailyFile").off("click").on("click",function () {
+                       layer.open({
+                           type: 1,
+                           title: '选择导出范围',
+                           content: '<div id="searchDate" class="layui-form" lay-filter="searchDate"; style="padding: 20px" >\n' +
+                           '<div class="layui-form-item" style="position: relative">\n' +
+                           '<div style="display: inline-block;width: 80px;height:19px">' +
+                           '<label style="white-space: pre;position: absolute;top:5px;"><span class="redSpan">*</span>开始时间：</label>' +
+                           '</div>'+
+                           '<div style="display: inline-block;width: calc(100% - 90px);position: relative">\n' +
+                           '<input type="text" style="cursor: pointer" placeholder="请选择导出时间" lay-verify="required" class="layui-input" name="startLong" id="startLong" >\n' +
+                           '<img src="/assetsInfo/images/riliform.png" style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;"/>\n' +
+                           '</div>\n' +
+                           '</div>\n' +
+                           '<div class="layui-form-item" style="position: relative">\n' +
+                           '<div style="display: inline-block;width: 80px;height:19px">' +
+                           '<label style="white-space: pre;position: absolute;top:5px;"><span class="redSpan">*</span>结束时间：</label>' +
+                           '</div>'+
+                           '<div style="display: inline-block;width: calc(100% - 90px);position: relative">\n' +
+                           '<input type="text" style="cursor: pointer" placeholder="请选择导出时间" lay-verify="required" class="layui-input" name="endLong" id="endLong" >\n' +
+                           '<img src="/assetsInfo/images/riliform.png" style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;"/>\n' +
+                           '</div>\n' +
+                           '</div>\n' +
+                           '</div>',
+                           area: ['400px', '200px'],
+                           offset:'25%',
+                           btn: ['确定', '取消'],
+                           yes: function(index, layero) {
+                               if(!$('#startLong').val()){
+                                   return layer.msg('请选择开始时间', {
+                                       icon: 5
+                                   });
+                               }
+                               if(!$('#endLong').val()){
+                                   return layer.msg('请选择结束时间', {
+                                       icon: 5
+                                   });
+                               }
+                               var startLong = dateChange($('#startLong').val());
+                               var endLong = dateChange($("#endLong").val());
+                               if(startLong>endLong){
+                                   return layer.msg('开始时间大于结束时间，请重新选择', {
+                                       icon: 5
+                                   });
+                               }
+                               // var allDate = parseInt((endLong - startLong) / 1000 / 60 / 60 /24);
+                               // if(allDate>60){
+                               //     return layer.msg('时间范围超过60天，请重新选择', {
+                               //         icon: 5
+                               //     });
+                               // }
+                               exportOption="?userId="+personId+"&beginDate="+startLong+"&endDate="+endLong;
+                               window.open("/ADC_info/api/budget/staffCalendar/exportExcelByCreateUserIdAndTime"+exportOption)
+                               // window.location.href = "/api/Daily/dataExport?startLong="+startLong+"&endLong="+endLong;
+                               layer.close(index);
+                           },
+                           success: function() {
+                               laydate.render({
+                                   elem: '#startLong'
+                               });
+                               laydate.render({
+                                   elem: '#endLong'
+                               });
+
+                           },
+                           resize: false
+                       });
+
+                   });
+                   $(window).resize();
+               },
+               // 日历框点击事件
+               dayClick: function (date, jsEvent, view) {
+                   var curDate = new Date(date).Format('yyyy-MM-dd');
+                   create(curDate)
+               },
+               // 日程事件点击事件
+               eventClick: function (calEvent, jsEvent, view) {
+                   // 获得日历当天日期
+                   var curDate = new Date().Format('yyyy-MM-dd');
+                   // 获取点击日程日期
+                   var selectDate = calEvent.start.format('YYYY-MM-DD');
+                   // 弹窗按钮
+                   var btn = null;
+                   // 日程简报弹层查看
+                   popMenu('edit', calEvent.obj);
+               }
+           })
+       }
+        Date.prototype.Format = function(fmt) { //author: meizz
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "H+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+        $('#projectId').on('change', function(e, params) {
+            renderTable("/api/Daily/daily/children?projectId=" + params.selected, null, true);
+        });
+
+       function setMouse(i,data) {
+           var tip;
+           $(".workCost"+i+"").off('mouseover').on('mouseover',function () {
+               var color;
+               if(data&&data.approveFillWorkCostTime<8){
+                   color='#FFB400';
+               }else{
+                   color='#008FC3';
+               }
+               tip = layer.tips('有效：<span style="color: '+color+'">'+(data?data.approveFillWorkCostTime+'h':"--")+'</span>\n累计：'+(data?data.allFillWorkCostTime+'h':"--")+'', '.workCost'+i+'', {
+                   tips: [1],
+                   time:0
+               });
+           })
+           $(".workCost"+i+"").off('mouseleave').on('mouseleave',function () {
+               layer.close(tip);
+           })
+       }
+        function create(curDate) {
+            console.log(curDate)
+            if(personId==config.getAccount().usid)
+            {
+                admin.req('/api/budget/task/tree', {
+                    userId:personId
+                }, function (d) {
+                    var judge=false;
+                    for (var i=0;i<d.data.length;i++)
+                    {
+                        if (d.data[i].type==4 || d.data[i].type==3){
+                            judge=true;
+                            break;
+                        }
+                    }
+                    if (judge)
+                    {
+                        popMenu('add',{},curDate);
+                    }
+                    else {
+                        layer.msg('暂无任务，请前往项目管理创建', {
+                            time:3000,
+                            icon: 5
+                        });
+                    }
+                });
+            }
+        }
+
+        function setFormValue(obj) {
+            if(!obj.workCostTime&&obj.handleType=='edit'){
+                $('#oldWork').css('display','black');
+                $('#dailyInfoList').css('display','none');
+                $('#center-area').hide();
+
+                //出差
+                if (obj.dailyType==1)
+                {
+                    //$('#center-area').show();
+                    obj.customerInfo=[obj.customer,obj.dept,obj.contacts];
+
+                }
+                obj.taskChecked=obj.taskIdArray;
+                var elemArray=  $('#dailytype-form input:radio');
+                $.each(elemArray,function(index,elem){
+                    if (elem.value==obj.dailyType)
+                    {
+                        $(elem).prop('checked','checked');
+                    }
+
+                });
+                var custArray=  $('#time_form input:radio');
+                $.each(custArray,function(index,value){
+                    if (value.value==obj.timeSlot)
+                    {
+                        $(value).prop('checked','checked');
+                    }
+                });
+                var con= obj.workDescription?obj.workDescription:"" ;
+                $('.workDescription_new').val(con);
+            }else if(obj.workCostTime||obj.handleType=='add'){
+                $('#oldWork').css('display','none');
+                $('#dailyInfoList').css('display','black');
+                if(obj.id){
+                    var setDailyFun = function () {
+                        $('.noDaily').css('display', 'none');
+                        var isShareHtml ="";
+                        if((obj.approveState==1||obj.approveState==2||obj.approveState==6||
+                                ((obj.approveState==3||obj.approveState==5||obj.approveState==4)&&obj.dailyParentCreateUserId))
+                            &&(obj.dailyParentCreateUserId||obj.childrenDailyCreateUserNames)){
+                            var strH = '提示：此条日报由'+obj.dailyParentCreateUserName+'共享';
+                            if(!obj.dailyParentCreateUserId){
+                                strH = '提示：此条日报共享至'+obj.childrenDailyCreateUserNames.join("、");
+                                if(obj.childrenDailyCreateUserNames.length==0){
+                                    strH="";
+                                }
+                            }
+                            isShareHtml='<div class="layui-form-item dailySelectMember" style="color:#FF9999">\n' +
+                                strH+
+                                '    </div>';
+                        }
+                        obj.workDescription = ADCFormDesignHelper.htmlDecodeByRegExp(obj.workDescription);
+                        $('#dailyInfoList').append('<div class="dailyBox layui-form-item"  dailyParentId="'+obj.dailyParentId+'"  dailyParentCreateUserId="'+obj.dailyParentCreateUserId+'" dailyParentCreateUserName="'+obj.dailyParentCreateUserName+'" childTaskFlag="'+(obj.childTaskFlag?4:3)+'" id="'+obj.taskIdArray[0]+'">\n' +
+                            '                        <span  class="workName" data-id="'+obj.id+'" data-approveState="'+obj.approveState+'" data-budgetId="'+(obj.budgetId?obj.budgetId:"")+'" data-projectId="'+(obj.projectId?obj.projectId:"")+'" id="'+obj.approveUserId+'"  title="'+obj.taskName+'" >'+obj.taskName+'</span>\n' +
+                            '                        <input autocomplete="off"  type="text" name="dailyTime"\n' +
+                            '                             id="dailyTime'+obj.taskIdArray[0]+'" value="'+obj.dailyCreateTime+'"  placeholder="日期" class="layui-input rili dailyTime" readonly lay-verify="required">\n' +
+                            '                        <input type="text" class="workTime" onkeyup="replaceit(this)" value="'+obj.workCostTime+'" lay-verify="required|numberInt"  />\n' +
+                            '<span>小时</span>\n' +
+                            '                        <textarea maxlength="200" name="workDescription" type="text"  rows="8"\n' +
+                            '                                  placeholder="请输入任务描述,字数控制在200字以内"\n' +
+                            '                                  class="layui-textarea workDescription_new workInfo"\n' +
+                            '                        >'+obj.workDescription+'</textarea>'+
+                            '<div class="layui-form-item " style="height: 36px;margin-top: 10px;margin-bottom:0px;position: relative">\n' +
+                            '                    <label style="width:35px;padding:5px 0" class="layui-form-label labelWidth"><span>成果:</span> </label>\n' +
+                            '                    <div class="layui-input-block reduceMarginL" style="position: relative">\n' +
+                            '                        <input style="background: #F6F8FE" type="text" placeholder="请上传附件" name="'+ obj.taskResultFileId +'" id="fileName_'+ obj.taskIdArray[0] +'" class="layui-input" readonly>\n' +
+                            '                    </div>\n' +
+                            '                    <div class="layui-inline " style="position:absolute;right:0;top: 1px;margin-right:0px">\n' +
+                            '                        <button style="background: #229FFF;color:#fff;border:none" class="layui-btn layui-btn-sm layui-btn-normal" title="上传" id="chooseFile_'+ obj.taskIdArray[0] +'">上传</button>\n' +
+                            '                        <button style="background: #87C459;color:#fff;border:none;margin-left: 3px;display: none" class="layui-btn layui-btn-sm layui-btn-normal" title="下载" id="download_'+ obj.taskIdArray[0] +'" >下载</button>\n' +
+                            '                        <button style="background: #FC6664;color:#fff;border:none;margin-left: 3px" class="layui-btn layui-btn-sm layui-btn-normal" title="删除" id="delFile_'+ obj.taskIdArray[0] +'" >删除</button>\n' +
+                            '                        <button class="layui-btn layui-btn-sm layui-btn-normal" title="上传" id="upload_'+ obj.taskIdArray[0] +'" style="display: none">上传</button>\n' +
+                            '                    </div>\n' +
+                            '                </div>'+
+                            memberHtml+isShareHtml+
+                            '                    </div>');
+                        giveBind(obj.taskIdArray[0]);
+                        if(obj.taskResultFileId){
+                            $('#chooseFile_'+obj.taskIdArray[0]).css("display","none");
+                            $('#download_'+obj.taskIdArray[0]).css("display","inline-block");
+                        }
+                        $('#fileName_' + obj.taskIdArray[0]).val(obj.resultFileName ? obj.resultFileName:'')
+                        laydate.render({
+                            elem: '#dailyTime'+obj.taskIdArray[0]+'',
+                            type: 'date',
+                            min:minYear,
+                            max:maxYear
+                        });
+                    };
+                    var memberHtml="";
+                    if((obj.approveState==4||obj.approveState==5||obj.approveState==3)&&!obj.dailyParentCreateUserId&&obj.childTaskFlag!=null){
+                        memberHtml='<div class="layui-form-item dailySelectMember">\n' +
+                            '        <label class="layui-form-label" >协作人<img src="/assetsInfo/images/wenhao.png"  class="menW'+obj.taskIdArray[0]+' wenhao" />：</label>\n' +
+                            '        <div class="layui-input-block" >\n' +
+                            '            <div name="dailyMemberIds'+obj.taskIdArray[0]+'" id="dailyMemberIds'+obj.taskIdArray[0]+'">\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '</div>';
+
+                        var loadD2 =layer.load(2);
+                        var urlDaily ="/api/budget/task/query/";
+                        if(obj.childTaskFlag){
+                            urlDaily="/api/budget/childrentask/query/";
+                        }
+                        $.ajax({
+                            url: urlDaily+obj.taskIdArray[0],
+                            type: 'get',
+                            // data: JSON.stringify(optionNum),
+                            // contentType: 'application/json',
+                            success: function (res) {
+                                layer.close(loadD2);
+                                if (res.ok) {
+                                    var arr =res.data.mapsList;
+                                    var arr1 =res.data.userIdDeptNameMapList?res.data.userIdDeptNameMapList:[];
+                                    var formSelectArr=[];
+                                    for (var i = 0; i < arr.length; i++) {
+                                        var title="";
+                                        for(var j =0;j<arr1.length;j++){
+                                            if(arr1[j].id==arr[i].id){
+                                                title=arr1[j].name;
+                                            }
+                                        }
+                                        if(arr[i].id!=config.getAccount().usid){
+                                            formSelectArr.push({
+                                                name: arr[i].name,
+                                                value: arr[i].id,
+                                                title:title
+                                            });
+                                        }
+                                    }
+                                    setDailyFun();
+                                    var memberIds_blong_xmSelect = xmSelect.render({
+                                        el: '#dailyMemberIds'+obj.taskIdArray[0],
+                                        filterable: true,
+                                        on: function(data){
+
+                                        },
+                                        theme: {
+                                            color: '#0081ff',
+                                        },
+                                        autoRow: true,
+                                        direction: 'down',
+                                        searchTips: '输入你要找的人',
+                                        toolbar: {
+                                            show: true,
+                                        },
+                                        initValue:obj.childrenDailyCreateUserIds,
+                                        data: formSelectArr,
+                                        show:function(){
+
+                                        },
+                                        template: function(name, value, selected, disabled){
+                                            return "<span title="+name.item.title+">"+name.item.name+"</span>";        //返回一个html结构, 用于显示选项
+
+                                        },
+                                    });
+                                    var menIndex;
+                                    $(".menW"+obj.taskIdArray[0]).off('mouseleave').on('mouseleave',function () {
+                                        layer.close(menIndex);
+                                    }).off('mouseenter').on('mouseenter',function () {
+                                        menIndex=layer.tips("<span style='color:#333333;'>选择协作人后，此条日报将同时进入协作人的日程管理中，并计入其工时。</span>", '.menW'+obj.taskIdArray[0], {
+                                            tips: [1, '#fff'],
+                                        });
+                                    });
+                                } else {
+                                    return layui.layer.msg(res.message, {
+                                        icon: 5
+                                    });
+                                }
+                            },
+                            error: function (err) {
+                                layer.close(loadD2);
+                                return layui.layer.msg(err.message, {
+                                    icon: 5
+                                });
+                            }
+                        });
+                    }else{
+                        setDailyFun();
+                    }
+                }
+            }
+            obj.taskChecked = obj.taskIdArray;
+            if(obj.approveState==1||obj.approveState==2){
+                $('#btn-sumbit-save').attr("disabled", 'disabled');
+                $('#btn-sumbit-save').removeClass("layui-btn-normal");
+                $('#btn-sumbit-save').addClass("layui-btn layui-btn-disabled");
+                $('#btn-daily-save').attr("disabled", 'disabled');
+                $('#btn-daily-save').removeClass("layui-btn-normal");
+                $('#btn-daily-save').addClass("layui-btn layui-btn-disabled");
+                $('#chooseFile_'+obj.taskIdArray[0]).css("display","none");
+                $('#delFile_'+obj.taskIdArray[0]).css("display","none");
+                $('#delFile_'+obj.taskIdArray[0]).parent().css("right","55px");
+                $('#fileName_' + obj.taskIdArray[0]).attr("placeholder","");
+            }
+            form.render();
+            var title = $('.layui-tpl-container .layui-card-header');
+            var formNames = ['id', 'workDescription', 'handleType','customerInfo','taskChecked','dailyCreateTime','usid','approveState','workCostTime'];
+            obj.title && title.text(obj.title);
+            for (var i = 0; i < formNames.length; i++) {
+                if (obj[formNames[i]]) {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                } else {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val('');
+                }
+            }
+
+        }
+
+
+        function popMenu(handleType, data,date) {
+            var params = {};
+            var title = "日报添加";
+            if (handleType=='add')
+            {
+                params.dailyCreateTime=date;
+            }
+           $('#dailyCreateTime').attr('disabled','disabled');
+            if (handleType === 'edit') {
+                title = '日报编辑';
+                data.dailyCreateTime=data.start;
+                params = data;
+
+            }
+            if(params.approveState==1||params.approveState==2){
+                title = '日报查看';
+            }
+            params.handleType = handleType;
+            localStorage.usid=personId;
+            admin.popupCenter({
+                title: title,
+                width:950,
+                path: 'components/tpl/daily_save_form.html',
+                finish: function() {
+                    $('#main').fullCalendar('refetchEvents');
+                },
+                success: function() {
+                    setFormValue(params);
+                    form.render();
+                }
+            });
+
+        };
+        var file = '';
+        function giveBind(id){
+
+            var files
+            // 清空文件队列
+            function clearFile(){
+                for (var x in files) {
+                    delete files[x];
+                }
+            }
+            var index;
+            $('#delFile_'+id).off('click').on('click',function () {
+                if(!$('#fileName_'+id).val()){
+                    return layer.msg('请先上传文件', {
+                        icon: 5
+                    });
+                }else{
+                    $('#fileName_'+id).val('')
+                    $('#fileName_'+id).prop('name','')
+                    $('#chooseFile_'+id).css("display","inline-block");
+                    $('#download_'+id).css("display","none");
+                }
+            });
+            $('#download_'+id).off('click').on('click',function () {
+                if($('#fileName_'+id).val()){
+                    window.open("/ADC_info/api/sys/file/"+$('#fileName_'+id).prop('name')+"/download")
+                }else{
+                    return layer.msg('文件损坏请联系管理员', {
+                        icon: 5
+                    });
+                }
+            })
+
+            // 上传
+            var uploadRender = upload.render({
+                elem: '#chooseFile_'+id,
+                url: '/api/sys/file/upload',
+                field: 'file',
+                accept: 'file',// 所有文件
+                auto: false,// 自动上传
+                exts:'pdf|doc|docx|xlsx|xls|zip|rar|jpg|jpeg|png|gif|ppt|pptx',// 允许上传的文件后缀
+                bindAction: '#upload_'+id,
+                choose:function(obj){
+                    console.log("上传")
+                    uploadRender.config.elem.next()[0].value = '';// 防止choose方法只触发一次
+                    files = obj.pushFile();// 文件队列
+                    clearFile();
+                    obj.preview(function(index, file, result){// file:准备上传的文件对象
+                        files = obj.pushFile();
+                        $('#fileName_'+id).val(file.name);
+                        $('#upload_'+id).click()
+                    });
+                },
+                before:function () {
+                    if($('#fileName_'+id).val()){
+                        index = layer.load(2);
+                    }else {
+                        return layer.msg('请先选择文件', {
+                            icon: 5
+                        });
+                    }
+                },
+                done: function(res,indexs) {// 上传完毕回调
+                    layer.close(index);
+                    if (res.ok) {
+                        layer.msg('文件上传成功！', {
+                            icon: 1
+                        });
+                        file = res.data.fileId;
+                        $('#fileName_'+id).prop('name',res.data.fileId);
+                        $('#chooseFile_'+id).css("display","none");
+                        $('#download_'+id).css("display","inline-block");
+                        //删除附件
+                        $('#delFile_'+id).off('click').on('click',function () {
+                            if($('#fileName_'+id).val()){
+                                $.ajax({
+                                    url: "/api/knowledge/paper/deleteFile/"+file,
+                                    type: 'delete',
+                                    success: function (data) {
+                                        if (data.ok) {
+                                            delete files[indexs];
+                                            $('#fileName_'+id).val('');
+                                            $('#fileName_'+id).prop('name',"");
+                                            file = '';
+                                            $('#chooseFile_'+id).css("display","inline-block");
+                                            $('#download_'+id).css("display","none");
+                                        } else {
+                                            return layer.msg(data.reason, {
+                                                icon: 5
+                                            });
+                                        }
+                                    }
+                                })
+                            }else {
+                                return layer.msg('请先上传文件', {
+                                    icon: 5
+                                });
+                            }
+                            $('#download_'+id).off('click').on('click',function () {
+                                if($('#fileName_'+id).val()){
+                                    window.open("/ADC_info/api/sys/file/"+file+"/download")
+                                }else{
+                                    return layer.msg('文件损坏请联系管理员', {
+                                        icon: 5
+                                    });
+                                }
+                            })
+                        })
+                    } else {
+                        layer.msg('文件上传失败：' + res.message, {
+                            icon: 5
+                        });
+                    }
+                }
+            });
+
+        }
+
+    })
+    $(function () {
+
+        $('.layui-card').css('height',$(document).height()-131);
+    })
+</script>
+
+</html>

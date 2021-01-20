@@ -1,0 +1,173 @@
+{
+    "code": 0,
+    "msg": "",
+    "count": 1000,
+    "data": [{
+            "department": "财务部",
+            "branch": "财务部",
+            "budget": 7134,
+            "actual": 5640,
+            "budgetachive": "51%"
+        },
+        {
+            "department": "管理部",
+            "branch": "管理部",
+            "budget": 770,
+            "actual": 623,
+            "budgetachive": "76%"
+        },
+        {
+            "department": "市场发展部",
+            "branch": "市场发展部",
+            "budget": 414,
+            "actual": 147,
+            "budgetachive": "46%"
+        },
+        {
+            "department": "综合本部",
+            "branch": "技术发展部",
+            "budget": 557,
+            "actual": 492,
+            "budgetachive": "68%"
+        },
+        {
+            "department": "综合本部",
+            "branch": "业务发展部",
+            "budget": 341,
+            "actual": 343,
+            "budgetachive": "80%"
+        },
+        {
+            "department": "综合本部",
+            "branch": "综合业务本部",
+            "budget": 2,
+            "actual": 8,
+            "budgetachive": "#DIV/0!"
+        },
+        {
+            "department": "咨询本部",
+            "branch": "材料研究部",
+            "budget": 247,
+            "actual": 163,
+            "budgetachive": "71%"
+        },
+        {
+            "department": "咨询本部",
+            "branch": "回收利用部",
+            "budget": 241,
+            "actual": 155,
+            "budgetachive": "70%"
+        }, {
+            "department": "咨询本部",
+            "branch": "节能研究部",
+            "budget": 206,
+            "actual": 156,
+            "budgetachive": "53%"
+        }, {
+            "department": "咨询本部",
+            "branch": "绿色发展部",
+            "budget": 122,
+            "actual": 188,
+            "budgetachive": "79%"
+        }, {
+            "department": "咨询本部",
+            "branch": "汽车评价部",
+            "budget": 146,
+            "actual": 256,
+            "budgetachive": "18.5%"
+        }, {
+            "department": "咨询本部",
+            "branch": "新能源研究部",
+            "budget": 555,
+            "actual": 296,
+            "budgetachive": "36%"
+        }, {
+            "department": "数据本部",
+            "branch": "产品数据部",
+            "budget": 655,
+            "actual": 296,
+            "budgetachive": "36%"
+        },
+        {
+            "department": "数据本部",
+            "branch": "工程数据部",
+            "budget": 1202,
+            "actual": 940,
+            "budgetachive": "50%"
+        }, {
+            "department": "数据本部",
+            "branch": "后市场数据部",
+            "budget": 156,
+            "actual": 162,
+            "budgetachive": "82%"
+        }, {
+            "department": "数据本部",
+            "branch": "市场数据部",
+            "budget": 575,
+            "actual": 571,
+            "budgetachive": "77%"
+        }, {
+            "department": "数据本部",
+            "branch": "数据技术部",
+            "budget": 105,
+            "actual": 105,
+            "budgetachive": "83%"
+        }, {
+            "department": "数据本部",
+            "branch": "数据平台部",
+            "budget": 434,
+            "actual": 122,
+            "budgetachive": "50%"
+        }, {
+            "department": "数据本部",
+            "branch": "数据业务部",
+            "budget": 5,
+            "actual": 12,
+            "budgetachive": "#DIV/0!"
+        }, {
+            "department": "软件本部",
+            "branch": "软件测试部",
+            "budget": 83,
+            "actual": 50,
+            "budgetachive": "32%"
+        },
+        {
+            "department": "软件本部",
+            "branch": "软件开发部",
+            "budget": 1102,
+            "actual": 1025,
+            "budgetachive": "80%"
+        }, {
+            "department": "软件本部",
+            "branch": "研发信息系统部",
+            "budget": 333,
+            "actual": 238,
+            "budgetachive": "58%"
+        }, {
+            "department": "软件本部",
+            "branch": "制造信息系统部",
+            "budget": 47,
+            "actual": 30,
+            "budgetachive": "55%"
+        }, {
+            "department": "软件本部",
+            "branch": "软件业务本部",
+            "budget": 10,
+            "actual": 23,
+            "budgetachive": "#DIV/0!"
+        }, {
+            "department": "团支部",
+            "branch": "团支部",
+            "budget": 555,
+            "actual": 96,
+            "budgetachive": "16%"
+        }, {
+            "department": "合计",
+            "branch": "",
+            "budget": 18645,
+            "actual": 13332,
+            "budgetachive": "64%"
+        }
+    ]
+
+}

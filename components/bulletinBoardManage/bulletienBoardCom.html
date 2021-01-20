@@ -1,0 +1,1376 @@
+<style>
+    *{
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    /*隐藏滚动条*/
+    .bordMain .layui-table-body::-webkit-scrollbar {
+        display: none;
+    }
+    .layui-table-tips-main{
+        border-radius: 2px;
+        box-shadow: 1px 1px 3px rgba(0,0,0,.2);
+        background-color: #0a1948 !important;
+        color: #A0D8FF !important;
+        overflow-y:auto !important; ;
+    }
+    .bordMain{
+        background-image: url(/assetsInfo/images/bordImg/mainBg.png);
+        background-size: 100% 100%;
+        box-sizing: border-box;
+        /*height: 1454px;*/
+        /*width: 2560px;*/
+        padding: 0 15px 10px 15px;
+        height: 100%;
+        width: 100%;
+    }
+    .bordMain .bordHeader{
+        position: relative;
+        height: 50px;
+    }
+    .bordMain .bordHeader .headerTime{
+        font-size:12px;
+        font-family:Microsoft YaHei;
+        font-weight:bold;
+        color:rgba(84,245,255,1);
+        position: absolute;
+        bottom:10px;
+    }
+    .bordMain .bordHeader .headerRefresh{
+        font-size:14px;
+        font-family:Source Han Sans CN;
+        font-weight:500;
+        color:rgba(69,218,255,1);
+        position: absolute;
+        right: 0;
+        bottom: 10px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+    .bordMain .bordHeader .headerTitle{
+        font-size:23px;
+        font-family:Microsoft YaHei;
+        font-weight:bold;
+        color:rgba(255,255,255,1);
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+    }
+    .bordMain .bordContent{
+        height: calc(100% - 50px);
+        width: 100%;
+        /*background: #fff;*/
+    }
+    .bordMain .bordContent .bordTab{
+        height: 10%;
+        width: 100%;
+        display: flex;
+        /*background: pink;*/
+        margin-top: 2px;
+    }
+    .bordMain .bordContent .bordTab .bordTabBox{
+        flex: 1;
+        margin-right: 5px;
+        background-size: 100% 100%;
+        background-image: url(/assetsInfo/images/bordImg/tabBg.png);
+    }
+    .bordMain .bordContent .bordTab .bordTabBox:last-child{
+        margin-right: 0px;
+    }
+    .bordMain .bordContent .bordTab .contractBox{
+        /*background-image: url(/assetsInfo/images/comImg/hetong.png);*/
+    }
+    .bordMain .bordContent .bordTab .invoiceBox{
+        /*background-image: url(/assetsInfo/images/comImg/kaipiao.png);*/
+    }
+    .bordMain .bordContent .bordTab .incomeBox{
+        /*background-image: url(/assetsInfo/images/comImg/jinzhang.png);*/
+    }
+    .bordMain .bordContent .bordTab .tabImg{
+        width: 50px;
+        height: 50px;
+        position: relative;
+        top: 50%;
+        margin-top: -24px;
+        left: 10px;
+    }
+    .bordMain .bordContent .bordTab .infoBox {
+        width: 66%;
+        float: right;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        font-size:19px;
+        font-weight:bold;
+        color:rgba(255,255,255,1);
+        align-items: center;
+        position: relative;
+    }
+    .bordMain .bordContent .bordTab .infoBox .infoTitle{
+        width: 50%;
+    }
+    .bordMain .bordContent .bordTab .infoBox .infoTitle div{
+        font-size:11px;
+        /*margin-top: 20px;*/
+    }
+    .bordMain .bordContent .bordTab .infoBox .infoLine{
+        width:2px;
+        height:44px;
+        background:rgba(160,196,255,1);
+        border-radius:50%;
+        position: absolute;
+        left: 40%;
+    }
+    .bordMain .bordContent .bordCanvas{
+        /*background: pink;*/
+        width: 100%;
+        height:60%;
+        margin-top: 2px;
+        display: flex;
+        flex-direction: column;
+    }
+    .bordMain .bordContent .bordCanvas .canvasTop{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: calc(50% - 1px);
+    }
+    .bordMain .bordContent .bordCanvas .canvasTop:last-child{
+        margin-top: 2px;
+    }
+    .bordMain .bordContent .bordCanvas .canvasBox{
+        display: flex;
+        flex:1;
+        margin-right: 7px;
+        background-size: 100% 100%;
+        background-image: url(/assetsInfo/images/comImg/month-bg.png);
+        position: relative;
+    }
+    .bordMain .bordContent .bordCanvas .canvasBox:last-child{
+        margin-right: 0px;
+    }
+    .bordMain .bordContent .bordCanvas .canvasBox .canvasTitle{
+        font-size:16px;
+        font-family:Microsoft YaHei;
+        font-weight:400;
+        color:rgba(81,236,254,1);
+        width: 26%;
+        height: 16%;
+        background-size: cover;
+        background-image: url(/assetsInfo/images/comImg/title-bg.png);
+        display: flex;
+        align-items: center;
+        position: absolute;
+        top:12px;
+        left: 6px;
+    }
+    .bordMain .bordContent .bordCanvas .canvasDiv{
+        flex:1;
+        padding: 10px 10px 10px 5px;
+    }
+    .bordMain .bordContent .bordCanvas .canvasBox .canvasTitle .titleBox{
+        margin-left: 25px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+    .bordMain .bordContent .bordCanvas .canvasBox .canvasTitle2{
+        width: 30%;
+        background-image: url(/assetsInfo/images/comImg/title-bg2.png);
+    }
+    .bordMain .bordTable{
+        width: 100%;
+        height: 30%;
+        display: flex;
+        margin-top: 2px;
+    }
+    .bordMain .bordTable .tableBox{
+        margin-right: 7px;
+        width: 50%;
+        /*flex: 1;*/
+    }
+    .bordMain .bordTable .planBox{
+        background-size: 100% 100%;
+        background-image: url(/assetsInfo/images/comImg/jiaoliubg.png);
+        padding: 10px 10px 5px 10px;
+        box-sizing: border-box;
+    }
+    .bordMain .bordTable .planBox .tableTitle{
+        font-size: 16px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: rgba(81,236,254,1);
+        width: 27%;
+        height: 18%;
+        background-size: cover;
+        background-image: url(/assetsInfo/images/comImg/title-bg.png);
+        display: flex;
+        align-items: center;
+        margin-top: 2px;
+    }
+    .bordMain .bordTable .planBox .tableTitle .titleBox{
+        margin-left: 25px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+    .table-box{
+        width: 100%;
+        height: calc(100% - 32px);
+        overflow: hidden;
+    }
+    .table-box .layui-table{
+        background: none;
+        color: #A0D8FF;
+    }
+    .table-box .layui-table-header,
+    .table-box .layui-table thead tr,
+    .table-box .layui-table-hover
+    {
+        background: none;
+        color: #2DA9FF;
+    }
+    .table-box .layui-table tbody tr:hover{
+        background: none;
+        color: #A0D8FF;
+    }
+    .table-box table tr td,
+    .table-box table,
+    .table-box table tr ,
+    .table-box .layui-table-view,
+    .table-box table th,
+    .table-box .layui-table-header{
+        border-color: #0974DE;
+    }
+    .table-box .layui-table-view{
+        margin:5px 0px 5px 5px
+    }
+    .bordMain .bordTable .enterpriseTable{
+        display: flex;
+        margin-right: 0px;
+    }
+    .bordMain .bordTable .enterpriseTable .enterprise-box{
+        flex: 1;
+    }
+    .bordMain .bordTable .enterprise-table{
+        background-size: 100% 100%;
+        background-image: url(/assetsInfo/images/comImg/paihang.png);
+        padding: 10px 10px 5px 10px;
+        margin-right: 10px;
+    }
+    .bordMain .bordTable .enterprise-table .tableTitle{
+        font-size: 16px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: rgba(81,236,254,1);
+        width: 90%;
+        height: 17%;
+        background-size: cover;
+        background-image: url(/assetsInfo/images/comImg/title-bg3.png);
+        display: flex;
+        align-items: center;
+        margin-top: 2px;
+    }
+    .bordMain .bordTable .enterprise-table .tableTitle .titleBox{
+        margin-left: 25px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+    .bordMain .bordTable .item{
+        height:19%;
+        margin-top:2px;
+        width:100%;
+        background-size: 100% 100%;
+        background-image: url(/assetsInfo/images/comImg/qiye.png);
+    }
+    .bordMain .bordTable .item:nth-child(1){
+        margin-top:0
+    }
+    .bordMain .bordTable .item .sort{
+        display: block;
+        float: left;
+        margin-left:11px;
+        /*height:4.5vh;*/
+        /*width:4.5vh;*/
+        margin-top:1.13vh;
+    }
+    .bordMain .name{
+        float: left;
+        /*line-height: 6.8vh;*/
+        margin-left:15px;
+        font-size:14px;
+        font-family:Microsoft YaHei;
+        font-weight:400;
+        color:rgba(160,216,255,1);
+        /*line-height:64px;*/
+        display: flex;
+        height: 100%;
+        align-items: center;
+    }
+    .bordMain .jia{
+        float: right;
+        margin:0 27px 0 10px;
+        /*line-height: 6.8vh;*/
+        font-size:14px;
+        font-family:Microsoft YaHei;
+        font-weight:400;
+        color:rgba(160,216,255,1);
+        display: flex;
+        height: 100%;
+        align-items: center;
+        /*line-height:64px;*/
+    }
+    .bordMain .num{
+        float: right;
+        font-size:17px;
+        font-family:Microsoft YaHei;
+        font-weight:400;
+        color:#A0D8FF;
+        display: flex;
+        height: 100%;
+        align-items: center;
+        /*line-height:64px;*/
+    }
+    .bordMain .nums2{
+        color:#3EDE36
+    }
+    .bordMain .nums3{
+        color:#9499FF
+    }
+    .bordMain .nums4{
+        color:#38D1F7
+    }
+    .bordMain .nums5{
+        color:#FF7200
+    }
+    .bordMain .layui-table-cell{
+        min-height: 20px;
+        height: auto;
+        line-height: 22px;
+        white-space:normal;
+        word-break: break-all;
+        /*font-size: 32px;*/
+    }
+    .bordMain .headerImg{
+        width: 22px;
+        height: 23px;
+    }
+    .bordMain .titleImg{
+        width: 18px;
+        height: 18px;
+    }
+    .bordMain .refreshImg{
+        width: 21px;
+        height: 21px;
+    }
+    .zanwu{
+        width: 55px;
+        height: 40px;
+    }
+    @media screen and (min-width: 1920px) {
+        .bordMain .bordHeader .headerTime{
+            bottom: 0px;
+            font-size: 16px;
+        }
+        .bordMain .bordContent .bordTab .tabImg{
+            width: 80px;
+            height: 80px;
+            margin-top: -39px;
+        }
+        .bordMain .bordHeader .headerRefresh{
+            font-size:16px;
+            bottom:0;
+        }
+        .bordMain .refreshImg{
+            width: 27px;
+            height: 27px;
+        }
+        .bordMain .headerImg{
+            width: 32px;
+            height: 33px;
+        }
+        .bordMain .bordHeader .headerTitle{
+            height: 50px;
+            font-size: 30px;
+        }
+        .bordMain .bordContent .bordTab{
+            margin-top: 20px;
+        }
+        .bordMain .bordContent{
+            height: calc(100% - 75px);
+        }
+        .bordMain .titleImg{
+            width: 30px;
+            height: 30px;
+        }
+        .bordMain .bordTable .enterprise-table .tableTitle,
+        .bordMain .bordTable .planBox .tableTitle,
+        .bordMain .bordContent .bordCanvas .canvasBox .canvasTitle{
+            font-size: 20px;
+        }
+        .bordMain .bordContent .bordCanvas .canvasBox .canvasTitle{
+            width: 28%;
+        }
+        .bordMain .bordTable .planBox .tableTitle{
+            width: 30%;
+        }
+        .bordMain .bordContent .bordCanvas .canvasBox .canvasTitle2{
+            width: 32%;
+        }
+        .bordMain .bordTable .enterprise-table .tableTitle{
+            width: 93%;
+        }
+        .bordMain .bordContent .bordCanvas .canvasBox .canvasTitle .titleBox,
+        .bordMain .bordTable .planBox .tableTitle .titleBox,
+        .bordMain .bordTable .enterprise-table .tableTitle .titleBox{
+            margin-left: 40px;
+        }
+        .bordMain .bordContent .bordTab .infoBox{
+            font-size: 26px;
+        }
+        .bordMain .bordContent .bordTab .infoBox .infoTitle div{
+            font-size: 16px;
+        }
+        .bordMain .bordContent .bordTab .infoBox .infoLine{
+            height: 70%;
+        }
+        .bordMain .name ,.bordMain .jia{
+            font-size: 18px;
+        }
+        .bordMain .num{
+            font-size: 24px;
+        }
+        .table-box {
+            height: calc(100% - 50px);
+        }
+        .bordMain .bordTable .item .sort {
+            margin-top: 1.55vh;
+        }
+        .zanwu{
+            width: 120px;
+            height: 100px;
+        }
+    }
+    @media screen and (max-width: 1300px) {
+        /*.bordMain .bordContent .bordTab .tabImg{*/
+            /*width: 80px;*/
+            /*height: 80px;*/
+            /*margin-top: -39px;*/
+        /*}*/
+        .bordMain .bordContent .bordCanvas .canvasBox .canvasTitle{
+            height: 13%;
+            font-size: 15px;
+        }
+        .bordMain .bordTable .planBox .tableTitle{
+            height: 14%;
+            font-size:15px;
+        }
+        .bordMain .bordTable .enterprise-table .tableTitle{
+            width: 95%;
+            height: 14%;
+            font-size:15px;
+        }
+        /*.bordMain{*/
+            /*height: 99.95%;*/
+        /*}*/
+
+        .bordMain .bordTable{
+            height:29%;
+        }
+        .bordMain .bordContent .bordTab{
+            margin-top: -7px;
+        }
+    }
+    .bordMain .layui-table-cell{
+        padding: 0px;
+    }
+</style>
+<meta charset="utf-8" />
+<title>中汽数据经营数据看板</title>
+<!-- Favorites Icon Start -->
+<link rel="shortcut icon" href="../../favicon.ico">
+<link rel="icon" href="../../favicon.ico">
+<!-- Favorites Icon End -->
+
+<!-- CSS Links -->
+<link rel="stylesheet" href="/assetsInfo/libs/layui/css/layui.css" />
+<link rel="stylesheet" href="/assetsInfo/css/admin.css" />
+
+
+<link rel="stylesheet" href="/assetsInfo/css/LayValidator.css" />
+<!-- tableb编辑校验 -->
+
+<div class="bordMain">
+    <div class="bordHeader">
+        <div class="headerTime"></div>
+        <div class="headerTitle">
+            <img src="../../favicon.ico" class="headerImg" >
+            <span style="margin-left: 16px;">中汽数据经营数据看板</span>
+        </div>
+        <div class="headerRefresh" id="refresh-btn">
+            <img  src="/assetsInfo/images/comImg/refresh.png" class="refreshImg">
+            <span style="margin-left: 7px">刷新</span>
+        </div>
+    </div>
+    <div class="bordContent">
+        <div class="bordTab">
+            <div class="bordTabBox contractBox">
+                <img src="/assetsInfo/images/bordImg/tabImg1.png" class="tabImg">
+                <div class="infoBox">
+                    <div class="infoTitle">
+                        <span class="infoTi" id="yearContractAmount"></span> 万
+                        <div>累计合同额</div>
+                    </div>
+                    <div class="infoLine">
+
+                    </div>
+                    <div class="infoTitle">
+                        <span class="infoTi" id="monthContractAmount"></span> 万
+                        <div>本月合同额</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bordTabBox invoiceBox">
+                <img src="/assetsInfo/images/bordImg/tabImg2.png" class="tabImg">
+                <div class="infoBox">
+                    <div class="infoTitle">
+                        <span class="infoTi" id="yearInvoiceAmount"></span> 万
+                        <div>累计开票额</div>
+                    </div>
+                    <div class="infoLine">
+
+                    </div>
+                    <div class="infoTitle">
+                        <span class="infoTi" id="monthInvoiceAmount"></span> 万
+                        <div>本月开票额</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bordTabBox incomeBox">
+                <img src="/assetsInfo/images/bordImg/tabImg3.png" class="tabImg">
+                <div class="infoBox">
+                    <div class="infoTitle">
+                        <span class="infoTi" id="yearIncomeAmount"></span> 万
+                        <div>累计进账额</div>
+                    </div>
+                    <div class="infoLine">
+
+                    </div>
+                    <div class="infoTitle">
+                        <span class="infoTi" id="monthIncomeAmount"></span> 万
+                        <div>本月进账额</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bordCanvas">
+            <div class="canvasTop">
+                <div class="canvasBox">
+                    <div class="canvasTitle">
+                        <div class="titleBox">
+                            <img src="/assetsInfo/images/comImg/titleImg1.png" class="titleImg">
+                            <span>月度合同额</span>
+                        </div>
+                    </div>
+                    <div class="canvasDiv" id="statisticsCanvas"></div>
+                </div>
+                <div class="canvasBox">
+                    <div class="canvasTitle">
+                        <div class="titleBox">
+                            <img src="/assetsInfo/images/comImg/titleImg2.png" class="titleImg">
+                            <span>月度开票额</span>
+                        </div>
+                    </div>
+                    <div class="canvasDiv" id="invoiceCanvas"></div>
+                </div>
+            </div>
+            <div class="canvasTop">
+                <div class="canvasBox">
+                    <div class="canvasTitle">
+                        <div class="titleBox">
+                            <img src="/assetsInfo/images/comImg/titleImg3.png" class="titleImg">
+                            <span>月度进账额</span>
+                        </div>
+                    </div>
+                    <div class="canvasDiv" id="incomeCanvas"></div>
+                </div>
+                <div class="canvasBox">
+                    <div class="canvasTitle canvasTitle2">
+                        <div class="titleBox">
+                            <img src="/assetsInfo/images/comImg/titleImg4.png" class="titleImg">
+                            <span>本部合同统计</span>
+                        </div>
+                    </div>
+                    <div class="canvasDiv" id="yearStCanvas"></div>
+                </div>
+            </div>
+        </div>
+        <div class="bordTable">
+            <div class="planBox tableBox">
+                <div class="tableTitle">
+                    <div class="titleBox">
+                        <img src="/assetsInfo/images/comImg/titleImg5.png" class="titleImg">
+                        <span>近期交流计划</span>
+                    </div>
+                </div>
+                <div class="table-box plan-table">
+                    <table id="planTable" lay-filter="planTable"></table>
+                </div>
+            </div>
+            <div class="tableBox enterpriseTable">
+                <div class="enterprise-box enterprise-table">
+                    <div class="tableTitle">
+                        <div class="titleBox">
+                            <img src="/assetsInfo/images/comImg/phb.png" class="titleImg">
+                            <span>企业年度合同总额排行榜TOP5</span>
+                        </div>
+                    </div>
+                    <div class="table-box enterprise-tables">
+                        <table id="enterpriseTable" lay-filter="enterpriseTable"></table>
+                    </div>
+                </div>
+                <div class="enterprise-box">
+                    <div class="item">
+                        <img class="sort" src="/assetsInfo/images/comImg/gongsi1.png" style="width:21px;height:21px;" />
+                        <div class="name" id="bottom_right_name1">合作企业总数</div>
+                        <div class="jia">家</div>
+                        <div class="num">
+                            <div id="projectOwnerNum" class="dw_right"></div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img class="sort" src="/assetsInfo/images/comImg/gongsi2.png" style="width:21px;height:21px;" />
+                        <div class="name" id="bottom_right_name2">新增合作企业数</div>
+                        <div class="jia">家</div>
+                        <div class="nums2 num">
+                            <div id="currentYearIncreaseProjectOwnerNum" class="dw_right"></div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img class="sort" src="/assetsInfo/images/comImg/renyuan.png" style="width:21px;height:21px;" />
+                        <div class="name" id="bottom_right_name3">联系人总数</div>
+                        <div class="jia">人</div>
+                        <div class="nums3 num" >
+                            <div id="contactNum" class="dw_right"></div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img class="sort" src="/assetsInfo/images/comImg/renyuan2.png" style="width:21px;height:21px;" />
+                        <div class="name" id="bottom_right_name4">本年新增数</div>
+                        <div class="jia">人</div>
+                        <div class="nums4 num" >
+                            <div id="currentYearContactIncreaseNum" class="dw_right"></div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img class="sort" src="/assetsInfo/images/comImg/huabanfuben.png" style="width:21px;height:21px;" />
+                        <div class="name" id="bottom_right_name5">核心决策人总数</div>
+                        <div class="jia">人</div>
+                        <div class="nums5 num">
+                            <div id="policymakerNum" class="dw_right"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- jQuery 1.x 版本兼容 IE8 -->
+<script type="text/javascript" src="/assetsInfo/libs/jquery-1.12.4.min.js"></script>
+<!-- Q.js 轻量路由框架 -->
+<script type="text/javascript" src="/assetsInfo/libs/q.js"></script>
+<!-- jQuery 轻量级 MVVM 框架 -->
+<script type="text/javascript" src="/assetsInfo/libs/pandyle.min.js"></script>
+<!-- layui 脚本文件 -->
+<script type="text/javascript" src="/assetsInfo/libs/layui/layui.js"></script>
+<script src="/assetsInfo/libs/echarts.min.js"></script>
+<script type="text/javascript" src="/assetsInfo/js/jsencrypt.min.js"></script>
+<script>
+    layui.use(['element', 'form', 'layer',"table"], function () {
+        var element = layui.element,
+            admin = layui.admin,
+            config = layui.config,
+            layer = layui.layer,
+            table = layui.table,
+            tools = layui.tools;
+        $.ajaxSetup({
+            beforeSend: function(jqXHR, settings) {
+                function encryptedData (publicKey, pwd) {
+                    // 私钥 和后端沟通
+                    // 新建JSEncrypt对象
+                    var encryptor = new JSEncrypt()
+                    // 设置公钥
+                    encryptor.setPublicKey(publicKey)
+                    // 加密数据
+                    var decrypt = encryptor.encrypt(pwd.toString())
+                    return decrypt
+                }
+                var pubKey="MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKtSP3y2DkyoDQsFGr6sn4saLBFwcijEPWsWQ1Hnz8sIvn7V3TyNrSesf+7nPgnUk9Gt/7aKsXUkY67BzMJ5xkECAwEAAQ==";
+                var verifyToken = encryptedData(pubKey,new Date().getTime());
+                jqXHR.setRequestHeader("Verify-Token", verifyToken);
+            },
+            complete: function(jqXHR, textStatus) {
+                if (jqXHR.status === 401||(jqXHR.responseJSON&&jqXHR.responseJSON.message.indexOf("登录")!=-1)) {
+                    layer.msg('登录状态失效，请重新登录！');
+                    setTimeout(function () {
+                        config.removeAccount();
+                        if (window.top!=null && window.top.document.URL!=document.URL){
+                            window.top.location.replace(window.top.location.origin+'/ADC_info/login.html?redirect_to=' + window.location.hash);
+                        }else{
+                            location.replace('/ADC_info/login.html?redirect_to=' + window.location.hash);
+                        }
+                    },2000);
+                }
+            }
+        });
+        var tablex= 15;
+        var canvasFontSize=8;
+        $(document).ready(function() {
+            if($(window).width()>=1300){
+                tablex=5;
+                canvasFontSize=10;
+            }
+        });
+        //绘制月度统计额图
+        var setLineBarCanvas = function (lineData,ele) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById(ele));
+            var monthArr = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+            myChart.resize();
+            myChart.clear();
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: '{b}<br />{a0}:{c0}<br />{a1}:{c1}<br />{a2}:{c2}%'
+                },
+                legend: {
+                    data: [String(lineData.lastYear),String(lineData.currentYear), '增长率'],
+                    top:'1%',
+                    right:"3%",
+                    icon:"roundRect",
+                    itemWidth:40,
+                    itemHeight:10,
+                    textStyle:{
+                        padding:[3, 0, 0, 0],
+                        color:"#5CABFC",
+                        // fontSize:28
+                    },
+
+                },
+                tooltip : {
+                    trigger : 'axis',
+                    formatter : function(params) {
+                        if(params.length!=0){
+                            var str=params[0].name+"</br>";
+                            for (var i = 0; i < params.length; i++) {
+                                str+=params[i].seriesName+":"+params[i].value+(params[i].seriesName=="增长率"?"%":"")+"</br>";
+                            }
+                        }
+                        return str;
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '2%',
+                    bottom: '1%',
+                    top:'40%',
+                    containLabel: true
+                },
+                color: ["#225BAC", "#13B5B1", "#ECE900"],
+                xAxis: {
+                    type: 'category',
+                    // boundaryGap: false,
+                    data: monthArr.slice(0,new Date().getMonth()),
+                    axisTick: {
+                        lineStyle: {color: '#a1a1a1'}    // x轴刻度的颜色
+                    },
+                    axisLabel: {
+                        color: '#5CABFC'
+                        // ,fontSize:28
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#a1a1a1',
+                        },
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name:"万元",
+                        nameTextStyle: {
+                            padding: [0, 0, 0, -40],
+                            color:'#5CABFC',
+                            // fontSize:28
+                        },
+                        nameGap:10,
+                        axisTick:{
+                            lineStyle:{color:'#a1a1a1'}    // x轴刻度的颜色
+                        },
+                        axisLabel:{
+                            color:'#5CABFC'
+                            // ,fontSize:28
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#a1a1a1',
+                            },
+                        },
+                        splitLine :{    //网格线
+                            lineStyle:{
+                                type:'dashed',    //设置网格线类型 dotted：虚线   solid:实线
+                                color: '#a1a1a1'
+                            },
+                            show:true //隐藏或显示
+                        }
+                    },
+                    {
+                        type: 'value',
+                        nameTextStyle: {
+                            padding: [0, 0, 0, -40]
+                        },
+                        nameGap:10,
+                        axisTick:{
+                            lineStyle:{color:'#a1a1a1'}    // x轴刻度的颜色
+                        },
+                        axisLabel:{
+                            color:'#5CABFC',
+                            formatter:'{value}%',
+                            // fontSize:28
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#a1a1a1',
+                            },
+                        },
+                        splitLine :{    //网格线
+                            lineStyle:{
+                                type:'dashed',    //设置网格线类型 dotted：虚线   solid:实线
+                            },
+                            show:false //隐藏或显示
+                        }
+
+                    }
+                ],
+                series: [
+
+                    {
+                        name: lineData.lastYear,
+                        type: 'bar',
+                        yAxisIndex:0,
+                        label: {
+                            show: true,
+                            position: 'top',
+                            fontSize:canvasFontSize,
+                            offset: [-15, -2],
+                        },
+                        barWidth: 10,
+                        data: lineData.lastTimeDataList.slice(0,new Date().getMonth())
+                    },
+                    {
+                        name: lineData.currentYear,
+                        type: 'bar',
+                        yAxisIndex:0,
+                        label: {
+                            show: true,
+                            position: 'top',
+                            offset: [5, -2],
+                            fontSize:canvasFontSize
+                        },
+                        barWidth: 10,
+                        data: lineData.currentTimeDataList.slice(0,new Date().getMonth())
+                    },
+                    {
+                        name: '增长率',
+                        type: 'line',
+                        yAxisIndex:1,
+                        itemStyle: {
+                            normal: {
+                                lineStyle: {
+                                    width: 1, //折线宽度
+                                }
+                            },
+                        },
+                        label: {
+                            show: true,
+                            position: 'top',
+                            formatter:'{c}%',
+                            offset: [-2, -8],
+                            fontSize:canvasFontSize
+                        },
+                        data: lineData.rateList.slice(0,new Date().getMonth())
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        //绘制本部月度图
+        var setLineBarCanvas2 = function (lineData,ele) {
+            var leftMargin="2%";
+            if(lineData.currentTimeDataList.length==0&&lineData.lastTimeDataList.length==0&&
+                lineData.rateList==0){
+                leftMargin="5%";
+            }
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById(ele));
+            myChart.resize();
+            myChart.clear();
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: '{b}<br />{a0}:{c0}<br />{a1}:{c1}<br />{a2}:{c2}%'
+                },
+                legend: {
+                    data: [String(lineData.lastYear), String(lineData.currentYear), '增长率'],
+                    top:'1%',
+                    right:"3%",
+                    icon:"roundRect",
+                    itemWidth:40,
+                    itemHeight:10,
+                    textStyle:{
+                        color:'#5CABFC',
+                        padding:[3, 0, 0, 0],
+                        // fontSize:28
+                    },
+                },
+                grid: {
+                    left: "3%",
+                    right: '2%',
+                    bottom: '1%',
+                    top:'40%',
+                    containLabel: true
+                },
+                tooltip : {
+                    trigger : 'axis',
+                    formatter : function(params) {
+                        if(params.length!=0){
+                            var str=params[0].name+"</br>";
+                            for (var i = 0; i < params.length; i++) {
+                                str+=params[i].seriesName+":"+params[i].value+(params[i].seriesName=="增长率"?"%":"")+"</br>";
+                            }
+                        }
+                        return str;
+                    }
+                },
+                color: ["#225BAC", "#13B5B1", "#ECE900"],
+                xAxis: {
+                    type: 'category',
+                    // boundaryGap: false,
+                    data: lineData.xindexList,
+                    axisTick:{
+                        lineStyle:{color:'#a1a1a1'}    // x轴刻度的颜色
+                    },
+                    axisLabel:{
+                        color:'#5CABFC'
+                        // ,fontSize:28
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#a1a1a1',
+                        },
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name:"万元",
+                        nameTextStyle: {
+                            padding: [0, 0, 0, -40],
+                            color:'#5CABFC',
+                            // fontSize:28
+                        },
+                        nameGap:10,
+                        axisTick:{
+                            lineStyle:{color:'#a1a1a1'}    // x轴刻度的颜色
+                        },
+                        axisLabel:{
+                            color:'#5CABFC'
+                            // ,fontSize:28
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#a1a1a1',
+                            },
+                        },
+                        splitLine :{    //网格线
+                            lineStyle:{
+                                type:'dashed',    //设置网格线类型 dotted：虚线   solid:实线
+                                color: '#a1a1a1'
+                            },
+                            show:true //隐藏或显示
+                        }
+                    },
+                    {
+                        type: 'value',
+                        nameTextStyle: {
+                            padding: [0, 0, 0, -40]
+                        },
+                        nameGap:10,
+                        axisTick:{
+                            lineStyle:{color:'#a1a1a1'}    // x轴刻度的颜色
+                        },
+                        axisLabel:{
+                            color:'#5CABFC',
+                            formatter:'{value}%',
+                            // fontSize:28
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#a1a1a1',
+                            },
+                        },
+                        splitLine :{    //网格线
+                            lineStyle:{
+                                type:'dashed'    //设置网格线类型 dotted：虚线   solid:实线
+                            },
+                            show:false //隐藏或显示
+                        }
+                    }
+                ],
+                series: [
+
+                    {
+                        name: lineData.lastYear,
+                        // name: 2019,
+                        type: 'bar',
+                        barWidth: 10,
+                        yAxisIndex:0,
+                        label: {
+                            show: true,
+                            position: 'top',
+                            offset: [-15, -2],
+                            fontSize:canvasFontSize
+                        },
+                        data: lineData.lastTimeDataList
+                        // data: [0, 13332, 6666, 6666, 0, 0, 0, 0, 0, 0, 0, 0]
+                    },
+                    {
+                        name: lineData.currentYear,
+                        // name: 2020,
+                        type: 'bar',
+                        yAxisIndex:0,
+                        barWidth: 10,
+                        label: {
+                            show: true,
+                            position: 'top',
+                            offset: [5, -2],
+                            fontSize:canvasFontSize
+                        },
+                        data: lineData.currentTimeDataList
+                        // data: [0, 6666, 6666, 6666, 0, 0, 0, 0, 0, 0, 0, 0]
+                    },
+                    {
+                        name: '增长率',
+                        type: 'line',
+                        yAxisIndex:1,
+                        symbol: 'circle',
+                        symbolSize: 6,   //折线点的大小
+                        label: {
+                            show: true,
+                            position: 'top',
+                            formatter:'{c}%',
+                            offset: [-2, -8],
+                            fontSize:canvasFontSize
+                        },
+                        itemStyle: {
+                            normal: {
+                                lineStyle: {
+                                    width: 0, //折线宽度
+                                }
+                            },
+                        },
+                        data: lineData.rateList
+                        // data: [0, -50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        /**
+         * 功能:获取图表信息
+         * 时间:2020/7/7
+         * 作者:lijiacheng
+         * @param
+         */
+        var getInfoData = function (dataType,ele) {
+            $.ajax({
+                url: "/ADC_info/api/pad/padOperationManage/dashBoardBarVO/" + dataType,
+                type: 'get',
+                async:false,
+                success: function (res) {
+                    if (res.ok) {
+                        setLineBarCanvas(res.data,ele)
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        var getConData = function (dataType,ele) {
+            $.ajax({
+                url: "/ADC_info/api/pad/padOperationManage/orgDashBoardBarVO/" + dataType,
+                type: 'get',
+                async:false,
+                success: function (res) {
+                    if (res.ok) {
+                        setLineBarCanvas2(res.data,ele)
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        function timestampToTime(timestamp) {
+            var date = new Date(timestamp);
+            var Y = date.getFullYear();
+            var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
+            var D = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+            return Y + '-'+ M+ '-' + D;
+
+        }
+        function showTable(tableId, api, cols,data={}) {
+            table.render({
+                elem: '#' + tableId,
+                id: tableId,
+                url: api,
+                where:data,
+                parseData: function (res) {
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+                },
+                text: {
+                    none: '<div style="color: #5D77A4"><img src="/assetsInfo/images/bordImg/zanwu.png" class="zanwu"><div>暂无数据</div></div>' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+                },
+                cols: cols,
+                page: false,
+                height: $(".plan-table").height()-tablex,
+                width: $(".plan-table").width()-5,
+                request: {
+                    page: 'pageNo',
+                    limitName: 'pageSize'
+                }
+            });
+        }
+        // 近期交流计划
+        var rankingCols1 = [
+            [
+                {
+                    field: 'epDate',
+                    title: '日期',
+                    align: 'center',
+                    templet: function (d) {
+                        var text = d.ext2 ? d.ext2 : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                field: 'epForm',
+                title: '形式',
+                align: 'center',
+                templet: function (d) {
+                    var text = d.epForm ? d.epForm : "";
+                    return '<div title="' + text + '"><span>' + text + '</span></div>'
+                }
+            },
+                {
+                    field: 'epEnterprise',
+                    title: '企业',
+                    align: 'center',
+                    templet: function (d) {
+                        var text = d.epEnterprise ? d.epEnterprise : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                field: 'epExchangeDomain',
+                title: '交流领域',
+                align: 'center',
+                templet: function (d) {
+                    var text = d.epExchangeDomain ? d.epExchangeDomain : "";
+                    return '<div title="' + text + '"><span>' + text + '</span></div>'
+                }
+            }, {
+                field: 'epLeaderName',
+                title: '建议领导',
+                align: 'center',
+                templet: function (d) {
+                    var text = d.epLeaderName ? d.epLeaderName : "";
+                    return '<div title="' + text + '"><span>' + text + '</span></div>'
+                }
+            }]];
+
+        function showTableP4(tableId, api, cols) {
+            table.render({
+                elem: '#' + tableId,
+                id: tableId,
+                url: api,
+                parseData: function (res) {
+                    var arr=[];
+                    var strArr=["工业和信息化部计算机与微电子发展研究中心（中国软件评测中心）","中国汽车技术研究中心有限公司"];
+                    for (var i = 0; i <res.data.length ; i++) {
+                        if(strArr.indexOf(res.data[i].projectOwner)==-1){
+                            arr.push(res.data[i]);
+                        }
+
+                    }
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        // "count": res.data.count, //解析数据长度
+                        "data": arr.slice(0,5) //解析数据列表
+                    };
+                },
+                cols: cols,
+                height: $(".enterprise-tables").height()-tablex,
+                width: $(".enterprise-tables").width()-5,
+                // where: {
+                // }
+            });
+        }
+        // 年度排行
+        var rankingCols2 = [
+            [
+                {
+                    type: 'numbers', title: '排行',
+                    width:40,
+                },
+                {
+                    field: 'projectOwner',
+                    title: '企业',
+                    align: 'center',
+                    // minWidth:150,
+                    templet: function (d) {
+                        var text = d.projectOwner;
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                field: 'contractAmountStr',
+                title: '金额（万元）',
+                align: 'center',
+                width:110,
+                templet: function (d) {
+                    var text = d.contractAmountStr;
+                    return '<div title="' + text + '"><span>' + text + '</span></div>'
+                }
+            }]
+        ];
+
+        var getAmountFun = function () {
+            $.ajax({
+                url: "/ADC_info/api/pad/padOperationManage/getHeaderVO",
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        for (var item in res.data){
+                            if(res.data[item]){
+                                $("#"+item).text(res.data[item])
+                            }else{
+                                $("#"+item).text(0)
+                            }
+                        }
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        var getNumberFun = function () {
+            $.ajax({
+                url: "/ADC_info/api/customerresourcemanage/contacts/newContactsStatistics/"+new Date().getFullYear(),
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        for (var item in res.data){
+                            if(res.data[item]){
+                                $("#"+item).text(res.data[item])
+                            }else{
+                                $("#"+item).text(0)
+                            }
+                        }
+
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        var getHandledValue= function (num) {
+            return num < 10 ? '0' + num : num;
+        };
+        var getDate = function () {
+            var d = new Date();
+            var year = d.getFullYear().toString();
+            var month = getHandledValue(d.getMonth() + 1).toString();
+            var date = getHandledValue(d.getDate()).toString();
+            var hours = getHandledValue(d.getHours()).toString();
+            var minutes = getHandledValue(d.getMinutes()).toString();
+            var second = getHandledValue(d.getSeconds()).toString();
+            var formatter="YYYY/MM/DD HH:mm:ss";
+            var resStr = formatter
+                .replace('YYYY', year)
+                .replace('YY', year.substr(2))
+                .replace('MM', month)
+                .replace('DD', date)
+                .replace('HH', hours)
+                .replace('mm', minutes)
+                .replace('ss', second);
+            $(".headerTime").text(resStr);
+        };
+        var timeInter;
+        var initFun =function(){
+            getDate();
+            timeInter=setInterval(function(){
+                getDate()
+            },1000);
+            showTableP4('enterpriseTable', '/ADC_info/api/budget/project/getPadProjectContractAmount',rankingCols2 );
+            getInfoData(1,"statisticsCanvas");
+            getInfoData(2,"invoiceCanvas");
+            getInfoData(3,"incomeCanvas");
+            getConData(1,"yearStCanvas");
+            showTable('planTable', '/ADC_info/api/exchangeplan/exchangePlan/pad', rankingCols1,{})
+            getNumberFun();
+            getAmountFun();
+        }
+        initFun();
+        $("#refresh-btn").off("click").on("click",function () {
+            clearInterval(timeInter);
+            initFun();
+        })
+    });
+</script>

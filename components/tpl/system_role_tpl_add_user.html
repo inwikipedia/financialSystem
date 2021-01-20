@@ -1,0 +1,64 @@
+<!--
+File   : system_role_tpl_add_user.html
+Created: Thursday September 20th 2018 9:36:49 am
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Last Modified: Tuesday September 25th 2018 11:50:45 am
+Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+-----
+Description: 
+-----
+HISTORY:
+-->
+
+<div class="layui-tpl-container">
+    <!-- 新增和编辑表单 -->
+    <div class="layui-form p-form">
+        <div class="layui-form">
+            <div class="layui-form-item table-top-bar">
+                <!-- 左侧 -->
+                <div class="layui-inline">
+                    <div class="layui-inline search-item">
+                        <i class="layui-icon layui-icon-search"></i>
+                        <input type="text" name="usName" placeholder="输入用户名" class="layui-input">
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-filter="btn_search_adduser"
+                            lay-submit>查询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 表格容器 -->
+        <table id="tableContent-adduser" lay-filter="tableContent-adduser"></table>
+
+        <!-- 提交按钮 -->
+        <!-- 取消按钮 -->
+        <div class="layui-form-item" style="text-align: center;margin-top: 20px;">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="menuSave_users">保存</button>
+            <button class="layui-btn layui-btn-primary" lay-submit lay-filter="popmenuCancle">取消</button>
+        </div>
+    </div>
+</div>

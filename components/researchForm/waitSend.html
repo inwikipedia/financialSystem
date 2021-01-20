@@ -1,0 +1,148 @@
+<style>
+
+</style>
+<div id="waitSendTable" lay-filter="waitSendTable"></div>
+<script type="text/html" id="memberTool">
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-member-edit">编辑</button>
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-member-del">删除</button>
+</script>
+<script>
+    layui.use(['element','laypage','tree','util','table','form','laydate'], function () {
+        var element = layui.element,
+            table = layui.table,
+            tree = layui.tree,
+            form = layui.form,
+            admin = layui.admin,
+            laydate = layui.laydate,
+            config = layui.config,
+            tools =layui.tools,
+            util = layui.util;
+        var account = config.getAccount();
+        table.render({
+            elem: '#waitSendTable',
+            url: admin.formatUrl('/api/research/info/page'), //数据接口
+            method: 'GET',
+            id: 'waitSendTable',
+            // 格式化后台返回的数据
+            parseData: function (res) { //res 即为原始返回的数据
+                // 返回结果，进行渲染表格
+                return {
+                    "code": res.respCode, //解析接口状态
+                    "count": res.data.count,
+                    "msg": res.message, //解析提示文本
+                    "data": res.data.list //解析数据列表
+                };
+            },
+            page:true,
+            request: {
+                pageName: 'page',
+                limitName: 'pageSize'
+            },
+            cols: [
+                [ {
+                    type: 'numbers',
+                    title: '序号',
+                    fixed: 'left',
+                    width:80
+                },{
+                    title: '合同名称',
+                    field: 'researchProjectName',
+                    align: 'center'
+                }, {
+                    title: '所属部门',
+                    field: 'ownDepartmentName',
+                    align: 'center'
+                },{
+                    title: '操作',
+                    align: 'center',
+                    toolbar:'#memberTool'
+                }]
+            ],
+        });
+        table.on('tool(waitSendTable)', function (obj) {
+            // 获取点击列的数据
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent == 'btn-member-edit') {
+                if(data.extInfo4!=2){
+                    admin.popupCenter({
+                        id: 'ADCFormDesignHelper-startProcess',
+                        maxmin: false,
+                        title: '编辑项目',
+                        path: 'components/researchForm/mainForm.html',
+                        area: ['100%', '100%'],
+                        // btn: ['启动', '取消'],
+                        btnAlign: 'c',
+                        resize: false,
+                        finish: function () {
+                            table.reload('waitSendTable');
+                        },
+                        success: function () {
+                            $('#researchProjectId').val(data.researchProjectId);
+                            $('#researchProjectPropertyId').val(data.researchProjectPropertyId);
+                        }
+                    },'top');
+                }else{
+                    admin.popupCenter({
+                        id: 'ADCFormDesignHelper-startProcess',
+                        maxmin: false,
+                        title: '查看项目',
+                        path: 'components/researchChangeForm/mainChangeForm.html',
+                        area: ['100%', '100%'],
+                        // btn: ['启动', '取消'],
+                        btnAlign: 'c',
+                        resize: false,
+                        finish: function () {
+
+                        },
+                        success: function () {
+                            $('#researchProjectId').val(data.researchProjectId);
+                            $('#procBusinessKey').val(data.extInfo6);
+                            // $('#isEdit').val(2);
+                            // var elem = '.mainForm';
+                            // var inputElem = $(elem + ' input'),
+                            //     textareaElem = $(elem + ' textarea'),
+                            //     selectElem = $(elem + ' select'),
+                            //     buttonElem = $(elem + ' button');
+                            // inputElem.attr('disabled', 'disabled');
+                            // textareaElem.attr('disabled', 'disabled');
+                            // selectElem.attr('disabled', 'disabled');
+                            // buttonElem.attr('disabled', 'disabled');
+                            // //所有文件控件下载按钮移除只读属性
+                            // for (var i = 0; i <buttonElem.length ; i++) {
+                            //     buttonElem.eq(i).css('display','none');
+                            //
+                            // }
+                        }
+                    },'top');
+                }
+            }else if(layEvent == 'btn-member-del'){
+                layer.confirm("是否确定删除:" + data.researchProjectName,{
+                    btn: ['是','否']},function (index) {
+                    $.ajax({
+                        url: "/api/research/info/"+data.researchProjectId,
+                        type: 'delete',
+                        // contentType: "application/json",
+                        success: function (res) {
+                            if(res.ok){
+                                layer.msg('删除成功！', {
+                                    icon: 1
+                                });
+                                table.reload('waitSendTable');
+                            }else{
+                                layer.msg(res.message, {
+                                    icon: 5
+                                });
+                            }
+                        }
+                    })
+
+                },function (index) {
+                    layer.close(index);
+                });
+
+            }
+            })
+    })
+
+</script>

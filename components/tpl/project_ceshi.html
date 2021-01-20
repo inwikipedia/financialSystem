@@ -1,0 +1,486 @@
+<style>
+    .milepost_form .milepost_info {
+        width: 550px;
+        /*height: 320px;*/
+        float: left;
+
+    }
+
+    .milepost_form .milepost_info .milepost_title {
+        color: black;
+        margin-bottom: 10px;
+    }
+
+    .milepost_form .milepost_info .milepost_box {
+        border: 1px solid #ccc;
+        height: 355px;
+    }
+
+    .milepost_form .milepost_info .milepost_row {
+        min-height: 35px;
+        height: auto;
+        padding: 10px 10px 0px 10px;
+    }
+
+    .milepost_form .milepost_info .milepost_row_textarear {
+        padding: 10px 10px 0px 10px;
+        position: relative;
+    }
+
+    .milepost_form .milepost_info .milepost_label {
+        width: 25%;
+        display: inline-block;
+    }
+
+    .milepost_form .milepost_info .milepost_text {
+        display: inline-block;
+        width: 75%;
+    }
+
+    .milepost_form .milepost_info .milepost_row_textarear .milepost_textarear_label {
+        width: 25%;
+        height: 19px;
+        display: inline-block;
+    }
+
+    .milepost_form .milepost_info .milepost_row_textarear .milepost_textarear_label .milepost_label {
+        position: absolute;
+        top: 10px;
+    }
+
+    .milepost_right_box {
+        border: 1px solid #ccc;
+    }
+
+    .milepost_form .layui-form-checkbox[lay-skin=primary] {
+        padding-right: 23px;
+    }
+
+    .milepost_form .layui-form-checkbox[lay-skin=primary] i {
+        width: 12px;
+        height: 12px;
+        line-height: 12px;
+        top: 2px;
+    }
+</style>
+<style>.milestoneInfo {
+    overflow: hidden;
+}
+
+.milestoneInfo ul li span:first-child {
+    font-weight: bold;
+}
+
+.milestoneInfo ul li {
+    margin-bottom: 5px;
+}
+
+#milestone_details .milestone-box table {
+    width: 100%;
+}
+
+.milestone-box .layui-table thead tr {
+    background-color: #EBEEF4;
+}
+
+layui-table-body tr:nth-child(even) {
+    background-color: #F7F9FC;
+}
+
+.milestone-box table tr {
+    height: 31px
+}
+
+.target-right {
+    color: #999;
+    font-size: 14px;
+}
+
+#milestone_details table td {
+    border: 1px solid rgba(235, 238, 244, 1);
+}
+</style>
+<div style="padding: 20px" id="milestone_details"></div>
+<script type="text/html" id="control">
+    <a class="table-control-btn" lay-event="download" style="color: #999;"><img
+            src="../../assetsInfo/images/icon/xiazai.png"/> 下载</a>
+    <a class="table-control-btn" lay-event="upFile" style="color: #999;">上传</a>
+    <input style="display: none" enctype="multipart/form-data" type="file"/>
+</script>
+<div class="layui-tpl-container" style="height: 600px;">
+    <div class="milepost_form">
+        <div class="milepost_info milepost_left">
+            <h3 class="milepost_title">项目基本情况</h3>
+            <div class="milepost_box">
+                <div class="milepost_row">
+                    <lable class="milepost_label">项目名称：</lable>
+                    <div class="milepost_text">
+                        <br>
+                    </div>
+                </div>
+                <div class="milepost_row">
+                    <lable class="milepost_label">项目承担部门：</lable>
+                    <div class="milepost_text">
+                        <br>
+                    </div>
+                </div>
+                <div class="milepost_row">
+                    <lable class="milepost_label">是否涉及软件开发：</lable>
+                    <div class="milepost_text">
+                        <br>
+                    </div>
+                </div>
+                <div class="milepost_row">
+                    <lable class="milepost_label">项目负责人：</lable>
+                    <div class="milepost_text">
+                        <br>
+                    </div>
+                </div>
+                <div class="milepost_row">
+                    <lable class="milepost_label">项目实施计划：</lable>
+                    <div class="milepost_text">
+                        <br>
+                    </div>
+                </div>
+                <div class="milepost_row_textarear">
+                    <div class="milepost_textarear_label">
+                        <lable class="milepost_label">项目基本情况：</lable>
+                    </div>
+                    <div class="milepost_text">
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div calss="milepost_info milepost_right">
+            <div>
+                <h3 class="milepost_title" style="display: inline-block">项目实施阶段里程碑</h3>
+                <div style="display: inline-block;float: right;cursor: pointer;" id="del_project_btn">
+                    <span style="color:#999999">删除</span>
+                    <img src="assetsInfo/images/del.png">
+                </div>
+                <div style="display: inline-block;float: right;cursor: pointer;" id="add_project_btn">
+                    <span style="color:#999999">添加里程碑</span>
+                    <img src="assetsInfo/images/zengjia.png">
+                </div>
+            </div>
+            <div class="milepost_box" style="overflow-y: auto;margin-right: 0">
+                <div class="milepost_right_box">
+                    <div class="milepost_row">
+
+                        <lable class="milepost_label">
+                            <input type="checkbox" title="里程碑名称：" lay-skin="primary" checked="">
+
+                        </lable>
+                        <div class="milepost_text">
+                            <br>
+                        </div>
+                    </div>
+                    <div class="milepost_row">
+                        <lable class="milepost_label">负责人：</lable>
+                        <div class="milepost_text">
+                            <br>
+                        </div>
+                    </div>
+                    <div class="milepost_row_textarear">
+                        <div class="milepost_textarear_label">
+                            <lable class="milepost_label">里程碑目标：</lable>
+                        </div>
+                        <div class="milepost_text">
+                            <br>
+                        </div>
+                    </div>
+                    <div class="milepost_row">
+                        <lable class="milepost_label">预计起止日期：</lable>
+                        <div class="milepost_text">
+                            <br>
+                        </div>
+                    </div>
+                    <div class="milepost_row_textarear">
+                        <div class="milepost_textarear_label">
+                            <lable class="milepost_label">预计成果物：</lable>
+                        </div>
+                        <div class="milepost_text">
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['table'], function () {
+        var table = layui.table;
+        layui.admin.req('/api/progress/projectMilepost/SQQNVP4C43', {}, function (res) {
+            if (res.ok) {
+                var parent_json = res.data;
+                var milepostBeginTime = layui.util.toDateString(parent_json.milepostBeginTime, 'yyyy-MM-dd');
+                var milepostEndTime = layui.util.toDateString(parent_json.milepostEndTime, 'yyyy-MM-dd');
+                var finishTime = layui.util.toDateString(parent_json.finishTime, 'yyyy-MM-dd');
+                var con = '<div class="milestoneInfo" >' +
+                    '<ul style="float: left; width: 40%;">' +
+                    '<li><span style="color:#666;font-size: 14px">负责人：</span><span class="target-right">' + (parent_json.milepostManagerName ? parent_json.milepostManagerName : '') + '</span></li>' +
+                    '<li><span style="color:#666;font-size: 14px">起止时间：</span><span class="target-right">' + milepostBeginTime + ' 至 ' + milepostEndTime + '</span></li>' +
+                    '<li><span style="color:#666;font-size: 14px">完成时间：</span><span class="target-right">' + finishTime + '</span></li>' +
+                    '</ul>' +
+                    '<div style="float: right; width: 60%;height:68px"><span style="color:#666;font-size: 14px;font-weight: bold">目标：</span><span class="target-right">' + parent_json.milepostTarget + '</span></div>' +
+                    '</div>' +
+                    '<div class="milestone-box" style="width: 100%;"><table id="milestone-result" lay-filter="milestone-result"></table></div>' +
+                    '<input name="milestoneInfo_id" type="text" title="里程碑" value="' + parent_json.id + '" adcform="adc_form_input" class="layui-input" adcform_hide="0" adcform_fontsize="14" adcform_align="left" adcform_height="30" adcform_validate="adcformvalidate_none" style="display: none">';
+                $('#milestone_details').append(con);
+                var id = parent_json.id;
+                var renderTable = function (id) {
+                    table.render({
+                        elem: '#milestone-result',
+                        id: 'milestone-result',
+                        url: '/api/progress/projectMilepost/getMilepostAndResult/' + id,
+                        parseData: function (res) {
+                            return {
+                                "code": res.respCode, //解析接口状态
+                                "msg": res.message, //解析提示文本
+                                "count": res.data.count, //解析数据长度
+                                "data": res.data.projectMilepostResultVOList //解析数据列表
+                            };
+                        },
+                        cols: [
+                            [{
+                                field: 'fileName',
+                                title: '成果物',
+                                templet: function (d) {
+                                    var text = d.fileName ? d.fileName : "";
+                                    return '<div title="' + text + '"><span>' + text + '</span></div>'
+                                }
+                            }, {
+                                field: 'resultFileName',
+                                title: '文件名称',
+                                align: 'center',
+                                templet: function (d) {
+                                    var text = d.resultFileName ? d.resultFileName : "";
+                                    return '<div title="' + text + '"><span>' + text + '</span></div>'
+                                }
+                            }, {
+                                field: 'fileSize',
+                                title: '大小',
+                                align: 'center',
+                                templet: function (d) {
+                                    var text = d.fileSize ? d.fileSize : "";
+                                    return '<div title="' + text + '"><span>' + text + '</span></div>'
+                                }
+                            }, {
+                                field: 'uploadUserName',
+                                title: '上传人',
+                                align: 'center',
+                                templet: function (d) {
+                                    var text = d.uploadUserName ? d.uploadUserName : "";
+                                    return '<div title="' + text + '"><span>' + text + '</span></div>'
+                                }
+                            }, {
+                                field: 'uploadTime',
+                                title: '上传时间',
+                                align: 'center',
+                                templet: function (d) {
+                                    return layui.util.toDateString(d.uploadTime, 'yyyy-MM-dd');
+                                }
+                            }, {
+                                templet: '#control',
+                                title: '操作',
+                                align: 'center',
+                                unresize: true
+                            }]
+                        ],
+                        cellMinWidth: 80,
+                        skin: 'row',
+                        even: true,
+                    });
+                    table.on('tool(milestone-result)', function (obj) {
+                        // 获取点击列的数据
+                        var data = obj.data;
+                        var layEvent = obj.event;
+                        if (layEvent === 'download') {
+                            window.location.href = "/ADC_info/api/progress/projectMilepostResult/" + data.fileId + '/download';
+                        } else if (layEvent === 'upFile') {
+                            var ele = obj.tr.children().eq(obj.tr.children().length - 1).children().children('input');
+                            obj.tr.children().eq(obj.tr.children().length - 1).children().children('input').click();
+                            ele.off('change').on('change', function (data) {
+                                var xhr = new XMLHttpRequest();
+                                xhr.open("POST", "/api/progress/projectMilepostResult/upload");
+                                var fd = new FormData();
+                                fd.append("file", this.files[0]);
+                                xhr.onload = function (e) {
+                                    if (xhr.status === 200) {
+                                        if (JSON.parse(xhr.responseText).ok) {
+                                            console.log(JSON.parse(xhr.responseText).data, 666666)
+                                        } else {
+                                            layui.layer.msg(JSON.parse(xhr.responseText).message, {icon: 0});
+                                        }
+                                    } else if (xhr.status === 413) {
+                                        layui.layer.msg("上传失败！上传文件大小不能超过 10M", {icon: 0});
+                                    }
+                                    else {
+                                        layui.layer.msg("上传失败！请在控制台查看错误日志", {icon: 5});
+                                        console.error(xhr);
+                                    }
+                                };
+                                xhr.send(fd);
+                            });
+                        }
+                    })
+                }
+                renderTable(id)
+            } else {
+                layer.msg(res.message, {
+                    icon: 5
+                });
+            }
+        }, {
+            method: 'get'
+        });
+
+    })</script>
+<script>
+    var userClick = function (self) {
+        var data = {data: []};
+        var that = self;
+        var dataUsid = that.dataset.usid,
+            dataUsname = that.dataset.usname;
+        if (dataUsid && dataUsname) {
+            dataUsid = dataUsid.split(",");
+            dataUsname = dataUsname.split(",");
+            for (var i = 0; i < dataUsid.length; i++) {
+                data.data.push({
+                    id: dataUsid[i],
+                    name: dataUsname[i]
+                });
+            }
+        }
+
+        function callback(res) {
+            if (res.length > 0) {
+                var ids = [], names = [];
+                for (var i = 0; i < res.length; i++) {
+                    ids.push(res[i].id);
+                    names.push(res[i].name);
+                }
+                that.dataset.usid = ids.join(",");
+                that.dataset.usname = names.join(",");
+                that.value = names.join(",");
+            } else {
+                that.dataset.usid = "";
+                that.dataset.usname = "";
+                that.value = "";
+            }
+        }
+
+        ADCFormDesignHelper.personnelSelect(data, callback, "radio");
+    };
+    var addOutcomes = function (self) {
+        var dateTime = new Date().getTime();
+        var idx = $(self).siblings().attr('name').split('_')[3];
+        var liInx = $(self).parent().parent('.milepost_text').children('div').length + 1;
+        var html = '<div style="margin-bottom: 5px">' +
+            '<input name="input_' + dateTime + '_milepost_' + idx + '_' + liInx + '" type="text" title="预计成果物" value="" adcform="adc_form_input" class="layui-input" placeholder="预计成果物" adcform_listctrlmark="" adcform_hide="0" adcform_fontsize="14" adcform_align="left" adcform_height="30" adcform_validate="adcformvalidate_none" style="box-sizing: border-box; font-size: 14px; text-align: left; height: 30px;width: calc(100% - 20px );"/>' +
+            '<i class="clickImg layui-icon layui-icon-delete" style="font-size: 20px; margin-right:-50px;cursor:pointer" href="javascript:;" onclick="delOutcomes(this)"></i></div>';
+        $(self).parent().parent('.milepost_text').append(html);
+    };
+    var delOutcomes = function (self) {
+        $(self).parent().remove();
+    };
+
+    var add = function () {
+        var dateTime = new Date().getTime();
+        var dateEng = Date.now().toString(36);
+        var idx = $('#projectTable').children('.milepost_right_box').length + 1;
+        var htmlcont = '<div class="milepost_right_box" name="milepost_' + idx + '" adcform="adc_form_milepost">' +
+            '<div class="milepost_row">' +
+            '<lable class="milepost_label">\n' +
+            '<input style="display:none" title="里程碑名称：" type="checkbox" lay-skin="primary"/>\n' +
+            '</lable>' +
+            '<div class="milepost_text">' +
+            '<input name="input_' + dateTime + '_milepost_' + idx + '" type="text" title="里程碑名称" value="" adcform="adc_form_input" class="layui-input" placeholder="里程碑名称" adcform_listctrlmark="" adcform_hide="0" adcform_fontsize="14" adcform_align="left" adcform_height="30" adcform_validate="adcformvalidate_none" style="box-sizing: border-box; font-size: 14px; text-align: left; height: 30px;">' +
+            '<div src="/assetsInfo/libs/addtable/addtable.js" cdata_tag="script" _ue_custom_node_="true">' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '<div class="milepost_row">' +
+            '<lable class="milepost_label">负责人：</lable>' +
+            '<div class="milepost_text">' +
+            '{|-<span class="layui-input-inline" style="position: relative;">' +
+            '<input name="inputuserselect_' + dateTime + '_milepost_' + idx + '" type="text" title=" 负责人" adcform="adc_form_user_select" class="layui-input" placeholder=" 负责人" readonly="readonly" onclick="userClick(this)" adcform_default="1" adcform_width="190" adcform_height="30" adcform_fontsize="14" style="box-sizing: border-box; width: 190px; height: 30px; font-size: 14px; cursor: pointer; padding-right: 30px;">' +
+            '<em class="layui-icon layui-icon-username" style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;"></em>' +
+            '</span>-|}' +
+            '<script class="inputuserselect_' + dateTime +
+            '_milepost_' + idx + '_script">\
+                (function (that) {\
+                    var adcform_default = that.getAttribute("adcform_default");\
+                    if (adcform_default == "1") {\
+                        var account = layui.config.getAccount();\
+                        that.value = account.usname;\
+                        that.dataset.usname = account.usname;\
+                        that.dataset.usid = account.usid;\
+                    }\
+                })(document.querySelector("input[name=inputuserselect_' + dateTime + '_milepost_' + idx + ']"));\
+                        <\/script>' +
+            '</div></div>' +
+            '<div class="milepost_row_textarear">' +
+            '<div class="milepost_textarear_label">' +
+            '<lable class="milepost_label">里程碑目标：</lable>' +
+            '</div>' +
+            '<div class="milepost_text">' +
+            '<textarea name="textarea_' + dateTime + '_milepost_' + idx + '" title="里程碑目标" value="" adcform="adc_form_textarea" class="layui-textarea" placeholder="里程碑目标" adcform_rich="0" adcform_fontsize="14" adcform_height="80" style="box-sizing: border-box; font-size: 14px; height: 80px;">' +
+            '</textarea>' +
+            '</div></div>' +
+            '<div class="milepost_row">' +
+            '<lable class="milepost_label">预计起止日期：</lable>' +
+            '<div class="milepost_text">' +
+            '<input name="datetime_' + dateTime + '_milepost_' + idx + '" type="text" title="预计起止日期" placeholder="预计起止日期" adcform="adc_form_datetime" adcform_theme="#37ABFF" adcform_type="_range" class="datetime_' + dateTime + '_milepost_' + idx + ' layui-input" adcform_hide="0" adcform_auto="1" adcform_fontsize="14" adcform_align="left" adcform_width="190" adcform_height="30" style="box-sizing: border-box; font-size: 14px; text-align: left; width: 190px; height: 30px;">' +
+            '<script class="datetime_' + dateTime + '_milepost_' + idx + '_script">\
+                    (function(){var param = {\
+                        elem: ".datetime_' + dateTime + '_milepost_' + idx + '"\
+                    };\
+                    var type = document.querySelector(".datetime_' + dateTime + '_milepost_' + idx + '").getAttribute("adcform_type").split("_");\
+                    var theme = document.querySelector(".datetime_' + dateTime + '_milepost_' + idx + '").getAttribute("adcform_theme");\
+                    var auto = document.querySelector(".datetime_' + dateTime + '_milepost_' + idx + '").getAttribute("adcform_auto");\
+                    if(type[0]!==""){param.type=type[0];}\
+                    if(type[1]!==""){param.range=true;}\
+                    if(theme){param.theme=theme;}\
+                    if(auto == "1" && type[1]==""){param.value = new Date();}\
+                    layui.laydate.render(param);})();\
+                <\/script>' +
+            '</div></div>' +
+            '<div class="milepost_row_textarear"><div class="milepost_textarear_label"> <lable class="milepost_label">预计成果物：</lable> </div><div class="milepost_text">' +
+            '<div style="margin-bottom: 5px">' +
+            '<input name="input_' + dateTime + '_milepost_' + idx + '" type="text" title="预计成果物" value="" adcform="adc_form_input" class="layui-input" placeholder="预计成果物" adcform_listctrlmark="" adcform_hide="0" adcform_fontsize="14" adcform_align="left" adcform_height="30" adcform_validate="adcformvalidate_none" style="box-sizing: border-box; font-size: 14px; text-align: left; height: 30px;width: calc(100% - 20px );"/>' +
+            '<img class="clickImg" onclick="addOutcomes(this)" src="/assetsInfo/images/Group-.png" style="cursor: pointer;"/></div>' +
+            '</div></div></div>';
+        $('#projectTable').append(htmlcont);
+    };
+    $('#add_project_btn').off('click').on('click', function () {
+        add();
+    });
+    $('#del_project_btn').off('click').on('click', function () {
+        var idx = 0;
+        var arr = [];
+        for (var i = 0; i < $("#projectTable input:checkbox").length; i++) {
+            if ($("#projectTable input:checkbox")[i].checked) {
+                idx++;
+                arr.push($("#projectTable input:checkbox").eq(i));
+            }
+        }
+        if (idx == $("#projectTable input:checkbox").length) {
+            return layer.msg('至少要保留一个里程碑，请重新选择！', {
+                icon: 5
+            });
+        } else if (idx == 0) {
+            return layer.msg('请选择里程碑！', {
+                icon: 5
+            });
+        }
+        delMilepost(arr);
+    });
+    var delMilepost = function (arr) {
+        for (var i = 0; i < arr.length; i++) {
+            arr[i].parent().parent().parent('.milepost_right_box').remove();
+        }
+    };
+</script>

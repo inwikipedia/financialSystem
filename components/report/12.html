@@ -1,0 +1,392 @@
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<link rel="stylesheet" href="assetsInfo/css/report.css">
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+    
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+    
+    .titDivbox {
+        width: 90%;
+        margin: auto;
+        position: relative;
+    }
+    
+    .titDiv {
+        width: 100%;
+        font-size: 16px;
+        font-weight: bold;
+        color: #888;
+        position: absolute;
+        top: 25px;
+    }
+    
+    .layui-form {
+        margin: 20px auto;
+    }
+    
+    .tit01,
+    .tit02 {
+        width: 50%;
+        float: left;
+        text-align: center;
+    }
+    
+    .chart {
+        width: 96%;
+        height: 300px;
+    }
+    
+    @media screen and (min-width: 1366px) and (max-width: 1920px) {
+        .pie-chart {
+            height: 240px;
+        }
+        .chart {
+            width: 96%;
+            height: 300px;
+        }
+    }
+    
+    @media screen and (min-width: 1920px) {
+        .pie-chart {
+            height: 370px;
+        }
+        .chart {
+            width: 96%;
+            height: 300px;
+        }
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span class="layui-card-header-title"><strong>资产情况汇总表
+                </strong></span>
+                <!-- <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-sm exportbtn">导出PPT</a> -->
+            </div>
+
+
+            <div class="layui-row">
+                <div class="layui-col-md4">
+                    <div class="layui-form-item pie-chart" id="picture" style="width: 90%; margin:auto;"></div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-form-item chart" id="picture3"></div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-form-item pie-chart" id="picture2" style="width: 90%; margin:auto;"></div>
+
+                </div>
+            </div>
+            <div class="botTable layui-table">
+
+                <table id="tableContent-form" lay-filter="tableContent-form"></table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+</script>
+<script>
+    layui.use(['table'], function() {
+        var table = layui.table,
+            admin = layui.admin,
+            layer = layui.layer;
+
+        //下面表格
+        table.render({
+            elem: '#tableContent-form',
+            url: '/json/12.json', //数据接口
+            cols: [
+                [ //表头
+                    {
+                        field: 'budgetcount',
+                        title: '资产类型',
+
+                        align: 'center'
+                    }, {
+                        field: 'time',
+                        title: '资产原值',
+
+                        align: 'center'
+
+                    }, {
+                        field: 'jan',
+                        title: '数量',
+
+                        align: 'center'
+
+                    }, {
+                        field: 'feb',
+                        title: '资产净值',
+
+                        align: 'center'
+                    }
+                ]
+            ]
+        })
+
+        //1
+        var dom = document.getElementById("picture");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        app.title = '环形图';
+
+        option = {
+            title: {
+                x: 'center',
+                y: "10px",
+                textStyle: {
+                    fontSize: 16
+                },
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{b} : {c} ({d}%)"
+            },
+            grid: {
+                top: "2%"
+            },
+            legend: {
+                type: 'scroll',
+                // orient: 'vertical',
+                x: 'center', // 'center' | 'left' | {number},
+                bottom: '5%', // 'center' | 'bottom' | {number}
+                icon: "roundRect",
+                itemWidth: 10,
+                itemHeight: 10
+            },
+            color: ['RGBA(124,190,253,0.8)', 'RGBA(255,233, 133,0.8)', 'RGBA(136,217,160,0.8)', 'RGBA(255,172, 218,0.8)'],
+            series: [{
+                type: 'pie',
+                radius: ['20%', '50%'],
+                center: ['50%', '46%'],
+                label: {
+                    normal: {
+                        show: true,
+                        color: "#000",
+                        formatter: '{b}:\n{c}({d}%)' //自定义显示格式(b:name, c:value, d:百分比)
+                    }
+
+                },
+                labelLine: {
+                    length: 10,
+                    // length2: 10
+                    show: true
+                },
+                data: [{
+                    value: 880,
+                    name: '北京卡达克'
+                }, {
+                    value: 10,
+                    name: '北工部'
+                }, {
+                    value: 80,
+                    name: '天津卡达克'
+                }, {
+                    value: 40,
+                    name: '大中心'
+                }]
+            }]
+        };;
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+        //2
+        var dom = document.getElementById("picture2");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        app.title = '环形图';
+
+        option = {
+            title: {
+                x: 'center',
+                y: "10px",
+                textStyle: {
+                    fontSize: 16
+                },
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{b} : {c} ({d}%)"
+            },
+            grid: {
+                top: "2%"
+            },
+            legend: {
+                type: 'scroll',
+                // orient: 'vertical',
+                x: 'center', // 'center' | 'left' | {number},
+                bottom: '5%', // 'center' | 'bottom' | {number}
+                icon: "roundRect",
+                itemWidth: 10,
+                itemHeight: 10
+            },
+            series: [{
+                type: 'pie',
+                radius: ['20%', '50%'],
+                center: ['50%', '46%'],
+                color: ['RGBA(124,190,253,0.8)', 'RGBA(255,233, 133,0.8)'],
+                label: {
+                    normal: {
+                        show: true,
+                        color: "#000",
+                        formatter: '{b}:\n{c}({d}%)' //自定义显示格式(b:name, c:value, d:百分比)
+                    }
+
+                },
+                labelLine: {
+                    length: 10,
+                    // length2: 10
+                    show: true
+                },
+                data: [{
+                    value: 15,
+                    name: "科研设备"
+
+                }, {
+                    value: 85,
+                    name: "办公设备/家具"
+
+                }]
+            }]
+        };;
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+
+
+        admin.req('/json/report.json', {}, function(res) {
+            var depObject = res.asset[0];
+            var xData = [];
+            var tableCol = [];
+
+            for (var key in depObject) {
+                xData.push(depObject[key])
+            }
+
+            var yData1 = [],
+                yData2 = [];
+            for (var key in res.asset[1]) {
+                yData1.push(res.asset[1][key])
+            }
+            for (var key in res.asset[2]) {
+                yData2.push(res.asset[2][key])
+            }
+
+
+            showUpL2(xData, yData1, yData2)
+        }, {
+            method: 'get'
+        });
+        //柱状图
+        var showUpL2 = function(xData, data1, data2) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("picture3"));
+            // 图表配置项
+            var option = {
+                title: {
+                    left: 'center',
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        crossStyle: {
+                            color: '#999'
+                        }
+                    }
+                },
+                grid: {
+                    left: 65,
+                    right: 40,
+                },
+                legend: {
+                    data: [{
+                        name: '原值',
+                        icon: "roundRect"
+                    }, {
+                        name: '净值',
+                        icon: "roundRect"
+                    }],
+                    left: 'center',
+                    top: 'top',
+                    padding: [7, 0, 0, 0],
+                    itemWidth: 10,
+                    itemHeight: 10
+                },
+                yAxis: {
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'dashed',
+                            color: "#E8E8E8"
+                        }
+                    },
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: xData,
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#949494',
+                        }
+                    }
+                }],
+                series: [{
+                        name: '原值',
+                        type: 'bar',
+                        barMaxWidth: 30,
+                        data: data1,
+                        color: 'RGBA(124,190,253,0.8)',
+                    }, {
+                        name: '净值',
+                        type: 'bar',
+                        barMaxWidth: 30,
+                        color: 'RGBA(255,233, 133,0.8)',
+                        data: data2,
+
+                    }
+
+                ]
+            };
+            myChart.setOption(option);
+        };
+
+        function syncFunction() {
+            //重置表格
+            initRender();
+            //重置图表
+            initOption();
+            myChart.setOption(echartsOption, true);
+        };
+        setTimeout(function() {
+            window.onresize = function() {
+                myChart.resize();
+                //myChartLine.resize();
+                //GantChart.resize();
+                // myChartPie.resize();
+            }
+        }, 200);
+
+
+    });
+</script>

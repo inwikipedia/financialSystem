@@ -1,0 +1,188 @@
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+
+
+<title>模型预览</title>
+
+<style type="text/css">
+    .center-in-center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+</style>
+
+<link rel="stylesheet" type="text/css" href="../../assetsInfo/pivot.css">
+<!-- <script type="text/javascript" src="../../assetsInfo/libs/jquery-1.11.1.min.js"></script> -->
+<script type="text/javascript" src="../../assetsInfo/libs/jquery-ui-1.9.2.min.js"></script>
+<script type="text/javascript" src="../../assetsInfo/pivot.js"></script>
+<script src="../../assetsInfo/echarts.js"></script>
+<script src="../../assetsInfo/walden.js"></script>
+<script src="../../assetsInfo/js/ec_renderers.js"></script>
+<div class="layui-row">
+    <div class="layui-col-md6">
+        <div id="output" style="margin: 30px;"></div>
+    </div>
+    <div class="layui-col-md6">
+        <div id="output2" style="margin: 30px;"></div>
+    </div>
+</div>
+<div class="layui-row">
+    <div class="layui-col-md6">
+        <div id="output3" style="margin: 30px;"></div>
+    </div>
+    <div class="layui-col-md6">
+        <div id="output4" style="margin: 30px;"></div>
+    </div>
+</div>
+
+
+
+<script>
+    var id = "524d9cc986" //sessionStorage.getItem("id");
+    var renderers = $.extend($.pivotUtilities.renderers,
+        $.pivotUtilities.ec_renderers);
+    $.get('/api/model/model', {
+        MId: id
+    }, function(res) {
+        $.get('/api/dataset/page', {
+                Param: res.data[0].mparam,
+                associates: res.data[0].massociates,
+                tableName: res.data[0].mtables
+            },
+            function(info) {
+                var mconfig = eval('(' + res.data[0].mconfig + ')');
+                //console.log(mconfig)
+
+                var mps = info.data.list
+                $("#output").pivotUI(mps, {
+                    "showUI": false,
+                    "rows": mconfig.rows,
+                    "cols": mconfig.cols,
+                    "rendererName": mconfig.rendererName,
+                    "aggregatorName": mconfig.aggregatorName,
+                    "colOrder": mconfig.colOrder,
+                    "exclusions": mconfig.exclusions,
+                    "inclusions": mconfig.inclusions,
+                    "rowOrder": mconfig.rowOrder,
+                    "vals": mconfig.vals,
+                    "renderers": renderers
+                });
+
+            });
+
+
+
+    })
+    var id2 = "b261f9ba4f" //sessionStorage.getItem("id");
+    var renderers = $.extend($.pivotUtilities.renderers,
+        $.pivotUtilities.ec_renderers);
+    $.get('/api/model/model', {
+        MId: id2
+    }, function(res) {
+        $.get('/api/dataset/page', {
+                Param: res.data[0].mparam,
+                associates: res.data[0].massociates,
+                tableName: res.data[0].mtables
+            },
+            function(info) {
+                var mconfig = eval('(' + res.data[0].mconfig + ')');
+                //console.log(mconfig)
+
+                var mps = info.data.list
+                $("#output2").pivotUI(mps, {
+                    "showUI": false,
+                    "rows": mconfig.rows,
+                    "cols": mconfig.cols,
+                    "rendererName": mconfig.rendererName,
+                    "aggregatorName": mconfig.aggregatorName,
+                    "colOrder": mconfig.colOrder,
+                    "exclusions": mconfig.exclusions,
+                    "inclusions": mconfig.inclusions,
+                    "rowOrder": mconfig.rowOrder,
+                    "vals": mconfig.vals,
+                    "renderers": renderers
+                });
+
+            });
+
+
+
+    })
+    var id3 = "b261f9ba4f" //sessionStorage.getItem("id");
+    var renderers = $.extend($.pivotUtilities.renderers,
+        $.pivotUtilities.ec_renderers);
+    $.get('/api/model/model', {
+        MId: id3
+    }, function(res) {
+        $.get('/api/dataset/page', {
+                Param: res.data[0].mparam,
+                associates: res.data[0].massociates,
+                tableName: res.data[0].mtables
+            },
+            function(info) {
+                var mconfig = eval('(' + res.data[0].mconfig + ')');
+                //console.log(mconfig)
+
+                var mps = info.data.list
+                $("#output3").pivotUI(mps, {
+                    "showUI": false,
+                    "rows": mconfig.rows,
+                    "cols": mconfig.cols,
+                    "rendererName": mconfig.rendererName,
+                    "aggregatorName": mconfig.aggregatorName,
+                    "colOrder": mconfig.colOrder,
+                    "exclusions": mconfig.exclusions,
+                    "inclusions": mconfig.inclusions,
+                    "rowOrder": mconfig.rowOrder,
+                    "vals": mconfig.vals,
+                    "renderers": renderers
+                });
+
+            });
+
+
+
+    })
+    var id4 = "26a0960eaf" //sessionStorage.getItem("id");
+    var renderers = $.extend($.pivotUtilities.renderers,
+        $.pivotUtilities.ec_renderers);
+    $.get('/api/model/model', {
+        MId: id4
+    }, function(res) {
+        $.get('/api/dataset/page', {
+                Param: res.data[0].mparam,
+                associates: res.data[0].massociates,
+                tableName: res.data[0].mtables
+            },
+            function(info) {
+                var mconfig = eval('(' + res.data[0].mconfig + ')');
+                //console.log(mconfig)
+
+                var mps = info.data.list
+                $("#output4").pivotUI(mps, {
+                    "showUI": false,
+                    "rows": mconfig.rows,
+                    "cols": mconfig.cols,
+                    "rendererName": mconfig.rendererName,
+                    "aggregatorName": mconfig.aggregatorName,
+                    "colOrder": mconfig.colOrder,
+                    "exclusions": mconfig.exclusions,
+                    "inclusions": mconfig.inclusions,
+                    "rowOrder": mconfig.rowOrder,
+                    "vals": mconfig.vals,
+                    "renderers": renderers
+                });
+
+            });
+
+
+
+    })
+</script>

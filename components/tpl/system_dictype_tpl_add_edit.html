@@ -1,0 +1,58 @@
+<!--
+File   : system_dictype_tpl_add_edit.html
+Created: Monday September 17th 2018 9:45:08 am
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Last Modified: Monday September 17th 2018 10:13:48 am
+Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+-----
+Description: 
+-----
+HISTORY:
+-->
+
+<div class="layui-tpl-container">
+    <div class="layui-form p-form">
+        <input type="text" name="type" style="display: none;">
+        <input type="text" name="id" style="display: none;">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 类型名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="dicTypeName" placeholder="请输入字典名称" class="layui-input" maxlength="50">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 类型编码</label>
+            <div class="layui-input-block">
+                <input type="text" name="dicTypeCode" placeholder="请输入字典编码" class="layui-input" maxlength="50">
+            </div>
+        </div>
+        <!-- 提交按钮 -->
+        <!-- 取消按钮 -->
+        <div class="layui-form-item" style="text-align: center;">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="menuSave-dictype">保存</button>
+            <button class="layui-btn layui-btn-primary" lay-submit lay-filter="popmenuCancle">取消</button>
+        </div>
+    </div>
+</div>

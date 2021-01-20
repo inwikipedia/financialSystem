@@ -1,0 +1,17 @@
+
+<div class="modal" ng-controller="BpmnFeedbackPopupCtrl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+			<div class="modal-header">
+            	<p style="font-size: 16px;margin: 5px 0;display: inline-block;">{{'PROPERTY.FEEDBACK.TITLE' | translate:property}}</p>
+            </div>
+            <div class="modal-body">
+            	<p><textarea auto-focus class="form-control" ng-model="model.feedback" style="width:90%; height:100%; max-width: 100%; max-height: 100%; min-height: 300px"/></p>
+           	</div>
+           	<div class="modal-footer">
+				<button ng-click="send()" ng-disabled="model.feedback.length === 0" class="btn btn-primary" translate style="width: 80px;">ACTION.SEND</button>
+            	<button ng-click="cancel()" class="btn btn-primary" translate style="background-color: #949494;width: 80px;">ACTION.CANCEL</button>
+            </div>
+		</div>
+	</div>
+</div>

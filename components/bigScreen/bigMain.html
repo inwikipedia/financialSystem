@@ -1,0 +1,881 @@
+<style>
+    /*设置全屏后的背景颜色*/
+    :-webkit-full-screen {
+        background-color: #f2f6f8 !important;
+    }
+
+    :-moz-full-screen {
+        background-color: #f2f6f8 !important;
+    }
+
+    :-ms-fullscreen {
+        background-color: #f2f6f8 !important;
+    }
+
+    :fullscreen {
+        background-color: #f2f6f8 !important;
+    }
+
+    /*导航隐藏*/
+    .layui-layout-admin .admin-breadcrumb {
+        display: none;
+    }
+
+    .layui-layout-admin .layui-body {
+        padding: 5px 10px 10px 10px;
+    }
+
+    .layui-body {
+        height: calc(100vh - 40px);
+    }
+
+    #bigMain {
+        /*background-color: red;*/
+        height: calc(100% - 10px);
+        width: 100%;
+    }
+
+    .card-cycle {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        display: inline-block;
+        background-color: #1C9FE7;
+        vertical-align: middle;
+        margin-right: 5px;
+    }
+
+    .allScreen {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        cursor: pointer;
+    }
+
+    .noAll {
+        display: none;
+    }
+
+    .bigMain .bigHead {
+        /*width: 100%;*/
+        height: 46px;
+        padding: 5px;
+        background-color: white;
+    }
+
+    .bigMain .bigHead .bigHead-content {
+        width: 100%;
+        background: rgba(28, 159, 231, 0.1);
+        height: 100%;
+        position: relative;
+    }
+
+    .bigMain .bigHead .bigHead-content .bigHead-title {
+        font-size: 28px;
+        text-align: center;
+        color: #0085B5;
+        font-weight: bold;
+        height: 46px;
+        line-height: 46px;
+    }
+
+    .bigContent {
+        margin-top: 5px;
+        height: calc(100% - 51px);
+        display: flex;
+    }
+
+    .bigContent .contentLeft {
+        flex: 1;
+        margin-right: 10px;
+        border-radius: 2px;
+        background-color: white;
+    }
+
+    .bigContent .contentRight {
+        flex: 4;
+    }
+
+    .bigContent .contentLeft .contentLeft-title {
+        position: relative;
+        height: 7%;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #CDCDCD;
+    }
+
+    .bigContent .contentLeft .contentLeft-title .paiming {
+        /*position: absolute;*/
+        /*left: 5%;*/
+    }
+
+    .contentLeft-Text {
+        font-size: 16px;
+        font-weight: 600;
+        color: rgba(51, 51, 51, 1);
+        text-align: center;
+        display: inline-block;
+        margin-left: 10px;
+        /*width: 100%;*/
+        /*margin-top: 8%;*/
+    }
+
+    .bigMore {
+        font-size: 12px;
+        color: rgba(153, 153, 153, 1);
+        position: absolute;
+        right: 2%;
+        cursor: pointer;
+        /*margin-top: 10%;*/
+    }
+
+    .contentLeft-card {
+        height: 8%;
+        width: 100%;
+    }
+
+    .cardTab {
+        display: flex;
+        align-items: center;
+        width: 50%;
+        float: left;
+        height: 100%;
+        justify-content: center;
+        background: rgba(232, 232, 232, 1);
+        box-sizing: border-box;
+        font-size: 14px;
+        cursor: pointer;
+        color: #333;
+    }
+
+    .isActive {
+        background-color: white;
+        border-bottom: 2px solid rgba(0, 143, 195, 1);
+    }
+
+    .contentLeft-main {
+        width: 100%;
+        background-color: white;
+        height: calc(85% - 5px);;
+    }
+
+    .ulContent {
+        width: 100%;
+        height: 100%;
+    }
+
+    .ulContent .contentLeft-info {
+        height: calc(10% - 5px);
+        position: relative;
+        width: calc(100% - 10px);
+        display: flex;
+        align-items: center;
+        margin: 5px 5px 0px 5px;
+        box-sizing: border-box;
+    }
+
+    .ulContent .contentLeft-info .paimingImg {
+        width: 15%;
+        height: 100%;
+        display: flex;
+        /*align-items: center;*/
+        justify-content: center;
+        /*position: absolute;*/
+    }
+    .topImg img{
+        /*align-items: center;*/
+        width: 26px;
+        height: 26px;
+    }
+    .paiming-content {
+        width: 60%;
+        height: 100%;
+        display: flex;
+        /*align-items: center;*/
+        font-size: 14px;
+        color: #666;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        white-space: normal;
+        word-break: break-all;
+        /*display: -webkit-box;*/
+        /*line-height: 1.8;*/
+        /*-webkit-box-orient: vertical;*/
+        /*-webkit-line-clamp: 2;*/
+        /*overflow: hidden;*/
+        /*text-overflow:ellipsis;*/
+        /*word-break: break-all;*/
+        /*white-space: nowrap;*/
+    }
+
+    .paiming-number {
+        width: 25%;
+        height: 100%;
+        display: flex;
+        /*align-items: center;*/
+        justify-content: center;
+        font-weight: bold;
+    }
+
+    .isExcellent {
+        color: #0F63B1;
+    }
+
+    .paimingCycle {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: rgba(245, 245, 245, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .contentRight-top {
+        width: 100%;
+        height: 55%;
+        margin-bottom: 10px;
+        display: flex;
+    }
+
+    .contentRight-bottom {
+        width: 100%;
+        height: calc(45% - 10px);
+        border-radius: 2px;
+    }
+
+    .contentRight-top .contentRight-topInfo {
+        flex: 5;
+        height: 100%;
+        margin-right: 10px;
+    }
+
+    .contentRight-top .contentRight-topPaiming {
+        flex: 1.5;
+        height: 100%;
+        border-radius: 2px;
+        background-color: white;
+    }
+
+    .numberTitle {
+        display: flex;
+        width: 100%;
+        height: 28%;
+        margin-bottom: 10px;
+        color: white;
+    }
+
+    .numberPie {
+        width: 100%;
+        height: calc(72% - 10px);
+        border-radius: 2px;
+    }
+
+    .infoImg {
+        flex: 3;
+        border-radius: 2px;
+    }
+
+    .zhixing {
+        margin-right: 10px;
+        background: url("/assetsInfo/images/zhixing.png") no-repeat;
+        background-size: cover;
+    }
+
+    .kaipiao {
+        margin-right: 10px;
+        background: url("/assetsInfo/images/kaipiao.png") no-repeat;
+        background-size: cover;
+    }
+
+    .jinzhang {
+        background: url("/assetsInfo/images/jinzhang.png") no-repeat;
+        background-size: cover;
+    }
+
+    .infoBox {
+        width: 60%;
+        float: right;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        font-weight: bold;
+    }
+
+    .infoText {
+        font-size: 36px;
+        width: 100%;
+        /*display: flex;*/
+        /*justify-content: center;*/
+        /*align-items: center;*/
+    }
+
+    .infoTitle {
+        font-size: 16px;
+        width: 100%;
+        /*display: flex;*/
+        /*justify-content: center;*/
+        /*align-items: center;*/
+    }
+
+    .noBusiness {
+        height: 100%;
+    }
+
+    .pieCanvas, .lineCanvas {
+        width: 100%;
+        height: calc(100% - 35px);
+        background-color: white;
+    }
+
+    .paddingCard {
+        height: 100%;
+    }
+
+    .cart-title {
+        background-color: white;
+    }
+
+    .task-staus-style {
+        display: inline-block;
+        margin-left: 20px;
+    }
+
+    .task-staus1 {
+        background-color: #1C9FE7;
+    }
+
+    .task-staus2 {
+        background-color: #FDCD01;
+    }
+
+    .task-staus3 {
+        background-color: #00FF00;
+    }
+
+    .task-staus4 {
+        background-color: #84D3FF;
+    }
+
+    .task-staus {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin: 0 auto;
+    }
+
+    .noBusiness .layui-card-header {
+        height: 34px;
+        line-height: 34px;
+    }
+
+    .contentRight-title {
+        position: relative;
+        height: 14%;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #CDCDCD;
+    }
+
+    .topPaiming-right {
+        height: 86%;
+    }
+
+    .topPaiming-box {
+        height: 14%;
+        position: relative;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        background-color: white;
+    }
+
+    .topPaiming-box .paimingImg {
+        width: 15%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /*position: absolute;*/
+    }
+    .contentRight-Text {
+        font-size: 16px;
+        font-weight: 600;
+        color: rgba(51, 51, 51, 1);
+        /*text-align: center;*/
+        display: inline-block;
+        width: 70%;
+    }
+
+    .expendCycle {
+        background-color: #CACACA;
+        color: white;
+    }
+
+    .topPaiming-box .paiming-content {
+        color: #3B4961;
+        align-items: center;
+    }
+
+    .topPaiming-box .paiming-number {
+        color: #3B4961;
+        font-weight: normal;
+        align-items: center;
+    }
+    .paiming{
+        margin-left: 10px;
+    }
+    #rightBigMore {
+        position: relative;
+    }
+    @media (min-width: 1920px) {
+        .contentRight-Text,.contentLeft-Text{
+            font-size: 18px;
+        }
+        .paiming-content{
+            font-size: 16px;
+        }
+    }
+</style>
+<!--<div id="bigMain" class="bigMain">-->
+<!---->
+<!--</div>-->
+<div class="bigHead">
+    <div class="bigHead-content">
+        <div class="bigHead-title">
+            <span class="card-cycle"></span>
+            <span calss="bigHead-titleCotent">数据中心大数据展板</span>
+            <span class="card-cycle"></span>
+        </div>
+        <img src="/assetsInfo/images/quanping.png" title="全屏" class="allScreen isAll"/>
+        <img src="/assetsInfo/images/esc.png" title="退出全屏" class="allScreen noAll"/>
+    </div>
+</div>
+<div class="bigContent">
+    <div class="contentLeft">
+        <div class="contentLeft-title">
+            <img class="paiming" src="/assetsInfo/images/paiming.png"/>
+            <span class="contentLeft-Text">热点业务TOP</span>
+            <p class="bigMore" id="leftBigMore">更多</p>
+        </div>
+        <div class="contentLeft-card">
+            <span class="cardTab isActive" id="contractTab">合同额（万元）</span>
+            <span class="cardTab" id="billingTab">开票额（万元）</span>
+        </div>
+        <div class="contentLeft-main">
+            <ul class="ulContent">
+
+            </ul>
+        </div>
+    </div>
+    <div class="contentRight">
+        <div class="contentRight-top">
+            <div class="contentRight-topInfo">
+                <div class="numberTitle">
+                    <div class="infoImg zhixing">
+                        <div class="infoBox">
+                            <div class="infoTitle">年合同执行额(万元)</div>
+                            <div class="infoText" id="totalContract"></div>
+                        </div>
+                    </div>
+                    <div class="infoImg kaipiao">
+                        <div class="infoBox">
+                            <div class="infoTitle">年开票额(万元)</div>
+                            <div class="infoText" id="totalBilling"></div>
+                        </div>
+                    </div>
+                    <div class="infoImg jinzhang">
+                        <div class="infoBox">
+                            <div class="infoTitle">年进账额(万元)</div>
+                            <div class="infoText" id="totalCredit"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="numberPie">
+                    <div class="layui-row noBusiness">
+                        <div class="layui-col-md12 paddingCard">
+                            <div class="layui-card-header lc-header cart-title" style="padding-right: 0">
+                                <img src="../../assetsInfo/images/shujufenxi.png"/>
+                                &nbsp;本部数据
+                                <div class="contentName" style="float: right">
+
+                                </div>
+                            </div>
+                            <div class="pieCanvas" id="pieCanvas">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contentRight-topPaiming">
+                <div class="contentRight-title">
+                    <img class="paiming" src="/assetsInfo/images/paiming.png"/>
+                    <span class="contentRight-Text">支出数额TOP(万元)</span>
+                    <p class="bigMore" id="rightBigMore">更多</p>
+                </div>
+                <div class="topPaiming-right">
+
+                </div>
+            </div>
+        </div>
+        <div class="contentRight-bottom">
+            <div class="layui-row noBusiness">
+                <div class="layui-col-md12 paddingCard">
+                    <div class="layui-card-header lc-header cart-title">
+                        <img src="../../assetsInfo/images/shujufenxi.png"/>
+                        &nbsp;月度数据
+                    </div>
+                    <div class="lineCanvas" id="lineCanvas">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['element', 'form', 'layer'], function () {
+        var element = layui.element,
+            admin = layui.admin,
+            config = layui.config,
+            layer = layui.layer,
+            tools = layui.tools;
+        var thisYear = sessionStorage.getYear;
+        //绘制饼图
+        var setPieCanvas = function (pieData) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("pieCanvas"));
+            myChart.resize();
+            var option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b}: {c} ({d}%)"
+                },
+                color: ["#1C9FE7", "#FDCD01", "#00FF00", "#84D3FF"],
+                title: [
+                    {
+                        text: '说明：合同执行额含有：跨年结余合同额、本年新签订合同额',
+                        x: '50%',
+                        y: '85%',
+                        textAlign: 'center',
+                        textBaseline: 'middle',
+                        textStyle: {
+                            fontSize: 12,
+                            color: "#999999",
+                            fontWeight: "normal"
+                        }
+                    },
+                    {
+                        text: '年合同\n执行额',
+                        x: '19.5%',
+                        y: '40%',
+                        textAlign: 'center',
+                        textBaseline: 'middle',
+                        textStyle: {
+                            fontSize: 14,
+                            color: "#666666",
+                            fontWeight: 'normal'
+                        }
+                    },
+                    {
+                        text: '年开票额',
+                        x: '49.5%',
+                        y: '40%',
+                        textAlign: 'center',
+                        textBaseline: 'middle',
+                        textStyle: {
+                            fontSize: 14,
+                            color: "#666666",
+                            fontWeight: "normal"
+                        }
+                    },
+                    {
+                        text: '年进账额',
+                        x: '79.5%',
+                        y: '40%',
+                        textAlign: 'center',
+                        textBaseline: 'middle',
+                        textStyle: {
+                            fontSize: 14,
+                            color: "#666666",
+                            fontWeight: "normal"
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: '年合同执行额',
+                        type: 'pie',
+                        radius: ['50%', '70%'],
+                        center: ['20%', '40%'],
+                        avoidLabelOverlap: false,
+                        // silent:true,
+                        label: {
+                            normal: {
+                                show: false
+
+                            },
+                            emphasis: {
+                                show: false
+                                // textStyle: {
+                                //     fontSize: '14',
+                                //     fontWeight: 'bold'
+                                // }
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        data: pieData.contractGraphPieChart
+                    },
+                    {
+                        name: '年开票额',
+                        type: 'pie',
+                        radius: ['50%', '70%'],
+                        center: ['50%', '40%'],
+                        avoidLabelOverlap: false,
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'center'
+                            },
+                            emphasis: {
+                                show: false
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        data: pieData.billGraphPieChart
+                    },
+                    {
+                        name: '年进账额',
+                        type: 'pie',
+                        radius: ['50%', '70%'],
+                        center: ['80%', '40%'],
+                        avoidLabelOverlap: false,
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'center'
+                            },
+                            emphasis: {
+                                show: false
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        data: pieData.creditGraphPieChart
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        //绘制折线图
+        var setLineCanvas = function (lineData) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("lineCanvas"));
+            myChart.resize();
+            var option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['进账额', '开票额', '合同额'],
+                    top:'5%'
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    top:'18%',
+                    containLabel: true
+                },
+                color: ["#1C9FE7", "#FDCD01", "#00FF00", "#84D3FF"],
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                    axisTick:{
+                        lineStyle:{color:'#3B4961'}    // x轴刻度的颜色
+                    },
+                    axisLabel:{color:'#3B4961'}
+                },
+                yAxis: {
+                    type: 'value',
+                    name:"万元",
+                    nameTextStyle: {
+                        padding: [0, 0, 0, -40]
+                    },
+                    nameGap:10,
+                    axisTick:{
+                        lineStyle:{color:'#3B4961'}    // x轴刻度的颜色
+                    },
+                    axisLabel:{color:'#3B4961'}
+                },
+                series: [
+                    {
+                        name: '进账额',
+                        type: 'line',
+                        data: lineData.creditGraph.y
+                    },
+                    {
+                        name: '开票额',
+                        type: 'line',
+                        data: lineData.billGraph.y
+                    },
+                    {
+                        name: '合同额',
+                        type: 'line',
+                        data: lineData.contractGraph.y
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        //设置左侧排名
+        var setPaimingList = function (paimingData) {
+            var html = '';
+            for (var i = 0; i < paimingData.length; i++) {
+                var amount = Math.round(paimingData[i].amount / 10000);
+                var itemImg = '';
+                var isExcellent = 'isExcellent';
+                var topImg="topImg";
+                if (i == 0) {
+                    itemImg = '<img src="/assetsInfo/images/guanjun.png">';
+                } else if (i == 1) {
+                    itemImg = '<img src="/assetsInfo/images/yajun.png">';
+                } else if (i == 2) {
+                    itemImg = '<img src="/assetsInfo/images/jijun.png">';
+                } else {
+                    itemImg = '<span class="paimingCycle">' + (i + 1) + '</span>';
+                    isExcellent = '';
+                    topImg="";
+                }
+                html += '<li id="' + paimingData[i].id + '" class="contentLeft-info">\n' +
+                    '                    <div class="paimingImg '+topImg+'">\n' +
+                    itemImg +
+                    '                    </div>\n' +
+                    '                    <span title="'+paimingData[i].name+'" class="paiming-content '+topImg+'">' + paimingData[i].name + '</span>\n' +
+                    '                    <span class="paiming-number ' + isExcellent +' '+topImg+'">' + amount + '</span>\n' +
+                    '                </li>'
+            }
+            $(".ulContent").empty().append(html);
+        };
+        //设置右侧排名
+        var setExpendList = function (expendData) {
+            var html = '';
+            for (var i = 0; i < expendData.length; i++) {
+                var styleIcon = '';
+                if (i == 0 || i == 1 || i == 2) {
+                    styleIcon = 'expendCycle';
+                }
+                var amount = Math.round(expendData[i].amount / 10000);
+                html += '<div class="topPaiming-box">\n' +
+                    '                        <div class="paimingImg">\n' +
+                    '                            <span class="paimingCycle ' + styleIcon + '">' + (i + 1) + '</span>\n' +
+                    '                        </div>\n' +
+                    '                        <span class="paiming-content">' + expendData[i].name + '</span>\n' +
+                    '                        <span class="paiming-number ">' + amount + '</span>\n' +
+                    '                    </div>';
+            }
+            $(".topPaiming-right").empty().append(html);
+        };
+        $.ajax({
+            url: "/api/dataBoard/budgetTree/" + thisYear + "/7/?pageSize=10",
+            type: 'get',
+            success: function (res) {
+                if (res.ok) {
+                    var contractAmount = res.data.contractAmount;
+                    var billing = res.data.billing;
+                    var deptExpenditure = res.data.deptExpenditure;
+                    setPaimingList(contractAmount);
+                    setExpendList(deptExpenditure.slice(0, 7));
+                    $('#contractTab').off("click").on("click", function () {
+                        $(this).addClass('isActive').siblings().removeClass('isActive');
+                        setPaimingList(contractAmount);
+                    });
+                    $('#billingTab').off("click").on("click", function () {
+                        $(this).addClass('isActive').siblings().removeClass('isActive');
+                        setPaimingList(billing);
+                    });
+                } else {
+                    layer.msg(res.message, {
+                        icon: 5
+                    });
+                }
+            }
+        });
+        $.ajax({
+            url: "/api/dataBoard/detail?mainBoard=TT8S672VLL,YYKU3J77UA,LG2Q52HH7Y,X2JQL6ZGVF&year=" + thisYear,
+            type: 'get',
+            success: function (res) {
+                if (res.ok) {
+                    var totalBilling = Math.round(res.data.totalBilling / 10000);
+                    var totalContract = Math.round(res.data.totalContract / 10000);
+                    var totalCredit = Math.round(res.data.totalCredit / 10000);
+                    $("#totalCredit").html(totalCredit);
+                    $("#totalContract").html(totalContract);
+                    $("#totalBilling").html(totalBilling);
+                    var billGraphPieChart = [];
+                    var contractGraphPieChart = [];
+                    var creditGraphPieChart = [];
+                    var html = '';
+                    for (var i = 0; i < res.data.billGraphPieChart.y.length; i++) {
+                        res.data.billGraphPieChart.y[i] = res.data.billGraphPieChart.y[i] ? Math.round(res.data.billGraphPieChart.y[i] / 10000) : 0;
+                        res.data.contractGraphPieChart.y[i] = res.data.contractGraphPieChart.y[i] ? Math.round(res.data.contractGraphPieChart.y[i] / 10000) : 0;
+                        res.data.creditGraphPieChart.y[i] = res.data.creditGraphPieChart.y[i] ? Math.round(res.data.creditGraphPieChart.y[i] / 10000) : 0;
+
+                        billGraphPieChart.push({
+                            value: res.data.billGraphPieChart.y[i],
+                            name: res.data.billGraphPieChart.x[i]
+                        });
+                        contractGraphPieChart.push({
+                            value: res.data.contractGraphPieChart.y[i],
+                            name: res.data.contractGraphPieChart.x[i]
+                        });
+                        creditGraphPieChart.push({
+                            value: res.data.creditGraphPieChart.y[i],
+                            name: res.data.creditGraphPieChart.x[i]
+                        })
+                        html += '<div class="task-staus task-staus' + (i + 1) + ' task-staus-style"></div><span style="margin-right: 30px">  ' + res.data.billGraphPieChart.x[i] + '  </span>';
+                    }
+                    $('.contentName').empty().append(html);
+                    for (var i = 0; i < res.data.billGraph.y.length; i++) {
+                        res.data.billGraph.y[i] = res.data.billGraph.y[i] ? Math.round(res.data.billGraph.y[i] / 10000) : 0;
+                        res.data.contractGraph.y[i] = res.data.contractGraph.y[i] ? Math.round(res.data.contractGraph.y[i] / 10000) : 0;
+                        res.data.creditGraph.y[i] = res.data.creditGraph.y[i] ? Math.round(res.data.creditGraph.y[i] / 10000) : 0;
+                    }
+                    var pieData = {
+                        billGraphPieChart: billGraphPieChart,
+                        contractGraphPieChart: contractGraphPieChart,
+                        creditGraphPieChart: creditGraphPieChart
+                    };
+                    var lineData = {
+                        billGraph: res.data.billGraph,
+                        contractGraph: res.data.contractGraph,
+                        creditGraph: res.data.creditGraph
+                    };
+                    setPieCanvas(pieData);
+                    setLineCanvas(lineData);
+                } else {
+                    layer.msg(res.message, {
+                        icon: 5
+                    });
+                }
+            }
+        });
+    });
+</script>

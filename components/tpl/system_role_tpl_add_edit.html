@@ -1,0 +1,73 @@
+<!--
+File   : system_role_tpl_add_edit.html
+Created: Tuesday September 11th 2018 2:27:10 pm
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Last Modified: Thursday September 13th 2018 2:49:37 pm
+Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+-----
+Description: 
+-----
+HISTORY:
+-->
+
+<div class="layui-tpl-container">
+    <div class="layui-form p-form">
+        <input type="text" name="type" id="type" style="display: none;">
+        <input type="text" name="rid" disabled="disabled" style="display: none;">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 角色名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="rname" placeholder="请输入角色名称" class="layui-input" maxlength="50">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-block">
+                <input type="text" name="rdesc" placeholder="请输入描述" class="layui-input" maxlength="80">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red;">*</span> 角色编码</label>
+            <div class="layui-input-block">
+                <input type="text" name="extInfo" placeholder="请输入角色编码" class="layui-input" maxlength="50">
+            </div>
+        </div>
+
+        <!--<div class="layui-form-item">-->
+            <!--<label class="layui-form-label"><span style="color: red;">*</span> 权重</label>-->
+            <!--<div class="layui-input-block">-->
+                <!--<input type="number" name="extInfo" placeholder="请输入权重" class="layui-input" >-->
+            <!--</div>-->
+        <!--</div>-->
+        <!-- 提交按钮 -->
+        <!-- 取消按钮 -->
+        <div class="layui-form-item" style="text-align: center;">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="menuSave-role">保存</button>
+            <button class="layui-btn layui-btn-primary" lay-submit lay-filter="popmenuCancle">取消</button>
+        </div>
+    </div>
+</div>

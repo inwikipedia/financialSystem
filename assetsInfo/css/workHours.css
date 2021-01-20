@@ -1,0 +1,289 @@
+.main{
+    position: relative;
+}
+body .ztree {
+    height: calc(100vh - 107px);
+    overflow-y: hidden;
+}
+.nav{
+    position: relative;
+    z-index: 2;
+    /* float: right; */
+    /* width: 100%; */
+    /* padding-right: 20px; */
+    /* right: 17px; */
+    height: 36px;
+    top: 6px;
+    /*overflow: hidden;*/
+    background-color: #fff;
+    padding: 4px 18px;
+    margin-bottom: 7px;
+}
+    /*<!--面包屑隐藏-->*/
+.layui-breadcrumb .admin-breadcrumb{
+    visibility: hidden!important;
+}
+/*.main {*/
+/*background-color: #fff;*/
+/*}*/
+.layui-row{
+    margin: 2.5px 0;
+}
+#centerOfficeWorkTime{
+    height: 210px;
+    width: 500px;
+    float: left;
+}
+#person_centerOfficeWorkTimeTable{
+    margin-top: 25px;
+}
+#person_centerOfficeWorkTime {
+     height: 210px;
+     width: 500px;
+    float: left;
+ }
+.workTimeTable{
+    margin-left: -6px;
+}
+.workTimeTable li{
+    border: 1px solid #E6E6E6;
+    min-width: 100px;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    color: #666;
+    padding: 0 7px;
+    border-bottom: none;
+    border-right: none;
+    background: #fff;
+}
+.workTimeTable li:last-child{
+    border-bottom:  1px solid #E6E6E6;;
+}
+.table-kuang ul:last-child, .workTimeTable ul:last-child{
+    border-right:1px solid #e6e6e6 ;
+}
+.workTimeTable li:first-child{
+    background-color: #fafafa;
+}
+
+.workTimeTable p:first-child{
+    background-color: #EBEBEB;
+}
+.workUl ul{
+    float: left;
+}
+.layui-col-space5>*{
+    padding: 0;
+}
+.pie-right {
+    float: right;
+    width: calc(100vw - 598px);
+    margin-top: 5px;
+}
+#departmentWorkTimeTable{
+    width: 49% ;
+    float: right;
+}
+.workUl{
+    width: calc(100vw - 673px);
+    overflow-x: auto;
+    padding-left: 115px;
+}
+.workUlOrg{
+    width: calc(100vw - 723px);
+    overflow-x: auto;
+    padding-left: 133px;
+}
+.table-fix-col{
+    position: absolute;
+    padding-left: 6px
+;
+}
+.table-kuang{
+    /*width: 10000000px;*/
+    white-space: nowrap;
+    flex-direction: row;
+    display: flex;
+}
+.width100{
+    width: calc(100% - 115px);
+}
+.workUlOrgPro{
+    padding-left: 133px;
+    width: calc(100% - 121px);
+}
+.bar-block{
+    height: 200px;
+    width: 100%;
+}
+#departmentWorkTime,#itemWorkTime{
+    width: 100%;
+    height: 200px;
+}
+.layui-card-header{
+    height: 36px;
+    line-height: 36px;
+}
+.headerTitle{
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+.total{
+    font-size:14px;
+    font-family:SourceHanSansCN-Medium;
+    font-weight:500;
+    color:#999999;
+}
+.buttonGroup button{
+    padding: 0 5px;
+}
+.buttonGroup i{
+    font-size: 14px!important;
+}
+.btn-active {
+    border: 1px solid #10ADE8 ;
+    color: #10ADE8;
+    border-left: 1px solid #10ADE8 !important;
+}
+.time-blobk{
+    width: 100px;
+    height: 25px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    color: #999;
+    font-size: 12px;
+    text-indent: 4px;
+}
+.zwsj{
+    position: absolute;
+    text-align: center;
+    float: left;
+    width: 100%;
+    top: 27px;
+}
+body .layui-card-body {
+    height: auto;
+    overflow-x: hidden;
+    padding: 24px 15px 9px 15px;
+}
+#optionMan{
+    position: absolute;
+    z-index: 100;
+    top: 11px;
+    right: 153px;
+    border: 1px solid #10ADE8;
+    color: #10ADE8;
+    border-left: 1px solid #10ADE8 !important;
+    background: #fff;
+    padding: 2px 14px 3px;
+    border-radius: 4px;
+}
+.layui-card-body .layui-col-space5:last-child{
+    margin-top: 3px;
+}
+.layui-layout-admin .admin-breadcrumb{
+    display: none!important;
+}
+.table-kuang ul{
+    cursor: pointer;
+}
+.userName-btn{
+    border: 1px solid #10ADE8;
+    color: #10ADE8;
+    border-left: 1px solid #10ADE8 !important;
+    background: #fff;
+    padding: 0px 11px 1px;
+    border-radius: 4px;
+    height: 22px;
+    font-size: 12px;
+    margin-top: 4px;
+    cursor: pointer;
+}
+#userName{
+    padding: 0 9px 0 54px;
+    font-size: 14px;
+}
+.width50{
+    width: 50% !important;
+    float: left;
+}
+.table-fix-col{
+    border-right: 1px solid #E6E6E6;
+}
+#project  .layui-card-body {
+    padding-right: 9px;
+}
+.work-time{
+    color:#666;
+    border: 1px solid #E6E6E6;
+    text-align: center;
+    border-top: none;
+    /*width: calc(50% - 1px );*/
+}
+/*兼容自适应高度问题*/
+@media screen and (max-width: 1366px) {
+    /*.workPro{*/
+        /*padding-left: 116px;*/
+    /*}*/
+}
+.dateBox{
+    position: absolute;
+    width: 200px;
+    height:110px;
+    background-color: #fff;
+    right: 100px;
+    top: 72px;
+    border: 1px solid;
+    display: none;
+}
+.dateItem{
+    margin-top:20px;
+}
+.workIcon{
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -3px;
+    cursor: pointer;
+    border-width: 6px;
+    border-top-color: #c2c2c2;
+    border-top-style: solid;
+    transition: all .3s;
+    -webkit-transition: all .3s;
+}
+.workIconChange{
+    margin-top: -9px;
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+.dateDl{
+    /*display: none;*/
+    position: absolute;
+    left: 0;
+    top: 32px;
+    padding: 5px 0;
+    z-index: 899;
+    min-width: 100%;
+    border: 1px solid #d2d2d2;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.12);
+    box-sizing: border-box;
+}
+.dateDl dd{
+    padding: 0 10px;
+    line-height: 36px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    text-align: center;
+}
+.layui-this{
+    background-color: #229FFF;
+    color: #fff;
+}

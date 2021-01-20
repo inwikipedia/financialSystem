@@ -1,0 +1,609 @@
+<!--
+File   : customer.html
+Created: Friday November 23rd 2018 11:17:50 am
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Last Modified: Thursday December 6th 2018 9:57:08 am
+Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+-----
+Description: 客户档案列表
+-----
+HISTORY:
+2018-11-23	yuchunyu97	客户档案列表新增
+-->
+
+<style>
+    #tableContent-crm-customer-add-form .layui-form-select,
+    #CRM-Viewer .layui-form-select,
+    #CRM-Editor .layui-form-select {
+        min-width: 100px;
+    }
+    
+    span.layui-input-inline {
+        width: 100%;
+    }
+    
+    span.layui-input-inline input {
+        width: 100%!important;
+    }
+    
+    td[valign='top']>input {
+        width: 100%!important;
+    }
+    
+    td[valign='top']>input:focus {
+        background-color: #eee;
+    }
+    
+    td[valign='middle']>input:focus {
+        background-color: #eee;
+    }
+    
+    td[valign='middle']>input {
+        width: 100%!important;
+    }
+    
+    td[valign='middle']>textarea:focus {
+        background-color: #eee;
+    }
+    
+    td[valign='middle']>textarea {
+        width: 100%!important;
+    }
+    
+    td[valign='top']>textarea:focus {
+        background-color: #eee;
+    }
+    
+    td[valign='top']>textarea {
+        width: 100%!important;
+    }
+    /* td[valign='middle']>strong {
+        color: #1E9FFF;
+    }
+    
+    td[valign='middle']>p {
+        color: #1E9FFF;
+    } */
+</style>
+
+<div class="layui-row layui-col-space15 crm">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <!--<div class="layui-card-header">客户关系管理</div>-->
+            <div class="layui-card-body">
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar">
+                        <div class="layui-inline">
+                            <div class="layui-inline search-item">
+                                <i class="layui-icon layui-icon-search"></i>
+                                <input name="searchField" type="text" placeholder="输入查询内容" class="layui-input" id="search-input">
+                            </div>
+                            <div class="layui-inline">
+                                <button  lay-filter="crm-search"  class="layui-btn layui-btn-sm layui-btn-normal" lay-submit title="查询">查询</button>
+                            </div>
+                            <div class="layui-inline">
+                                <button lay-filter="crm-reset" class="layui-btn layui-btn-sm layui-btn-primary" lay-submit title="重置">重置</button>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-pull-right">
+                            <div class="layui-inline">
+                                <button lay-filter="crm-customer-btn-add" class="layui-btn layui-btn-sm layui-btn-primary" lay-submit title="新增">
+                                    <i class="layui-icon layui-icon-add-1"></i>新增
+                                </button>
+                                <button type="button" class="layui-btn layui-btn-sm layui-import" id="crm-customer-btn-import" title="导入">
+                                    <i class="layui-icon layui-icon-upload-drag"></i>导入
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table id="tableContent-crm-customer" lay-filter="tableContent-crm-customer"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../assetsInfo/js/ADCFormDesignHelper.js"></script>
+<script>
+    layui.use(['table', 'upload'], function() {
+        var table = layui.table,
+            form = layui.form,
+            upload = layui.upload,
+            config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer,
+            colsList = [],
+            tools = layui.tools,
+            dateParams = ['recordDate', "establishDate", "createdDate", "signData",
+                "beginData", "endData", "applyData", 'endDate', 'proEstablishTime', 'proEndTime', 'createdTime'
+            ], //需要格式化的日期参数
+            account = config.getAccount();
+
+        var formId = window.$params.formId ? window.$params.formId : '',
+            formDataCache = null,
+            layerIns = null;
+        if (formId === '') return layer.msg('获取 formId 异常，请联系管理员处理', {
+            icon: 5
+        });
+
+        var CRM_EDITOR_LAYER = null;
+        var CRM_EDITOR_DATA = null;
+        // 表单信息的状态，'add' 新增 'edit' 编辑
+        var adcformdesignStatus = null;
+
+        // 根据 formId 获取表单数据
+        admin.req('/api/form/' + formId, {}, function(res) {
+            if (res.ok) {
+                formDataCache = res.data;
+            } else {
+                return layer.msg('获取表单数据失败，请刷新重试', {
+                    icon: 5
+                });
+            }
+        });
+
+        // 获取列表表头数据
+        admin.req('/api/crm/content/forms', {
+            formId: formId,
+            page: 1,
+            pageSize: 1
+        }, function(res) {
+            if (!res.ok) {
+                return layer.msg(res.message, {
+                    icon: 5
+                });
+            }
+
+            // 可以增加自定义列信息
+            colsList.push({
+                type: 'numbers',
+                title: '#',
+                fixed: 'left'
+            });
+            // 将后台获取的列信息添加进列表
+            $.each(res.data.tableHeadList, function(index, item) {
+                if (isInArray(dateParams, item.name)) {
+                    setTableDateData(colsList, item);
+
+                } else if (item.name == 'proEndFlag') {
+                    colsList.push({
+                        field: item.name,
+                        title: item.value,
+                        templet: function(d) {
+                            return d[item.name] == 1 ? '是' : '否';
+
+                        }
+                    });
+
+                }
+                //这是需要省略不需要再列表显示的
+                else if (item.name == 'travelStartTime' || item.name == 'travelEndTime') {
+
+                } else if (item.name == 'travelStartAndFinishTime') {
+
+                    colsList.push({
+                        field: item.name,
+                        title: item.value,
+                        templet: function(d) {
+                            if (d.travelStartAndFinishTime) {
+                                var newstr = d.travelStartAndFinishTime.replace(" - ", " / ");
+                                return '<div title="'+newstr+'"><span>'+ newstr +'</span></div>'
+                            }
+
+                        }
+                    });
+                } else {
+                    colsList.push({
+                        field: item.name,
+                        title: item.value,
+                        templet:function(d) {
+                            var text= d[item.name] ? d[item.name] : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    });
+                }
+
+            });
+
+            colsList.push({
+                title: '操作',
+                templet: function(d) {
+                    return '\
+                            <a class="table-control-btn" lay-event="view" title="查看">查看</a>\
+                            <a class="table-control-btn" lay-event="edit" title="编辑">编辑</a>\
+                            <a class="table-control-btn table-control-btn-danger" lay-event="del" title="删除">删除</a>\
+                        ';
+                },
+                width: 140,
+                align: 'center',
+                fixed: 'right'
+            });
+            // 渲染表格
+            renderTabel(colsList);
+        });
+
+        // 渲染表格
+        function renderTabel(colsList,searchField) {
+            table.render({
+                elem: '#tableContent-crm-customer',
+                id: 'tableContent-crm-customer',
+                url: admin.formatUrl('/api/crm/content/forms'),
+                where: {
+                    formId: formId,
+                    searchField:searchField?searchField:""
+                },
+                cols: [colsList],
+                // 格式化后台返回的数据
+                parseData: function(res) { //res 即为原始返回的数据
+                    var count = 0,
+                        list = [];
+                    if (!res.ok) {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    } else {
+                        count = res.data.pageInfo.count;
+                        list = res.data.pageInfo.list
+                    }
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": count, //解析数据长度
+                        "data": list //解析数据列表
+                    };
+                },
+                height: 472,
+                cellMinWidth: 120,
+                page: {
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                },
+                request: {
+                    pageName: 'page',
+                    limitName: 'pageSize'
+                },
+                loading: false, // 关闭表格自带的 loading 动画
+                done: function() {
+                    $(window).resize();
+                }
+            });
+        }
+
+
+        // 新增和编辑时的表单提交监听
+        form.on('submit(adcformdesign)', function(data) {
+            switch (adcformdesignStatus) {
+                case 'add':
+                    adcformdesignAdd(data);
+                    break;
+                case 'edit':
+                    adcformdesignEdit(data);
+                    break;
+
+                default:
+                    break;
+            }
+        });
+
+        form.on('submit(crm-search)', function(obj) {
+            var data = obj.field;
+            renderTabel(colsList,data.searchField);
+
+        });
+        form.on('submit(crm-reset)', function(obj) {
+
+            $('#search-input').val("");
+            renderTabel(colsList,"");
+        });
+        // input输入框点击回车提交
+        $('#search-input').keyup(function (event) {
+
+            if (event.keyCode === 13) {
+
+                renderTabel(colsList,$('#search-input').val());
+
+            }
+        });
+
+        // 新增
+        form.on('submit(crm-customer-btn-add)', function() {
+            if (!formDataCache) return layer.msg('获取表单数据失败，请刷新重试', {
+                icon: 5
+            });
+            layerIns = layer.open({
+                type: 1,
+                id: 'tableContent-crm-customer-add',
+                title: '新增',
+                content: '<div id="tableContent-crm-customer-add-form">' +
+                    ADCFormDesignHelper.formatHtml(formDataCache.contentHtml) + '</div>',
+                area: ['96%', '80%'],
+                btn: ['确定', '取消'],
+                yes: function(index, layero) {
+                    $('#adcformdesign-submit').click();
+                    // DONE: 关闭弹层
+                },
+                success: function() {
+                    form.render();
+                    adcformdesignStatus = 'add';
+                },
+                resize: false
+            });
+        });
+
+        // 导入
+        upload.render({
+            elem: '#crm-customer-btn-import',
+            url: '/api/crm/customerRecord/excelImport', //上传接口
+            accept: 'file',
+            acceptMime: 'xlsx/xlsm',
+            before: function(obj) {
+                layer.load(); //上传loading
+            },
+            done: function(res) {
+                layer.closeAll();
+
+                if (res.respCode == 0) {
+                    layer.msg('导入成功！', {
+                        icon: 1
+                    });
+                    table.reload('tableContent-crm-customer', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                } else {
+                    return layer.msg('导入失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            },
+            error: function() {
+                //请求异常回调
+                layer.closeAll();
+                return layer.msg('导入出现错误，请重试！', {
+                    icon: 5
+                });
+            }
+        });
+
+
+        // 新增提交处理
+        // 获取左侧表单数据 并提交请求
+        function adcformdesignAdd(data) {
+            // 获取数据
+            var formData = ADCFormDesignHelper.formdataGet('#tableContent-crm-customer-add-form', data.field);
+            var formTitle = [
+                formDataCache.formName,
+                '（',
+                account.account,
+                ' ',
+                new Date().toLocaleString(),
+                '）'
+            ].join('');
+            // 保存数据
+            admin.req('/api/crm/content', {
+                formId: formId,
+                formTitle: formTitle,
+                formContent: JSON.stringify(formData),
+                // HINT: 没定写什么，先这么写
+                formState: '正常',
+                columnID: formDataCache.columnID,
+                columnName: formDataCache.columnName
+            }, function(res) {
+                if (res.ok) {
+                    // 保存成功
+                    layer.msg('数据保存成功', {
+                        icon: 1
+                    });
+                    layer.close(layerIns);
+                    // 刷新表格
+                    table.reload('tableContent-crm-customer');
+                } else {
+                    // 保存失败
+                    return layer.msg('数据保存失败' + res.message, {
+                        icon: 5
+                    });
+                }
+            }, {
+                method: 'post'
+            });
+        }
+
+        // 表格行操作
+        // 监听表格工具条事件
+        table.on('tool(tableContent-crm-customer)', function(obj) {
+            // 获取点击列的数据
+            var d = obj.data;
+            var layEvent = obj.event;
+
+            // 判断操作类型
+            if (layEvent === 'del') {
+                // 删除
+                layer.confirm('确定删除本条数据吗？', {
+                    icon: 3,
+                    title: '提示'
+                }, function() {
+                    admin.req('/api/crm/content/' + formId + '/' + d.id, {}, function(data) {
+                        if (data.ok) {
+                            layer.msg('删除成功！', {
+                                icon: 1
+                            });
+                            table.reload('tableContent-crm-customer', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        } else {
+                            return layer.msg('删除失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: 'delete'
+                    });
+                });
+            } else if (layEvent === 'edit') {
+                // 编辑
+                if (!formDataCache) return layer.msg('获取表单数据失败，请刷新重试', {
+                    icon: 5
+                });
+                admin.req('/api/formdata/' + d.id, {}, function(res) {
+                    try {
+                        layer.open({
+                            type: 1,
+                            title: '<span style="color: green;">【编辑模式】</span>' + res.data.formTitle,
+                            id: 'ADCFormDesignHelper-CRM-Editor',
+                            content: '<div id="CRM-Editor"></div>',
+                            area: ['96%', '96%'],
+                            success: function() {
+                                // 填入数据
+                                // 先将表单结构填入容器
+                                $('#CRM-Editor').html(ADCFormDesignHelper.formatHtml(formDataCache.contentHtml));
+                                ADCFormDesignHelper.expandHtmlViewer('#CRM-Editor', JSON.parse(res.data.formContent));
+                                // 填入数据
+                                ADCFormDesignHelper.formdataUpdate('#CRM-Editor', JSON.parse(res.data.formContent));
+                                // 渲染表单
+                                $('#CRM-Editor [name]').each(function(index, item) {
+                                    $(item).removeAttr('disabled');
+                                });
+                                form.render();
+                                adcformdesignStatus = 'edit';
+                            },
+                            btn: ['保存', '取消'],
+                            yes: function(index, layero) {
+                                // 将 layer 的 id 保存在外部变量中，以便保存成功后关闭弹层
+                                CRM_EDITOR_LAYER = index;
+                                CRM_EDITOR_DATA = res.data;
+                                $('#adcformdesign-submit').click();
+                            }
+                        });
+                    } catch (error) {
+                        console.error(error);
+                        layui.layer.msg('查看表单内容出错，请在控制台查看错误信息', {
+                            icon: 5
+                        });
+                        try {
+                            layui.layer.close($('#ADCFormDesignHelper-CRM-Viewer').parent().attr('id').split('layer')[1]);
+                        } catch (e) {}
+                    }
+                });
+            } else if (layEvent === 'view') {
+                // 查看
+                if (!formDataCache) return layer.msg('获取表单数据失败，请刷新重试', {
+                    icon: 5
+                });
+                admin.req('/api/formdata/' + d.id, {}, function(res) {
+                    try {
+                        layer.open({
+                            type: 1,
+                            title: '<span style="color: #37ABFF;">【查看模式】</span>' + res.data.formTitle,
+                            id: 'ADCFormDesignHelper-CRM-Viewer',
+                            content: '<div id="CRM-Viewer"></div>',
+                            area: ['99%', '96%'],
+                            success: function() {
+                                // 填入数据
+                                // 先将表单结构填入容器
+                                $('#CRM-Viewer').html(ADCFormDesignHelper.formatHtml(formDataCache.contentHtml));
+                                ADCFormDesignHelper.expandHtmlViewer('#CRM-Viewer', JSON.parse(res.data.formContent));
+                                // 填入数据
+                                ADCFormDesignHelper.formdataUpdate('#CRM-Viewer', JSON.parse(res.data.formContent));
+                                // 渲染表单
+                                $('#CRM-Viewer [name]').each(function(index, item) {
+                                    // 下载按钮不会被禁用
+                                    if (item.name && item.name.indexOf('download') > -1) return true;
+                                    $(item).attr('disabled', 'disabled');
+                                });
+                                form.render();
+                            }
+                        });
+                    } catch (error) {
+                        console.error(error);
+                        layui.layer.msg('查看表单内容出错，请在控制台查看错误信息', {
+                            icon: 5
+                        });
+                        try {
+                            layui.layer.close($('#ADCFormDesignHelper-CRM-Viewer').parent().attr('id').split('layer')[1]);
+                        } catch (e) {}
+                    }
+                });
+            }
+        });
+
+        function isInArray(arr, value) {
+            var index = $.inArray(value, arr);
+            if (index >= 0) {
+                return true;
+            }
+            return false;
+        }
+        /*
+           表格中添加需要格式化的日期
+         */
+
+        function setTableDateData(colsList, item) {
+            // 可以增加自定义列信息
+            colsList.push({
+                field: item.name,
+                title: item.value,
+                width: 180,
+                align: 'center',
+                templet: function(d) {
+//                    return d[item.name] ? new Date(parseInt(d[item.name])).toLocaleString() : "";
+                    var time= d[item.name] ? new Date(parseInt(d[item.name])).toLocaleString() : "";
+                    return '<div title="'+time+'"><span>'+ time +'</span></div>'
+                }
+            });
+        }
+
+        // 编辑表单的保存提交
+        function adcformdesignEdit(data) {
+            var formData = ADCFormDesignHelper.formdataGet('#CRM-Editor', data.field);
+            // HINT: 编辑后的数据顺序和新建时的不太一样
+            // DONE: 表单编辑
+            admin.req('/api/crm/content', {
+                id: CRM_EDITOR_DATA.id,
+                formId: CRM_EDITOR_DATA.adcFormEO.id,
+                formContent: JSON.stringify(formData)
+            }, function(res) {
+                if (res.ok) {
+                    layer.msg('保存成功', {
+                        icon: 1
+                    });
+                    layer.close(CRM_EDITOR_LAYER);
+                    // 刷新表格
+                    table.reload('tableContent-crm-customer');
+                } else {
+                    layer.msg('保存失败', {
+                        icon: 5
+                    });
+                }
+            }, {
+                method: 'put'
+            });
+        }
+
+    });
+</script>

@@ -1,0 +1,1680 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+<style type="text/css">
+    .layui-layer-page .layui-layer-content {
+        overflow: visible !important;
+    }
+    /*reset style*/
+    /*拖动的元素最好设置一个宽带和高度*/
+    
+    #draggableDiv {
+        z-index: 1000;
+        background-color: rgba(255, 255, 255,0.2);
+        width: 308px;
+        height: 22px;
+        position: absolute;
+        color: rgb(0, 0, 0);
+    }
+    /* #blankarea {
+            margin-top: 10px;
+            height: 550px;
+            border: 1px dotted rgb(0, 0, 0);
+        } */
+    /* zdy主题风格*/
+    
+    .dtree-zdy-item-this {
+        background-color: #c2c2c2!important;
+    }
+    /* 当前选中行样式*/
+    
+    .dtree-zdy-item:hover {
+        background-color: #f2f2f2!important;
+    }
+    /* 行悬停样式*/
+    
+    .dtree-zdy-item cite {
+        font-size: 14px!important;
+    }
+    /* 行文字样式*/
+    
+    .dtree-zdy-item:hover cite {
+        color: #5FB878!important;
+    }
+    /* 行悬停文字样式*/
+    
+    .dtree-zdy-dtreefont {
+        font-size: 18px!important;
+    }
+    /* 一级图标、二级图标、复选框样式*/
+    
+    .dtree-zdy-ficon {
+        color: rgb(7, 146, 252)!important;
+    }
+    /*一级图标特定样式*/
+    
+    .dtree-zdy-icon {
+        color: rgb(7, 146, 252)!important;
+    }
+    /*二级图标特定样式*/
+    
+    .dtree-zdy-checkbox:hover {
+        color: #5FB878!important;
+    }
+    /*复选框悬停样式*/
+    
+    .dtree-zdy-choose {
+        color: #5FB878!important;
+    }
+    /* 复选框选中样式*/
+    
+    #rightlistcontainer {
+        min-height: 550px;
+        position: relative;
+        /* border: 1px solid #666666; */
+        background-color: #ffffff;
+        border-radius: 5px;
+        z-index: 0;
+        overflow: auto;
+    }
+    
+    #rightlistcontainer .model {
+        font-family: verdana, arial, sans-serif;
+        font-size: 11px;
+        color: #333333;
+        border-width: 1px;
+        border-color: #666666;
+        border-collapse: collapse;
+        min-width: 220px;
+    }
+    
+    #rightlistcontainer .model h4 {
+        text-align: center;
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #666666;
+        background-color: #dedede;
+    }
+    
+    #rightlistcontainer .model h4 a {
+        color: #fff!important;
+    }
+    
+    #rightlistcontainer .model ul {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        overflow: auto;
+        border-color: #666666;
+        background-color: #ffffff;
+        max-height: 220px;
+    }
+    
+    #rightlistcontainer .model ul li {
+        border-width: 1px;
+        padding: 0px;
+        border-style: solid;
+        border-color: #666666;
+        background-color: #ffffff;
+        list-style-type: none;
+    }
+    
+    .jtk-endpoint,
+    .endpointTargetLabel,
+    .endpointSourceLabel {
+        cursor: pointer;
+    }
+    
+    .yourclass {
+        background-color: rgb(255, 255, 255)
+    }
+</style>
+<link rel="stylesheet" href="../../assetsInfo/libs/layui_ext/dtree/dtree.css">
+<link rel="stylesheet" href="../../assetsInfo/libs/layui_ext/dtree/font/dtreefont.css">
+<script type="text/javascript" src="../../assetsInfo/libs/jquery-ui-1.9.2.min.js"></script>
+<script type="text/javascript" src="../../assetsInfo/libs/jsPlumb-2.2.8.js"></script>
+<script type="text/javascript" src="../../assetsInfo/libs/bootstrap.min.js"></script>
+
+
+
+
+<!-- 管理页面 -->
+<div class="layui-col-md12 card-show-list">
+    <div class="layui-card">
+        <div class="layui-card-header">模型管理</div>
+        <div class="layui-card-body">
+            <div class="layui-form">
+                <div class="layui-form-item table-top-bar">
+                    <div class="layui-inline">
+                        <div class="layui-inline search-item">
+                            <i class="layui-icon layui-icon-search"></i>
+                            <input type="text" name="inp_search" id="inp_search" placeholder="输入模型名称" class="layui-input">
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-normal" lay-filter="btn_search_form" lay-submit>查询</button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_reset_form" lay-submit>重置</button>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-pull-right">
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_add_sql" lay-submit>
+                                        <i class="layui-icon layui-icon-fonts-code"></i>新增代码
+                                    </button>
+                            <button class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_add_form" lay-submit>
+                                <i class="layui-icon layui-icon-add-1"></i>新增模型
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table id="tableContent-form" lay-filter="tableContent-form"></table>
+        </div>
+    </div>
+</div>
+<!-- 编辑页面 -->
+<div class="layui-col-md12 card-show-edit" id="maincontainer" style="display: none;">
+    <div id='draggableDiv' class="ui-widget-content">
+    </div>
+    <div id="contentcontainer">
+        <!--左边面板-->
+        <div id="leftpanel" class="layui-col-md3">
+            <div class="layui-card p-main">
+                <div class="layui-card-header">数据列表</div>
+                <div class="layui-card-body">
+                    <div id="schoolproperty" style="height: 550px;overflow: auto;" class="threepanels">
+                        <ul id="menu" class="dtree" data-id="0"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--右边面板-->
+        <!-- 可视化sql -->
+        <div class="layui-col-md9 card-show-model">
+            <div class="layui-card">
+                <div class="layui-card-header">关系配置面板</div>
+                <i class="layui-icon close1 layui-icon-close layui-card-close"></i>
+                <div class="layui-card-body">
+
+                    <div id="rightlistcontainer">
+                        <!-- <div id='blankarea'> </div> -->
+                    </div>
+
+                    <div class="layui-form-item" style="text-align: center;position: absolute;bottom: 0px;left: 1000px;right: 0;">
+                        <div class="layui-btn-group">
+                            <button class="layui-btn layui-btn-normal" id="model_save" lay-submit lay-filter="model_save">保存</button>
+                            <button class="layui-btn layui-btn-primary" id="model_read" lay-submit lay-filter="model_read">预览</button>
+                            <button class="layui-btn layui-btn-danger" lay-submit lay-filter="model_clear">清空</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- sql语句查询 -->
+<div class="layui-col-md12 card-show-sql" style="display: none;">
+    <div class="layui-card">
+        <div class="layui-card-header">SQL查询</div>
+        <i class="layui-icon close2 layui-icon-close layui-card-close"></i>
+        <div class="layui-card-body">
+            <textarea id="demo" style="display: none;"></textarea>
+        </div>
+        <div class="layui-form-item" style="text-align: center;position: absolute;bottom: 0px;left: 0;right: 0;">
+
+            <button class="layui-btn layui-btn-normal" id="sql_save" lay-submit lay-filter="sql_save">保存</button>
+            <button class="layui-btn layui-btn-primary" id="sql_read" lay-submit lay-filter="sql_read">预览</button>
+
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="view">查看</a>
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+    <a class="table-control-btn table-control-btn-danger" lay-event="del">删除</a>
+</script>
+
+<!-- 按钮组 -->
+
+<div id="myModal" style="display: none;">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+        </div>
+
+        <label class="layui-form-label">条件</label>
+        <div class="layui-input-inline">
+            <select name="A" id="select_sourceList" lay-verify="required">
+                          </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="associate" id="select_comparison">
+                            <option value="">请选择关系</option>
+                            <option value="=" selected="selected">=</option>
+                          </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="B" id="select_targetList" lay-verify="required">
+                          </select>
+        </div>
+    </form>
+
+    <div class="layui-form-item" style="text-align: center;position: absolute;bottom: 10px;left: 650px;right: 0;">
+        <button id="submit_label" class="layui-btn layui-btn-normal" lay-submit lay-filter="menuSave_user">保存</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var tableName = null;
+    var modelid = null; //可能要改诶
+    layui.use('layedit', function() {
+        var layedit = layui.layedit;
+      var form = layui.form;
+        var content = layedit.build('demo', {
+            height: 480, //设置编辑器高度
+            contenteditable:true,
+            tool: ['strong' //加粗
+                , 'italic' //斜体
+                , 'underline' //下划线
+
+                , '|' //分割线
+
+                , 'left' //左对齐
+                , 'center' //居中对齐
+                , 'right' //右对齐
+
+            ]
+        }); //建立编辑器
+        var c = null;
+        $('#sql_save').on('click', function() {
+            popMenu2();
+        });
+        // 设置表单内容
+        function setFormValue2(obj) {
+            var inputs = $('.layui-tpl-container').find('input'),
+                textareas = $('.layui-tpl-container').find('textarea')
+            title = $('.layui-tpl-container .layui-card-header'),
+                console.log(obj)
+            $.ajax({
+
+                url: '/api/model/model?MId=' + obj,
+                type: "GET",
+                success: function(rec) {
+                    var info = rec.data[0];
+                    if (info.mname != null) {
+                        $('.layui-tpl-container  input[name="mname"]').val(info.mname);
+                    } else {
+                        $('.layui-tpl-container  input[name="mname"]').val('');
+                    }
+                    if (info.minfo != null) {
+                        $('.layui-tpl-container  textarea[name="minfo"]').val(info.minfo);
+                    } else {
+                        $('.layui-tpl-container  textarea[name="minfo"]').val('');
+                    }
+
+                }
+
+            });
+
+        }
+
+        function popMenu2() {
+            c = layedit.getText(content)
+            console.log(c)
+            if (c.length == 0) {
+
+                return layer.msg('请先填写代码', {
+                    icon: 5
+                });
+            } else {
+                admin.popupCenter({
+                    title: "保存代码",
+                    path: 'components/file/sqlSave.html',
+                    success: function() {
+                        if (modelid != null)
+                            setFormValue2(modelid);
+                    }
+                });
+
+            }
+        }
+
+
+        // 表单提交
+        form.on('submit(sqlSave)', function(data) {
+            // 获取表单数据
+            var d = data.field,
+                elem = data.elem;
+            //console.log(c.toString())
+            if (d.mname === '' || d.minfo === '') {
+                return layer.msg('请填写必填项！', {
+                    icon: 5
+                });
+            }
+
+            $(elem).attr('disabled', true);
+            if (modelid == null) {
+                var ajaxType = 'POST',
+                    ajaxName = '保存代码';
+            } else {
+                var ajaxType = 'PUT',
+                    ajaxName = '修改代码';
+            }
+
+
+            // 发送请求
+            admin.req('/api/model/model', {
+                    mid: modelid,
+                    mname: d.mname,
+                    minfo: d.minfo,
+                    mCode: c.toString()
+                },
+                function(data) {
+                    $(elem).attr('disabled', false);
+                    c = null;
+
+                    if (data.ok) {
+
+                        layer.msg(ajaxName + '成功！', {
+                            icon: 1
+                        });
+                        admin.finishPopupCenter();
+                    } else {
+
+                        return layer.msg(ajaxName + '失败：' + data.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: ajaxType
+                });
+
+        });
+        form.on('submit(sql_read)', function() {
+            c = layedit.getText(content)
+
+            if (c.length == 0) {
+                return layer.msg('请先配置模型关系', {
+                    icon: 5
+                });
+            } else {
+                sessionStorage.setItem("itemSql", c);
+                // layer.open({
+                //     title: "预览",
+                //     type: 2,
+                //     area: ['900px', '700px'],
+                //     content: 'components/file/sqlShow.html'
+                // });
+                admin.popupCenter({
+                    title: '预览',
+                    area: ['90%', '80%'],
+                    path: 'components/file/sqlShow.html',
+                    skin: 'yourclass',
+                    finish: function(data) {
+
+                        if(data){
+
+                        }
+                    },
+                    success: function () {
+                    }
+                });
+            }
+
+        });
+    });
+    layui.use(['dtree', 'treeSelect', 'layer', 'jquery'], function() {
+        var dtree = layui.dtree,
+            form = layui.form,
+            $ = layui.jquery,
+        admin = layui.admin;
+
+
+            $.get("/api/dataset", {}, function(res) {
+
+
+
+                var result = res;
+                var DTree = dtree.render({
+                    elem: "#menu", //绑定元素
+                    data: result.data,
+                    type: "all",
+                    nodeIconArray: {
+                        "3": {
+                            "open": "dtree-icon-xinxipilu",
+                            "close": "dtree-icon-xinxipilu"
+                        }
+                    },
+                    initLevel: "1", //展开层级
+                    dot: false,
+                    skin: "zdy", //皮肤主题，通过css更改
+                    ficon: "-1",
+                    icon: ["3", "2"], //二级图标样式
+
+                    toolbarStyle: {
+                        title: "目录",
+
+                    }, //菜单栏名称修改
+
+
+
+
+                    //请求数据
+                    dequestRequest: {
+                        nodeId: "NAME",
+                        parentId: "PARENTID",
+                        context: "NAME"
+                    },
+
+
+                    dataFormat: "list", //配置data的风格为list
+                    checkbar: false, // 复选框
+                    dataStyle: "layuiStyle", //使用layui风格的数据格式
+                    //修改response中返回数据的定义
+                    response: {
+                        message: "message",
+                        statusName: "respCode",
+                        statusCode: 0,
+                        rootName: "data",
+                        title: "NAME",
+                        treeId: "NAME",
+                        parentId: "PARENTID"
+                    },
+
+                });
+            });
+        $('#model_save').on('click', function() {
+            popMenu();
+
+        });
+
+
+        var ary = new Array();
+        var x = new Array();
+        var t = new Array();
+        var k = null;
+        var X = new Array();
+        var Y = new Array();
+
+
+
+        function popMenu() {
+
+            ary = new Array();
+            x = new Array();
+            t = new Array();
+            k = null;
+            X = new Array();
+            Y = new Array();
+            //这里是拿到要显示的列
+            $("input[type=checkbox]:checked").each(function() {
+                var val = this.value;
+                var tableName = val.substring(0, val.indexOf("."));
+                var colName = val.substring(val.lastIndexOf('.') + 1);
+                $.ajax({
+
+                    url: '/api/dataset/colTOComment/' + tableName + "/" + colName,
+                    type: "GET",
+                    async: false,
+                    success: function(rec) {
+                        console.log(rec.data[0].COMMENTS)
+                        if (rec.data[0].COMMENTS != null) {
+                            ary.push(val + " as " + rec.data[0].COMMENTS);
+                        } else {
+                            ary.push(val + " ");
+                        }
+
+                    }
+
+                });
+                //ary.push(val);
+            });
+            console.log(ary.join());
+            //拿到所有需要的表名
+
+            $("span[id='tryfo']").each(function() {
+                var val = $(this).html();
+                x.push(val);
+            });
+            //console.log(x.join());
+            //获取model位置坐标
+
+            $("div[id*='_model']").each(function() {
+                var a = $(this).position().top;
+                var b = $(this).position().left;
+                X.push(a);
+                Y.push(b);
+            });
+            //console.log(X);
+            //console.log(Y);
+            //拿到表之间的对应关系（连线）
+
+            $("div[id^='jsPlumb']").each(function() {
+                var val = $(this).html();
+                if (val.lenth != 0) {
+                    var first = val.substring(0, val.indexOf("="));
+                    var second = val.substring(val.lastIndexOf('=') + 1);
+                    first = first.substring(0, first.indexOf("."));
+                    second = second.substring(0, second.indexOf("."));
+                    third = second.substring(second.lastIndexOf(' ') + 1);
+                    var total = "'" + first + "&" + third + "'" + ":" + "'" + val + "'";
+                    t.push(total);
+                }
+            });
+            //console.log(t.join());
+            k = "{" + t.join() + "}"
+                //console.log(k);
+            if (ary.length == 0 || x.length == 0 || t.length == 0) {
+
+                return layer.msg('请先配置模型关系', {
+                    icon: 5
+                });
+            } else {
+                admin.popupCenter({
+                    title: "保存模型",
+                    path: 'components/file/modelSave.html',
+                    success: function() {
+                        if (modelid != null)
+                            setFormValue(modelid);
+                    }
+                });
+
+            }
+
+        }
+        // 表单提交
+        form.on('submit(modelSave)', function(data) {
+            // 获取表单数据
+            var d = data.field,
+                elem = data.elem;
+
+            //console.log(d);
+
+
+            if (d.mname === '' || d.minfo === '') {
+                return layer.msg('请填写必填项！', {
+                    icon: 5
+                });
+            }
+
+            $(elem).attr('disabled', true);
+            if (modelid == null) {
+                var ajaxType = 'POST',
+                    ajaxName = '保存模型';
+            } else {
+                var ajaxType = 'PUT',
+                    ajaxName = '修改模型';
+            }
+
+
+            // 发送请求
+            admin.req('/api/model/model', {
+                    mid: modelid,
+                    mname: d.mname,
+                    minfo: d.minfo,
+                    mparam: ary.join(),
+                    massociates: k,
+                    mtables: x.join(),
+                    mx: X.join(),
+                    my: Y.join()
+                },
+                function(data) {
+                    $(elem).attr('disabled', false);
+                    if (data.ok) {
+
+                        layer.msg(ajaxName + '成功！', {
+                            icon: 1
+                        });
+                        admin.finishPopupCenter();
+                    } else {
+
+                        return layer.msg(ajaxName + '失败：' + data.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: ajaxType
+                });
+
+        });
+        // 设置表单内容
+        function setFormValue(obj) {
+            var inputs = $('.layui-tpl-container').find('input'),
+                textareas = $('.layui-tpl-container').find('textarea')
+            title = $('.layui-tpl-container .layui-card-header'),
+                console.log(obj)
+            $.ajax({
+
+                url: '/api/model/model?MId=' + obj,
+                type: "GET",
+                success: function(rec) {
+                    var info = rec.data[0];
+                    if (info.mname != null) {
+                        $('.layui-tpl-container  input[name="mname"]').val(info.mname);
+                    } else {
+                        $('.layui-tpl-container  input[name="mname"]').val('');
+                    }
+                    if (info.minfo != null) {
+                        $('.layui-tpl-container  textarea[name="minfo"]').val(info.minfo);
+                    } else {
+                        $('.layui-tpl-container  textarea[name="minfo"]').val('');
+                    }
+
+                }
+
+            });
+
+        }
+        // 取消按钮
+        form.on('submit(modelCancle)', function() {
+            admin.closePopupCenter();
+        });
+        //清空按钮
+        form.on('submit(model_clear)',
+
+            function() {
+                //console.log("run"),
+                $('#rightlistcontainer').empty();
+                instance.reset();
+                instance.bind("connection", function(connInfo, originalEvent) {
+                    init(connInfo.connection);
+                });
+                instance.bind("dblclick", function(conn, originalEvent) {
+                    init(conn);
+                });
+            });
+        //预览按钮
+        form.on('submit(model_read)', function() {
+            ary = new Array();
+            x = new Array();
+            t = new Array();
+            k = null;
+
+            //这里是拿到要显示的列
+
+            $("input[type=checkbox]:checked").each(function() {
+                var val = this.value;
+                ary.push(val);
+            });
+            //console.log(ary.join());
+            //拿到所有需要的表名
+
+            $("span[id='tryfo']").each(function() {
+                var val = $(this).html();
+                x.push(val);
+            });
+            //console.log(x.join());
+            //拿到表之间的对应关系（连线）
+
+            $("div[id^='jsPlumb']").each(function() {
+                var val = $(this).html();
+                if (val.length != 0) {
+                    var first = val.substring(0, val.indexOf("="));
+                    var second = val.substring(val.lastIndexOf('=') + 1);
+                    first = first.substring(0, first.indexOf("."));
+                    second = second.substring(0, second.indexOf("."));
+                    third = second.substring(second.lastIndexOf(' ') + 1);
+                    var total = "'" + first + "&" + third + "'" + ":" + "'" + val + "'";
+                    t.push(total);
+                }
+            });
+            //console.log(t.join());
+            k = "{" + t.join() + "}"
+                //console.log(k);
+            if (ary.length == 0 || x.length == 0 || t.length == 0) {
+                return layer.msg('请先配置模型关系', {
+                    icon: 5
+                });
+            } else {
+                sessionStorage.setItem("ary", ary.join());
+                sessionStorage.setItem("x", x.join());
+                sessionStorage.setItem("k", k);
+
+                admin.popupCenter({
+                    title: '预览',
+                    area: ['90%', '80%'],
+                    path: 'components/file/modelShow.html',
+                    skin: 'yourclass',
+                    finish: function(data) {
+
+                        if(data){
+
+                        }
+                    },
+                    success: function () {
+                    }
+                });
+                // layer.open({
+                //     title: "预览",
+                //     type: 2,
+                //     area: ['900px', '700px'],
+                //     content: 'components/file/modelShow.html'
+                // });
+            }
+
+        });
+
+
+
+    });
+
+
+    $(document).ready(function() {
+
+        var clickElement = null;
+        $(".threepanels").on("mousedown", "li", function(event) {
+            //获取当前mousedown元素的内容
+            tableName = $(this).attr("data-id");
+            var itemContent = $(this).html();
+            var draggableDiv = $("#draggableDiv");
+            $(draggableDiv).css({
+                "display": "block",
+                "height": 0
+            });
+            //将点击的元素内容复制
+            clickElement = $(this).clone();
+
+            var currentdiv = $(this).offset();
+            $(draggableDiv).css({
+                "top": currentdiv.top - 100,
+                "left": currentdiv.left - 250
+            });
+            draggableDiv.trigger(event);
+            //取消默认行为
+            return false;
+        });
+        $("#draggableDiv").mouseup(function(event) {
+            $(this).css({
+                "height": "0"
+            });
+        });
+
+        //拖动元素时鼠标的位置
+        var dragDivLeft = 0;
+        var dragDivTop = 0;
+        $("#draggableDiv").draggable({
+            scope: "plant",
+            containment: "window",
+            drag: function(event, ui) {
+                $("#draggableDiv").css({
+                    "width": "260px",
+                    "height": "22px"
+                });
+                $("#draggableDiv").append(clickElement);
+
+                // var closeTop = $(".closeBar").offset().top;
+                // dragDivLeft = event.target.offsetLeft;
+                // dragDivTop = event.target.offsetTop;
+            },
+            stop: function() {
+                //拖拽结束，将拖拽容器内容清空
+                $("#draggableDiv").html("");
+                $("#draggableDiv").css({
+                    "height": "0"
+                });
+            }
+        });
+
+        //“放”的操作代码
+        $("#rightlistcontainer").droppable({
+            scope: "plant",
+            // selector: $(this),
+            drop: function(event, ui) {
+                if ($("#" + tableName + "_model").length == 0) {
+                    // console.log('on drag over');
+                    CreateModel(ui, $(this));
+                } else {
+                    return layer.msg('页面上已存在该数据表！', {
+                        icon: 5
+                    });
+                }
+
+
+            }
+        });
+
+
+    });
+
+    var instance = jsPlumb.getInstance({
+        DragOptions: {
+            cursor: "pointer",
+            zIndex: 2000
+        },
+        ConnectionOverlays: [
+            ["Arrow", {
+                location: 1,
+                visible: true,
+                width: 11,
+                length: 11,
+                direction: 1,
+                id: "arrow_forwards"
+            }],
+            ["Arrow", {
+                location: 0,
+                visible: true,
+                width: 11,
+                length: 11,
+                direction: -1,
+                id: "arrow_backwards"
+            }],
+            ["Label", {
+                location: 0.5,
+                id: "label",
+                cssClass: "aLabel"
+            }]
+        ],
+        containment: 'rightlistcontainer'
+    });
+    instance.importDefaults({
+        ConnectionsDetachable: true,
+        ReattachConnections: true
+    });
+    instance.bind("connection", function(connInfo, originalEvent) {
+        // console.log(connInfo.connection);
+        init(connInfo.connection);
+    });
+    instance.bind("dblclick", function(conn, originalEvent) {
+        //$(".jtk-overlay").remove();
+        init(conn);
+
+    });
+
+    function CreateModel(ui, selector) {
+        var modelId = tableName;
+        var id = modelId + "_model";
+        $(selector).append('<div class="model" id="' + id +
+            '" modelType="' + modelId + '">' +
+            getModelElementStr(modelId) + '</div>');
+        var left = parseInt(ui.offset.left - $(selector).offset().left);
+        var top = parseInt(ui.offset.top - $(selector).offset().top);
+        $("#" + id).css("position", "absolute").css("left", left).css("top", top);
+        //添加连接点
+        instance.addEndpoint(id, {
+            anchors: "RightMiddle"
+        }, hollowCircle);
+        instance.addEndpoint(id, {
+            anchors: "LeftMiddle"
+        }, hollowCircle);
+        //注册实体可draggable
+        $("#" + id).draggable({
+            containment: "rightlistcontainer",
+            drag: function(event, ui) {
+                instance.repaintEverything();
+            },
+            stop: function() {
+                instance.repaintEverything();
+            }
+        });
+    }
+
+    //端点样式设置
+    var hollowCircle = {
+        endpoint: ["Dot", {
+            cssClass: "endpointcssClass"
+        }], //端点形状
+        connectorStyle: connectorPaintStyle,
+        paintStyle: {
+            fill: "#666666",
+            radius: 6
+        }, //端点的颜色样式
+        isSource: true, //是否可拖动（作为连接线起点）
+        connector: ["Bezier", {
+            stub: 30,
+            gap: 0,
+            coenerRadius: 0,
+            alwaysRespectStubs: true,
+            midpoint: 0.5
+        }],
+        isTarget: true, //是否可以放置（连接终点）
+        maxConnections: -1
+    };
+    //基本连接线样式
+    var connectorPaintStyle = {
+        stroke: "#62A8D1",
+        strokeWidth: 2
+    };
+
+
+    function getModelElementStr(name) {
+        var list = '';
+        list += '<h4><span id = "tryfo">' +
+            name +
+            '</span><a href="javascript:void(0)" class="pull-right" onclick="removeElement(this);">X</a>' +
+            '</h4>';
+        list += '<ul>'
+
+        list += parseProperties(name);
+        list += '</ul>';
+        return list;
+
+    }
+
+    function parseProperties(obj) {
+        var str = "";
+
+        $.ajax({
+
+            url: '/api/dataset/tableToColumn/' + obj,
+            type: "GET",
+            async: false,
+            success: function(rec) {
+                for (var i in rec.data) {
+                    // console.log(rec.data[i].NAME);
+                    str += '<li><input type="checkbox" value ="' + obj + "." + rec.data[i].NAME + '">' +
+                        rec.data[i].NAME + '</li>';
+                }
+
+            }
+
+        });
+
+        return str;
+
+    }
+
+    function removeElement(obj) {
+        var element = $(obj).parents(".model");
+        layer.confirm('确认要删除吗？', {
+            btn: ['确定', '取消'], //按钮
+            icon: 5,
+            title: "删除确认"
+        }, function(index) {
+
+            layer.close(index);
+            instance.remove(element);
+
+        });
+
+    }
+
+
+    function openModak() {
+        layui.use(['layer'], function() {
+            var layer = layui.layer,
+                $ = layui.$;
+            layer.open({
+                type: 1, //类型
+                area: ['800px', '150px'], //定义宽和高
+                title: '配置表间关联列', //题目
+                shadeClose: false, //点击遮罩层关闭
+                shade: 0,
+                content: $('#myModal'), //打开的内容
+                end: function() {
+                    $("#myModal").hide();
+                },
+            });
+        })
+    }
+
+    //设置连接Label的label
+    function init(conn) {
+        layui.use(['form'], function() {
+
+            var form = layui.form;
+            var label_text;
+            $("#select_sourceList").empty();
+            $("#select_targetList").empty();
+            var sourceName = $("#" + conn.sourceId).attr("modelType");
+
+            var targetName = $("#" + conn.targetId).attr("modelType");
+            //console.log(targetName);
+            //获取对应列数据
+            $.ajax({
+
+                url: '/api/dataset/tableToColumn/' + sourceName,
+                type: "GET",
+                async: false,
+                success: function(rec) {
+                    for (var i in rec.data) {
+                        // console.log(rec.data[i].NAME);
+                        var optionStr = getOptions(rec.data[i].NAME, sourceName);
+                        $("#select_sourceList").append(optionStr);
+                        layui.form.render("select");
+                    }
+
+                }
+
+            });
+            $.ajax({
+
+                url: '/api/dataset/tableToColumn/' + targetName,
+                type: "GET",
+                async: false,
+                success: function(rec) {
+                    for (var i in rec.data) {
+                        // console.log(rec.data[i].NAME);
+                        var optionStr = getOptions(rec.data[i].NAME, targetName);
+                        $("#select_targetList").append(optionStr);
+                        layui.form.render("select");
+                    }
+
+                }
+
+            });
+            $("#submit_label").unbind("click");
+            $("#submit_label").on("click", function() {
+                setlabel(conn);
+                layer.closeAll();
+            });
+            openModak();
+        });
+    }
+
+    /**
+     * 获取option
+     * @param obj
+     * @returns {String}
+     */
+    function getOptions(obj, head) {
+        var str = "";
+
+        var val = head + '.' + obj;
+        str += '<option value="' + val + '">' +
+            val +
+            '</option>';
+        return str;
+    }
+    //setlabel
+    function setlabel(conn) {
+        conn.getOverlay("label").setLabel($("#select_sourceList").val() +
+            ' ' +
+            $("#select_comparison").val() +
+            ' ' +
+            $("#select_targetList").val());
+        conn.setParameter("twoWay", false);
+    }
+
+
+    var param = null;
+
+    function getInfo() {
+
+        var info;
+
+        $.ajax({
+            url: '/api/model/model/page?mId=' + modelid,
+            type: "get",
+            async: false,
+            success: function(result) {
+                info = result.data.list[0]
+                    //console.log(info)
+            },
+        })
+        param = info.mparam.split(',');
+        var tables = info.mtables.split(',');
+        var associates = info.massociates.substring(0, info.massociates.indexOf("}"));
+        associates = associates.substring(associates.lastIndexOf('{') + 1);
+        associates = associates.split(',');
+        var X = info.mx.split(',');
+        var Y = info.my.split(',');
+        //console.log(param),
+        // console.log(tables),
+        // console.log(associates),
+        // console.log(X),
+        // console.log(Y)
+        for (var i in tables) {
+            AddModel(tables[i], X[i], Y[i])
+
+        }
+        for (var x in associates) {
+
+            var trans = '"' + associates[x] + '"';
+            var a = trans.substring(0, trans.indexOf(":"));
+
+            var n1 = a.substring(0, a.indexOf("&"));
+            n1 = n1.substring(n1.lastIndexOf("'") + 1);
+
+            var n2 = a.substring(a.lastIndexOf('&') + 1);
+            n2 = n2.substring(0, n2.indexOf("'"));
+
+            var asso = trans.substring(trans.lastIndexOf(':') + 1);
+            //asso = asso.substring(asso.lastIndexOf("'") + 1);
+            asso = asso.substring(0, asso.indexOf('"'));
+            asso = asso.replace("\'", "");
+            asso = asso.replace("\'", "");
+            connectPorts(n1, n2, asso)
+
+        }
+
+
+    }
+
+    function AddModel(tables, top, left) {
+        var modelId = tables;
+
+        var id = modelId + "_model";
+        $("#rightlistcontainer").append('<div class="model" id="' + id +
+            '" modelType="' + modelId + '">' +
+            getModelElementStr2(modelId) + '</div>');
+        var a = parseInt(top);
+        var b = parseInt(left);
+        $("#" + id).css("position", "absolute").css("left", b).css("top", a);
+        //添加连接点
+        instance.addEndpoint(id, {
+            anchors: "RightMiddle"
+        }, hollowCircle);
+        instance.addEndpoint(id, {
+            anchors: "LeftMiddle"
+        }, hollowCircle);
+
+        //注册实体可draggable
+        $("#" + id).draggable({
+            containment: "rightlistcontainer",
+            drag: function(event, ui) {
+                instance.repaintEverything();
+            },
+            stop: function() {
+                instance.repaintEverything();
+            }
+        });
+    }
+
+    function getModelElementStr2(name) {
+        var list = '';
+        list += '<h4><span id = "tryfo">' +
+            name +
+            '</span><a href="javascript:void(0)" class="pull-right" onclick="removeElement(this);">X</a>' +
+            '</h4>';
+        list += '<ul>'
+
+        list += parseProperties2(name);
+        list += '</ul>';
+        return list;
+
+    }
+
+    function parseProperties2(obj) {
+        var str = "";
+        var forc = 0;
+
+        $.ajax({
+
+            url: '/api/dataset/tableToColumn/' + obj,
+            type: "GET",
+            async: false,
+            success: function(rec) {
+                for (var i in rec.data) {
+                    //console.log(rec.data);
+                    for (var x in param) {
+                        //console.log(rec.data[2].NAME);
+                        //console.log(param[x].substring(param[x].lastIndexOf('.') + 1))
+                        var mp = param[x].substring(param[x].lastIndexOf('.') + 1)
+                        mp = mp.substring(0, mp.indexOf(" "));
+                        console.log(mp)
+                        if (rec.data[i].NAME == mp.toUpperCase()) {
+                            forc = 1;
+                            break;
+                        } else {
+                            forc = 0;
+                        }
+                    }
+                    if (forc == 1) {
+                        str += '<li><input type="checkbox"  checked="checked"  value ="' + obj + "." + rec.data[i].NAME + '">' +
+                            rec.data[i].NAME + '</li>';
+                    } else {
+                        str += '<li><input type="checkbox" value ="' + obj + "." + rec.data[i].NAME + '">' +
+                            rec.data[i].NAME + '</li>';
+                    }
+
+                }
+
+
+
+            }
+
+        });
+
+        return str;
+
+    }
+
+    function connectPorts(node1, node2, asso) {
+        var common = {
+            endpoint: ["Dot", {
+                cssClass: "endpointcssClass"
+            }], //端点形状
+            connector: ["Bezier"],
+            paintStyle: {
+                stroke: "#666666",
+                strokeWidth: 1
+            },
+            endpointStyle: {
+                fill: "#666666",
+                radius: 6
+            },
+            anchors: ['Right', 'Left'],
+        }
+        instance.importDefaults({
+            ConnectionsDetachable: true,
+            ReattachConnections: true
+        });
+
+
+        instance.connect({
+            overlays: [
+                ["Label", {
+                        label: asso,
+                        location: 0.5,
+                        events: {
+                            dblclick: function(labelOverlay, originalEvent) {
+                                var x = labelOverlay.canvas.id;
+                                //console.log(labelOverlay.canvas.id)
+                                $("#" + x).remove();
+
+
+                            },
+                        }
+                    },
+
+                ],
+
+            ],
+            source: node1 + "_model",
+            target: node2 + "_model"
+        }, common)
+        instance.draggable(node1 + "_model")
+        instance.draggable(node2 + "_model")
+    }
+
+    layui.use(['table'], function() {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer;
+        // 渲染表格
+        table.render({
+            elem: '#tableContent-form',
+            id: 'tableContent-form',
+            url: admin.formatUrl('/api/model/model/page'),
+            // 格式化后台返回的数据
+            parseData: function(res) {
+                return {
+                    "code": res.respCode, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.list //解析数据列表
+                };
+            },
+            height: 472,
+            cols: [
+                [{
+                    type: 'numbers'
+                }, {
+                    field: 'mname',
+                    title: '模型名称'
+                }, {
+                    field: 'minfo',
+                    title: '模型描述',
+                    align: 'center',
+                    width: 400
+                }, {
+                    field: 'mcreate',
+                    templet: function(d) {
+                        return new Date(d.mcreate).toLocaleString('chinese', {
+                            hour12: false
+                        });
+                    },
+                    title: '创建时间',
+                    align: 'center',
+                    sort: true,
+                    width: 180
+                }, {
+                    field: 'mchange',
+                    templet: function(d) {
+                        if (d.mchange != null) {
+                            return new Date(d.mchange).toLocaleString('chinese', {
+                                hour12: false
+                            });
+                        } else {
+                            return ("尚未修改")
+                        };
+                    },
+                    title: '保存时间',
+                    align: 'center',
+                    sort: true,
+                    width: 180
+                }, {
+                    field: 'createMan',
+                    title: '创建人',
+                    align: 'center',
+                    width: 100
+                }, {
+                    field: 'changeMan',
+                    templet: function(d) {
+                        if (d.changeMan == null) {
+                            return ("尚未修改")
+                        } else {
+                            return (d.changeMan)
+                        };
+
+                    },
+                    title: '保存人',
+                    align: 'center',
+                    width: 100
+                }, {
+                    templet: '#control-1',
+                    title: '操作',
+                    align: 'center',
+                    width: 140,
+                    unresize: true
+                }]
+            ],
+            cellMinWidth: 120,
+            page: {
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+            },
+            request: {
+                pageName: 'pageNo',
+                limitName: 'pageSize'
+            },
+            where: {
+                design: 0
+            }
+        });
+        // 侧边栏变化时刷新数据表格
+        // 将 table ID 存入数组
+        layui.admin.addTableCache('tableContent-form');
+
+        // 搜索
+        form.on('submit(btn_search_form)', function(data) {
+            var searchValue = data.field.inp_search;
+            table.reload('tableContent-form', {
+                where: {
+                    MName: searchValue,
+                    reload: new Date().getTime()
+                }
+            });
+        });
+        // 重置
+        form.on('submit(btn_reset_form)', function() {
+            $('#inp_search').val('');
+            table.render({
+                elem: '#tableContent-form',
+                id: 'tableContent-form',
+                url: admin.formatUrl('/api/model/model/page'),
+                // 格式化后台返回的数据
+                parseData: function(res) {
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                height: 472,
+                cols: [
+                    [{
+                        type: 'numbers'
+                    }, {
+                        field: 'mname',
+                        title: '模型名称'
+                    }, {
+                        field: 'minfo',
+                        title: '模型描述',
+                        align: 'center',
+                        width: 600
+                    }, {
+                        field: 'mcreate',
+                        templet: function(d) {
+                            return new Date(d.mcreate).toLocaleString('chinese', {
+                                hour12: false
+                            });
+                        },
+                        title: '创建时间',
+                        align: 'center',
+                        sort: true,
+                        width: 180
+                    }, {
+                        field: 'mchange',
+                        templet: function(d) {
+                            if (d.mchange != null) {
+                                return new Date(d.mchange).toLocaleString('chinese', {
+                                    hour12: false
+                                });
+                            } else {
+                                return ("尚未修改")
+                            };
+                        },
+                        title: '保存时间',
+                        align: 'center',
+                        sort: true,
+                        width: 180
+                    }, {
+                        field: 'createMan',
+                        title: '创建人',
+                        align: 'center',
+                        width: 100
+                    }, {
+                        field: 'changeMan',
+                        templet: function(d) {
+                            if (d.changeMan == null) {
+                                return ("尚未修改")
+                            } else {
+                                return (d.changeMan)
+                            };
+
+                        },
+                        title: '保存人',
+                        align: 'center',
+                        width: 100
+                    }, {
+                        templet: '#control-1',
+                        title: '操作',
+                        align: 'center',
+                        width: 140,
+                        unresize: true
+                    }]
+                ],
+                cellMinWidth: 120,
+                page: {
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                },
+                request: {
+                    pageName: 'pageNo',
+                    limitName: 'pageSize'
+                },
+                where: {
+                    design: 0
+                }
+            });
+        });
+
+        // 监听工具条事件
+        // 查看、编辑、删除
+        table.on('tool(tableContent-form)', function(obj) {
+            // 获取点击列的数据
+            var data = obj.data;
+            var layEvent = obj.event;
+            // 判断操作类型
+            if (layEvent === 'del') {
+                // 删除
+                layer.confirm('确定删除模型：' + data.mname + '吗？', {
+                    icon: 3,
+                    title: '提示'
+                }, function() {
+                    admin.req('/api/model/model/' + data.mid, {}, function(data) {
+                        if (data.ok) {
+                            layer.msg('删除模型成功！', {
+                                icon: 1
+                            });
+                            table.reload('tableContent-form', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        } else {
+                            return layer.msg('删除模型失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: 'delete'
+                    });
+                });
+            } else if (layEvent === 'edit') {
+                // 编辑
+                modelid = data.mid;
+                if (data.mparam != null) {
+                    instance.reset()
+                    $('.card-show-list').fadeOut(function() {
+                        $('.card-show-edit').fadeIn();
+                        getInfo();
+                        instance.bind("connection", function(connInfo, originalEvent) {
+                            init(connInfo.connection);
+                        });
+                        instance.bind("dblclick", function(conn, originalEvent) {
+                            init(conn);
+
+                        });
+                    });
+                } else {
+                    $('.card-show-list').fadeOut(function() {
+                        $('.card-show-sql').fadeIn();
+                        if (data.mCode != null) {
+                            $('#LAY_layedit_1').contents().find('body').html(data.mCode);
+                        } else {
+                            $('#LAY_layedit_1').contents().find('body').html('');
+                        }
+
+                    });
+
+
+                }
+
+            } else if (layEvent === 'view') {
+                // 查看
+
+                sessionStorage.setItem("id", data.mid);
+                if (data.mparam != null) {
+                    // layer.open({
+                    //     title: "预览",
+                    //     type: 2,
+                    //     skin: 'yourclass',
+                    //     area: ['800px', '600px'],
+                    //     content: 'components/file/modelRead.html'
+                    // });
+                    admin.popupCenter({
+                        title: '预览',
+                        area: ['90%', '80%'],
+                        path: 'components/file/modelRead.html',
+                        skin: 'yourclass',
+                        finish: function(data) {
+
+                            if(data){
+
+                            }
+                        },
+                        success: function () {
+                        }
+                    });
+                } else {
+                    admin.popupCenter({
+                        title: '预览',
+                        area: ['90%', '80%'],
+                        path: 'components/file/sqlRead.html',
+                        skin: 'yourclass',
+                        finish: function(data) {
+
+                            if(data){
+
+                            }
+                        },
+                        success: function () {
+                        }
+                    });
+                    // layer.open({
+                    //     title: "预览",
+                    //     skin: 'yourclass',
+                    //     type: 2,
+                    //     area: ['800px', '600px'],
+                    //     content: 'components/file/sqlRead.html'
+                    // });
+                }
+
+                //window.open("components/file/modelRead.html")
+
+            }
+        });
+        form.on('submit(btn_add_form)', function() {
+            // 新增
+            modelid = null;
+            instance.reset()
+            instance.bind("connection", function(connInfo, originalEvent) {
+                init(connInfo.connection);
+            });
+            instance.bind("dblclick", function(conn, originalEvent) {
+                init(conn);
+
+            });
+            $('.card-show-list').fadeOut(function() {
+                $('.card-show-edit').fadeIn();
+            });
+
+        });
+
+        // 新增/编辑表单取消按钮
+        // $('#btnCancle_form').on('click', function() {
+        //     panelControl('close');
+        // });
+        // 右上角关闭按钮
+        $('.close2').on('click', function() {
+            $('#LAY_layedit_1').contents().find('body').html('');
+            $('.card-show-sql').fadeOut(function() {
+                $('.card-show-list').fadeIn();
+                table.reload('tableContent-form', {
+                    where: {
+                        reload: new Date().getTime()
+                    }
+                });
+
+            });
+        });
+        $('.close1').on('click', function() {
+            $('#rightlistcontainer').empty();
+            instance.reset()
+            instance.bind("connection", function(connInfo, originalEvent) {
+                init(connInfo.connection);
+            });
+            instance.bind("dblclick", function(conn, originalEvent) {
+                init(conn);
+
+            });
+            $('.card-show-edit').fadeOut(function() {
+                $('.card-show-list').fadeIn();
+                table.reload('tableContent-form', {
+                    where: {
+                        reload: new Date().getTime()
+                    }
+                });
+            });
+        });
+        form.on('submit(btn_add_sql)', function() {
+            // 新增
+            modelid = null;
+            $('.card-show-list').fadeOut(function() {
+                $('.card-show-sql').fadeIn();
+
+            });
+
+        });
+
+
+
+    });
+</script>
+
+
+
+
+</html>

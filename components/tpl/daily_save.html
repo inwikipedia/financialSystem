@@ -1,0 +1,859 @@
+<style>
+    #daily-form .layui-input-block {
+        margin-left: 85px;
+        padding-right: 0;
+        margin-top: -30px;
+    }
+
+    .heng {
+        width: 910px;
+        height: 4px;
+        background-color: #e5e5e5;
+    }
+
+    .xuanzr .layui-form-radioed>i {
+        color: #2f96e3;
+    }
+
+    .xuanzr .layui-form-radio>i {
+        font-size: 14px;
+    }
+
+    .layui-form-radio {
+        float: left;
+    }
+
+    tr td input {
+        border: none;
+        width: 100%;
+    }
+
+    .layui-row .layui-table tbody tr:hover {
+        background-color: #fff;
+    }
+
+    .layui-row #tanchuang thead tr th {
+        text-align: center;
+    }
+
+    .layui-row #tanchuang thead tr th:nth-child(1) {
+        width: 130px;
+    }
+
+    .layui-row #tanchuang thead tr th:nth-child(2) {
+        width: 385px;
+    }
+
+    .layui-row #tanchuang thead tr th:nth-child(3) {
+        width: 280px;
+    }
+
+    .layui-row #tanchuang thead tr th:nth-child(4) {
+        width: 29px;
+    }
+
+    .laydate-time-list {
+        padding-bottom: 0;
+        overflow: hidden
+    }
+
+    .laydate-time-list>li {
+        width: 50% !important;
+    }
+
+    .laydate-time-list>li:last-child {
+        display: none;
+    }
+
+    .layui-row .layui-table thead tr {
+        background-color: #EBEEF4;
+    }
+
+    .fu_img {
+        float: right;
+    }
+
+    .shuju td input {
+        border: none;
+        width: 87%;
+    }
+
+    .shuju .richeng {
+        border: none;
+        width: 100%;
+    }
+
+    .shuju .didian {
+        border: none;
+        width: 100%;
+    }
+
+    ::-webkit-scrollbar {
+        width: 0.25rem;
+        height: 0.25rem;
+        background-image: linear-gradient(135deg, #EBEEF4 0%, rgba(95, 95, 95, 0.5) 72%, rgba(95, 95, 95, 0.3) 100%);
+    }
+
+    ::-webkit-scrollbar-track {
+        border-radius: 0;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        border-radius: 0;
+        background-image: linear-gradient(135deg, #EBEEF4 0%, #EBEEF4 72%, #EBEEF4 100%);
+        transition: all .2s;
+        border-radius: 0.25rem;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(95, 95, 95, 0.7);
+    }
+</style>
+<link rel="stylesheet" href="../../assetsInfo/libs/layui/css/layui.css" />
+<div class="layui-tpl-container" style="overflow: auto;padding-right: 0px;" id="daily-form">
+    <div class="layui-form">
+        <div class="layui-row">
+            <div class="layui-col-md5 baoliu"
+                style="overflow-y: auto;max-height: 480px;overflow-x: hidden;margin-bottom: 10px;">
+                <!-- zTree 树 -->
+                <span class="redSpan">*</span>
+                <h3 style="margin-bottom: 10px;display: inline-block;
+                padding-right: 45px;">日期:</h3>
+                <input autocomplete="off" style="width: 210px;border-radius: 6px;display: inline-block" type="text"
+                    name="startTime" id="startTime" placeholder="日期" class="layui-input rili" readonly="readonly"
+                    lay-verify="required">
+                <img src="/assetsInfo/images/riliform.png" alt="" style="margin-left: -30px">
+            </div>
+            <div class="xuanzr">
+                <span style="display: inline-block;
+                margin-left: -386px;
+                margin-top: 58px;">日程类型:</span>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" id="leixing">
+                        <form class="layui-form" action="" lay-filter="typeForm" id="typeForm">
+                            <input type="radio" name="scheduleType" value="东丽办公" title="东丽办公">
+                            <input type="radio" name="scheduleType" value="西青办公" title="西青办公">
+                            <input type="radio" name="scheduleType" value="出差" title="出差">
+                            <div class="chu" style="float: left;
+                        margin-top: 3px;margin-right: 10px;">
+                                <span style="color: #FF0000;">*</span>
+                                出差地点：<input type="text" placeholder="请输入地点" maxlength="4" name="home" style="    width: 108px;
+                            height: 29px;
+                            border: 1px solid rgba(232,232,232,1);">
+                            </div>
+                            <input type="radio" name="scheduleType" value="出国" title="出国">
+                            <input type="radio" name="scheduleType" value="休假" title="休假">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="heng">
+            </div>
+            <div style="margin-top: 5px">日程详情</div>
+            <form class="layui-form" action="" lay-filter="addGoodsForm" id="addGoodsForm">
+                <table class="layui-table" id="tanchuang" style="margin-top: 15px;
+        display: block;
+    height: 260px;
+    overflow: auto;
+      width: 910px;">
+                    <thead>
+                        <tr>
+                            <th>时间</th>
+                            <th>日程内容</th>
+                            <th>地点</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ip">
+                        <tr class="shuju">
+                            <td><input type="text" id="text" class="textDate" placeholder="请选择时间" readonly="readonly"
+                                    name="nex"><img src="/assetsInfo/images/shijian.png" alt="" class="fu_img"></td>
+                            <td><input type="text" placeholder="请填写日程(最多40字)" maxlength="40" name="nex" class="richeng">
+                            </td>
+                            <td><input type="text" placeholder="请填写地点(最多20字)" maxlength="20" name="nex" class="didian">
+                            </td>
+                            <td><img class="clickImg" onclick="addPlanOutcomes(this)"
+                                    src="/assetsInfo/images/tianjia_06.png" style="cursor: pointer;"
+                                    _src="/assetsInfo/images/tianjia_06.png"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+            <div class="layui-form-item" style="text-align: center;margin-top: 30px;">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="btn-daily-save" id="btn-daily-save">保存
+                </button>
+                <button class="layui-btn layui-btn-normal" id="btn-daily-qing">清空
+                </button>
+                <button class="layui-btn layui-btn-primary" id="btn-daily-cancel">关闭</button>
+            </div>
+        </div>
+        <!--传递过来的操作类型-->
+        <input type="text" name="handleType" id="handleType" style="display: none;">
+        <!-- 如果是编辑传过来的id-->
+    </div>
+</div>
+
+<!-- <script src="../../assetsInfo/libs/exhide.js"></script>
+<script src="../../assetsInfo/libs/fuzzy.js"></script>
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+<script src="../../assetsInfo/js/MenuAuthHelper.js"></script>
+<script src="../../assetsInfo/libs/layui/layui.js"></script> -->
+<script>
+    var io = 0
+    var addPlanOutcomes = function () {
+        var index = new Date().getTime()
+        var html = '<tr class="shuju">\n' +
+            '<td><input type="text" id="text' + index +
+            '" class="textDate" placeholder="请选择时间" readonly="readonly" name="nex"> <img src="/assetsInfo/images/shijian.png" alt="" class="fu_img"></td>\n' +
+            '<td><input type="text" placeholder="请填写日程(最多40字)" maxlength="40" name="nex" class="richeng"></td>\n' +
+            '<td><input type="text" placeholder="请填写地点(最多20字)" maxlength="20" name="nex" class="didian"></td>\n' +
+            '<td><i class="clickImg layui-icon layui-icon-delete" style="font-size: 20px; margin-right:-50px;cursor:pointer;color: #bf6a6b;" href="javascript:;" onclick="delPlanOutcomes(this)"></i></td>\n' +
+            ' </tr>';
+        $('#ip').append(html);
+        layui.use(['laydate'], function () {
+            var laydate = layui.laydate;
+            laydate.render({
+                elem: '#text' + index,
+                type: 'time',
+                range: '-',
+                format: 'HH:mm'
+                    // , value: '08:00 - 17:00'
+                    ,
+                isInitValue: false,
+                ready: function (date) {
+                    $($($(".laydate-time-list li ol")[0]).find("li")[8]).trigger("click");
+                    $($($(".laydate-time-list li ol")[3]).find("li")[17]).trigger("click");
+                    var startTimeDate = $($(".laydate-time-list li ol")[1]).find("li");
+                    for (var i = 0; i < startTimeDate.length; i++) {
+                        var t00 = startTimeDate[i].innerText;
+                        if (t00 != "00" && t00 != "30") {
+                            startTimeDate[i].remove()
+                        }
+                    }
+
+                    var endTimeDate = $($(".laydate-time-list li ol")[4]).find("li");
+                    for (var i = 0; i < endTimeDate.length; i++) {
+                        var t00 = endTimeDate[i].innerText;
+                        if (t00 != "00" && t00 != "30") {
+                            endTimeDate[i].remove()
+                        }
+                    }
+
+                },
+                done: function (value, date, endDate) {
+                    /*var im = value.slice(0, 2)
+                    var imt = value.slice(8, 10)
+                    var stateTime = value.slice(3, 5)
+                    var endTime = value.slice(11, 13)
+                    if (im != '' && im == imt) {
+                        if (stateTime >= endTime) {
+                            $(".laydate-btns-clear").click()
+                            layer.msg('开始时间不能大于结束时间');
+                            io = 1
+                        } else {
+                            io = 0
+                        }
+                    }
+                    else if (im < imt) {
+                        io = 0
+                    }
+                    else if (im == '' || imt == '') {
+                        io = 0
+                    } else {
+                        $(".laydate-btns-clear").click()
+                        layer.msg('开始时间不能大于结束时间');
+                        io = 1
+                    }*/
+                    if (value) {
+                        var beginTime = value.split(" - ")[0];
+                        var endTime = value.split(" - ")[1];
+                        console.log(beginTime)
+                        console.log(endTime)
+                        if (beginTime >= endTime) {
+                            $(".laydate-btns-clear").click()
+                            layer.msg('开始时间不能大于结束时间');
+                            io = 1
+                        } else {
+                            io = 0
+                        }
+                    }
+                    setTimeout(() => {
+
+                        var ullp = []
+                        for (var i = 0; i < $('.shuju').length; i++) {
+                            var itme = $('.shuju').eq(i)
+                            ullp.push(
+                                itme.find('input').eq(0).val(),
+                            )
+                        }
+                        var beginTime = []
+                        var endTime = []
+                        var time = ''
+                        var time1 = ''
+                        for (var k = 0; k < ullp.length; k++) {
+                            var ite = ullp[k]
+                            if (ite && ite.length > 0) {
+                                time = ite.split(" - ")[0];
+                                time1 = ite.split(" - ")[1]
+                                beginTime.push(time)
+                                endTime.push(time1)
+                            }
+                        }
+                        beginTimeArr = beginTime.sort();
+                        endTimeArr = endTime.sort();
+                        for (i = 1; i < beginTimeArr.length; i++) {
+                            if (beginTimeArr[i] < endTimeArr[i - 1]) {
+                                layer.msg('时间不能有重叠');
+                                io = 2
+                                return false;
+                            } else {
+                                io = 0
+                            }
+                        }
+                    }, 500);
+                }
+            })
+        })
+    }
+    var iop = []
+    // 删除操作
+    var delPlanOutcomes = function (that) {
+        layer.confirm('确定删除该条吗', {
+            icon: 3,
+            title: '提示'
+        }, function (index) {
+            $(that).parent().parent().remove();
+            var ids = $(that).parent().parent().find('input').eq(0).attr("data_id")
+            if (ids) {
+                iop.push(
+                    ids
+                )
+            }
+            layer.msg('删除成功', {
+                icon: 1
+            });
+
+        });
+    };
+
+    var isSameTime = function (scheduleTime) {
+        var beginTime = []
+        var endTime = []
+        var time = ''
+        var time1 = ''
+        for (var k = 0; k < scheduleTime.length; k++) {
+            var ite = scheduleTime[k]
+            if (ite && ite.length > 0) {
+                time = ite.split(" - ")[0];
+                time1 = ite.split(" - ")[1]
+                beginTime.push(time)
+                endTime.push(time1)
+            }
+        }
+        var beginTimeArr = beginTime.sort();
+        var endTimeArr = endTime.sort();
+        for (i = 1; i < beginTimeArr.length; i++) {
+            if (beginTimeArr[i] < endTimeArr[i - 1]) {
+                return 2;
+            }
+        }
+        return 0;
+    }
+
+    $('.richeng').bind('input propertychange', function () {
+        if ($(this).val().length > 39) {
+            layer.msg('最多可写40字符');
+        }
+    });
+    $('.didian').bind('input propertychange', function () {
+        if ($(this).val().length > 19) {
+            layer.msg('最多可写20字符');
+        }
+
+    });
+
+    $('#leixing').on('click', function () {
+        var input_in = $('#leixing input[name="scheduleType"]:checked ').val()
+        if (input_in == "出差") {
+            $('.chu').show()
+        } else {
+            $('.chu').hide()
+        }
+    })
+    layui.use(['form', 'table', 'formSelects', 'laydate', 'upload', "xmSelect"], function () {
+        var admin = layui.admin,
+            laydate = layui.laydate,
+            config = layui.config,
+            form = layui.form,
+            table = layui.table,
+            layer = layui.layer,
+            xmSelect = layui.xmSelect,
+            upload = layui.upload,
+            customerInfo = [],
+            formSelects = layui.formSelects;
+        var thisYear = new Date().getFullYear();
+
+
+        var maxYear = thisYear + "-12-31";
+        var minYear = thisYear + "-1-1";
+        var taskNum = 0;
+        layui.admin.addTableCache('tanchuang');
+        form.verify({
+            numberInt: function (value, item) { //value：表单的值、item：表单的DOM对象
+                if (!/^([0-9]*(\.\d)?)$/.test(value)) {
+                    return '请填写0至24之间的数字(含一位小数)！';
+                }
+                if (parseFloat(value) === 0 || parseFloat(value) > 24) {
+                    return '请填写0至24之间的数字(含一位小数)！';
+                }
+            }
+        });
+        laydate.render({
+            elem: '#text',
+            type: 'time',
+            range: '-',
+            format: 'HH:mm'
+                // , value: '08:00 - 17:00'
+                ,
+            isInitValue: false,
+            ready: function (date) {
+                $($($(".laydate-time-list li ol")[0]).find("li")[8]).trigger("click");
+                $($($(".laydate-time-list li ol")[3]).find("li")[17]).trigger("click");
+                var startTimeDate = $($(".laydate-time-list li ol")[1]).find("li");
+                for (var i = 0; i < startTimeDate.length; i++) {
+                    var t00 = startTimeDate[i].innerText;
+                    if (t00 != "00" && t00 != "30") {
+                        startTimeDate[i].remove()
+                    }
+                }
+                var endTimeDate = $($(".laydate-time-list li ol")[4]).find("li");
+                for (var i = 0; i < endTimeDate.length; i++) {
+                    var t00 = endTimeDate[i].innerText;
+                    if (t00 != "00" && t00 != "30") {
+                        endTimeDate[i].remove()
+                    }
+                }
+            },
+            done: function (value, date, endDate) {
+                /*var im = value.slice(0, 2)
+                var imt = value.slice(8, 10)
+                var stateTime = value.slice(3, 5)
+                var endTime = value.slice(11, 13)
+                if (im != '' && im == imt) {
+                    if (stateTime >= endTime) {
+                        $(".laydate-btns-clear").click()
+                        layer.msg('开始时间不能大于结束时间');
+                        io = 1
+                    } else {
+                        io = 0
+                    }
+                }
+                else if (im < imt) {
+                    io = 0
+                }
+                else if (im == '' || imt == '') {
+                    io = 0
+                } else {
+                    $(".laydate-btns-clear").click()
+                    layer.msg('开始时间不能大于结束时间');
+                    io = 1
+                }*/
+
+                if (value) {
+                    var beginTime = value.split(" - ")[0];
+                    var endTime = value.split(" - ")[1];
+                    console.log(beginTime)
+                    console.log(endTime)
+                    if (beginTime >= endTime) {
+                        $(".laydate-btns-clear").click()
+                        layer.msg('开始时间不能大于结束时间');
+                        io = 1
+                    } else {
+                        io = 0
+                    }
+                }
+                setTimeout(() => {
+                    var ullp = []
+                    for (var i = 0; i < $('.shuju').length; i++) {
+                        var itme = $('.shuju').eq(i)
+                        ullp.push(
+                            itme.find('input').eq(0).val(),
+                        )
+                    }
+                    var beginTime = []
+                    var endTime = []
+                    var time = ''
+                    var time1 = ''
+                    for (var k = 0; k < ullp.length; k++) {
+                        var ite = ullp[k]
+                        if (ite && ite.length > 0) {
+                            time = ite.split(" - ")[0];
+                            time1 = ite.split(" - ")[1]
+                            beginTime.push(time)
+                            endTime.push(time1)
+                        }
+                    }
+                    beginTimeArr = beginTime.sort();
+                    endTimeArr = endTime.sort();
+                    for (i = 1; i < beginTimeArr.length; i++) {
+                        if (beginTimeArr[i] < endTimeArr[i - 1]) {
+                            layer.msg('时间不能有重叠');
+                            io = 2
+                            return false;
+                        } else {
+                            io = 0
+                        }
+                    }
+                }, 500);
+            }
+        })
+
+        $('.chu').hide()
+        //验证登陆人以及
+        var usidReapt = localStorage.usid;
+        var usid = localStorage.usid;
+        // 人员id
+        if ($('#usidNum').val()) {
+            usid = $('#usidNum').val();
+        }
+
+        if ($('#usidNum').val() == usidReapt && $('#usidEdit').val()) {
+            // $('#daily-form input').removeAttr("disabled");
+            $('#daily-form textarea').removeAttr("readonly");
+        }
+        $('#key').bind('input propertychange', function () {
+            var _keywords = $(this).val();
+            addTree(_keywords); //call lazy load
+        });
+        formSelects.on('customerId', function (id, vals, val) {
+
+            getDept(val.id);
+
+        });
+
+        form.on('checkbox(daily_check)', function (data) {
+            if (data.elem.checked) {
+                zTreeObj.checkAllNodes(true);
+            } else {
+                zTreeObj.checkAllNodes(false);
+            }
+        });
+
+        var usid_id = layui.config.getAccount().usid
+        var usname = layui.config.getAccount().usname
+
+        formSelects.on('dep_select', function (id, vals, val) {
+            formSelects.data('person_select', 'local', {
+                arr: val.list
+            });
+            formSelects.btns('person_select', []);
+        })
+
+        $('#btn-daily-cancel').on('click', function () {
+            // admin.finishPopupCenter();
+            console.log('关闭')
+            admin.closePopupCenter();
+        });
+        $('#btn-daily-qing').on('click', function () {
+            var k = 0
+            if (k === 0) {
+                
+                layer.confirm('确定清空数据吗', {
+                    icon: 3,
+                    title: '提示'
+                }, function (index) {
+                    if ($('.shuju').length > 0) {
+                        var DetailEOs = [];
+                        for (var i = 0; i < $('.shuju').length; i++) {
+                            var itme = $('.shuju').eq(i)
+                            var id_de = itme.find('input').eq(0).attr("data_id")
+                            if (id_de) {
+                                iop.push(
+                                    id_de
+                                )
+                                k = 1
+                            }
+                        }
+                        for (var i = 0; i < $('.shuju').length; i++) {
+                            var itme = $('.shuju').eq(i)
+                            DetailEOs.push({
+                                beginTime: '',
+                                currentWordNumber: '0',
+                                detailType: '0',
+                                endTime: '',
+                                scheduleDetail: itme.find('input').eq(1).val(),
+                                scheduleTFirst: '0',
+                                scheduleTime: '',
+                                timeLimit: itme.find('input').eq(0).val(),
+                                extInfo1: itme.find('input').eq(2).val(),
+                                extInfo2: usid_id,
+                                extInfo3: usname,
+                                id: itme.find('input').eq(0).attr("data_id") || '',
+                                orderNumber: i
+                            })
+                        }
+                    }
+                    var ip_ui = $('.shuju').find('input').eq(1).attr("data_ip") || ''
+
+                    var workList = {
+                        ids: iop || [],
+                        scheduleContent: '',
+                        scheduleDate: $(".baoliu input[name='startTime']").val(),
+                        scheduleDesc: '1',
+                        scheduleHour: '0',
+                        userId: localStorage.usid,
+                        scheduleDetailEOs: DetailEOs,
+                        id: ip_ui
+                    }
+
+                    $(".textDate").val('');
+                    $(".richeng").val('');
+                    $(".didian").val('');
+                    if ($.isEmptyObject(ip_ui)) {
+                        // layer.msg('无可清空的数据', {
+                        //     icon: 1
+                        // });
+                        layer.closeAll('dialog')
+                        return;
+                    }
+
+                    admin.req('/api/smallProgram/ScheduleHourController/' + ip_ui, {},
+                        function (data) {
+                            if (data.ok) {
+                                $('input[name="scheduleType"]').prop('checked', false);
+                                $('.chu input[name="home"]').val('');
+                                $('.chu').hide();
+                                form.render('radio');
+                                $(':input', '#addGoodsForm').attr("data_id", "");
+                                $(':input', '#addGoodsForm').attr("data_ip", "");
+                                $(':input', '#addGoodsForm').val("");
+                                iop = [];
+                                layer.msg('清空成功！', {
+                                    icon: 1
+                                });
+                                // admin.finishPopupCenter();
+                                $('#main').fullCalendar('refetchEvents');
+                                // admin.finishPopupCenter();
+                            } else {
+                                return layer.msg('清空失败：' + data.message, {
+                                    icon: 5
+                                });
+                                admin.finishPopupCenter();
+                            }
+
+                        }, {
+                            method: 'delete'
+                        });
+
+                    form.render();
+
+                });
+
+            }
+        });
+
+        // 日期框初始化
+        laydate.render({
+            elem: '#startTime',
+            btns: ['now', 'confirm']
+        });
+        //  点击保存按钮
+        form.on('submit(btn-daily-save)', function (obj) {
+
+            if ($('.shuju').length > 0) {
+                var DetailEOs = [];
+                var scheduleType = ''
+                if (obj.field.scheduleType == '出差') {
+                    scheduleType = obj.field.scheduleType + ':' + $(".chu input[name='home']").val()
+                } else {
+                    scheduleType = obj.field.scheduleType
+                }
+                for (var i = 0; i < $('.shuju').length; i++) {
+                    var itme = $('.shuju').eq(i)
+                    var scheduleDetail = itme.find('input').eq(1).val();
+                    var timeLimit = itme.find('input').eq(0).val();
+                    var scheduleDetailId = itme.find('input').eq(0).attr("data_id");
+                    var schedulePlace = itme.find('input').eq(2).val();
+                    if ((scheduleDetail != 'null' && scheduleDetail != '') || (timeLimit != 'null' &&
+                            timeLimit != '') ||
+                        (scheduleDetailId != 'null' && scheduleDetailId != '') || (scheduleType &&
+                            scheduleType != 'null' && scheduleType != '')) {
+                        DetailEOs.push({
+                            beginTime: '',
+                            currentWordNumber: '0',
+                            detailType: '0',
+                            endTime: '',
+                            scheduleDetail: itme.find('input').eq(1).val(),
+                            scheduleTFirst: '0',
+                            scheduleTime: '',
+                            timeLimit: itme.find('input').eq(0).val(),
+                            extInfo1: itme.find('input').eq(2).val(),
+                            extInfo2: usid_id,
+                            extInfo3: usname,
+                            id: scheduleDetailId || '',
+                            orderNumber: i
+                        })
+                    }
+                }
+            }
+            var ip_ui = $('.shuju').find('input').eq(1).attr("data_ip") || ''
+
+            var workList = {
+                ids: iop || [],
+                scheduleContent: scheduleType,
+                scheduleDate: obj.field.startTime,
+                scheduleDesc: '1',
+                scheduleHour: '0',
+                userId: localStorage.usid,
+                updateUserId: usid_id,
+                updateUserName: usname,
+                scheduleDetailEOs: DetailEOs,
+                id: ip_ui
+            }
+            var type = obj.field.startTime
+            if (obj.field.scheduleType == '出差') {
+                var jop = $(".chu input[name='home']").val()
+                if (jop == '' || jop == undefined || jop == null) {
+                    layer.msg('必须填写地点');
+                } else {
+                    for (var i = 0; i < DetailEOs.length; i++) {
+                        var it = DetailEOs[i];
+                        if (it.timeLimit) {
+                            var beginTime = it.timeLimit.split(" - ")[0];
+                            var endTime = it.timeLimit.split(" - ")[1];
+                            if (beginTime >= endTime) {
+                                layer.msg('开始时间不能大于结束时间');
+                                io = 1
+                            } else {
+                                io = 0
+                            }
+                        }
+                    }
+
+                    if (io == 1) {
+                        layer.msg('开始时间不能大于结束时间');
+                        return;
+                    } else if (io == 2) {
+                        layer.msg('时间不能有重叠');
+                        return;
+                    } else {
+                        if (workList.scheduleDetailEOs.length > 0) {
+                            var scheduleContent = workList.scheduleContent;
+                            var scheduleTime = [];
+                            for (var i = workList.scheduleDetailEOs.length - 1; i >= 0; i--) {
+                                var timeLimit = workList.scheduleDetailEOs[i].timeLimit;
+                                var scheduleDetail = workList.scheduleDetailEOs[i].scheduleDetail;
+                                var scheduleDetailId = workList.scheduleDetailEOs[i].id ? workList
+                                    .scheduleDetailEOs[i].id : "";
+                                var schedulePlace = workList.scheduleDetailEOs[i].extInfo1;
+                                if ((scheduleDetail == 'null' || scheduleDetail == '') && (timeLimit ==
+                                        'null' || timeLimit == '')) {
+                                    workList.scheduleDetailEOs.splice(i, 1);
+                                    if (scheduleDetailId != '') {
+                                        workList.ids.push(scheduleDetailId);
+                                    }
+                                } else {
+                                    if (timeLimit && timeLimit != 'null' && timeLimit != '') {
+                                        scheduleTime.push(timeLimit);
+                                    }
+                                }
+                            }
+                            if (isSameTime(scheduleTime) == 2) {
+                                layer.msg('时间不能有重叠');
+                                return;
+                            }
+                        }
+                        admin.req('/api/smallprogram/scheduleDetail', workList, function (data) {
+                            if (data.ok) {
+                                layer.msg('保存成功！', {
+                                    icon: 1
+                                });
+                                admin.finishPopupCenter();
+                            } else {
+                                return layer.msg('保存失败：' + data.message, {
+                                    icon: 5
+                                });
+                                admin.finishPopupCenter();
+                            }
+                        }, {
+                            method: 'post'
+                        });
+                    }
+                }
+            } else {
+                var kk = []
+                for (var i = 0; i < DetailEOs.length; i++) {
+                    var it = DetailEOs[i]
+
+                }
+                if (io == 1) {
+                    layer.msg('开始时间不能大于结束时间');
+                    return;
+                } else if (io == 2) {
+                    layer.msg('时间不能有重叠');
+                    return;
+                } else {
+                    if (workList.scheduleDetailEOs.length > 0) {
+                        var scheduleContent = workList.scheduleContent;
+                        var scheduleTime = [];
+                        for (var i = workList.scheduleDetailEOs.length - 1; i >= 0; i--) {
+                            var timeLimit = workList.scheduleDetailEOs[i].timeLimit;
+                            var scheduleDetail = workList.scheduleDetailEOs[i].scheduleDetail;
+                            var scheduleDetailId = workList.scheduleDetailEOs[i].id ? workList
+                                .scheduleDetailEOs[i].id : "";
+                            var schedulePlace = workList.scheduleDetailEOs[i].extInfo1;
+                            if ((scheduleDetail == 'null' || scheduleDetail == '') && (timeLimit ==
+                                    'null' || timeLimit == '') &&
+                                (!scheduleContent || scheduleContent == 'null' || scheduleContent == '')
+                            ) {
+                                layer.msg('日程类型、日程详情(时间与日程内容)不能都为空！', {
+                                    icon: 5
+                                });
+                                return;
+                                //workList.scheduleDetailEOs.splice(i,1);
+                            } else if ((scheduleDetail == 'null' || scheduleDetail == '') && (
+                                    timeLimit == 'null' || timeLimit == '') &&
+                                (scheduleContent || scheduleContent != 'null' || scheduleContent != '')
+                            ) {
+                                workList.scheduleDetailEOs.splice(i, 1);
+                                if (scheduleDetailId != '') {
+                                    workList.ids.push(scheduleDetailId);
+                                }
+                            } else {
+                                if (timeLimit && timeLimit != 'null' && timeLimit != '') {
+                                    scheduleTime.push(timeLimit);
+                                }
+                            }
+                        }
+                        if (isSameTime(scheduleTime) == 2) {
+                            layer.msg('时间不能有重叠');
+                            return;
+                        }
+                    }
+                    if (workList.scheduleDetailEOs.length > 0 || workList.scheduleContent) {
+                        admin.req('/api/smallprogram/scheduleDetail', workList, function (data) {
+                            if (data.ok) {
+                                layer.msg('保存成功！', {
+                                    icon: 1
+                                });
+                                admin.finishPopupCenter();
+                            } else {
+                                return layer.msg('保存失败：' + data.message, {
+                                    icon: 5
+                                });
+                                admin.finishPopupCenter();
+                            }
+                        }, {
+                            method: 'post'
+                        });
+                    } else {
+                        layer.msg('日程类型、日程详情(时间与日程内容)不能都为空！', {
+                            icon: 5
+                        });
+                    }
+                }
+            }
+
+        });
+    })
+</script>

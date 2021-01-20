@@ -1,0 +1,125 @@
+<div class="layui-table layui-form adc-form-design-helper" style="padding: 20px;box-sizing: border-box;">
+    <table data-sort="sortDisabled" style="margin: 0 auto;width: 100%;">
+        <tbody>
+        <tr>
+            <td style="-ms-word-break: break-all;" valign="middle" align="left">
+                <span style="color: red">*</span> 项目名称：<br>
+            </td>
+            <td style="word-break: break-all;" valign="middle" align="left">
+                <input name="name" id="itemName" class="layui-input"
+                       readonly="readonly">
+            </td>
+            <td style="word-break: break-all;" valign="middle" align="left">
+                <span style="color: red">*</span> 业务类型：
+            </td>
+            <td valign="middle" align="left">
+                <input type="text" value="" disabled
+                       class="layui-input layui-unselect" name="business">
+
+            </td>
+        </tr>
+        <tr>
+            <td valign="middle" align="left">
+                <span style="color: red">*</span> 项目负责人：
+            </td>
+            <td valign="middle" align="left">
+                <span class="layui-input-inline" style="position: relative;display:block">
+                    <input id="inputuser"  name="projectLeader"
+                           style="box-sizing: border-box;  height: 30px; font-size: 14px; cursor: pointer; padding-right: 30px;"
+                           disabled="disabled">
+                   </span>
+            </td>
+            <td rowspan="1" colspan="1" valign="middle" align="left">
+                <span style="color: red">*</span> 合同企业名称：
+            </td>
+            <td rowspan="1" colspan="1" valign="middle" align="left">
+                <input id="inputyewu" type="text"
+                       style="box-sizing: border-box; font-size: 14px; text-align: left;  height: 30px;" maxlength="50"
+                       disabled="disabled"  name="projectOwner">
+            </td>
+        </tr>
+        <tr>
+            <td valign="middle" align="left">
+                <span style="color: red">*</span> 项目组成员：
+            </td>
+            <td rowspan="1" colspan="1" style="word-break: break-all;" valign="middle" align="left">
+                <span class="layui-input-inline" style="position: relative;display:block">
+   <input id="inputuserselect" type="text"
+          style="box-sizing: border-box; height: 30px; font-size: 14px; cursor: pointer; padding-right: 30px;"
+          disabled="disabled" name="memberNames"></span>
+            </td>
+            <td rowspan="1" colspan="1" style="word-break: break-all;" valign="middle" align="left">
+                <span style="color: red">*</span> 所属业务:
+            </td>
+            <td rowspan="1" colspan="1" style="word-break: break-all; " valign="middle" align="left">
+                <input id="yewu" type="text"
+                       style="box-sizing: border-box; height: 30px; font-size: 14px; cursor: pointer; padding-right: 30px;"
+                       disabled="disabled" name="budget"></span>
+
+            </td>
+        </tr>
+        <tr id="scientificSearch">
+
+            <td rowspan="1" colspan="1" valign="middle" align="left">
+                <span style="color: red">*</span> 合同签订时间：
+            </td>
+            <td rowspan="1" colspan="1" valign="middle" align="left">
+                <input name="projectStartTime"  id="createTime" type="text" disabled="disabled"
+                       style="box-sizing: border-box; font-size: 14px; text-align: left;  height: 30px;">
+            </td>
+            <td rowspan="1" colspan="1" valign="middle" align="left">
+                人力投入（人天）：
+            </td>
+            <td style="-ms-word-break: break-all;" rowspan="1" colspan="1" valign="middle" align="left">
+                <input id="humanInput" class="layui-input"
+                       style="height: 30px; text-align: left; font-size: 14px; box-sizing: border-box;"
+                       type="text" disabled="disabled" name="personInput"
+                >
+            </td>
+        </tr>
+        <tr>
+            <td style="word-break: break-all;" valign="middle" align="left">
+                合同编号
+            </td>
+            <td style="word-break: break-all;" valign="middle" align="left">
+                <input name="contractNo" title="" class="layui-input"
+                       style="height: 30px; text-align: left; font-size: 14px; box-sizing: border-box; "
+                       type="text" readonly="readonly">
+            </td>
+
+        </tr>
+        <tr>
+            <td valign="middle" align="left">
+                项目描述：
+            </td>
+            <td rowspan="1" colspan="3" valign="middle" align="left">
+                <textarea name="projectDescription" title="项目描述" id="describe" class="layui-textarea"
+                          style=" height: 80px; font-size: 14px; box-sizing: border-box;resize: none"
+                          placeholder="项目描述" adcform_width="600" adcform_height="80" adcform_fontsize="14"
+                          adcform="adc_form_textarea" adcform_rich="1" maxlength="200"
+                          disabled="disabled"></textarea>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <style>
+        .layui-form-select dl {
+            top: 42px !important;
+            bottom: auto;
+            height: 155px !important;
+        }
+
+        .layui-form-selected dl {
+            height: 195px;
+            width: 200px;
+        }
+        input,input:disabled {
+            background-color: #fff;
+            border: 1px solid #e6e6e6;
+            cursor: not-allowed!important;
+            width: 100%;
+            padding-left: 10px;
+        }
+    </style>
+</div>

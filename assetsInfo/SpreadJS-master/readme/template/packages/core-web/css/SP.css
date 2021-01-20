@@ -1,0 +1,54 @@
+﻿/* Scss Document */
+body,
+td,
+th {
+  font-family: Open Sans, Segoe UI, Verdana, Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-variant: normal; }
+
+.docC1_header {
+  background: #94c33d url("../images/SP-32X32.png") no-repeat left center;
+  background-position: 10px 14px;
+  padding-left: 52px !important;
+  color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  padding: 10px;
+  box-sizing: border-box; }
+  .docC1_header .product {
+    margin: 4px;
+    display: inline-block;
+    float: left;
+    padding-right: 10px; }
+  .docC1_header span {
+    display: inline-block;
+    color: #fff;
+    line-height: 40px;
+    font-size: 115%; }
+  .docC1_header ul {
+    display: inline-block;
+    list-style: none;
+    float: right;
+    margin: 0;
+    padding: 0; }
+    .docC1_header ul li {
+      display: inline-block; }
+      .docC1_header ul li a {
+        color: #fff;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-weight: 500;
+        padding: 0px 15px 4px;
+        border-left: 1px solid #fff;
+        font-weight: normal; }
+      .docC1_header ul li:last-child a, .docC1_header ul li:first-child a {
+        border-left: none; }
+      .docC1_header ul li:last-child a {
+        background-color: #6e8c2b;
+        border-radius: 5px;
+        padding: 8px 12px;
+        margin-right: 10px; }

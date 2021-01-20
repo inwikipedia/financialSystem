@@ -1,0 +1,23 @@
+<div>
+    <input type="hidden" id="process_id" value="">
+    <input type="hidden" id="process_key" value="">
+    <input type="hidden" id="isExternalForm" value="">
+    <div class="layui-form p-form">
+        <div class="layui-form-item" id="process_def_tpl_start">
+
+        </div>
+        <!-- 提交按钮 -->
+        <!-- 取消按钮 -->
+        <div class="layui-form-item" style="text-align: center;">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="processStart">启动</button>
+            <button class="layui-btn layui-btn-primary" lay-submit lay-filter="popProcessCancle">取消</button>
+        </div>
+    </div>
+</div>
+<style>
+    .layui-form-selectup dl {
+        top: 42px!important;
+        bottom: auto!important;
+        height: 177px!important;
+    }
+</style>

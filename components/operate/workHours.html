@@ -1,0 +1,1518 @@
+<link rel="stylesheet" href="../../assetsInfo/css/dragula.css">
+<link rel="stylesheet" href="../../assetsInfo/css/duty.css">
+<link rel="stylesheet" href="../../assetsInfo/css/workHours.css">
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<div class="main">
+    <div id="nav" class="nav">
+        <div style="float: right;">
+            <div class="layui-btn-group buttonGroup layui-form" style="float: right;" id="dataStatic">
+                <div class="layui-form-item"  style="width: 100px;font-size: 14px;position: relative">
+                    <!--<select  style="text-align: center"   id="workTimeChange"  lay-filter="workTimeChange" >-->
+                        <!--<option value="year">本年</option>-->
+                        <!--<option value="season">本季度</option>-->
+                        <!--<option value="month">本月</option>-->
+                        <!--<option value="week">本周</option>-->
+                        <!--<option  value="custom">自定义</option>-->
+                    <!--</select>-->
+                    <div >
+                        <div class="layui-select-title" style="position: relative">
+                            <div class="dateValue" style="cursor: pointer">
+                                <input type="text" placeholder="请选择" value="" id="dateValue" style="cursor: pointer"   autocomplete="off" readonly="" class="layui-input layui-unselect">
+                                <i class="layui-edge workIcon"></i>
+                            </div>
+                            <div id="workMouse" style="display: none">
+                                <dl class="layui-anim layui-anim-upbit dateDl" style="">
+                                    <dd lay-value="year" class="layui-this">本年</dd>
+                                    <dd lay-value="season" class="">本季度</dd>
+                                    <dd lay-value="month" class="">本月</dd>
+                                    <dd lay-value="week" class="">本周</dd>
+                                    <dd lay-value="custom" class="">自定义</dd>
+                                </dl>
+                                <div class="dateBox layui-form" id="dateBox" style="padding: 20px;">
+                                    <div class="layui-form-item">
+                                        <input type="text" placeholder="请选择" autocomplete="off" class="layui-input" id="startDate" name="startDate" >
+                                    </div>
+                                    <div class="layui-form-item" >
+                                        <input type="text" placeholder="请选择" autocomplete="off" class="layui-input" id="endDate" name="endDate" >
+                                    </div>
+                                    <div>
+                                        <div class="layui-layer-btn layui-layer-btn-">
+                                            <a class="layui-layer-btn0" id="dateSure">确定</a>
+                                            <a class="layui-layer-btn1" id="dateCancel">取消</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!--<button class="layui-btn layui-btn-primary layui-btn-sm" style="border-top-left-radius: 4px;border-bottom-left-radius:4px;" id="week">-->
+                    <!--<i class="layui-icon">周</i>-->
+                <!--</button>-->
+                <!--<button class="layui-btn layui-btn-primary layui-btn-sm" id="month">-->
+                    <!--<i class="layui-icon">月</i>-->
+                <!--</button>-->
+                <!--<button class="layui-btn layui-btn-primary layui-btn-sm" id="season">-->
+                    <!--<i class="layui-icon">季</i>-->
+                <!--</button>-->
+                <!--<button class="layui-btn layui-btn-primary layui-btn-sm btn-active" style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;" id="year">-->
+                    <!--<i class="layui-icon">年</i>-->
+                <!--</button>-->
+            </div>
+        </div>
+            <div class="layui-inline" id="symbolBox" style="float: right;margin:1px 162px 0 0;height: 36px;line-height: 30px;display: none">
+                 <span id="beginText"></span>
+                 <span >--</span>
+                 <span id="endText"></span>
+            </div>
+        <div class="layui-btn-group buttonGroup" style="float: left;margin:1px 8px 0 0">
+            <button class="layui-btn layui-btn-primary layui-btn-sm btn-active" style="border-top-left-radius: 4px;border-bottom-left-radius:4px;" id="organization-btn">
+                <i class="layui-icon">组织</i>
+            </button>
+            <button class="layui-btn layui-btn-primary layui-btn-sm" id="project-btn">
+                <i class="layui-icon">项目</i>
+            </button>
+            <button class="layui-btn layui-btn-primary layui-btn-sm" id="person-btn" style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;">
+                <i class="layui-icon">人员</i>
+            </button>
+        </div>
+    </div>
+    <div id="organization">
+        <div class="layui-row" id="org-first">
+            <div class="layui-col-md12">
+                <div class="layui-card layui-row">
+                    <div class="layui-card-header" style="overflow: hidden">
+                        <img src="../../assetsInfo/images/icon/worktime.png" />&nbsp;
+                        <span class="headerTitle">投入工时一览</span>&nbsp;&nbsp; | &nbsp;
+                        <span class="total" id="centerOfficeWorkTimeTotal"></span>
+                    </div>
+                    <div class="layui-card-body orgData1">
+                        <div class="layui-col-space5">
+                            <div id="centerOfficeWorkTime"></div>
+                        </div>
+                        <div class="layui-col-space5 pie-right" id="centerOfficeWorkTimeTable">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row" id='org-second'>
+            <div class="layui-col-md12">
+                <div class="layui-card layui-row">
+                    <div class="layui-card-header">
+                        <img src="../../assetsInfo/images/icon/worktime.png" />&nbsp;
+                        <span class="headerTitle">投入工时一览</span>&nbsp;&nbsp; | &nbsp;
+                        <span class="total" id="departmentWorkTimeTotal"></span>
+                    </div>
+                    <div class="layui-card-body orgData2" style="padding-bottom: 0px;overflow: hidden">
+                        <div class="layui-col-space5 ">
+                            <div id="departmentWorkTime" class="bar-block"></div>
+                        </div>
+
+                        <div class="layui-col-space5" id="departmentWorkTimeTable">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row" id='org-third'>
+            <div class="layui-col-md12">
+                <div class="layui-card layui-row">
+                    <div class="layui-card-header">
+                        <img src="../../assetsInfo/images/icon/worktime.png" />&nbsp;
+                        <span class="headerTitle">项目组投入工时一览</span>&nbsp;&nbsp; | &nbsp;
+                        <span class="total" id="projectWorkTimeTotal"></span>
+                    </div>
+                    <div class="layui-card-body orgData3">
+                        <div class="layui-col-space5 ">
+                            <div id="projectWorkTime" class="bar-block"></div>
+                        </div>
+
+
+                        <div class="layui-col-space5" id="projectWorkTimeTable">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="project" style="display: none">
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <div class="layui-card layui-row">
+                    <div class="layui-card-header" style="overflow: hidden">
+                        <img src="../../assetsInfo/images/icon/worktime.png" />&nbsp;
+                        <span class="headerTitle">业务投入工时一览</span>&nbsp;&nbsp; | &nbsp;
+                        <span id="project_businessTotal" class="total"></span>
+                    </div>
+                    <div class="layui-card-body">
+                        <div class="layui-col-space5">
+                            <div id="project_business" class="bar-block"></div>
+                        </div>
+
+                        <div class="layui-col-space5" id="project_businessTable">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <div class="layui-card layui-row">
+                    <div class="layui-card-header">
+                        <img src="../../assetsInfo/images/icon/worktime.png" />&nbsp;
+                        <span class="headerTitle">业务任务投入工时一览</span>&nbsp;&nbsp; | &nbsp;
+                        <span class="total" id="business_task_departmentWorkTimeTotal"></span>
+                    </div>
+                    <div class="layui-card-body">
+                        <div class="layui-col-space5">
+                            <div id="business_task_departmentWorkTime" class="bar-block"></div>
+                        </div>
+
+                        <div class="layui-col-space5" id="business_task_departmentWorkTimeTable">
+                            <p class="zwsj"><img src="../../assetsInfo/images/back2.png" alt=""></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <div class="layui-card layui-row">
+                    <div class="layui-card-header">
+                        <img src="../../assetsInfo/images/icon/worktime.png" />&nbsp;
+                        <span class="headerTitle">项目投入工时一览</span>&nbsp;&nbsp; | &nbsp;
+                        <span class="total" id="project_departmentWorkTimeTotal"></span>
+                    </div>
+                    <div class="layui-card-body">
+                        <div class="layui-col-space5">
+                            <div id="project_departmentWorkTime" class="bar-block"></div>
+                        </div>
+
+                        <div class="layui-col-space5" id="project_departmentWorkTimeTable">
+                            <p class="zwsj"><img src="../../assetsInfo/images/back2.png" alt=""></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <div class="layui-card layui-row">
+                    <div class="layui-card-header">
+                        <img src="../../assetsInfo/images/icon/worktime.png" />&nbsp;
+                        <span class="headerTitle">任务投入工时一览</span>&nbsp;&nbsp; | &nbsp;
+                        <span class="total" id="project_projectWorkTimeTotal"></span>
+                    </div>
+                    <div class="layui-card-body">
+                        <div class="layui-col-space5">
+                            <div id="project_projectWorkTime" class="bar-block"></div>
+                        </div>
+
+                        <div class="layui-col-space5" id="project_projectWorkTimeTable">
+                            <p class="zwsj"><img src="../../assetsInfo/images/back2.png" alt=""></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="person" style="display: none">
+        <button id="optionMan">人员选择</button>
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <div class="layui-card layui-row">
+                    <div class="layui-card-header" style="overflow: hidden">
+                        <img src="../../assetsInfo/images/icon/worktime.png" />&nbsp;
+                        <span class="headerTitle">个人投入工时一览</span>&nbsp;&nbsp; | &nbsp;
+                        <span class="total" id="person_centerOfficeWorkTimeTableTotal"></span>
+                        <span id="userName"></span>
+                        <button onclick="personDataReser()" class="userName-btn">刷新</button>
+
+
+                    </div>
+                    <div class="layui-card-body" style="padding-top: 5px;">
+                        <div class="layui-col-space5">
+                            <div id="person_centerOfficeWorkTime"></div>
+                        </div>
+                        <div class="layui-col-space5 pie-right" id="person_centerOfficeWorkTimeTable"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+<script src="../../assetsInfo/libs/chosen/chosen.jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../../assetsInfo/libs/exhide.js"></script>
+<script src="../../assetsInfo/libs/fuzzy.js"></script>
+<script>
+    //日期格式化，返回值形式为yy-mm-dd
+    function timeFormat(date) {
+        if (!date || typeof(date) === "string") {
+            this.error("参数异常，请检查...");
+        }
+        var y = date.getFullYear(); //年
+        var m = date.getMonth() + 1; //月
+        var d = date.getDate(); //日
+
+        return y + "-" + m + "-" + d;
+    }
+    //    重置
+    function personDataReser() {
+        personUsid = Usid;
+        layui.use(['laydate'], function() {
+            var config = layui.config;
+            userName = config.getAccount().usname
+        });
+        var endTime,startTime;
+        endTime=timeFormat(new Date());
+        if($("#dateValue").val()=='本年'){
+            startTime='year';
+        }else if($("#dateValue").val()=='本周'){
+            startTime='week';
+        }else if($("#dateValue").val()=='本季度'){
+            startTime='season';
+        }else if($("#dateValue").val()=='本月'){
+            startTime='month';
+        }else if($("#dateValue").val()=='自定义'){
+            endTime=$("#endDate")[0].value;
+            startTime=$("#startDate")[0].value;
+        }
+        personDataOne(startTime,endTime)
+    }
+    layui.use(['form', 'formSelects', 'layer', 'laydate'], function() {
+        var admin = layui.admin,
+            laydate = layui.laydate,
+            config = layui.config,
+            layer = layui.layer,
+            form = layui.form,
+            roles = config.getAccount().roles,
+            orgs =[];
+
+            for(var item of config.getAccount().orgs)
+            {
+                orgs.push(item.id);
+            }
+
+
+
+        //仅本部长和总监可看本部投入工时  ************
+        // var rolesArr =[];
+        // for(var i of roles){
+        //     rolesArr.push(i.name)
+        // }
+        // rolesArr = rolesArr.join();
+        // if(rolesArr.indexOf('本部长')!= -1 || rolesArr.indexOf('总监')!= -1){
+        //     $('#hidden').show();
+        // }else{
+        //     $('#hidden').hide();
+        // }
+        //***************************************
+        $('#optionMan').click(function() {
+            //        ADCFormDesignHelper.personnelSelect([], callback);
+            function callback(res) {
+                console.log(res);
+                var id = res.id ? res.id : "";
+                personUsid = res.id;
+                var endTime,startTime;
+                endTime=timeFormat(new Date());
+                if($("#dateValue").val()=='本年'){
+                    startTime='year';
+                }else if($("#dateValue").val()=='本周'){
+                    startTime='week';
+                }else if($("#dateValue").val()=='本季度'){
+                    startTime='season';
+                }else if($("#dateValue").val()=='本月'){
+                    startTime='month';
+                }else if($("#dateValue").val()=='自定义'){
+                    endTime=$("#endDate")[0].value;
+                    startTime=$("#startDate")[0].value;
+                }
+                personDataOne(startTime,endTime);
+                userName = res.name
+                ShowName(userName)
+            }
+
+            layer.open({
+                type: 2,
+                id: 'personnelSelect',
+                title: '请选择',
+                content: 'components/operate/person_select.html',
+                area: ['95%', '95%'],
+                btn: ['确定', '取消'],
+                yes: function(index, layero) {
+                    var finalData = $('#personnelSelect iframe')[0].contentWindow
+                        .task_personnel_select.finish();
+                    // 获取到数据，执行回掉函数
+                    callback && typeof callback === 'function' && callback(
+                        finalData);
+                    layer.close(index);
+                },
+                success: function() {
+                    // 执行 iframe 内的方法
+                    //                $('#personnelSelect iframe')[0].contentWindow.task_personnel_select.init(data);
+                },
+                resize: false
+            });
+        })
+
+    TimeType = "year"; //时间维度
+    classify = "organization"; //组织维度
+    personUsid = ""; //人员tab页 人员选择 人员的id
+
+
+    //点击组织按钮
+    $('#organization-btn').click(function() {
+        classify = "organization";
+
+        $(this).addClass('btn-active');
+        $(this).siblings().removeClass('btn-active');
+        $('#organization').show();
+        $('#project').hide();
+        $('#person').hide();
+        $("#symbolBox").hide();
+        $("dd[lay-value='year']").addClass('layui-this');
+        $("dd[lay-value='year']").siblings().removeClass('layui-this');
+        $("#dateValue").val('本年');
+        $("#startDate")[0].value='';
+        $("#endDate")[0].value='';
+        var endTime,startTime;
+        endTime=timeFormat(new Date());
+        startTime='year';
+        $("#workTimeChange option[value='year']").prop('selected', 'selected');
+        form.render('select');
+        organizationDataOne(startTime,endTime)
+    });
+    //点击项目按钮
+    $('#project-btn').click(function() {
+        classify = "project";
+
+        $(this).addClass('btn-active');
+        $(this).siblings().removeClass('btn-active');
+        $('#organization').hide();
+        $('#project').show();
+        $('#person').hide();
+        $("#symbolBox").hide();
+        $("#startDate")[0].value='';
+        $("#endDate")[0].value='';
+        $("dd[lay-value='year']").addClass('layui-this');
+        $("dd[lay-value='year']").siblings().removeClass('layui-this');
+        $("#dateValue").val('本年');
+        var endTime,startTime;
+        endTime=timeFormat(new Date());
+        startTime='year';
+        $("#workTimeChange option[value='year']").prop('selected', 'selected');
+        form.render('select');
+        projectDataOne(startTime,endTime);
+    });
+    //点击人员按钮
+    $('#person-btn').click(function() {
+        classify = "person";
+
+        $(this).addClass('btn-active');
+        $(this).siblings().removeClass('btn-active');
+        $('#organization').hide();
+        $('#project').hide();
+        $('#person').show();
+        $("#symbolBox").hide();
+        $("#startDate")[0].value='';
+        $("#endDate")[0].value='';
+        $("dd[lay-value='year']").addClass('layui-this');
+        $("dd[lay-value='year']").siblings().removeClass('layui-this');
+        $("#dateValue").val('本年');
+        layui.use(['form', 'formSelects', 'laydate'], function() {
+            var config = layui.config;
+            userId = config.getAccount().usid;
+            Usid = config.getAccount().usid;
+            personUsid = config.getAccount().usid;
+            userName = config.getAccount().usname
+        });
+        var endTime,startTime;
+        endTime=timeFormat(new Date());
+        startTime='year';
+        $("#workTimeChange option[value='year']").prop('selected', 'selected');
+        form.render('select');
+        personDataOne(startTime,endTime);
+    });
+
+
+
+    //获取这周的周一
+        function getFirstDayOfWeek (date) {
+
+            var weekday = date.getDay()||7; //获取星期几,getDay()返回值是 0（周日） 到 6（周六） 之间的一个整数。0||7为7，即weekday的值为1-7
+
+            date.setDate(date.getDate()-weekday+1);//往前算（weekday-1）天，年份、月份会自动变化
+            return timeFormat(date);
+        }
+
+        //获取当月第一天
+        function getFirstDayOfMonth (date) {
+            date.setDate(1);
+            return timeFormat(date);
+        }
+
+        //获取当季第一天
+        function getFirstDayOfSeason (date) {
+            var month = date.getMonth();
+            if(month <3 ){
+                date.setMonth(0);
+            }else if(2 < month && month < 6){
+                date.setMonth(3);
+            }else if(5 < month && month < 9){
+                date.setMonth(6);
+            }else if(8 < month && month < 11){
+                date.setMonth(9);
+            }
+            date.setDate(1);
+            return timeFormat(date);
+        }
+
+        //获取当年第一天
+        function getFirstDayOfYear (date) {
+            date.setDate(1);
+            date.setMonth(0);
+            return timeFormat(date);
+        }
+        function infoChange(startTime,endTime){
+            if (classify == "organization") {
+                //                组织
+                organizationDataOne(startTime,endTime);
+            } else if (classify == "project") {
+                //                项目
+                projectDataOne(startTime,endTime);
+
+            } else {
+                console.log(personUsid)
+                //                人员
+                personDataOne(startTime,endTime);
+            }
+            form.render();
+        };
+        laydate.render({
+            elem: '#startDate',
+            type: 'date'
+        });
+        laydate.render({
+            elem: '#endDate',
+            type: 'date'
+        });
+        //日期选择确定事件
+        $("#dateSure").off('click').on('click',function () {
+            var startTime,endTime;
+            startTime=$("#startDate")[0].value;
+            endTime=$("#endDate")[0].value;
+            if((!startTime&&endTime)||(!startTime&&!endTime)){
+               return layer.msg('请选择开始时间', {
+                    icon: 5
+                });
+            }else if(startTime&&!endTime){
+                return layer.msg('请选择结束时间', {
+                    icon: 5
+                });
+            }
+            infoChange(startTime,endTime);
+            $("#beginText")[0].innerHTML=startTime;
+            $("#endText")[0].innerHTML=endTime;
+            $("#dateValue").val('自定义');
+            $("dd[lay-value='custom']").addClass('layui-this');
+            $("dd[lay-value='custom']").siblings().removeClass('layui-this');
+            $("#workMouse").hide();
+            $("#symbolBox").show();
+            $("#dateBox").hide();
+        });
+        //日期选择取消事件
+        $("#dateCancel").off('click').on('click',function () {
+            $("#dateBox").hide();
+            $("#workMouse").hide();
+        });
+        //点击日期请选择事件
+        $(".dateValue").off('click').on('click',function () {
+            $("#workMouse").show();
+        });
+        $("#workMouse dd[lay-value='custom']").off('mouseenter').on('mouseenter',function (event) {
+            $("#dateBox").show();
+        });
+        //判断鼠标移出自定义相关组件时触发事件
+        $("#workMouse").off('mouseleave').on('mouseleave',function (event) {
+            //日期选择框存在时不让选择自定义日期悬浮框消失
+            if($(".layui-laydate").length==0){
+                $("#dateBox").hide();
+                $("#workMouse").hide();
+            }
+        });
+        //        年月日切换
+        $("#workMouse").off('click').on('click','dd',function (event) {
+            var value=event.target.getAttribute('lay-value');
+            if(value=='custom')return;
+            $("#dateValue").val(event.target.innerHTML);
+            $("dd[lay-value='"+value+"']").addClass('layui-this');
+            $("dd[lay-value='"+value+"']").siblings().removeClass('layui-this');
+            $("#dateBox").hide();
+            $("#workMouse").hide();
+            $("#symbolBox").hide();
+            $("#startDate")[0].value='';
+            $("#endDate")[0].value='';
+            var startTime,endTime;
+            endTime=timeFormat(new Date());
+            startTime=value;
+            infoChange(startTime,endTime);
+        });
+    //随机排序
+    function foo(arr){
+        console.log(arr)
+        if(arr){
+            var cloneArr= arr.concat();
+            cloneArr.sort(function(n1,n2){
+                return Math.random()-0.5;
+            })
+            return cloneArr;
+        }
+
+
+    }
+    function pieMan(data, id) {
+        data = data ? data : '';
+        foo(data);
+        console.log(data)
+        var myChart = echarts.init(document.getElementById(id));
+        var option = {
+            title: {
+                show: true,
+                x: 'center',
+                y: 'center',
+                textStyle: {
+                    fontSize: '16',
+                    color: '#3BA0FF',
+                    fontWeight: 'normal'
+                }
+            },
+            grid: {
+                top: '100',
+                bottom: '20',
+                left: '15',
+                right: '15',
+            },
+            tooltip: { //提示框组件
+                trigger: 'item', //触发类型(饼状图片就是用这个)
+                formatter: "{b} : {c}%" //提示框浮层内容格式器
+            },
+            color: ['#3BA0FF', '#36CBCB', '#4ECB74', '#FAD337'], //手动设置每个图例的颜色
+            legend: {
+                icon: 'circle',
+                //right:100,  //图例组件离右边的距离
+                // orient : 'vertical',  //布局  纵向布局 图例标记居文字的左边 vertical则反之
+                // width:80,      //图行例组件的宽度,默认自适应
+                x: 'center',   //图例显示在右边
+                bottom: '2',   //图例在垂直方向上面显示居中
+                itemWidth: 10,  //图例标记的图形宽度
+                itemGap: 10,
+//                    width:"300px",
+                type: 'scroll',
+            },
+            series: [ //系列列表
+                {
+                    name: '', //系列名称
+                    type: 'pie', //类型 pie表示饼图
+                    // center: ['35%', '50%'], //设置饼的原心坐标 不设置就会默认在中心的位置
+                    // radius: ['10%', '40%'], //饼图的半径,第一项是内半径,第二项是外半径,内半径为0就是真的饼,不是环形
+
+                    radius: ['20%','50%'],
+                    itemStyle: { //图形样式
+                        normal: { //normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式，比如在鼠标悬浮或者图例联动高亮时。
+                            label: { //饼图图形上的文本标签
+                                show: true, //平常显示
+                                formatter: "{blue|{c}%} \n{b}", //提示框浮层内容格式器
+                                textStyle: {    //图例文字的样式
+                                    color: '#BABABA',  //文字颜色
+                                    fontSize: 12    //文字大小
+                                },
+                                rich: {
+                                    gray: {
+                                        color: 'BABABA'
+                                    },
+                                    blue: {
+                                        color: '#3BA0FF',
+                                        fontSize: 12, //文字大小
+                                        fontWeight: 'bold'
+                                    }
+                                }
+                            },
+                            labelLine: { //标签的视觉引导线样式
+                                show: true, //平常显示
+                                color: '#e9e9e9',
+                                length: 11,
+                                length2: 11,
+                                textStyle: { //图例文字的样式
+                                    color: '#333', //文字颜色
+                                    fontSize: 12 //文字大小
+                                }
+                            },
+                            borderWidth: 3,
+                            borderColor: '#fff'
+                        },
+                        emphasis: { //normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式，比如在鼠标悬浮或者图例联动高亮时。
+                            label: { //饼图图形上的文本标签
+                                show: true,
+                                position: 'center',
+                                textStyle: {
+                                    fontSize: '14',
+                                    fontWeight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    data: data
+                }
+            ]
+        };
+        myChart.setOption(option)
+    }
+
+    function bar(data, name, color, id) {
+        var myChart = echarts.init(document.getElementById(id));
+        var length = data.length;
+        var num;
+        num = parseFloat((21 / length) * 100);
+        var dataZoomShow = num > 100 ? false : true;
+        var lenNum=length>12?4:6;
+        if(length>12){
+            lenNum=4;
+        }else if(length>5){
+            lenNum=3;
+        }else{
+            lenNum=6;
+        }
+        console.log(lenNum,6555555);
+        var rot=length>12?60:false;
+        var option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                top: '3%',
+                left: '1',
+                right: '1',
+                bottom: '7%',
+                containLabel: true
+            },
+
+            dataZoom: [{
+                zoomLock: true, //拖动固定区域
+                type: 'inside',
+                start: 0,
+                borderColor: "#fff",
+                end: num
+            },
+                {
+                    zoomLock: true,
+                show: dataZoomShow,
+                height: 15, //组件高度
+                type: 'slider',
+                y: '90%',
+                start: 0,
+                borderColor: "#f3f3f3",
+                fillerColor: "#ddd",
+                backgroundColor: "#fff",
+                end: num,
+                dataBackground:{                        //数据阴影的样式。
+                    lineStyle:{"color":"#fff"},              //阴影的线条样式
+                    areaStyle:'#fff',              //阴影的填充样式
+                },
+            }
+            ],
+
+            // dataZoom: [{
+            //     zoomLock: true,  //拖动固定区域
+            //     type: 'slider',
+            //     show: dataZoomShow,
+            //     xAxisIndex: [0],
+            //     height: 1, //组件高度
+            //     bottom: 10,
+            //     start: 0,
+            //     end: num,
+            //     backgroundColor: color,
+            //     fillerColor: color,
+            //     borderColor: color,
+            //     showDataShadow: false,
+            //     showDetail: false,
+            //     handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+            //     handleSize: '20',
+            //     handleStyle: {
+            //         color: color
+            //     },
+            //     axisTick: {
+            //         inside: true,
+            //         alignWithLabel: true,
+            //         lineStyle: {
+            //             color: ['rgba(255,255,255,.5)'],
+            //         }
+            //     }
+            // }],
+            xAxis: {
+                type: 'category',
+                axisLine: {
+                    lineStyle: {
+                        type: 'solid',
+                        color: '#EEEEEE', //左边线的颜色
+                        width: '1' //坐标线的宽度
+                    }
+                },
+                axisLabel: {
+                    rotate: rot, //横坐标字体倾斜程度
+                    textStyle: {
+                        color: '#999999' //坐标值得具体的颜色
+
+                    },
+                    formatter: function(params) { //标签输出形式 ---请开始你的表演
+                        var index = 10;
+                        var newstr = '';
+                        for (var i = 0; i < params.length; i += index) {
+                            var tmp = params.substring(i, i + index);
+                            newstr += tmp + '\n';
+                        }
+                        if (newstr.length > lenNum)
+                            return '\n' + newstr.substring(0, lenNum) + '...';
+                        else
+                            return '\n' + newstr;
+                    }
+                },
+                data: name
+            },
+            yAxis: {
+                type: 'value',
+                axisLine: {
+                    show: false
+                },
+                axisTick: {
+                    show: false
+                },
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        type: 'dashed',
+                        color: "#E8E8E8"
+                    }
+                },
+                axisLabel: {
+                    textStyle: {
+                        color: '#999999' //坐标值得具体的颜色
+
+                    }
+                },
+                triggerEvent: true
+            },
+            series: [{
+                data: data,
+                type: 'bar',
+                color: color,
+                itemGap: 5,
+                barWidth: 40, //柱图宽度
+            }]
+        };
+        myChart.setOption(option);
+        myChart.on('mouseover', function(params) { //鼠标经过图表时候判断参数  ---请开始你的表演
+            console.log(params);
+            if (params.componentType == 'yAxis') {
+                var tt = $('#tip');
+                tt.html(params.value);
+                console.log('x=' + params.event.event.layerX + '  ---' + 'y=' + params.event.event.layerY)
+                tt.css('left', params.event.event.layerX + 10);
+                tt.css('top', params.event.event.layerY + 20);
+                console.log(tt.css('left'));
+                tt.show();
+            }
+        });
+        myChart.on('mouseout', function(params) {
+            $('#tip').hide();
+        })
+    }
+
+
+    //组织 本部
+    function organizationDataOne(beginTime,endTime) {
+        var indata = {
+            "timeType": '',
+            "orgId": orgs.join(','),
+        }
+        $.ajax({
+            url: "/api/statistics/businessWorktime/getOrgWorkTime?beginTime="+beginTime+'&endTime='+endTime+'&orgIds='+orgs.join(',')+'&requestType=bigDept',
+            type: 'get',
+            contentType: "application/json",
+            success: function(res) {
+                if (res.data) {
+                    var data = [];
+
+                    var dataRes = res.data.orgList?res.data.orgList:[];
+                    $('#departmentWorkTimeTotal').html('');
+                    $('#projectWorkTimeTotal').html('');
+                    $('#centerOfficeWorkTimeTotal').html('');
+                    $('#centerOfficeWorkTimeTotal').prev().html(res.data.orgType+'投入工时一览');
+
+
+                    if( dataRes.length!=0){
+                        $('.orgData1').html('    <div class="layui-col-space5"><div id="centerOfficeWorkTime"></div> </div><div class="layui-col-space5 pie-right" id="centerOfficeWorkTimeTable"></div>');
+                        $('.orgData2').html('   <div class="layui-col-space5 "><div id="departmentWorkTime" class="bar-block"></div> </div>    <div class="layui-col-space5" id="departmentWorkTimeTable" style="position: relative">     </div>'  );
+                        $('.orgData3').html('     <div class="layui-col-space5 "> <div id="projectWorkTime" class="bar-block"></div>  </div>  <div class="layui-col-space5" id="projectWorkTimeTable">  </div>');
+                        var con = ' <ul class="workTimeTable table-fix-col" style="float: left;" ><li>序号</li><li>'+res.data.orgType+'</li><li>工时总计（人天）</li><li>工时人均（人天）</li><li>占比</li></ul><div class="workUl workUlOrg"><div  class="table-kuang">';
+                        var num = 0;
+                        for (var i = 0; i < dataRes.length; i++) {
+                            num = num + dataRes[i].percent;
+                            var index = i + 1;
+                            var obj = {}
+                            obj.value = parseFloat(dataRes[i].percent);
+                            obj.name = dataRes[i].orgName;
+                            data.push(obj);
+                            con += ' <ul class="workTimeTable"  style="flex: 1;" id="' + dataRes[i].orgId + '" onclick="organizationDataTwo(\'' + beginTime + '\',\''+endTime+'\',\'' + dataRes[i].orgId + '\',\'' + res.data.orgType + '\')">' +
+                                ' <li>' + index + '</li> ' +
+                                '<li>' + dataRes[i].orgName + '</li>' +
+                                '<li>' + dataRes[i].workTime.toFixed(2) + '</li>' +
+                                '<li>' + dataRes[i].perAveInput + '</li>' +
+                                '<li>' + parseFloat(dataRes[i].percent) + '%</li></ul>'
+                        }
+                        con += '</div></div>';
+                        pieMan(data, 'centerOfficeWorkTime');
+                        //工时总计
+
+                        $('#centerOfficeWorkTimeTotal').html("");
+                        $('#centerOfficeWorkTimeTotal').html("工时投入总计：" + res.data.allWorkTime + "人天");
+                        $('#centerOfficeWorkTimeTable').html("");
+                        $('#centerOfficeWorkTimeTable').html(con);
+                           //如果长度多长，出现滚动条，左侧快速滑动会出现小bug
+
+                        if(dataRes.length>5)
+                        {
+
+                            $('#centerOfficeWorkTimeTable .table-fix-col').css('margin-left','-6px');
+
+                        }
+
+
+                        //如果是项目组 第二级加载自身的柱状图
+                        if(res.data.orgType.indexOf('项目组')!=-1)
+                        {
+                                $("#centerOfficeWorkTimeTable ul").removeAttr("onclick");
+                                organizationDataTwo(beginTime,endTime, orgs.join(','),res.data.orgType)
+                                $('#org-second .layui-card-header').hide();
+
+                        }
+                        else{
+                                    //    表格点击变颜色
+                                $(".table-kuang ul").click(function() {
+                                    $(this).find('li').css("color", "#55ADFF")
+                                    $(this).siblings().find('li').css("color", "#666")
+
+                                })
+                                if (dataRes.length > 0) {
+                                     organizationDataTwo(beginTime,endTime, dataRes[0].orgId,res.data.orgType)
+                                  }
+
+                        }
+
+                    } else {
+                        var con = '<p class="zwsj" style="  position: relative;top: 0;"><img src="../../assetsInfo/images/back2.png" alt=""></p>';
+                        $('#centerOfficeWorkTime').parent().parent().html(con)
+                        $('#departmentWorkTime').parent().parent().html(con)
+                        $('#projectWorkTime').parent().parent().html(con)
+
+                         if(res.data.orgType=='项目组')
+                         {
+                             $('#org-third').hide();
+                             $('#org-second .layui-card-header').hide();
+                         }
+                         else if(res.data.orgType=='部门')
+                         {
+                            $('#org-third').hide();
+                            $('#departmentWorkTimeTotal').prev().text('项目组投入工时一览');
+
+                         }
+
+                    }
+
+
+                } else {
+                    var con = '<p class="zwsj" style="  position: relative;top: 0;"><img src="../../assetsInfo/images/back2.png" alt=""></p>';
+                    $('#centerOfficeWorkTime').parent().parent().html(con)
+                    $('#departmentWorkTime').parent().parent().html(con)
+                    $('#projectWorkTime').parent().parent().html(con)
+                    // $('#centerOfficeWorkTimeTable').html("");
+
+
+
+                }
+            }
+        });
+    }
+
+    //组织 部门
+    window.organizationDataTwo=function(beginTime,endTime, orgId,orgType) {
+
+        var indata = {
+            "timeType": [],
+            "orgId": orgId,
+        }
+        $.ajax({
+            url: "/api/statistics/businessWorktime/getOrgWorkTime?beginTime="+beginTime+'&endTime='+endTime+'&orgIds='+orgId+'&requestType=dept',
+            type: 'get',
+            contentType: "application/json",
+            success: function(res) {
+                if (res.data.orgList) {
+                    var data = [];
+                    var name = [];
+                    if (res.data.orgList.length > 0) {
+                        $('#org-second').show();
+                        var myChart4 = echarts.init(document.getElementById("departmentWorkTime"));
+
+                        // if (res.data.orgList.length < 6) {
+                            var minWidthNum = 49;
+                            var paddingLeft,width,leftA;
+                            myChart4.dispose();
+                            $("#departmentWorkTime").addClass("width50");
+                            $("#departmentWorkTimeTable").addClass("width50");
+                            //处理小屏幕下5个项目时不出现滚动条
+                        if(res.data.orgList.length==5){
+                            paddingLeft='133px';
+                            width='calc(100% - 125px)';
+                            leftA='0px';
+                            $("#departmentWorkTime").css('cssText','width:calc(50% - 15px)!important;')
+                        }else{
+                            leftA='0px';
+                            paddingLeft='133px';
+                            width='calc(100% - 125px)';
+                            $("#departmentWorkTime").css({'width':'50%'})
+                        }
+                        // } else {
+                        //     var minWidthNum = 100;
+                        //     myChart4.dispose();
+                        //     $("#departmentWorkTime").addClass("width50")
+                        //     $("#departmentWorkTimeTable").addClass("width50")
+                        //     $("#departmentWorkTime").removeClass("width50")
+                        //     $("#departmentWorkTime").css("width", "100%")
+                        //     $("#departmentWorkTimeTable").removeClass("width50")
+                        //     $("#departmentWorkTimeTable").css("width", "100%")
+                        // }
+                    }else{
+                        $('#org-second').hide();
+                    }
+                    var dataRes = res.data.orgList;
+                    var con = '<ul class="workTimeTable table-fix-col" style="float: left;left:'+leftA+';"><li>序号</li> <li>'+res.data.orgType+'</li><li>工时总计（人天）</li><li>工时人均（人天）</li></ul><div class="workUl width100 " style="padding-left:'+paddingLeft+';width:'+width+'"><div  class="table-kuang">';
+                    for (var i = 0; i < dataRes.length; i++) {
+                        var index = i + 1;
+                        data.push(dataRes[i].workTime.toFixed(2));
+                        name.push(dataRes[i].orgName);
+                        con += ' <ul class="workTimeTable" style="flex: 1;" id="' + dataRes[i].orgId + '" onclick="organizationDataThree(\'' + beginTime + '\',\''+endTime+'\',\'' + dataRes[i].orgId + '\')">' +
+                            ' <li>' + index + '</li> ' +
+                            '<li>' + dataRes[i].orgName + '</li>' +
+                            '<li>' + dataRes[i].workTime.toFixed(2) + '</li>'+
+                        '<li>' + dataRes[i].perAveInput + '</li></ul>'
+                    }
+
+                    con += '</div></div>';
+
+                     if(orgType.indexOf('项目组')==-1){
+                        $('#departmentWorkTimeTotal').prev().text(res.data.orgType+"投入工时一览");
+                        $('#departmentWorkTimeTotal').html("工时投入总计：" + (parseFloat(res.data.allWorkTime) ? parseFloat(res.data.allWorkTime) : 0) + "人天");
+                        $('#departmentWorkTimeTable').html(con)
+
+                    }
+                    else{
+                            myChart4.dispose();
+                            $("#departmentWorkTime").removeClass("width50")
+                            $("#departmentWorkTime").css("width", "100%")
+                            $("#departmentWorkTimeTable").removeClass("width50")
+
+
+                    }
+
+
+                    if(orgType.indexOf('本部')!=-1)
+                    {
+
+                            if (dataRes && dataRes.length > 0) {
+                                organizationDataThree(beginTime,endTime, dataRes[0].orgId)
+                           }
+                            //    表格点击变颜色
+                            $(".table-kuang ul").click(function() {
+                                        $(this).find('li').css("color", "#55ADFF")
+                                        $(this).siblings().find('li').css("color", "#666")
+
+                            })
+                    }
+                    else{
+                        $('#org-third').hide();
+
+                    }
+                    bar(data, name, "#55ADFF", 'departmentWorkTime');
+
+
+                }
+                else {
+                    var con = '<p class="zwsj"><img src="../../assetsInfo/images/back2.png" alt=""></p>';
+                    $('#departmentWorkTime').removeClass("width50");
+                    $('#departmentWorkTimeTable').html("");
+                    $("#departmentWorkTimeTable").removeClass("width50")
+                    $('#departmentWorkTime').html(con)
+                    $('#departmentWorkTimeTotal').html('');
+                    $('#projectWorkTimeTotal').html('');
+
+                    if(res.data.orgType.indexOf('本部'==-1))    {
+                        $('#org-third').hide();
+
+                    }
+
+                }
+            }
+        });
+    };
+
+    //组织 项目
+     window.organizationDataThree=function(beginTime,endTime, orgId) {
+        var indata = {
+            "timeType": [],
+            "orgId": orgId,
+            "end": "2019-03-23",
+            "start": "2018-01-01"
+        };
+        $.ajax({
+            url: "/api/statistics/businessWorktime/getOrgWorkTime?beginTime="+beginTime+'&endTime='+endTime+'&orgIds='+orgId+'&requestType=project',
+            type: 'get',
+            contentType: "application/json",
+            success: function(res) {
+
+
+                if (res.data) {
+                    var data = [];
+                    var name = [];
+
+                    if (res.data.orgList && res.data.orgList.length > 0) {
+                        var myChart4 = echarts.init(document.getElementById("projectWorkTime"));
+
+                        if (res.data.orgList.length < 6) {
+                            var minWidthNum = 50;
+                            myChart4.dispose();
+                            $("#projectWorkTime").addClass("width50")
+                            $("#projectWorkTimeTable").addClass("width50")
+                        } else {
+                            var minWidthNum = 100;
+                            myChart4.dispose();
+                            $("#projectWorkTime").removeClass("width50")
+                            $("#projectWorkTime").css("width", "100%")
+                            $("#projectWorkTimeTable").removeClass("width50")
+                        }
+                    }
+                    var dataRes = res.data.orgList;
+                    if (dataRes && dataRes.length > 0&&res.data.orgType!='部门') {
+                        $("#org-third").show();
+                        var con = '<ul class="workTimeTable table-fix-col" style="float: left"><li>序号</li> <li>项目组</li><li>工时总计（人天）</li><li>工时人均（人天）</li></ul><div class="workUl width100 workUlOrgPro"><div  class="table-kuang">'
+                        for (var i = 0; i < dataRes.length; i++) {
+                            var index = i + 1;
+                            data.push(dataRes[i].workTime.toFixed(2));
+                            name.push(dataRes[i].orgName);
+                            con += '<ul class="workTimeTable"  style="flex: 1;">' +
+                                '<li>' + index + '</li>' +
+                                '<li>' + dataRes[i].orgName + '</li>' +
+                                '<li>' + dataRes[i].workTime.toFixed(2) + '</li>'+
+                            '<li>' + dataRes[i].perAveInput + '</li></ul>'
+                        }
+                        con += '</div></div>';
+                    } else {
+                        $("#projectWorkTimeTable").removeClass("width50");
+                        $("#org-third").hide();
+                        $('#projectWorkTime').html("");
+                        var con = '<p class="zwsj"><img src="../../assetsInfo/images/back2.png" alt=""></p>';
+                    }
+
+                    bar(data, name, "#40D56D", 'projectWorkTime');
+                    $('#projectWorkTimeTotal').html("");
+                    $('#projectWorkTimeTotal').html("工时投入总计：" + (parseFloat(res.data.allWorkTime) ? parseFloat(res.data.allWorkTime) : 0) + "人天");
+                    $('#projectWorkTimeTable').html("");
+                    $('#projectWorkTimeTable').html(con)
+
+
+
+
+                } else {
+
+
+                    var con = '<p class="zwsj"><img src="../../assetsInfo/images/back2.png" alt=""></p>';
+                    $('#projectWorkTime').html("")
+                    $('#projectWorkTimeTable').html("")
+                    $('#projectWorkTime').html(con)
+
+                }
+
+            }
+
+        });
+    }
+
+    //项目1
+    function projectDataOne(beginTime,endTime) {
+        $.ajax({
+            url: "/api/statistics/businessWorktime/getBusWorkTime?beginTime="+beginTime+'&endTime='+endTime+'&orgIds='+orgs.join(','),
+            type: 'get',
+            contentType: "application/json",
+            success: function(res) {
+
+                if (res.data.businessStatistics && res.data.businessStatistics.length > 0) {
+                    var myChart = echarts.init(document.getElementById("project_business"));
+                    var dataRes = res.data.businessStatistics;
+                    if (res.data.businessStatistics.length < 6) {
+                        var minWidthNum = "calc((50vw - 150px)/ " + dataRes.length + ")"
+                        myChart.dispose();
+                        $("#project_business").addClass("width50")
+                        $("#project_businessTable").addClass("width50")
+                    } else {
+                        var minWidthNum = "calc((100vw - 146px)/ " + dataRes.length + ")"
+                        myChart.dispose();
+                        $("#project_business").removeClass("width50")
+                        $("#project_business").css("width", "100%")
+                        $("#project_businessTable").removeClass("width50")
+                    }
+                    var data = [];
+                    var name = [];
+
+                    var con = '<ul class="workTimeTable table-fix-col" style="float: left"><li>序号</li> <li>业务</li><li>工时总计（人天）</li></ul><div class="workUl width100 workUlOrgPro"><div  class="table-kuang">';
+                    for (var i = 0; i < dataRes.length; i++) {
+                        var index = i + 1;
+                        data.push(dataRes[i].workTime.toFixed(2));
+                        name.push(dataRes[i].name);
+
+                        con += ' <ul class="workTimeTable"  style="flex: 1;" onclick="projectDataTwo(\'' + beginTime + '\',\''+endTime+'\',\'' + dataRes[i].id + '\')">' +
+                            ' <li>' + index + '</li> ' +
+                            '<li>' + dataRes[i].name + '</li>' +
+                            '<li>' + dataRes[i].workTime.toFixed(2) + '</li></ul>'
+                    }
+                    con += '</div></div>';
+                    bar(data, name, "#55ADFF", 'project_business');
+
+                    $('#project_businessTotal').html("");
+                    $('#project_businessTotal').html("工时投入总计：" + (parseFloat(res.data.businessAllWorkTime) ? parseFloat(res.data.businessAllWorkTime.toFixed(2)) : 0) + "人天");
+                    $('#project_businessTable').html("")
+                    $('#project_businessTable').html(con)
+                    if ( dataRes && dataRes.length > 0) {
+                        projectDataTwo(beginTime,endTime, dataRes[0].id)
+                    }
+                    //    表格点击变颜色
+                    $(".table-kuang ul").click(function() {
+                        $(this).find('li').css("color", "#55ADFF")
+                        $(this).siblings().find('li').css("color", "#666")
+                    })
+                } else {
+                    $('#project_businessTable').html("")
+                    $('#project_business').html("")
+
+                    var con = '<p class="zwsj"><img src="../../assetsInfo/images/back2.png" alt=""></p>';
+                    $('#project_businessTable').removeClass("width50");
+                    $('#project_departmentWorkTime').removeClass("width50");
+                    $('#project_projectWorkTime').removeClass("width50");
+
+                    $('#project_businessTotal').html("");
+                    $('#project_departmentWorkTimeTotal').html("");
+                    $('#project_projectWorkTimeTotal').html("");
+
+                    $('#project_businessTable').html(con)
+                    $('#project_projectWorkTimeTable').html("")
+                    $('#project_projectWorkTime').html("")
+                    $('#project_departmentWorkTimeTable').html("");
+                    $('#project_departmentWorkTime').html("");
+                    $('#project_departmentWorkTime').html(con);
+                    $('#project_projectWorkTimeTable').html("")
+                    $('#project_projectWorkTime').html("")
+                    $('#project_projectWorkTime').html(con)
+                }
+            }
+        });
+    }
+
+    //项目2
+
+
+     window.projectDataTwo=function(beginTime,endTime, id) {
+        $.ajax({
+            url: "/api/statistics/projectWorktime/getPBTaskWorkTimeByBusinessId?beginTime="+beginTime+'&endTime='+endTime+'&businessId='+id,
+            type: 'get',
+            contentType: "application/json",
+            success: function(res) {
+
+                if (res.data) {
+                    var data = [];
+                    var Taskdata = [];
+                    var name = [];
+                    var Taskname = [];
+                    var dataRes = res.data.projectStatistics?res.data.projectStatistics:[];
+                    var taskStatisticsData = res.data.taskStatistics? res.data.taskStatistics:[];
+                    var myChart4 = echarts.init(document.getElementById("business_task_departmentWorkTime"));
+                      if(taskStatisticsData.length>0)
+                      {
+                        if (taskStatisticsData.length < 6) {
+                                var minWidthNum = "calc((50vw - 150px)/ " + taskStatisticsData.length + ")"
+                                myChart4.dispose();
+                                $("#business_task_departmentWorkTime").addClass("width50")
+                                $("#business_task_departmentWorkTimeTable").addClass("width50")
+                            } else {
+                                var minWidthNum = "calc((100vw - 146px)/ " + taskStatisticsData.length + ")"
+                                myChart4.dispose();
+                                $("#business_task_departmentWorkTime").removeClass("width50")
+                                $("#business_task_departmentWorkTime").css("width", "100%")
+                                $("#business_task_departmentWorkTimeTable").removeClass("width50")
+                            }
+
+                            var taskCon = '<ul class="workTimeTable table-fix-col" style="float: left"><li>序号</li> <li>业务</li><li>工时总计（人天）</li></ul><div class="workUl width100 workUlOrgPro"><div  class="table-kuang">';
+                            for (var i = 0; i < taskStatisticsData.length; i++) {
+                                var index = i + 1;
+                                Taskdata.push(taskStatisticsData[i].workTime);
+                                Taskname.push(taskStatisticsData[i].name);
+                                taskCon += ' <ul class="workTimeTable"  style="flex: 1;"  id="' + taskStatisticsData[i].id + '" >' +
+                                    ' <li>' + index + '</li> ' +
+                                    '<li>' + taskStatisticsData[i].name + '</li>' +
+                                    '<li>' + taskStatisticsData[i].workTime.toFixed(2) + '</li></ul>'
+                            }
+                            taskCon += '</div></div>';
+                            $('#business_task_departmentWorkTimeTable').html(taskCon);
+                            bar(Taskdata, Taskname, "#F39800", 'business_task_departmentWorkTime');
+                            $('#business_task_departmentWorkTimeTotal').html("工时投入总计：" + (parseFloat(res.data.taskAllWorkTime) ? parseFloat(res.data.taskAllWorkTime.toFixed(2)) : 0) + "人天");
+
+
+                      }  else {
+                        $('#business_task_departmentWorkTime').html("");
+                        var con = '<p class="zwsj"><img src="../../assetsInfo/images/back2.png" alt=""></p>';
+                        $('#business_task_departmentWorkTimeTable').html("");
+
+                        $('#business_task_departmentWorkTime').removeClass("width50");
+                        $('#business_task_departmentWorkTime').html(con);
+                        $('#business_task_projectWorkTime').html("")
+                        $('#business_task_projectWorkTimeTable').html("")
+                        $('#business_task_projectWorkTimeTable').removeClass("width50");
+                        $('#business_task_departmentWorkTimeTotal').html('');
+                        $('#business_task_projectWorkTimeTable').html(con)
+                    }
+
+
+                    if (dataRes.length > 0) {
+                        if (res.data.projectStatistics.length > 0) {
+                              var myChart2 = echarts.init(document.getElementById("project_departmentWorkTime"));
+
+                            if (res.data.projectStatistics.length < 6) {
+                                var minWidthNum = "calc((50vw - 150px)/ " + dataRes.length + ")"
+                                myChart2.dispose();
+                                $("#project_departmentWorkTime").addClass("width50")
+                                $("#project_departmentWorkTimeTable").addClass("width50")
+                            } else {
+                                var minWidthNum = "calc((100vw - 146px)/ " + dataRes.length + ")"
+                                myChart2.dispose();
+                                $("#project_departmentWorkTime").removeClass("width50")
+                                $("#project_departmentWorkTime").css("width", "100%")
+                                $("#project_departmentWorkTimeTable").removeClass("width50")
+                            }
+                            var con = '<ul class="workTimeTable table-fix-col" style="float: left"><li>序号</li> <li>项目</li><li>工时总计（人天）</li></ul><div class="workUl width100 workUlOrgPro"><div  class="table-kuang">';
+                            for (var i = 0; i < dataRes.length; i++) {
+                            var index = i + 1;
+                            data.push(dataRes[i].workTime.toFixed(2));
+                            name.push(dataRes[i].name);
+                            con += ' <ul class="workTimeTable"  style="flex: 1;"  id="' + dataRes[i].id + '" onclick="projectDataThree(\'' + beginTime + '\',\''+endTime+'\',\'' + dataRes[i].id + '\')">' +
+                                ' <li>' + index + '</li> ' +
+                                '<li>' + dataRes[i].name + '</li>' +
+                                '<li>' + dataRes[i].workTime.toFixed(2) + '</li></ul>'
+                           }
+                         con += '</div></div>';
+                        }
+                        bar(data, name, "#F39800", 'project_departmentWorkTime');
+                        $('#project_departmentWorkTimeTotal').html("");
+                        $('#project_departmentWorkTimeTotal').html("工时投入总计：" + (parseFloat(res.data.projectAllWorkTime) ? parseFloat(res.data.projectAllWorkTime.toFixed(2)) : 0) + "人天");
+                        projectDataThree(beginTime,endTime, dataRes[0].id)
+                        $('#project_departmentWorkTimeTable').html("");
+                        $('#project_departmentWorkTimeTable').html(con);
+                    }else {
+                        $('#project_departmentWorkTime').html("");
+                        var con = '<p class="zwsj"><img src="../../assetsInfo/images/back2.png" alt=""></p>';
+                        $('#project_departmentWorkTimeTable').html("");
+
+                        $('#project_departmentWorkTime').removeClass("width50");
+                        $('#project_departmentWorkTime').html(con);
+                        $('#project_projectWorkTime').html("")
+                        $('#project_departmentWorkTimeTotal').html("")
+                        $('#project_projectWorkTimeTotal').html("")
+
+                        $('#project_projectWorkTimeTable').html("")
+                        $('#project_projectWorkTimeTable').removeClass("width50");
+                        $('#project_projectWorkTimeTable').html(con)
+                    }
+
+
+
+                    //    表格点击变颜色
+                    $(".table-kuang ul").click(function() {
+                        $(this).find('li').css("color", "#55ADFF")
+                        $(this).siblings().find('li').css("color", "#666")
+
+                    })
+                }else {
+                    $('#project_departmentWorkTime').html("");
+                    $('#project_departmentWorkTime').removeClass("width50");
+
+                    var con = '<p class="zwsj"><img src="../../assetsInfo/images/back2.png" alt=""></p>';
+                    $('#project_departmentWorkTimeTable').html("");
+                    $('#project_departmentWorkTime').html(con);
+                    $('#project_projectWorkTime').html("")
+                    $('#project_projectWorkTimeTable').html("")
+                    $('#project_projectWorkTimeTable').removeClass("width50");
+                    $('#project_projectWorkTimeTable').html(con)
+                }
+            }
+        });
+    }
+
+    //项目3
+     window.projectDataThree=function(beginTime,endTime, id) {
+        $.ajax({
+            url: "/api/statistics/taskWorktime/getTaskWorkTimeByProId?beginTime="+beginTime+'&endTime='+endTime+'&projectId='+id,
+            type: 'get',
+            contentType: "application/json",
+            success: function(res) {
+                if (res.data.taskStatistics.length > 0) {
+                    var myChart3 = echarts.init(document.getElementById("project_projectWorkTime"));
+                    var dataRes = res.data.taskStatistics;
+                    if (res.data.taskStatistics.length < 6) {
+                        var minWidthNum = "calc((50vw - 150px)/ " + dataRes.length + ")"
+                        myChart3.dispose();
+                        $("#project_projectWorkTime").addClass("width50")
+                        $("#project_projectWorkTimeTable").addClass("width50")
+                    } else {
+                        var minWidthNum = "calc((100vw - 146px)/ " + dataRes.length + ")"
+                        myChart3.dispose();
+                        $("#project_projectWorkTime").removeClass("width50")
+                        $("#project_projectWorkTime").css("width", "100%")
+                        $("#project_projectWorkTimeTable").removeClass("width50")
+                    }
+                }
+                if (res.ok) {
+                    var data = [];
+                    var name = [];
+
+                    var con = '<ul class="workTimeTable table-fix-col" style="float: left"><li>序号</li> <li>任务</li><li>工时总计（人天）</li></ul><div class="workUl width100 workUlOrgPro"><div  class="table-kuang">';
+                    for (var i = 0; i < dataRes.length; i++) {
+                        var index = i + 1;
+                        data.push(dataRes[i].workTime.toFixed(2));
+                        name.push(dataRes[i].name);
+                        con += ' <ul class="workTimeTable"  style="flex: 1;" id="' + dataRes[i].id + '">' +
+                            ' <li>' + index + '</li> ' +
+                            '<li>' + dataRes[i].name + '</li>' +
+                            '<li>' + dataRes[i].workTime.toFixed(2) + '</li></ul>'
+                    }
+                    con += '</div></div>';
+                    bar(data, name, "#40D56D", 'project_projectWorkTime');
+
+
+                    $('#project_projectWorkTimeTotal').html("");
+                    $('#project_projectWorkTimeTotal').html("工时投入总计：" + (parseFloat(res.data.taskAllWorkTime) ? parseFloat(res.data.taskAllWorkTime.toFixed(2)) : 0) + "人天");
+                    $('#project_projectWorkTimeTable').html("")
+                    $('#project_projectWorkTimeTable').html(con)
+                }
+            }
+        });
+    }
+
+    //人员 个人
+     window.personDataOne=function(beginTime,endTime) {
+        ShowName(userName)
+            // $.ajax({
+            // url: "/api/budget/queryWorkTime/getWorkTimeByUserId/?paramType=" + time + "&userId=" + personUsid,
+        // var indata = {
+        //     "type": time,
+        //     "userId": personUsid
+        // };
+        $.ajax({
+            url: "/api/FinWorkTimeStatistics/findUserWorkTimeDiy?beginTime="+beginTime+'&endTime='+endTime+'&userId='+personUsid,
+            type: 'get',
+            // async:false, //同步
+            contentType: "application/json",
+            success: function(res) {
+                if (res.ok) {
+
+                    if (res.data[0]) {
+                        var data = [];
+                        var dataRes = res.data[0].business;
+                        if (dataRes.length > 0) {
+                            // console.log(dataRes.length);
+                            var numData = res.data[1].allWorkTime;
+                            res.data[2].utilizationRate=(res.data[2].utilizationRate*100).toFixed(2)+'%';
+                            var con = ' <ul class="workTimeTable table-fix-col" style="float: left;margin-left: -6px;"><li>序号</li><li>业务</li><li>工时总计（人天）</li></ul><div class="workUl width100 workUlOrgPro" style="width: calc(100% - 133px);"><div  class="table-kuang">';
+                            for (var i = 0; i < dataRes.length; i++) {
+                                console.log(dataRes)
+                                //为了美观去掉综合数据平台
+                                if(dataRes[i].name!="综合数据平台"){
+                                    var item = {};
+
+                                    item.value = parseFloat(dataRes[i].percentage);
+                                    item.name = dataRes[i].name;
+                                    data.push(item);
+                                    con += ' <ul class="workTimeTable"  style="flex: 1;" id="' + dataRes[i].orgId + '">' +
+                                        ' <li>' + (i + 1) + '</li> ' +
+                                        '<li>' + dataRes[i].name + '</li>' +
+                                        '<li>' + dataRes[i].manDay + '</li>' +
+                                        '</ul>'
+                                }
+
+                            }
+
+                            con += '</div>' +
+
+                                '</div>';
+                            con += '<div class="layui-row" style="margin: 0">' +
+                                '    <div class="layui-col-md6 work-time" style="border-right:none">工作负荷</div>' +
+                                '    <div class="layui-col-md6 work-time">'+res.data[2].utilizationRate+'</div>' +
+                                '</div>';
+                        } else {
+                            con = '<p class="zwsj" style="text-align: left;top: 20px;"><img src="../../assetsInfo/images/back2.png" alt="" ></p>';
+                        }
+                    }else {
+                        $('#person_centerOfficeWorkTimeTableTotal').html("");
+
+                        con = '<p class="zwsj" style="text-align: left;top: 20px;"><img src="../../assetsInfo/images/back2.png" alt="" ></p>';
+                    }
+                    pieMan(data, 'person_centerOfficeWorkTime');
+                    $('#person_centerOfficeWorkTimeTable').html("");
+                    $('#person_centerOfficeWorkTimeTable').html(con);
+                    $('#person_centerOfficeWorkTimeTableTotal').html("工时投入总计：" + (parseFloat(numData) ? parseFloat(numData) : 0) + "人天");
+                }
+            }
+        });
+    }
+
+    function ShowName(name) {
+        console.log(name)
+        var nameStr = name ? name : userName
+        console.log(nameStr)
+        $("#userName").html("姓名：" + nameStr)
+    }
+
+
+    $(function() {
+        $("dd[lay-value='year']").addClass('layui-this');
+        $("dd[lay-value='year']").siblings().removeClass('layui-this');
+        $("#dateValue").val('本年');
+        $("#startDate")[0].value='';
+        $("#endDate")[0].value='';
+        var endTime,startTime;
+        endTime=timeFormat(new Date());
+        startTime='year';
+        organizationDataOne(startTime,endTime)
+    })
+});
+
+</script>

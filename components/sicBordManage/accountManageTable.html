@@ -1,0 +1,268 @@
+<style>
+    body {
+        background-color: #fff;
+    }
+
+    html {
+        background-color: #fff !important;
+    }
+
+    .btn-width {
+        width: 90px;
+    }
+
+    .layui-table-view .layui-form-radio>i {
+        margin: 15px 0px !important;
+
+    }
+
+    .layui-col-space15>* {
+        padding: 0px !important;
+        margin: 0 !important;
+    }
+
+    .layui-col-space15 {
+        margin: 0px !important;
+    }
+
+    /* .accountManage .layui-table-box {
+        height: 90% !important;
+    } */
+
+    .accountManage .layui-table-body {
+        height: 80% !important;
+    }
+
+    .layui-table-box {
+        border-left: 1px solid #e6e6e6;
+        border-right: 1px solid #e6e6e6;
+        border-bottom: 1px solid #e6e6e6;
+        margin-bottom: 6px;
+    }
+
+    /* .accountManage .layui-form.layui-border-box.layui-table-view {
+        height: 490px !important;
+    } */
+
+    .accountManage .layui-form-item .layui-inline {
+        margin-right: 0px;
+    }
+
+    .layui-table-page .layui-laypage .layui-laypage-curr .layui-laypage-em {
+        background-color: transparent;
+        border: 1px solid #37ABFF;
+        box-sizing: border-box;
+    }
+
+    .layui-laypage .layui-laypage-curr em {
+        position: relative;
+        color: #37ABFF !important;
+    }
+
+    .layui-table-page .layui-laypage {
+        display: block;
+        text-align: right;
+    }
+
+    .layui-btn-sm {
+        font-size: 14px !important;
+        line-height: 26px !important;
+        height: 28px !important;
+        background: #fff !important;
+        color: #000 !important;
+        border: 1px solid #e3e3e3 !important;
+    }
+
+    .layui-input,
+    .layui-select {
+        height: 30px !important;
+        line-height: 28px !important;
+        margin-top: 4px;
+    }
+
+    .card-show-list {
+        padding: 15px !important;
+    }
+
+    .layui-laypage-limits {
+        position: absolute;
+        left: 10px;
+    }
+
+    .layui-laypage-count {
+        position: absolute;
+        left: 100px;
+    }
+
+    .layui-form-radio>i:hover,
+    .layui-form-radioed>i {
+        color: #37ABFF !important;
+    }
+
+    .layui-form.layui-border-box.layui-table-view {
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+    }
+
+    /* .layui-table-view {
+        height: 482px !important;
+    } */
+
+    .layui-table-page,
+    .layui-table-total {
+        border: none !important;
+    }
+
+    .layui-table-view .layui-table td,
+    .layui-table-view .layui-table th {
+        padding: 1px 0px !important;
+    }
+
+
+
+    /* .layui-table-cell {
+        height: auto !important;
+    } */
+</style>
+
+<div class="layui-row layui-col-space15 surveyManage">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+
+        <div class="layui-inline">
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width:auto;">科研项目ID:</label>
+                <div class="layui-inline" style="margin-left:-10px">
+                    <input type="text" id="researchProjectIdX" placeholder="输入科研项目ID" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width:auto;">项目名称:</label>
+                <div class="layui-inline" style="margin-left:-10px">
+                    <input type="text" id="projectNameX" placeholder="输入项目名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <button id="btn_search_user" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit title="查询"> <i
+                        class="layui-icon layui-icon-search"></i>查询</button>
+            </div>
+            <div class="layui-inline">
+                <button id="btn_reset_user" class="layui-btn layui-btn-sm layui-btn-primary" lay-submit
+                    title="重置">重置</button>
+            </div>
+        </div>
+        <table id="tableContent-form" lay-filter="tableContent-form"></table>
+
+    </div>
+</div>
+<link rel="stylesheet" href="../../assetsInfo/libs/layui/css/layui.css" />
+<link rel="stylesheet" href="../../assetsInfo/css/admin.css" />
+<script type="text/javascript" src="../../assetsInfo/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../assetsInfo/libs/jquery-1.12.4.min.js"></script>
+<script>
+    var tableDate;
+    layui.use(['table'], function () {
+        var table = layui.table,
+            form = layui.form,
+            admin = layui.admin,
+            layer = layui.layer;
+
+        //  var heightTable = $(document).height() - 140;
+        // 渲染表格
+        var renderTable = function (search) {
+            if (!search) {
+                search = {};
+            }
+            table.render({
+                elem: '#tableContent-form',
+                id: 'tableContent-form',
+                url: '/api/research/researchProject/page',
+                parseData: function (res) {
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                height: '384px',
+                cols: [
+                    [{
+                            type: 'radio'
+                        },
+                        {
+                            field: 'researchProjectId',
+                            title: '科研项目ID',
+                            align: 'center',
+                            templet: function (d) {
+                                var text = d.researchProjectId ? d.researchProjectId : "";
+                                return '<div title="' + text + '"><span>' + text +
+                                    '</span></div>'
+                            }
+                        },
+                        {
+                            field: 'projectName',
+                            title: '项目名称',
+                            align: 'center',
+                            width: 400,
+                            templet: function (d) {
+                                var text = d.projectName ? d.projectName : "";
+                                return '<div title="' + text + '"><span>' + text +
+                                    '</span></div>'
+                            }
+                        },
+                        {
+                            field: 'projectNo',
+                            title: '项目编号',
+                            align: 'center'
+                        },
+                    ]
+                ],
+                cellMinWidth: 120,
+                page: {
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                },
+                request: {
+                    page: 'pageNo',
+                    limitName: 'pageSize'
+                },
+                where: search,
+                done: function (res, curr, count) {
+                    if (curr > 1 && res.data.length == 0) {
+                        var pageValue = curr - 1;
+                        table.reload('tableContent-form', {
+                            page: {
+                                curr: pageValue
+                            }, // 修改页码
+                        });
+                    }
+                }
+            });
+            $('#btn_search_user').off('click').on('click', function () {
+                var data = {};
+                if ($('#researchProjectIdX').val()) {
+                    data.researchProjectId = $('#researchProjectIdX').val()
+                }
+                if ($('#projectNameX').val()) {
+                    data.projectName = $('#projectNameX').val()
+                }
+                renderTable(data);
+            });
+            $('#btn_reset_user').off('click').on('click', function () {
+
+                $('#researchProjectIdX').val('');
+                $('#projectNameX').val('');
+                renderTable();
+            });
+            table.on('radio(tableContent-form)', function (obj) {
+                tableDate = table.checkStatus('tableContent-form').data
+            });
+        };
+
+        renderTable();
+    });
+    var callbackdata = function () {
+        return tableDate;
+    }
+</script>

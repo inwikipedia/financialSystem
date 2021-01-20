@@ -1,0 +1,232 @@
+<!-- zTree 样式 -->
+<link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/metroStyle.css">
+<style>
+    #btn-export {
+        margin-left: 10px;
+    }
+
+    .ztree li span.button.chk.checkbox_false_disable {
+        display: none;
+    }
+
+    .work-search-input {
+        /*height:20px;*/
+        /*padding:3px 6px;*/
+        float: left;
+        width: 100px;
+    }
+
+    .work-search-label {
+        width: auto;
+        padding-left: 0px;
+        padding-right: 2px;
+    }
+
+    .rili {
+        background: url('../../assetsInfo/images/rili.jpg') no-repeat right center;
+        background-position: 95%;
+        background-size: 25px 21px;
+    }
+</style>
+<div class="layui-row layui-col-space15">
+    <!-- 单列普通表格 -->
+    <div class="layui-col-md12">
+        <div class="layui-card p-main">
+            <div class="layui-card-header" style="height: 0px"></div>
+            <!-- 卡片容器 -->
+            <div class="layui-card-body">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class=" table-top-bar">
+                        <div>
+                            <div class="layui-inline layui-form-item"
+                                 style="width: 100%;border-bottom:1px solid #e5e5e5;margin-bottom: 0px;padding-bottom: 15px">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label work-search-label">源用户：</label>
+                                    <input type="text" placeholder="请输入"
+                                           id="originUserName"
+                                           class=" work-search-input layui-input">
+                                </div>
+                                <button class="layui-btn layui-btn-sm layui-btn-normal"
+                                        style="margin-left: 0px;background-color: #239FFF;color: #fff"
+                                        id="btn-daily-search">
+                                    <img src="../../assetsInfo/images/chaxun.png" style=" width: 16px">
+                                    查询
+                                </button>
+                                <button class="layui-btn layui-btn-sm layui-btn-danger"
+                                        style="margin-left: 10px;" id="btn-daily-reset">
+                                    <img src="../../assetsInfo/images/reset.png" style="position: relative;top: -1px;">
+                                    重置
+                                </button>
+                                <button class="layui-btn layui-btn-sm layui-btn-danger"
+                                        style="float: right;background-color: #239FFF;color: #fff" id="btn-create">
+                                    新建
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 下部表格容器 -->
+                <table id="tableContent-project" lay-filter="tableContent-project"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="barTool">
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-edit">编辑</button>
+    <button class="layui-btn layui-btn-normal layui-btn-xs otherBtn" lay-event="btn-del">删除</button>
+</script>
+<script>
+    layui.use(['laydate', 'table', 'upload', 'formSelects'], function () {
+        var table = layui.table,
+            form = layui.form,
+            upload = layui.upload,
+            formSelects = layui.formSelects,
+            laydate = layui.laydate,
+            tools = layui.tools,
+            config = layui.config,
+            admin = layui.admin;
+        // 渲染左侧表格
+        var renderTable = function (search) {
+            if (!search) {
+                search = {};
+            }
+            search.configType = '0';
+            // 渲染表格
+            table.render({
+                elem: '#tableContent-project',
+                id: 'tableContent-project',
+                url: admin.formatUrl('/api/smallprogram/scheudlePermission/page'),
+                // 格式化后台返回的数据
+                parseData: function (res) { //res 即为原始返回的数据
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "count": res.data.count,
+                        "msg": res.message, //解析提示文本
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                request: {
+                    pageName: 'page',
+                    limitName: 'pageSize'
+                },
+                cols: [
+                    [{
+                        type: 'numbers',
+                        title: '序号',
+                        fixed: 'left'
+                    }, {
+                        field: 'originUserName',
+                        title: '源用户',
+                        width: 100,
+                        align: 'center'
+                    }, {
+                        field: 'destUserName',
+                        title: '目标用户',
+                        align: 'center',
+                        templet: function(d) {
+                            return '<div title="'+d.destUserName+'">'+d.destUserName+'</div>';
+                        }
+                    }, {
+                        field: 'maintenancePersonName',
+                        title: '维护用户',
+                        align: 'center',
+                        templet: function(d) {
+                            var maintenancePersonName = d.maintenancePersonName;
+                            if(!d.maintenancePersonName){
+                                maintenancePersonName = "";
+                            }
+                            return '<div title="'+maintenancePersonName+'">'+maintenancePersonName+'</div>';
+                        }
+                    },{
+                        title: '操作',
+                        align: 'center',
+                        toolbar: '#barTool',
+                        width: 163
+                    }
+                    ]
+                ],
+                page: true,
+                limit: 15, //显示的数量
+                limits: [10, 15, 20, 25, 30],
+                cellMinWidth: 90,
+                where: search
+            });
+        }
+        renderTable();
+        $("#btn-daily-search").off("click").on("click",function () {
+            var obj={
+                "originUserName":$("#originUserName").val()
+            };
+            renderTable(obj);
+        });
+        $("#btn-daily-reset").off("click").on("click",function () {
+            $("#originUserName").val('');
+            renderTable();
+        });
+        table.on('tool(tableContent-project)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'btn-edit') {
+                admin.popupCenter({
+                    title: '编辑',
+                    area: ['652px', '330px'],
+                    path: 'components/smallProject/smallCreate.html',
+                    finish: function(data) {
+
+                        if(data){
+                            table.reload("tableContent-project");
+                        }
+                    },
+                    success: function () {
+                        smallInit(data);
+                    }
+                });
+            }else if( obj.event === 'btn-del'){
+                layer.confirm("是否确定删除:" + data.originUserName,{
+                    btn: ['是','否']},function (index) {
+                    $.ajax({
+                        url: "/api/smallprogram/scheudlePermission/"+data.id,
+                        type: 'delete',
+                        // contentType: "application/json",
+                        success: function (res) {
+                            if(res.ok){
+                                layer.msg('删除成功！', {
+                                    icon: 1
+                                });
+                                table.reload('tableContent-project');
+                            }else{
+                                layer.msg(res.message, {
+                                    icon: 5
+                                });
+                            }
+                        }
+                    })
+
+                },function (index) {
+                    layer.close(index);
+                });
+            }
+        })
+        $('#btn-create').off("click").on('click', function () {
+            admin.popupCenter({
+                type:2,
+                title: '新建',
+                area: ['652px', '330px'],
+                path: 'components/smallProject/smallCreate.html',
+                finish: function(data) {
+
+                    if(data){
+                        table.reload("tableContent-project");
+                    }
+                },
+                success: function () {
+                    smallInit();
+                }
+            });
+        });
+    });
+</script>

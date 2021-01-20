@@ -1,0 +1,2594 @@
+<style>
+    *{
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    .sciBoardMain{
+        background-image: url(/assetsInfo/images/sciImg/mainBg.png);
+        background-size: 100% 100%;
+        box-sizing: border-box;
+        padding: 0 15px 10px 15px;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+    .sciBoardMain .bordHeader{
+        position: relative;
+        height: 53px;
+    }
+    .sciBoardMain .bordHeader .headerTime{
+        font-size:12px;
+        font-family:Microsoft YaHei;
+        font-weight:bold;
+        color:rgba(84,245,255,1);
+        position: absolute;
+        bottom:0px;
+    }
+    .sciBoardMain .bordHeader .headerTab{
+        font-size:14px;
+        font-family:Source Han Sans CN;
+        font-weight:500;
+        color:rgba(69,218,255,1);
+        position: absolute;
+        right: 0;
+        bottom: 0px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+    .sciBoardMain .bordHeader .headerTab .tabClass{
+        color:#429cd1;
+        background:rgba(33,164,255,0);
+        font-size:14px;
+        font-family:Source Han Sans CN;
+        border:1px solid #174885;
+        width: 64px;
+        text-align: center;
+    }
+    .sciBoardMain .bordHeader .headerTab .tabActive{
+        color:#afe5ff;
+        border:1px solid #156d88;
+    }
+    .sciBoardMain .bordHeader .mainAllImg{
+        width: 21px;
+        height: 21px;
+    }
+    .sciBoardMain .bordHeader .mainAll{
+        display: flex;
+    }
+    .sciBoardMain .bordContent{
+        height: calc(100% - 53px);
+    }
+    .sciBoardMain .bordContent .bordTabTitle{
+        margin-top: 5px;
+        height: calc(41% - 5px);
+        display: flex;
+    }
+    .sciBoardMain .bordContent .bordTabTitle .bordTabBox{
+
+    }
+    .sciBoardMain .bordContent .bordTabTitle .amountTitle{
+        flex:1.33;
+        margin-right: 5px;
+    }
+    .sciBoardMain .amountTitle .item{
+        height:calc(26% - 2px);
+        /*margin-top:2px;*/
+        width:100%;
+        background-size: 100% 100%;
+    }
+    .sciBoardMain .amountTitle .item1{
+        background-image: url(/assetsInfo/images/sciImg/item1.png);
+    }
+    .sciBoardMain .amountTitle .item2{
+        background-image: url(/assetsInfo/images/sciImg/item2.png);
+    }
+    .sciBoardMain .amountTitle .item3{
+        background-image: url(/assetsInfo/images/sciImg/item3.png);
+    }
+    .sciBoardMain .amountTitle .item4{
+        background-image: url(/assetsInfo/images/sciImg/item4.png);
+    }
+    .sciBoardMain .amountTitle .item:nth-child(1){
+        margin-top:0
+    }
+    .sciBoardMain .amountTitle .item .sort{
+        display: block;
+        float: left;
+        margin-left:11px;
+        /*height:4.5vh;*/
+        /*width:4.5vh;*/
+        margin-top:1.13vh;
+    }
+    .sciBoardMain .name{
+        float: left;
+        /*line-height: 6.8vh;*/
+        margin-left:90px;
+        font-size:14px;
+        font-family:Microsoft YaHei;
+        font-weight:400;
+        color:#9FE8FD;
+        /*line-height:64px;*/
+        display: flex;
+        height: 100%;
+        align-items: center;
+    }
+    .sciBoardMain .jia{
+        float: right;
+        margin:0 27px 0 10px;
+        /*line-height: 6.8vh;*/
+        font-size:14px;
+        font-family:Microsoft YaHei;
+        font-weight:400;
+        color:rgba(160,216,255,1);
+        display: flex;
+        height: 100%;
+        align-items: center;
+        /*line-height:64px;*/
+    }
+    .sciBoardMain .num{
+        float: right;
+        font-size:19px;
+        font-family:Microsoft YaHei;
+        font-weight:bold;
+        color:#EFDB56;
+        display: flex;
+        height: 100%;
+        align-items: center;
+        /*line-height:64px;*/
+    }
+    .sciBoardMain .num2{
+        color:#01E0E0;
+    }
+    .sciBoardMain .num3{
+        color:#E16CEF;
+    }
+    .sciBoardMain .num4{
+        color:#7CADFF;
+    }
+    .sciBoardMain .bordContent .bordTabTitle .quotaCanvas{
+        flex: 4;
+        background-size: 100% 100%;
+        background-image: url(/assetsInfo/images/sciImg/quotaCanvas.png);
+        position: relative;
+    }
+    .sciBoardMain .bordContent .quotaCanvas .quotaTitle{
+        position: absolute;
+        font-size:16px;
+        font-family:Source Han Sans CN;
+        font-weight:500;
+        color:rgba(159,232,253,1);
+        line-height: 48px;
+        margin-left: 24px;
+    }
+    .allImg{
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        cursor: pointer;
+        z-index: 9999;
+    }
+    .sciBoardMain .bordContent .bordCanvas{
+        margin-top: 10px;
+        height: calc(59% - 10px);
+        width: 100%;
+    }
+    .sciBoardMain .bordContent .bordCanvas .canvasTop{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: calc(50% - 5px);
+    }
+    .sciBoardMain .bordContent .bordCanvas .canvasTop:last-child{
+        margin-top: 10px;
+    }
+    .sciBoardMain .bordContent .bordCanvas .canvasItem{
+        flex: 1;
+        margin-right: 10px;
+        background-size: 100% 100%;
+        background-image: url(/assetsInfo/images/sciImg/canvasItem.png);
+        position: relative;
+    }
+    .sciBoardMain .bordContent .bordCanvas  .canvasItem2{
+        background-image: url(/assetsInfo/images/sciImg/canvasItem2.png);
+    }
+    .sciBoardMain .bordContent .bordCanvas .canvasItem:last-child{
+        margin-right: 0px;
+    }
+    .sciBoardMain .bordContent .bordCanvas .canvasItem .canvasItem-Title{
+        position: absolute;
+        font-size:16px;
+        font-family:Source Han Sans CN;
+        font-weight:500;
+        color:rgba(159,232,253,1);
+        line-height: 36px;
+        margin-left: 15px;
+    }
+    .canvas-box{
+        width: 100%;
+        height: 100%;
+    }
+    .lineHeight44{
+        line-height: 44px !important;
+    }
+    .lineHeight55{
+        line-height: 55px !important;
+    }
+    .lineHeight63{
+        line-height: 63px !important;
+    }
+    .lineHeight78{
+        line-height: 78px !important;
+    }
+    .lineHeight76{
+        line-height: 76px !important;
+    }
+    .lineHeight108{
+        line-height: 108px !important;
+    }
+    .allLayer{
+        height: 100%;
+        background-size: 100% 100%;
+        background-image: url(/assetsInfo/images/sciImg/layerBg.png);
+        position: relative;
+    }
+    .allLayer .canvasItem-Title{
+        position: absolute;
+        font-size:19px;
+        font-family:Source Han Sans CN;
+        font-weight:500;
+        color:rgba(159,232,253,1);
+        line-height: 66px;
+        margin-left: 23px;
+    }
+    .allLayer .closeImg{
+        right: 25px;
+        top:25px;
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        cursor: pointer;
+        z-index: 9999;
+    }
+    .btnImg{
+        position: absolute;
+        width: 35px;
+        top: calc(50% - 60px);
+        cursor: pointer;
+    }
+    .zuoImg{
+        left:-35px;
+    }
+    .youImg{
+        right:-35px;
+    }
+    .layui-layer-page .layui-layer-content{
+        overflow: visible !important;
+    }
+    .allLayer .canvas-box{
+        height: 100%;
+    }
+    .allLayer .height80{
+        height: 80%;
+    }
+    .allLayer .height90{
+        height: 90%;
+    }
+    .allLayer .check-box{
+        height: 20%;
+        display: flex;
+        flex-direction: row;
+        padding: 30px;
+        display: none;
+    }
+    .allLayer .layui-form-checkbox[lay-skin=primary] span{
+        color:#5CABFC;
+        font-size: 14px;
+    }
+    .allLayer .check-box .layui-form-item{
+        height: 25px;
+        margin-left: 15px;
+    }
+    /* 预警 轮播图 */
+
+    .swiper-slide {
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+    }
+
+    .gallery-thumbs {
+        height: 10%;
+        box-sizing: border-box;
+        padding: 10px 0;
+    }
+    .gallery-thumbs .swiper-slide ,.gallery-thumbs1 .swiper-slide{
+        width: 25%;
+        height: 100%;
+        color: #A9C7FF;
+    }
+
+    .gallery-thumbs .swiper-slide-thumb-active {
+        opacity: 1;
+    }
+    .swiperButton{
+        width: 14px;
+        height: 14px;
+        position: absolute;
+        top: 0px;
+    }
+    .swiper-wrapper{
+        top: 8px;
+    }
+    .swiper-slide-active{
+        color: rgba(92,171,252,1) !important;
+    }
+
+    .swiper-pagination-bullet-active{
+        background-color: #F07C49 !important;
+    }
+    .swiper-container{
+        --swiper-theme-color: #ff6600;
+        --swiper-pagination-color: rgba(169,199,255,1);/* 两种都可以 */
+    }
+    .gThumbs{
+        font-size:8px;
+        height: 16px;
+        line-height: 16px;
+    }
+    .swiper-pagination{
+        top:2px;
+    }
+
+
+    @media screen and (min-width: 1920px) {
+        .allLayer .layui-form-checkbox[lay-skin=primary] span{
+            font-size: 18px;
+        }
+        .btnImg{
+            position: absolute;
+            width: 50px;
+            top: calc(50% - 60px);
+            cursor: pointer;
+        }
+        .zuoImg{
+            left:-50px;
+        }
+        .youImg{
+            right:-50px;
+        }
+        .allLayer .canvasItem-Title{
+            font-size:25px;
+            line-height: 98px;
+            margin-left: 16px;
+        }
+        .sciBoardMain .bordHeader{
+            height: 72px;
+        }
+        .sciBoardMain .bordContent{
+            height: calc(100% - 72px);
+        }
+        .sciBoardMain .bordHeader .headerTime{
+            font-size: 16px;
+        }
+        .sciBoardMain .bordHeader .headerTab{
+            font-size: 18px;
+        }
+        .sciBoardMain .bordHeader .headerTab .tabClass{
+            font-size: 18px;
+            width: 90px;
+        }
+        .sciBoardMain .bordHeader .mainAllImg{
+            width: 24px;
+            height: 24px;
+        }
+        .sciBoardMain .name{
+            margin-left: 110px;
+            font-size: 20px;
+        }
+        .sciBoardMain .num{
+            font-size: 24px;
+        }
+        .sciBoardMain .jia{
+            font-size: 20px;
+        }
+        .sciBoardMain .bordContent .quotaCanvas .quotaTitle{
+            line-height: 68px;
+            margin-left: 50px;
+            font-size: 20px;
+        }
+        .sciBoardMain .bordContent .bordCanvas .canvasItem .canvasItem-Title{
+            line-height: 56px;
+            margin-left: 32px;
+            font-size: 20px;
+        }
+        .allImg , .allLayer .closeImg{
+            width: 30px;
+            height: 30px;
+        }
+    }
+</style>
+
+<meta charset="utf-8" />
+<title>中汽数据科研数据看板</title>
+<!-- Favorites Icon Start -->
+<link rel="shortcut icon" href="../../favicon.ico">
+<link rel="icon" href="../../favicon.ico">
+<!-- Favorites Icon End -->
+
+<!-- CSS Links -->
+<link rel="stylesheet" href="/assetsInfo/libs/layui/css/layui.css" />
+<link rel="stylesheet" href="/assetsInfo/css/admin.css" />
+<link rel="stylesheet" href="/assetsInfo/css/LayValidator.css" />
+<link rel="stylesheet" href="/assetsInfo/css/theme.css" />
+<link rel="stylesheet" href="/assetsInfo/libs/swiper-6.1.1/swiper-bundle.min.css">
+
+<div class="sciBoardMain">
+    <div class="bordHeader">
+        <div class="headerTime"></div>
+        <!--<div class="headerTitle">-->
+            <!--<span style="margin-left: 16px;">中汽数据科研数据看板</span>-->
+        <!--</div>-->
+        <div class="headerTab">
+            <div class="tabClass guobo-btn tabActive" data-type="1">国拨经费</div>
+            <div class="tabClass zichou-btn" data-type="2">自筹经费</div>
+            <div class="tabClass zong-btn" data-type="3">总经费</div>
+            <div class="mainAll" id="mainAll-btn">
+                <img  src="/assetsInfo/images/sciImg/mainAll.png" class="mainAllImg">
+                <div style="display: inline-block">全屏</div>
+            </div>
+        </div>
+
+    </div>
+    <div class="bordContent">
+        <div class="bordTabTitle">
+            <div class="bordTabBox amountTitle">
+                <div class="item item1">
+                    <!--<img class="sort" src="/assetsInfo/images/comImg/gongsi1.png" style="width:21px;height:21px;" />-->
+                    <div class="name" id="bottom_right_name1">科研经费总额</div>
+                    <div class="jia">万元</div>
+                    <div class="num">
+                        <div id="allFunds" class="dw_right"></div>
+                    </div>
+                </div>
+                <div class="item item2">
+                    <!--<img class="sort" src="/assetsInfo/images/comImg/gongsi1.png" style="width:21px;height:21px;" />-->
+                    <div class="name" id="bottom_right_name2">国拨经费总额</div>
+                    <div class="jia">万元</div>
+                    <div class="num num2">
+                        <div id="nationFunds" class="dw_right"></div>
+                    </div>
+                </div>
+                <div class="item item3">
+                    <!--<img class="sort" src="/assetsInfo/images/comImg/gongsi1.png" style="width:21px;height:21px;" />-->
+                    <div class="name" id="bottom_right_name3">自筹经费总额</div>
+                    <div class="jia">万元</div>
+                    <div class="num num3">
+                        <div id="selfFunds" class="dw_right"></div>
+                    </div>
+                </div>
+                <div class="item item4">
+                    <!--<img class="sort" src="/assetsInfo/images/comImg/gongsi1.png" style="width:21px;height:21px;" />-->
+                    <div class="name" id="bottom_right_name4">课题总数</div>
+                    <div class="jia">个</div>
+                    <div class="num num4">
+                        <div id="projectNum" class="dw_right"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bordTabBox quotaCanvas">
+                <div class="quotaTitle">
+                    <div class="quotaHeader canvasItem-Header">科研经费月度使用情况一览</div>
+                </div>
+                <img class="allImg" data-index="1" src="/assetsInfo/images/sciImg/quanping.png" />
+                <div class="canvas-box" id="canvas-box1">
+
+                </div>
+            </div>
+        </div>
+        <div class="bordCanvas">
+            <div class="canvasTop">
+                <div class="canvasItem">
+                    <div class="canvasItem-Title">
+                        <div class="canvasItem-Header changeTitle">科研经费拨付详情</div>
+                    </div>
+                    <img class="allImg" data-index="2" src="/assetsInfo/images/sciImg/quanping.png" />
+                    <div class="canvas-box" id="canvas-box2">
+
+                    </div>
+                </div>
+                <div class="canvasItem">
+                    <div class="canvasItem-Title">
+                        <div class="canvasItem-Header">科研经费使用情况</div>
+                    </div>
+                    <img class="allImg" data-index="3" src="/assetsInfo/images/sciImg/quanping.png" />
+                    <div class="canvas-box" id="canvas-box3">
+
+                    </div>
+                </div>
+                <div class="canvasItem">
+                    <div class="canvasItem-Title">
+                        <div class="canvasItem-Header">各部门科研经费详情</div>
+                    </div>
+                    <img class="allImg" data-index="4" src="/assetsInfo/images/sciImg/quanping.png" />
+                    <div class="canvas-box" id="canvas-box4">
+
+                    </div>
+                </div>
+                <div class="canvasItem canvasItem2">
+                    <div class="canvasItem-Title">
+                        <div class="canvasItem-Header">各部门科研经费申请分布</div>
+                    </div>
+                    <img class="allImg" data-index="5" src="/assetsInfo/images/sciImg/quanping.png" />
+                    <div class="canvas-box" id="canvas-box5">
+
+                    </div>
+                </div>
+            </div>
+            <div class="canvasTop">
+                <div class="canvasItem">
+                    <div class="canvasItem-Title">
+                        <div class="canvasItem-Header">重点课题排名</div>
+                    </div>
+                    <img class="allImg" data-index="6" src="/assetsInfo/images/sciImg/quanping.png" />
+                    <div class="canvas-box" id="canvas-box6">
+
+                    </div>
+                </div>
+                <div class="canvasItem">
+                    <div class="canvasItem-Title">
+                        <div class="canvasItem-Header">课题预警</div>
+                    </div>
+                    <img class="allImg" data-index="7" src="/assetsInfo/images/sciImg/quanping.png" />
+                    <div class="scanvas-box">
+                        <div class="canvas-box" id="canvas-box7" style="height:80%;top:10px; "></div>
+                        <div class="swiper-container gallery-thumbs" style="height: 20%;">
+                            <div class="swiper-wrapper" id="swiper-thumbs">
+                            </div>
+                            <img class="swiperButton" id="startSwiper" style="left: 30%; display: none; " src="/assetsInfo/images/sciImg/start.png" />
+                            <img class="swiperButton" id="stopSwiper" style="left: 30%; display: none;" src="/assetsInfo/images/sciImg/suspend.png" />
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                  <!--  <div class="canvas-box" id="canvas-box7">
+
+                    </div>-->
+                </div>
+                <div class="canvasItem">
+                    <div class="canvasItem-Title">
+                        <div class="canvasItem-Header">科研经费历史趋势</div>
+                    </div>
+                    <img class="allImg" data-index="8" src="/assetsInfo/images/sciImg/quanping.png" />
+                    <div class="canvas-box" id="canvas-box8">
+
+                    </div>
+                </div>
+                <div class="canvasItem canvasItem2">
+                    <div class="canvasItem-Title">
+                        <div class="canvasItem-Header">课题申请数量历史趋势</div>
+                    </div>
+                    <img class="allImg" data-index="9" src="/assetsInfo/images/sciImg/quanping.png" />
+                    <div class="canvas-box" id="canvas-box9">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="allLayer layui-form" style="display: none">
+    <div class="canvasItem-Title">
+        <div class="canvasItem-Header">课题申请数量历史趋势</div>
+    </div>
+    <img class="closeImg" src="/assetsInfo/images/sciImg/close.png" />
+    <div class="canvas-box" id="canvasLayer">
+
+    </div>
+    <div class="swiper-container gallery-thumbs1" style="height: 10%;">
+        <div class="swiper-wrapper" id="swiper-thumbs1">
+        </div>
+        <img class="swiperButton" id="startSwiper1" style="left: 30%; display: none; " src="/assetsInfo/images/sciImg/start.png" />
+        <img class="swiperButton" id="stopSwiper1" style="left: 30%; display: none;" src="/assetsInfo/images/sciImg/suspend.png" />
+        <div class="swiper-pagination"></div>
+    </div>
+    <div class="check-box">
+        <div class="layui-form-item ">
+            <input type="checkbox" title="写作" lay-filter="checkboxDept" lay-skin="primary" checked="">
+        </div>
+        <div class="layui-form-item ">
+            <input type="checkbox" title="写作" lay-skin="primary" checked="">
+        </div>
+        <div class="layui-form-item ">
+            <input type="checkbox" title="写作" lay-skin="primary" checked="">
+        </div>
+        <div class="layui-form-item ">
+            <input type="checkbox" title="写作" lay-skin="primary" checked="">
+        </div>
+        <div class="layui-form-item ">
+            <input type="checkbox" title="写作" lay-skin="primary" checked="">
+        </div>
+        <div class="layui-form-item ">
+            <input type="checkbox" title="写作" lay-skin="primary" checked="">
+        </div>
+    </div>
+    <img class="btnImg zuoImg" src="/assetsInfo/images/sciImg/zuo.png" />
+    <img class="btnImg youImg" src="/assetsInfo/images/sciImg/you.png" />
+</div>
+<!-- jQuery 1.x 版本兼容 IE8 -->
+<script type="text/javascript" src="/assetsInfo/libs/jquery-1.12.4.min.js"></script>
+<!-- Q.js 轻量路由框架 -->
+<script type="text/javascript" src="/assetsInfo/libs/q.js"></script>
+<!-- jQuery 轻量级 MVVM 框架 -->
+<script type="text/javascript" src="/assetsInfo/libs/pandyle.min.js"></script>
+<!-- layui 脚本文件 -->
+<script type="text/javascript" src="/assetsInfo/libs/layui/layui.js"></script>
+<script src="/assetsInfo/libs/echarts.min.js"></script>
+<script src="/assetsInfo/libs/swiper-6.1.1/swiper-bundle.min.js"></script>
+
+<script>
+    layui.use(['element', 'form', 'layer',"table"], function () {
+      var arr=[1,2,3,4,5]
+      var num=-1
+        var element = layui.element,
+            admin = layui.admin,
+            config = layui.config,
+            form = layui.form,
+            layer = layui.layer,
+            table = layui.table;
+        var canvasFontSize =12;
+        //处理字符串每隔7个换行
+        function strInsert(str, length) {
+            return str.replace(/\s/g,'').replace(/(.{7})/g,"$1<br/>"); //最后面不要"^_^" 就去掉( + "^_^")
+        }
+        function strInserts(str, length) {
+            return str.replace(/\s/g,'').replace(/(.{9})/g,"$1\n"); //最后面不要"^_^" 就去掉( + "^_^")
+        }
+        //图例数据
+        var canvasData1,canvasData2,canvasData3,canvasData4,canvasData5,canvasData6,canvasData7,canvasData8,canvasData9;
+        //绘制科研经费与额度使用情况一览图
+        var setCanvasBox1 = function (lineData,ele,isLayer) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById(ele));
+            // var monthArr = ['2019/8', '2019/9', '2019/10', '2019/11', '2019/13', '2019/1', '2020/2', '2020/3', '2020/4', '2020/5', '2020/6', '2020/7'];
+            var monthArr =lineData.xindexList ;
+            myChart.resize();
+            myChart.clear();
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: '{b}<br />{a0}:{c0}<br />{a1}:{c1}<br />{a2}:{c2}%'
+                },
+                legend: {
+                    data: ["已拨付","已使用"],
+                    top:'10%',
+                    // right:"3%",
+                    icon:"roundRect",
+                    itemWidth:40,
+                    itemHeight:10,
+                    textStyle:{
+                        padding:[3, 0, 0, 0],
+                        color:"#5CABFC",
+                        // fontSize:28
+                    },
+
+                },
+                tooltip : {
+                    trigger : 'axis',
+                    formatter : function(params) {
+                        if(params.length!=0){
+                            var str=params[0].name+"</br>";
+                            for (var i = 0; i < params.length; i++) {
+                                if(params[i].seriesType=="line")break;
+                                str+=params[i].seriesName+":"+params[i].value+"万元</br>";
+                            }
+                        }
+                        return str;
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '2%',
+                    bottom: isLayer?"5%":"1%",
+                    top:isLayer?"20%":"40%",
+                    containLabel: true
+                },
+                color: ["#5892FF", "#A9C7FF", "#FFFF00"],
+                xAxis: {
+                    type: 'category',
+                    // boundaryGap: false,
+                    data: monthArr,
+                    axisTick: {
+                        show:false,
+                        lineStyle: {color: '#a1a1a1'}    // x轴刻度的颜色
+                    },
+                    axisLabel: {
+                        color: '#5CABFC'
+                        // ,fontSize:28
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#a1a1a1',
+                        },
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name:"万元",
+                        nameTextStyle: {
+                            padding: [0, 0, 0, -40],
+                            color:'#5CABFC',
+                            // fontSize:28
+                        },
+                        nameGap:10,
+                        axisTick:{
+                            show:false,
+                            lineStyle:{color:'#a1a1a1'}    // x轴刻度的颜色
+                        },
+                        axisLabel:{
+                            color:'#5CABFC'
+                            // ,fontSize:28
+                        },
+                        axisLine: {
+                            show:false,
+                            lineStyle: {
+                                color: '#a1a1a1',
+                            },
+                        },
+                        splitLine :{    //网格线
+                            lineStyle:{
+                                type:'dashed',    //设置网格线类型 dotted：虚线   solid:实线
+                                color: '#a1a1a1'
+                            },
+                            show:true //隐藏或显示
+                        }
+                    },
+                    {
+                        type: 'value',
+                        nameTextStyle: {
+                            padding: [0, 0, 0, -40]
+                        },
+                        nameGap:10,
+                        axisTick:{
+                            show:false,
+                            lineStyle:{color:'#a1a1a1'}    // x轴刻度的颜色
+                        },
+                        axisLabel:{
+                            show:false,
+                            color:'#5CABFC',
+                            formatter:'{value}%',
+                            // fontSize:28
+                        },
+                        axisLine: {
+                            show:false,
+                            lineStyle: {
+                                color: '#a1a1a1',
+                            },
+                        },
+                        splitLine :{    //网格线
+                            lineStyle:{
+                                type:'dashed',    //设置网格线类型 dotted：虚线   solid:实线
+                            },
+                            show:false //隐藏或显示
+                        }
+
+                    }
+                ],
+                series: [
+
+                    {
+                        name: "已拨付",
+                        type: 'bar',
+                        yAxisIndex:0,
+                        label: {
+                            show: true,
+                            position: 'top',
+                            fontSize:canvasFontSize,
+                            offset: [-15, -2],
+                        },
+                        barWidth: 20,
+                        data: lineData.budgetDataList
+                        // data: [4520, 13332, 5702, 6478, 7541, 8741, 4891, 2451, 3455, 5421, 7444, 8464]
+                    },
+                    {
+                        name: "已使用",
+                        type: 'bar',
+                        yAxisIndex:0,
+                        label: {
+                            show: true,
+                            position: 'top',
+                            offset: [5, -2],
+                            fontSize:canvasFontSize
+                        },
+                        barWidth: 20,
+                        data: lineData.useDataList
+                        // data: [3145, 5110, 8410, 6420, 3421, 6412, 3145, 2455, 4578, 1245, 5456, 6454],
+                    },
+                    {
+                        // name: '增长率',
+                        type: 'line',
+                        yAxisIndex:1,
+                        symbol:'none', //去掉折线图中的节点
+                        smooth: true,  //true 为平滑曲线，false为直线
+                        lineStyle: {
+                            type: 'dashed'
+                        },
+                        itemStyle: {
+                            normal: {
+                                lineStyle: {
+                                    width: 1, //折线宽度
+                                    type:'dotted'
+                                }
+                            },
+                        },
+                        data:lineData.useDataList
+                        // data: [4520, 13332, 5702, 6478, 7541, 8741, 4891, 2451, 3455, 5421, 7444, 8464]
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        //绘制科研经费拨付详情图
+        var setCanvasBox2 = function (lineData,ele,isLayer) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById(ele));
+            myChart.resize();
+            myChart.clear();
+
+           var option = {
+               tooltip : {
+                   trigger : 'axis',
+                   formatter : function(params) {
+                       if(params.length!=0){
+                           var str="";
+                           for (var i = 0; i < params.length; i++) {
+                               if(params[i].seriesType=="line")break;
+                               str+=params[0].name+":"+params[i].value+"万元</br>";
+                           }
+                       }
+                       return str;
+                   }
+               },
+                legend: {
+                    show:false,
+                    data: ['2011年', '2012年']
+                },
+                grid: {
+                    left: '3%',
+                    right: isLayer?"6%":"15%",
+                    bottom: '3%',
+                    top:isLayer?"12%":"23%",
+                    containLabel: true
+                },
+               color: ["#0092EE","#00FFFF"],
+                xAxis: {
+                    type: 'value',
+                    name:"万元",
+                    nameTextStyle: {
+                        padding: [25, 0, 0, 10],
+                        color:'#5CABFC',
+                        // fontSize:28
+                    },
+                    nameGap:10,
+                    axisTick:{
+                        show:false,
+                        lineStyle:{color:'#5A638E'}    // x轴刻度的颜色
+                    },
+                    axisLabel:{
+                        color:'#5CABFC'
+                        // ,fontSize:28
+                    },
+                    axisLine: {
+                        show:true,
+                        lineStyle: {
+                            color: '#5A638E',
+                        },
+                    },
+                    splitLine :{    //网格线
+                        lineStyle:{
+                            type:'solid',    //设置网格线类型 dotted：虚线   solid:实线
+                            color: '#5A638E'
+                        },
+                        show:true //隐藏或显示
+                    }
+                },
+                yAxis: {
+                    type: 'category',
+                    axisLabel:{
+                        color:'#5CABFC'
+                        // ,fontSize:28
+                    },
+                    axisLine: {
+                        show:true,
+                        lineStyle: {
+                            color: '#5A638E',
+                        },
+                    },
+                    axisTick:{
+                        show:false,
+                        lineStyle:{color:'#5A638E'}    // x轴刻度的颜色
+                    },
+                    data: lineData.xindexList
+                },
+                series: [
+                    {
+                        // name: '2011年',
+                        type: 'bar',
+                        label: {
+                            show: true,
+                            position: 'right',
+                            // offset: [5, -2],
+                            color:"#9FE8FD",
+                            fontSize:canvasFontSize
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: new echarts.graphic.LinearGradient(
+                                    0, 0, 1, 0,
+                                    [
+                                        {offset: 0, color: 'rgba(255, 255, 255, 0)'},                   //柱图渐变色
+                                        // {offset: 0.5, color: '#44C0C1'},                 //柱图渐变色
+                                        {offset: 1, color: '#0092EE'},                   //柱图渐变色
+                                    ]
+                                )
+                            },
+                            emphasis: {
+                                color: new echarts.graphic.LinearGradient(
+                                    0, 0, 0, 1,
+                                    [
+                                        {offset: 0, color: 'rgba(255, 255, 255, 0)'},                   //柱图渐变色
+                                        // {offset: 0.5, color: '#44C0C1'},                 //柱图渐变色
+                                        {offset: 1, color: '#0092EE'},                  //柱图高亮渐变色
+                                    ]
+                                )
+                            }
+                        },
+                        // data: [2903, 2348,1820, 1317, 1049]
+                        data: lineData.useDataList
+                    },
+                    {
+                        // name: '增长率',
+                        type: 'line',
+                        // yAxisIndex:1,
+                        symbol:'none', //去掉折线图中的节点
+                        smooth: true,  //true 为平滑曲线，false为直线
+                        lineStyle: {
+                            type: 'dashed'
+                        },
+                        color:"#00FFFF",
+                        itemStyle: {
+                            normal: {
+                                lineStyle: {
+                                    width: 1, //折线宽度
+                                    type:'dotted'
+                                }
+                            },
+                        },
+                        // data: [2903, 2348,1820, 1317, 1049]
+                        data: lineData.useDataList
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        // 数组对象深拷贝
+        function copy(arr) {
+                let obj = arr instanceof Array ? [] : {};
+                for (let i in arr) {
+                    if (typeof arr[i] == 'object' && arr[i] !== undefined) {
+                        obj[i] = copy(arr[i])
+                    } else if (typeof arr[i] == 'object' && arr[i] == undefined) {
+                        obj[i] = null
+                    } else {
+                        obj[i] = arr[i]
+                    }
+                }
+                return obj
+            }
+        //绘制科研经费使用情况图
+        var setCanvasBox3 = function (lineData=[],ele,isLayer) {
+            // 图表初始化
+            // 如果容器为小块，则过滤列表，否则全部渲染
+            console.log( isLayer)
+           var newlineData = [];
+            newlineData=copy(lineData)
+            for(var i=0;i<newlineData.length;i++){
+                if(!isLayer && lineData[i].percent<5 ){
+                    newlineData[i].label={show:false}
+                    newlineData[i].labelLine={show:false}
+                }
+            }
+            // newlineData = newlineData.reverse();
+            var myChart = echarts.init(document.getElementById(ele));
+            myChart.resize();
+            myChart.clear();
+            var option = {
+                tooltip: {
+                    trigger: 'item',
+                    // formatter: '{d}%'
+                    formatter: function (param) {
+                        return param.data.percent + '%';
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '15%',
+                    bottom: '3%',
+                    top:"23%",
+                    containLabel: true
+                },
+                color: ["#CF9EF1","#8D7FEC","#5892FF","#53C8D1","#F2719A","#FCA4BB","#FBD444","#59CB74"],
+                series: [
+                    {
+                        name: '访问来源',
+                        type: 'pie',
+                        radius: isLayer?"60%":"60%",
+                        center: ['50%', '60%'],
+                        // minAngle: 10,
+                        /* data: [
+                            {value: 152, name: '劳务费'},
+                            {value: 233, name: '交流费'},
+                            {value: 123, name: '设备费'},
+                            {value: 243, name: '材料费'},
+                            {value: 125, name: '会议费'},
+                            {value: 260, name: '差旅费'},
+                            {value: 167, name: '燃料动力'},
+                            {value: 189, name: '加工费'}
+                        ], */
+                        data:newlineData,
+                        roseType: 'radius',
+                        avoidLabelOverlap:true,
+                        label: {
+                            color: '#5CABFC',
+                            formatter : function(params) {
+                              return strInserts(params.name+params.value+"万元")
+                            }
+                        },
+                        labelLine: {
+                          normal:{
+                            length:1,
+                            lineStyle: {
+                                color: '#5CABFC'
+                            }
+                          }
+                        },
+                        itemStyle: {
+                            // color: '#c23531',
+                            shadowBlur: 200,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        },
+
+                        animationType: 'scale',
+                        animationEasing: 'elasticOut',
+                        animationDelay: function (idx) {
+                            return Math.random() * 200;
+                        }
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        //绘制各部门科研经费详情图
+        var setCanvasBox4 = function (lineData,ele,isLayer) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById(ele));
+            var lineData1 = $.extend(true,{},lineData);
+            var yData=isLayer?lineData1.xindexList:lineData1.xindexList.slice(0,5);
+            var xData1=isLayer?lineData1.budgetDataList:lineData1.budgetDataList.slice(0,5);
+            var xData2=isLayer?lineData1.useDataList:lineData1.useDataList.slice(0,5);
+            yData.reverse();
+            xData1.reverse();
+            xData2.reverse();
+            myChart.resize();
+            myChart.clear();
+            var option = {
+                tooltip : {
+                    trigger : 'axis',
+                    formatter : function(params) {
+                        if(params.length!=0){
+                            var str="部门:"+params[0].name+"<br/>";
+                            for (var i = 0; i < params.length; i++) {
+                                if(params[i].seriesType=="line")break;
+                                str+=params[i].seriesName+":"+params[i].value+"万元</br>";
+                            }
+                        }
+                        return str;
+                    }
+                },
+
+                legend: {
+                    data: ["已使用","未使用"],
+                    top:'5%',
+                    right:"8%",
+                    icon:"roundRect",
+                    itemWidth:isLayer?20:10,
+                    itemHeight:isLayer?20:10,
+                    textStyle:{
+                        padding:[3, 0, 0, 0],
+                        color:"#5CABFC",
+                        // fontSize:28
+                    },
+
+                },
+                grid: {
+                    left: '3%',
+                    right: isLayer?"8%":"15%",
+                    bottom: '3%',
+                    top:isLayer?"12%":"23%",
+                    containLabel: true
+                },
+                color: ["#0092EE","#71B7EE"],
+                xAxis: {
+                    type: 'value',
+                    name:"万元",
+                    nameTextStyle: {
+                        padding: [25, 0, 0, 10],
+                        color:'#5CABFC',
+                        // fontSize:28
+                    },
+                    nameGap:10,
+                    axisTick:{
+                        show:false,
+                        lineStyle:{color:'#5A638E'}    // x轴刻度的颜色
+                    },
+                    axisLabel:{
+                        color:'#5CABFC'
+                        // ,fontSize:28
+                    },
+                    axisLine: {
+                        show:true,
+                        lineStyle: {
+                            color: '#5A638E',
+                        },
+                    },
+                    splitLine :{    //网格线
+                        lineStyle:{
+                            type:'solid',    //设置网格线类型 dotted：虚线   solid:实线
+                            color: '#5A638E'
+                        },
+                        show:true //隐藏或显示
+                    }
+                },
+                yAxis: {
+                    type: 'category',
+                    axisLabel:{
+                        color:'#5CABFC'
+                        // ,fontSize:28
+                    },
+                    axisLine: {
+                        show:true,
+                        lineStyle: {
+                            color: '#5A638E',
+                        },
+                    },
+                    axisTick:{
+                        show:false,
+                        lineStyle:{color:'#5A638E'}    // x轴刻度的颜色
+                    },
+                    // data: ['智能网联数据部', '网联技术研究部', '智能网联平台部', '研发信息系统部', '数据技术部']
+                    data:yData
+                },
+                series: [
+                    {
+                        name: '已使用',
+                        type: 'bar',
+                        stack: '总量',
+                        barWidth:isLayer?"auto":"auto",
+                        label: {
+                            show: true,
+                            position: 'right',
+                            // offset: [5, -2],
+                            color:"#9FE8FD",
+                            fontSize:canvasFontSize
+                        },
+                        z:999,
+                        itemStyle: {
+                            normal: {
+                                color: new echarts.graphic.LinearGradient(
+                                    0, 0, 1, 0,
+                                    [
+                                        {offset: 0, color: 'rgba(255, 255, 255, 0)'},                   //柱图渐变色
+                                        // {offset: 0.5, color: '#44C0C1'},                 //柱图渐变色
+                                        {offset: 1, color: '#07bc42'},                   //柱图渐变色
+                                    ]
+                                )
+                            },
+                            emphasis: {
+                                color: new echarts.graphic.LinearGradient(
+                                    0, 0, 0, 1,
+                                    [
+                                        {offset: 0, color: 'rgba(255, 255, 255, 0)'},                   //柱图渐变色
+                                        // {offset: 0.5, color: '#44C0C1'},                 //柱图渐变色
+                                        {offset: 1, color: '#07bc42'},                  //柱图高亮渐变色
+                                    ]
+                                )
+                            }
+                        },
+                        // data: [3000, 1000, 1200, 1550, 1317]
+                        data: xData2
+                    },
+                    {
+                        name: '未使用',
+                        type: 'bar',
+                        stack: '总量',
+                        barWidth:isLayer?"auto":"auto",
+                        label: {
+                            show: true,
+                            position: 'right',
+                            // offset: [5, -2],
+                            color:"#9FE8FD",
+                            fontSize:canvasFontSize,
+                            z:999
+                        },
+                        // itemStyle: {
+                        //     normal: {
+                        //         color: new echarts.graphic.LinearGradient(
+                        //             0, 0, 1, 0,
+                        //             [
+                        //                 {offset: 0, color: 'rgba(255, 255, 255, 0)'},                   //柱图渐变色
+                        //                 // {offset: 0.5, color: '#44C0C1'},                 //柱图渐变色
+                        //                 {offset: 1, color: '#0092EE'},                   //柱图渐变色
+                        //             ]
+                        //         )
+                        //     },
+                        //     emphasis: {
+                        //         color: new echarts.graphic.LinearGradient(
+                        //             0, 0, 0, 1,
+                        //             [
+                        //                 {offset: 0, color: 'rgba(255, 255, 255, 0)'},                   //柱图渐变色
+                        //                 // {offset: 0.5, color: '#44C0C1'},                 //柱图渐变色
+                        //                 {offset: 1, color: '#0092EE'},                  //柱图高亮渐变色
+                        //             ]
+                        //         )
+                        //     }
+                        // },
+                        // data: [1820, 2348, 2903, 1049, 1317]
+                        data: xData1
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        function sortNumber(a,b)
+        {
+            return a - b
+        }
+        //绘制各部门科研经费申请分布图
+        var setCanvasBox5 = function (lineData,ele,isLayer) {
+            // lineData=[
+            //     [5,424,"智能网联数据部"],[2,351,"智能网联平台部"],[6,257,"数据技术部"],
+            //     [8,125,"节能研究部"],[10,678,"研发信息系统部"],[4,225,"回收利用部"]
+            // ];
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById(ele));
+            myChart.resize();
+            myChart.clear();
+            var amountArr = [];
+            for (var i = 0; i <lineData.length ; i++) {
+                amountArr.push(lineData[i][1]);
+            }
+            amountArr.sort(sortNumber);
+            var option = {
+                tooltip : {
+                    show:true,
+                    formatter : function(params) {
+                        if(params.color!="rgba(0,0,0,0)"){
+                            var str="部门:"+params.data[2]+"<br/>";
+                            str+="课题数目："+params.data[0]+"个</br>";
+                            str+="经费金额："+params.data[1]+"万元</br>";
+                            return str;
+                        }
+
+                    },
+                    position:"top"
+                },
+                dataZoom: [
+                    {
+                        show: isLayer?true:false,
+                        yAxisIndex: 0,
+                        // filterMode: 'empty',
+                        width: 20,
+                        // height: '80%',
+                        showDataShadow: false,
+                        right: "5%",
+                        textStyle: {
+                            color: "#5CABFC",
+                            fontSize:20
+                        }
+
+                        // top:"5%"
+                    }
+                ],
+                // visualMap: {
+                //     min: amountArr[0],
+                //     max: amountArr[amountArr.length-1],
+                //     dimension: 1,
+                //     orient: 'vertical',
+                //     right: 10,
+                //     top: 'center',
+                //     show:isLayer?true:false,
+                //     // text: ['HIGH', 'LOW'],
+                //     calculable: true,
+                //
+                //     inRange: {
+                //         color: ['#AE39FF'],
+                //         colorSaturation:0.9,
+                //         colorAlpha:0.9
+                //         // color: ['#00FF00','#32CD32','#2E8B57','#FF0000','#B22222','#8B0000']
+                //     },
+                //     textStyle:{
+                //         color:"#5CABFC"
+                //     },
+                //     // color: new echarts.graphic.RadialGradient(1, 1, 0.8, [{
+                //     //     offset: 0,
+                //     //     color: '#e9e9e9'
+                //     // }, {
+                //     //     offset: 1,
+                //     //     color: '#AE39FF'
+                //     // }])
+                // },
+                legend: {
+                    data: ["已使用","未使用"],
+                    top:'5%',
+                    right:"8%",
+                    icon:"roundRect",
+                    itemWidth:10,
+                    itemHeight:5,
+                    textStyle:{
+                        padding:[3, 0, 0, 0],
+                        color:"#5CABFC",
+                        // fontSize:28
+                    },
+
+                },
+                grid: {
+                    left: '3%',
+                    right: '18%',
+                    bottom: '3%',
+                    top:isLayer?"20%":"35%",
+                    containLabel: true
+                },
+                color: ["#0092EE","#71B7EE"],
+                xAxis: {
+                    type: 'value',
+                    name:"个",
+                    nameTextStyle: {
+                        padding: [28, 0, 0, 0],
+                        color:'#5CABFC',
+                        // fontSize:28
+                    },
+                    nameGap:10,
+                    minInterval:1,
+                    axisTick:{
+                        show:false,
+                        lineStyle:{color:'#5A638E'}    // x轴刻度的颜色
+                    },
+                    axisLabel:{
+                        color:'#5CABFC'
+                        // ,fontSize:28
+                    },
+                    axisLine: {
+                        show:true,
+                        lineStyle: {
+                            color: '#5A638E',
+                        },
+                    },
+                    splitLine :{    //网格线
+                        lineStyle:{
+                            type:'dotted',    //设置网格线类型 dotted：虚线   solid:实线
+                            color: '#5A638E'
+                        },
+                        show:true //隐藏或显示
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name:"万元",
+                    nameTextStyle: {
+                        padding: [0, 0, 0, -30],
+                        color:'#5CABFC',
+                        // fontSize:28
+                    },
+                    nameGap:10,
+                    axisTick:{
+                        show:false,
+                        lineStyle:{color:'#5A638E'}    // x轴刻度的颜色
+                    },
+                    axisLabel:{
+                        color:'#5CABFC'
+                        // ,fontSize:28
+                    },
+                    axisLine: {
+                        show:true,
+                        lineStyle: {
+                            color: '#5A638E',
+                        },
+                    },
+                    splitLine :{    //网格线
+                        lineStyle:{
+                            type:'dotted',    //设置网格线类型 dotted：虚线   solid:实线
+                            color: '#5A638E'
+                        },
+                        show:true //隐藏或显示
+                    }
+                },
+                series: [
+                    {
+                        // name: '1990',
+                        data: lineData,
+                        type: 'scatter',
+                        symbolSize: function (data) {
+                            var maxIndex=isLayer?40:1
+                            return Math.cbrt(data[1]*maxIndex);
+                        },
+
+                        // emphasis: {
+                        //     label: {
+                        //         show: true,
+                        //         formatter: function (param) {
+                        //             return param.data[1];
+                        //         },
+                        //         position: 'top'
+                        //     }
+                        // },
+                        label: {
+                            show:true,
+                            color: '#89C3FF',
+                            position:"bottom",
+                            fontSize:ele=='canvasLayer'?14:8,
+                            formatter : function(params) {
+                                return params.data[2];
+                            }
+                        },
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(120, 36, 50, 0.5)',
+                            shadowOffsetY: 5,
+                            color: new echarts.graphic.RadialGradient(1, 1, 0.8, [{
+                                offset: 0,
+                                color: '#e9e9e9'
+                            }, {
+                                offset: 1,
+                                color: '#AE39FF'
+                            }])
+                        }
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        //绘制重点课题排名图
+        var setCanvasBox6 = function (lineData,ele,isLayer) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById(ele));
+            myChart.resize();
+            myChart.clear();
+            var option = {
+                tooltip : {
+                    trigger : 'axis',
+                    formatter : function(params) {
+                        if(params.length!=0){
+                            var str="";
+                            params[0].name=strInsert(params[0].name,7)
+                            for (var i = 0; i < params.length; i++) {
+                                if(params[i].seriesType=="line")break;
+                                str+=params[0].name+":"+params[i].value+"万元</br>";
+                            }
+                        }
+                        return str;
+                    }
+                },
+                legend: {
+                    show:false,
+                    data: ['2011年', '2012年']
+                },
+                grid: {
+                    left: '3%',
+                    right: isLayer?"10%":"15%",
+                    bottom: '3%',
+                    top:isLayer?"12%":"23%",
+                    containLabel: true
+                },
+                color: ["#0092EE","#00FFFF"],
+                xAxis: {
+                    type: 'value',
+                    name:"万元",
+                    nameTextStyle: {
+                        padding: [25, 0, 0, 10],
+                        color:'#5CABFC',
+                        // fontSize:28
+                    },
+                    nameGap:10,
+                    axisTick:{
+                        show:false,
+                        lineStyle:{color:'#5A638E'}    // x轴刻度的颜色
+                    },
+                    axisLabel:{
+                        color:'#5CABFC'
+                        // ,fontSize:28
+                    },
+                    axisLine: {
+                        show:true,
+                        lineStyle: {
+                            color: '#5A638E',
+                        },
+                    },
+                    splitLine :{    //网格线
+                        lineStyle:{
+                            type:'solid',    //设置网格线类型 dotted：虚线   solid:实线
+                            color: '#5A638E'
+                        },
+                        show:true //隐藏或显示
+                    }
+                },
+                yAxis: {
+                    type: 'category',
+                    axisLabel:{
+                        color:'#5CABFC',
+                        // ,fontSize:28
+                        formatter : function(params) {
+                            return params.substring(0,6)+"...";
+                        }
+                    },
+                    axisLine: {
+                        show:true,
+                        lineStyle: {
+                            color: '#5A638E',
+                        },
+                    },
+                    axisTick:{
+                        show:false,
+                        lineStyle:{color:'#5A638E'}    // x轴刻度的颜色
+                    },
+                    // data: ['车联网平台', '工业互联网支撑', '工业互联网平台', '大数据动力平台', '汽车云平台']
+                    data: lineData.xindexList
+                },
+                series: [
+                    {
+                        // name: '2011年',
+                        type: 'bar',
+                        label: {
+                            show: true,
+                            position: 'right',
+                            // offset: [5, -2],
+                            color:"#9FE8FD",
+                            fontSize:canvasFontSize
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: new echarts.graphic.LinearGradient(
+                                    0, 0, 1, 0,
+                                    [
+                                        {offset: 0, color: 'rgba(255, 255, 255, 0)'},                   //柱图渐变色
+                                        // {offset: 0.5, color: '#44C0C1'},                 //柱图渐变色
+                                        {offset: 1, color: '#03DFDF'},                   //柱图渐变色
+                                    ]
+                                )
+                            },
+                            emphasis: {
+                                color: new echarts.graphic.LinearGradient(
+                                    0, 0, 0, 1,
+                                    [
+                                        {offset: 0, color: 'rgba(255, 255, 255, 0)'},                   //柱图渐变色
+                                        // {offset: 0.5, color: '#44C0C1'},                 //柱图渐变色
+                                        {offset: 1, color: '#03DFDF'},                  //柱图高亮渐变色
+                                    ]
+                                )
+                            }
+                        },
+                        // data: [1049 ,1317,1820, 2348, 2903 ]
+                        data: lineData.useDataList
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        //绘制课题预警图
+        var setCanvasBox7 = function (lineData,ele,isLayer) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById(ele));
+            var monthArr = ['2015', '2016', '2017', '2018', '2019', '2020'];
+            myChart.resize();
+            myChart.clear();
+            var colorTemplate1 =[[0.25, "#A9C7FF"], [0.75, "#1089f2"], [1, "#F07C49"]];
+            var option = {
+                grid: {
+                    left: '4%',
+                    right: '8%',
+                    bottom: '1%',
+                    top:'40%',
+                    containLabel: true
+                },
+                color: ["#01E0E0"],
+                tooltip: {
+                    formatter: '{a} <br/>{b} : {c}%'
+                },
+                series: [
+                    {
+                        radius: '85%',
+                        name: '课题预警',
+                        type: 'gauge',
+                        // min: 0,
+                        // max: 100,
+                        center: ['50%', '55%'],
+                        splitNumber: 1,
+                        axisLabel:{
+                            formatter: function(v) {
+                                switch (v + "") {
+                                    case "25":
+                                        return "低";
+                                    case "50":
+                                        return "中";
+                                    case "75":
+                                        return "高";
+                                    default:
+                                        return "";
+                                }
+                            },
+                            textStyle:{
+                                color:'rgb(92,171,252)',
+                                fontSize:14
+                            }
+                        },
+                        axisLine: {				// 仪表盘轴线(轮廓线)相关配置。
+                            show: true,				// 是否显示仪表盘轴线(轮廓线),默认 true。
+                            lineStyle: {			// 仪表盘轴线样式。
+                                color: colorTemplate1, 	//仪表盘的轴线可以被分成不同颜色的多段。每段的  结束位置(范围是[0,1]) 和  颜色  可以通过一个数组来表示。默认取值：[[0.2, '#91c7ae'], [0.8, '#63869e'], [1, '#c23531']]
+                                opacity: 1,					//图形透明度。支持从 0 到 1 的数字，为 0 时不绘制该图形。
+                                width: isLayer?30:10,					//轴线宽度,默认 30。
+                                shadowBlur: 20,				//(发光效果)图形阴影的模糊大小。该属性配合 shadowColor,shadowOffsetX, shadowOffsetY 一起设置图形的阴影效果。
+                                shadowColor: "#fff",		//阴影颜色。支持的格式同color。
+                            }
+                        },
+                        pointer: {
+                            width:isLayer?5:3
+                        },
+                        axisTick: {            // 坐标轴小标记
+                            show:false,
+                            length: isLayer?30:10,        // 属性length控制线长
+                            width:1,
+                            lineStyle: {       // 属性lineStyle控制线条样式
+                                color: '#fff'
+                            }
+                        },
+                        splitLine: {           // 分隔线
+                            show:false,
+                            length: isLayer?30:5,         // 属性length控制线长
+                            lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                color: '#fff',
+                            },
+                        },
+                        detail: {
+                            color:"#A9C7FF",
+                            fontSize:isLayer?18:12,
+                            formatter: function(n){
+                              return n+'\n 百分比'
+                            },
+                            // formatter: '{value}%\n百分比'
+                            formatter: '高'
+                        },
+                        data: [
+                            {value: 87},
+                            ]
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        //绘制科研经费历史趋势图
+        var setCanvasBox8 = function (lineData,ele,isLayer) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById(ele));
+            // var monthArr = ['2015', '2016', '2017', '2018', '2019', '2020'];
+            var monthArr = lineData.xindexList;
+            myChart.resize();
+            myChart.clear();
+            var option = {
+                legend: {
+                    show:false,
+                    data: ["已拨付","已使用"],
+                    top:'10%',
+                    // right:"3%",
+                    icon:"roundRect",
+                    itemWidth:40,
+                    itemHeight:10,
+                    textStyle:{
+                        padding:[3, 0, 0, 0],
+                        color:"#5CABFC",
+                        // fontSize:28
+                    },
+
+                },
+                tooltip : {
+                    trigger : 'axis',
+                    formatter : function(params) {
+                        if(params.length!=0){
+                            var str="";
+                            for (var i = 0; i < params.length; i++) {
+                                str+="年份："+params[0].name+"，经费（万元）："+params[i].value+"</br>";
+                            }
+                        }
+                        return str;
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: isLayer?"5%":"13%",
+                    bottom: '1%',
+                    top:isLayer?"15%":"40%",
+                    containLabel: true
+                },
+                color: ["#01E0E0"],
+                xAxis: {
+                    type: 'category',
+                    // boundaryGap: false,
+                    data: monthArr,
+                    boundaryGap: false,
+                    name:"年",
+                    nameTextStyle: {
+                        padding: [25, 0, 0, 10],
+                        color:'#5CABFC',
+                        // fontSize:28
+                    },
+                    axisTick: {
+                        show:false,
+                        lineStyle: {color: '#5A638E'}    // x轴刻度的颜色
+                    },
+                    axisLabel: {
+                        color: '#5CABFC'
+                        // ,fontSize:28
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#5A638E',
+                        },
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name:"万元",
+                        nameTextStyle: {
+                            padding: [0, 0, 0, -40],
+                            color:'#5CABFC',
+                            // fontSize:28
+                        },
+                        nameGap:10,
+                        axisTick:{
+                            show:false,
+                            lineStyle:{color:'#5A638E'}    // x轴刻度的颜色
+                        },
+                        axisLabel:{
+                            color:'#5CABFC'
+                            // ,fontSize:28
+                        },
+                        axisLine: {
+                            show:true,
+                            lineStyle: {
+                                color: '#5A638E',
+                            },
+                        },
+                        splitLine :{    //网格线
+                            lineStyle:{
+                                type:'dashed',    //设置网格线类型 dotted：虚线   solid:实线
+                                color: '#5A638E'
+                            },
+                            show:false //隐藏或显示
+                        }
+                    }
+                ],
+                series: [
+
+                    {
+                        // name: '增长率',
+                        type: 'line',
+                        yAxisIndex:0,
+                        symbol:'none', //去掉折线图中的节点
+                        smooth: true,  //true 为平滑曲线，false为直线
+                        lineStyle: {
+                            // type: 'dashed'
+                        },
+                        itemStyle: {
+                            normal: {
+                                lineStyle: {
+                                    width: 1, //折线宽度
+                                    // type:'dotted'
+                                }
+                            },
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                offset: 0,
+                                color: '#01E0E0'
+                            }, {
+                                offset: 1,
+                                color: 'rgba(255, 255, 255, 0)'
+                            }])
+                        },
+                        // data: [0, 6354, 3544, 5541, 4235, 3215]
+                        data: lineData.useDataList
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        //绘制科研经费历史趋势图
+        var setCanvasBox9 = function (lineData,ele,isLayer) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById(ele));
+            // var monthArr = ['2015', '2016', '2017', '2018', '2019', '2020'];
+            var monthArr = lineData.xindexList;
+            myChart.resize();
+            myChart.clear();
+            var option = {
+                legend: {
+                    show:false,
+                    data: ["已拨付","已使用"],
+                    top:'10%',
+                    // right:"3%",
+                    icon:"roundRect",
+                    itemWidth:40,
+                    itemHeight:10,
+                    textStyle:{
+                        padding:[3, 0, 0, 0],
+                        color:"#5CABFC",
+                        // fontSize:28
+                    },
+
+                },
+                tooltip : {
+                    trigger : 'axis',
+                    formatter : function(params) {
+                        if(params.length!=0){
+                            var str="";
+                            for (var i = 0; i < params.length; i++) {
+                                str+="年份："+params[0].name+"，数目（个）："+params[i].value+"</br>";
+                            }
+                        }
+                        return str;
+                    }
+                },
+                grid: {
+                    left: '5%',
+                    right: isLayer?"5%":"13%",
+                    bottom: '1%',
+                    top:isLayer?"15%":"40%",
+                    containLabel: true
+                },
+                color: ["#1584EB"],
+                xAxis: {
+                    type: 'category',
+                    // boundaryGap: false,
+                    name:"年",
+                    nameTextStyle: {
+                        padding: [25, 0, 0, 10],
+                        color:'#5CABFC',
+                        // fontSize:28
+                    },
+                    data: monthArr,
+                    boundaryGap: false,
+                    axisTick: {
+                        show:false,
+                        lineStyle: {color: '#5A638E'}    // x轴刻度的颜色
+                    },
+                    axisLabel: {
+                        color: '#5CABFC'
+                        // ,fontSize:28
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#5A638E',
+                        },
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name:"个",
+                        nameTextStyle: {
+                            padding: [0, 0, 0, -30],
+                            color:'#5CABFC',
+                            // fontSize:28
+                        },
+                        nameGap:10,
+                        axisTick:{
+                            show:false,
+                            lineStyle:{color:'#5A638E'}    // x轴刻度的颜色
+                        },
+                        axisLabel:{
+                            color:'#5CABFC'
+                            // ,fontSize:28
+                        },
+                        axisLine: {
+                            show:true,
+                            lineStyle: {
+                                color: '#5A638E',
+                            },
+                        },
+                        splitLine :{    //网格线
+                            lineStyle:{
+                                type:'dashed',    //设置网格线类型 dotted：虚线   solid:实线
+                                color: '#5A638E'
+                            },
+                            show:false //隐藏或显示
+                        }
+                    }
+                ],
+                series: [
+
+                    {
+                        // name: '增长率',
+                        type: 'line',
+                        yAxisIndex:0,
+                        symbol:'none', //去掉折线图中的节点
+                        smooth: true,  //true 为平滑曲线，false为直线
+                        lineStyle: {
+                            // type: 'dashed'
+                        },
+                        itemStyle: {
+                            normal: {
+                                lineStyle: {
+                                    width: 1, //折线宽度
+                                    // type:'dotted'
+                                }
+                            },
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                offset: 0,
+                                color: '#1584EB'
+                            }, {
+                                offset: 1,
+                                color: 'rgba(255, 255, 255, 0)'
+                            }])
+                        },
+                        // data: [0, 2112, 1354, 5577, 4266, 1255]
+                        data: lineData.useDataList
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        var getHandledValue= function (num) {
+            return num < 10 ? '0' + num : num;
+        };
+        var getDate = function () {
+            var d = new Date();
+            var year = d.getFullYear().toString();
+            var month = getHandledValue(d.getMonth() + 1).toString();
+            var date = getHandledValue(d.getDate()).toString();
+            var hours = getHandledValue(d.getHours()).toString();
+            var minutes = getHandledValue(d.getMinutes()).toString();
+            var second = getHandledValue(d.getSeconds()).toString();
+            var formatter="YYYY/MM/DD HH:mm:ss";
+            var resStr = formatter
+                .replace('YYYY', year)
+                .replace('YY', year.substr(2))
+                .replace('MM', month)
+                .replace('DD', date)
+                .replace('HH', hours)
+                .replace('mm', minutes)
+                .replace('ss', second);
+            $(".headerTime").text(resStr);
+        };
+        var timeInter;
+        var getNumberFun = function () {
+            $.ajax({
+                url: "/ADC_info/api/research/resProReport/getHeaderVO",
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        for (var item in res.data){
+                            if(res.data[item]){
+                                $("#"+item).text(res.data[item])
+                            }else{
+                                $("#"+item).text(0)
+                            }
+                        }
+
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        getNumberFun();
+        //获取数据
+        var getData1 = function(type){
+            $.ajax({
+                url: "/ADC_info/api/research/resProReport/getDataByType?type="+type,
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        canvasData1=res.data;
+                        setCanvasBox1(canvasData1,"canvas-box1")
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        var getData2 = function(type){
+            $.ajax({
+                url: "/ADC_info/api/research/resProReport/projectAllocateDetail?type="+type,
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        canvasData2=res.data;
+                        canvasData2.useDataList.reverse();
+                        canvasData2.xindexList.reverse();
+                        setCanvasBox2(canvasData2,"canvas-box2")
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        var getData3 = function(type){
+            $.ajax({
+                url: "/ADC_info/api/research/resProReport/getFundsUseDetail?type="+type,
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        canvasData3=res.data;
+                        setCanvasBox3(canvasData3,"canvas-box3")
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        var getData4 = function(type){
+            $.ajax({
+                url: "/ADC_info/api/research/resProReport/getOrgFundsDetail?type="+type,
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        canvasData4=res.data;
+                        setCanvasBox4(canvasData4,"canvas-box4")
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        var getData5 = function(type){
+            $.ajax({
+                url: "/ADC_info/api/research/resProReport/getOrgFundsDistribution?type="+type,
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        canvasData5=res.data;
+                        setCanvasBox5(canvasData5,"canvas-box5")
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        var getData6 = function(type){
+            $.ajax({
+                url: "/ADC_info/api/research/resProReport/getTop5?type="+type,
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        canvasData6=res.data;
+                        canvasData6.useDataList.reverse();
+                        canvasData6.xindexList.reverse();
+                        setCanvasBox6(canvasData6,"canvas-box6")
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        var getData7 = function(type){
+            $.ajax({
+                url: "/ADC_info/api/research/resProReport/getTop5?type="+type,
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        canvasData7=res.data;
+                        setCanvasBox7(canvasData7,"canvas-box7")
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        var getData8 = function(type){
+            $.ajax({
+                url: "/ADC_info/api/research/resProReport/getFundsHistoryTrend?type="+type,
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        canvasData8=res.data;
+                        setCanvasBox8(canvasData8,"canvas-box8")
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        var getData9 = function(type){
+            $.ajax({
+                url: "/ADC_info/api/research/resProReport/getProjectHistoryTrend?type="+type,
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        canvasData9=res.data;
+                        setCanvasBox9(canvasData9,"canvas-box9")
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+
+        var initFun =function(type){
+            getDate();
+            timeInter=setInterval(function(){
+                getDate()
+            },1000);
+            var data={
+                lastYear:2019,
+                currentYear:2020
+            };
+            setCanvasBox7(data,"canvas-box7");
+            getData1(type);
+            getData2(type);
+            getData3(type);
+            getData4(type);
+            getData5(type);
+            getData6(type);
+            // getData7(type);
+            getData8(type);
+            getData9(type);
+
+        };
+        initFun(1);
+
+        //tab切换事件
+        $(".tabClass").off("click").on("click", function () {
+            $(this).addClass("tabActive");
+            $(this).siblings().removeClass("tabActive");
+            if($(this).attr("data-type")==2){
+                $(".changeTitle").html("科研经费使用详情")
+
+            }else{
+                $(".changeTitle").html("科研经费拨付详情")
+            }
+            initFun($(this).attr("data-type"));
+            clearTimeout(timeInter);
+        });
+        function checkBrowser() {
+            var ua = navigator.userAgent.toLocaleLowerCase();
+            var browserType = null;
+            if (ua.match(/msie/) != null || ua.match(/trident/) != null) {
+                browserType = "IE";
+                browserVersion = ua.match(/msie ([\d.]+)/) != null ? ua.match(/msie ([\d.]+)/)[1] : ua.match(/rv:([\d.]+)/)[1];
+            } else if (ua.match(/firefox/) != null) {
+                browserType = "火狐";
+            } else if (ua.match(/ubrowser/) != null) {
+                browserType = "UC";
+            } else if (ua.match(/opera/) != null) {
+                browserType = "欧朋";
+            } else if (ua.match(/bidubrowser/) != null) {
+                browserType = "百度";
+            } else if (ua.match(/metasr/) != null) {
+                browserType = "搜狗";
+            } else if (ua.match(/tencenttraveler/) != null || ua.match(/qqbrowse/) != null) {
+                browserType = "QQ";
+            } else if (ua.match(/maxthon/) != null) {
+                browserType = "遨游";
+            } else if (ua.match(/chrome/) != null) {
+                var is360 = _mime("type", "application/vnd.chromium.remoting-viewer");
+                function _mime(option, value) {
+                    var mimeTypes = navigator.mimeTypes;
+                    for (var mt in mimeTypes) {
+                        if (mimeTypes[mt][option] == value) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                if (is360) {
+                    browserType = '360';
+                } else {
+                    browserType = "谷歌";
+                }
+
+            } else if (ua.match(/safari/) != null) {
+                browserType = "Safari";
+            }
+            return browserType;
+        }
+        //监听退出全屏事件
+        function checkFull() {
+            return (window.outerHeight === window.screen.height && window.outerWidth === window.screen.width)||
+            (document.body.scrollHeight === window.screen.height && document.body.scrollWidth === window.screen.width) ||
+                document.fullscreenElement ||
+                document.msFullscreenElement ||
+                document.mozFullScreenElement ||
+                document.webkitFullscreenElement || false;
+        }
+        window.onresize = function () {
+            if($(window).height()==768||$(window).height()==767){
+                $(".canvasTop .canvasItem-Title").addClass("lineHeight44");
+                $(".quotaTitle").addClass("lineHeight55");
+                $(".allLayer .canvasItem-Title").addClass("lineHeight76");
+            }else if($(window).height()==1080||$(window).height()==1079){
+                $(".canvasTop .canvasItem-Title").addClass("lineHeight63");
+                $(".quotaTitle").addClass("lineHeight78");
+                $(".allLayer .canvasItem-Title").addClass("lineHeight108");
+            }else{
+                $(".canvasTop .canvasItem-Title").removeClass("lineHeight44");
+                $(".quotaTitle").removeClass("lineHeight55");
+                $(".canvasTop .canvasItem-Title").removeClass("lineHeight63");
+                $(".quotaTitle").removeClass("lineHeight78");
+                $(".allLayer .canvasItem-Title").removeClass("lineHeight108");
+                $(".allLayer .canvasItem-Title").removeClass("lineHeight76");
+            }
+            var myChart = document.getElementsByClassName("canvas-box");
+            for (var i = 0; i < myChart.length; i++) {
+                echarts.init(myChart[i]).resize();
+            }
+        };
+        //全屏显示
+        function fullScreen(el) {
+            var el = el.parent()[0];
+            if (checkBrowser() == "搜狗" || checkBrowser() == "360") {
+                $("#bigMain").parent().css("height", "100%")
+                $("#bigMain").parent().css("width", "100%")
+                // el = $("#bigMain")[0];
+            }
+            var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen,
+                wscript;
+            if (typeof rfs != "undefined" && rfs) {
+                rfs.call(el);
+                return;
+            }
+            if (typeof window.ActiveXObject != "undefined") {
+                wscript = new ActiveXObject("WScript.Shell");
+                if (wscript) {
+                    wscript.SendKeys("{F11}");
+                }
+            }
+        }
+        //阻止默认全屏事件
+        window.addEventListener('keydown', function (e) {
+            e = e || window.event;
+            if (e.keyCode===122 && !checkFull()) {
+                if($(".sciBoardMain").length!=0){
+                    e.preventDefault();
+                    fullScreen($(".sciBoardMain"));
+                }
+            }
+        });
+
+        // 课题预警
+        $(".swiper-container").css('width',($(window).width() - 62)/4)
+        var getSwiper = function () {
+            $.ajax({
+                url: "/ADC_info/api/research/researchProject/queryListByDangerLevel?level=高",
+                type: 'get',
+                async:false,
+                success: function (res) {
+                    if (res.ok) {
+                        // canvasData7=res.data;
+                        // console.log(canvasData7 )
+                        // setCanvasBox7(canvasData7,"canvas-box7")
+                        $("#swiper-thumbs").html('');
+                        var str = '';
+                        for( var i=0; i<res.data.length ; i++){
+                            if( res.data[i].projectName.length > 8){
+                                str += '<div class="swiper-slide gThumbs">'+ res.data[i].projectName.substring(0,8) + ' </div>'
+                            }else{
+                                str += '<div class="swiper-slide gThumbs">'+ res.data[i].projectName + ' </div>'
+                            }
+                        }
+                        $("#swiper-thumbs").html(str);
+                        $("#swiper-thumbs1").html(str);
+
+                        $("#stopSwiper").show();
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        }
+        getSwiper();
+        var swiperOption = {
+            spaceBetween: 10,
+            loop: true,  // 轮训
+            autoplay: {
+                delay: 2000,
+                stopOnLastSlide: false,
+                disableOnInteraction: true,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                dynamicBullets: true,
+                clickable :true, // 此参数设置为true时，点击分页器的指示点分页器会控制Swiper切换
+                renderBullet: function (index, className) {
+                    return '<span class="' + className + '" style="background-color: #A9C7FF; opacity:1;"></span>';
+                },
+            },
+            slidesPerView: 3,
+            centeredSlides : true,
+            centeredSlidesBounds: true,
+            // freeMode: true,
+            // watchSlidesVisibility: true,
+            // watchSlidesProgress: true,
+        }
+        var galleryThumbs = new Swiper('.gallery-thumbs', swiperOption);
+        //如果你在swiper初始化后才决定使用clickable，可以这样设置
+        galleryThumbs.params.pagination.clickable = true ;
+        $("#startSwiper").on('click',function(){
+            galleryThumbs.autoplay.start();
+            $("#stopSwiper").show();
+            $("#startSwiper").hide();
+        });
+        $("#stopSwiper").on('click',function(){
+            galleryThumbs.autoplay.stop();
+            $("#stopSwiper").hide();
+            $("#startSwiper").show();
+        });
+
+        function canvas7(canvasIndex, galleryThumbs1) {
+
+            if(canvasIndex == 7){
+                // $("#canvasLayer").css('height','90%');
+                $("#canvasLayer").addClass('height90');
+                $(".gallery-thumbs1").show();
+                $("#stopSwiper1").show();
+                galleryThumbs1.autoplay.start();
+            }else{
+                // $("#canvasLayer").css('height','100%');
+                $("#canvasLayer").removeClass("height90");
+                $(".gallery-thumbs1").hide();
+                $("#stopSwiper1").hide();
+                $("#stopSwiper1").hide();
+                galleryThumbs1.autoplay.stop();
+            }
+            $("#startSwiper1").on('click',function(){
+                galleryThumbs1.autoplay.start();
+                $("#stopSwiper1").show();
+                $("#startSwiper1").hide();
+            });
+            $("#stopSwiper1").on('click',function(){
+                galleryThumbs1.autoplay.stop();
+                $("#stopSwiper1").hide();
+                $("#startSwiper1").show();
+            });
+        }
+        //退出全屏
+        function exitFullScreen(el) {
+            var el = document,
+                cfs = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullScreen,
+                wscript;
+            if (typeof cfs != "undefined" && cfs) {
+                cfs.call(el);
+                return;
+            }
+
+            if (typeof window.ActiveXObject != "undefined") {
+                wscript = new ActiveXObject("WScript.Shell");
+                if (wscript != null) {
+                    wscript.SendKeys("{F11}");
+                }
+            }
+        }
+        $("#mainAll-btn").off("click").on("click", function () {
+            if (checkFull()) {
+                //要执行的动作
+                exitFullScreen();
+            } else {
+                fullScreen($(".sciBoardMain"));
+            }
+
+        });
+        $(".allImg").off("click").on("click", function () {
+            var titleHtml =$(this).parent().find(".canvasItem-Header").html();
+            var canvasIndex =$(this).attr("data-index");
+            var data={
+                lastYear:2019,
+                currentYear:2020
+            };
+           var indexLay= layer.open({
+                type: 1,
+                title: false,
+                closeBtn: 0,
+                area: ["80%","90%"],
+                skin: 'layui-layer-nobg', //没有背景色
+                shadeClose: false,
+                content: $('.allLayer'),
+                success:function () {
+                    console.log(canvasIndex )
+                    var galleryThumbs1 = new Swiper('.gallery-thumbs1', swiperOption);
+                    canvas7(canvasIndex,galleryThumbs1)
+                    if(canvasIndex==4){
+                        $(".allLayer .canvas-box").addClass("height80");
+                        $(".allLayer .check-box").css("display","flex");
+                        var html ="";
+                        for (var i = 0; i < canvasData4.xindexList.length; i++) {
+                            html+='<div class="layui-form-item ">\n' +
+                                '            <input type="checkbox" class="deptCheck" data-index="'+i+'" title="'+canvasData4.xindexList[i]+'" lay-filter="checkboxDept" lay-skin="primary" checked="">\n' +
+                                '        </div>';
+                        }
+                        $(".allLayer .check-box").empty().append(html);
+                    }else{
+                        $(".allLayer .canvas-box").removeClass("height80");
+                        $(".allLayer .check-box").css("display","none");
+                    }
+
+
+                    $(".allLayer .canvasItem-Header").html(titleHtml);
+                    eval("setCanvasBox"+canvasIndex+"(canvasData"+canvasIndex+",'canvasLayer','isLayer')")
+                    form.on('checkbox(checkboxDept)', function (obj,ele) {
+                        var check=obj.elem.checked;
+                        var el =$(".deptCheck");
+                        var temp ={
+                            xindexList:[],
+                            useDataList:[],
+                            budgetDataList:[]
+                        };
+                        for (var i = 0; i < el.length; i++) {
+                            if (el[i].checked) {
+                                temp.xindexList.push(canvasData4.xindexList[i]);
+                                temp.budgetDataList.push(canvasData4.budgetDataList[i]);
+                                temp.useDataList.push(canvasData4.useDataList[i]);
+                            }
+                        }
+                        setCanvasBox4(temp,"canvasLayer","isLayer");
+                    });
+                    $(".closeImg").off("click").on("click",function () {
+                        layer.close(indexLay);
+                    });
+                    $(".zuoImg").off("click").on("click",function () {
+                        if(canvasIndex==1){
+                            return;
+                        }
+                        canvasIndex=Number(canvasIndex)-1;
+                        if(canvasIndex==4){
+                            $(".allLayer .canvas-box").addClass("height80");
+                            $(".allLayer .check-box").css("display","flex");
+                            var html ="";
+                            for (var i = 0; i < canvasData4.xindexList.length; i++) {
+                                html+='<div class="layui-form-item ">\n' +
+                                    '            <input type="checkbox" class="deptCheck" data-index="'+i+'" title="'+canvasData4.xindexList[i]+'" lay-filter="checkboxDept" lay-skin="primary" checked="">\n' +
+                                    '        </div>';
+                            }
+                            $(".allLayer .check-box").empty().append(html);
+
+                        }else{
+                            $(".allLayer .canvas-box").removeClass("height80");
+                            $(".allLayer .check-box").css("display","none");
+                        }
+                        canvas7(canvasIndex, galleryThumbs1)
+                        titleHtml=$("#canvas-box"+canvasIndex).parent().find(".canvasItem-Header").html();
+                        $(".allLayer .canvasItem-Header").html(titleHtml);
+                        eval("setCanvasBox"+canvasIndex+"(canvasData"+canvasIndex+",'canvasLayer','isLayer')")
+                        form.render();
+                    });
+                    $(".youImg").off("click").on("click",function () {
+                        if(canvasIndex==9){
+                            return;
+                        }
+                        canvasIndex=Number(canvasIndex)+1;
+                        if(canvasIndex==4){
+                            $(".allLayer .canvas-box").addClass("height80");
+                            $(".allLayer .check-box").css("display","flex");
+                            var html ="";
+                            for (var i = 0; i < canvasData4.xindexList.length; i++) {
+                                html+='<div class="layui-form-item ">\n' +
+                                    '            <input type="checkbox" class="deptCheck" data-index="'+i+'" title="'+canvasData4.xindexList[i]+'" lay-filter="checkboxDept" lay-skin="primary" checked="">\n' +
+                                    '        </div>';
+                            }
+                            $(".allLayer .check-box").empty().append(html);
+                        }else{
+                            $(".allLayer .canvas-box").removeClass("height80");
+                            $(".allLayer .check-box").css("display","none");
+                        }
+                        canvas7(canvasIndex,galleryThumbs1)
+                        titleHtml=$("#canvas-box"+canvasIndex).parent().find(".canvasItem-Header").html();
+                        $(".allLayer .canvasItem-Header").html(titleHtml);
+                        eval("setCanvasBox"+canvasIndex+"(canvasData"+canvasIndex+",'canvasLayer','isLayer')")
+                        form.render();
+                    });
+                    form.render();
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,327 @@
+
+<style>
+    #btn-export {
+        margin-left: 10px;
+    }
+    .work-search-input{
+        /*height:20px;*/
+        /*padding:3px 6px;*/
+        float: left;
+        width: 100px;
+    }
+    .work-search-label{
+        width: auto;
+        padding-left: 0px;
+        padding-right: 2px;
+    }
+    .form-input{
+        display: inline-block;
+    }
+    .costReBox .finishCostBtn{
+        border: 1px solid #10ADE8 !important;
+        color: #10ADE8;
+        height: 22px;
+        line-height: 20px;
+        float: right;
+        background: #fff;
+        padding: 0 10px;
+        margin-top: 5px;
+        cursor: pointer;
+    }
+</style>
+<div class="layui-row layui-col-space15">
+    <!-- 单列普通表格 -->
+    <div class="layui-col-md12 costReBox">
+        <div class="layui-card p-main">
+            <div class="layui-card-header" style="height: 0px"></div>
+            <!-- 卡片容器 -->
+            <div class="layui-card-body">
+                <!-- 数据表格顶部控制栏 -->
+                <!--<div class="layui-form">-->
+                    <!--<div class=" table-top-bar">-->
+                        <!--<div>-->
+                            <!--<div class="layui-inline layui-form-item" style="width: 100%;border-bottom:1px solid #e5e5e5;margin-bottom: 0px;padding-bottom: 15px">-->
+                                <!--<div class="layui-inline">-->
+                                    <!--<label class="layui-form-label work-search-label">部门：</label>-->
+                                    <!--<input type="text" placeholder="请输入" readonly id="infoDepartment" class=" work-search-input layui-input">-->
+                                <!--</div>-->
+
+                                <!--<div class="layui-inline layui-form-item">-->
+                                    <!--<label class="layui-form-label work-search-label">状态：</label>-->
+                                    <!--<div class="form-input ">-->
+                                        <!--<select  class="costStatus  ">-->
+                                            <!--<option value="10">全部</option>-->
+                                            <!--<option value="0">未认领</option>-->
+                                            <!--<option value="1">已认领</option>-->
+                                            <!--<option value="2">逾期未认领</option>-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+
+                                    <!--&lt;!&ndash;<input type="text" placeholder="请输入" class="costStatus work-search-input layui-input">&ndash;&gt;-->
+                                <!--</div>-->
+
+                                <!--<button class="layui-btn layui-btn-sm layui-btn-danger" style="float: right;margin-left: 10px;"  id="btn-cost-reset">-->
+                                    <!--<img src="../../assets/images/reset.png" style="position: relative;top: -1px;">-->
+                                    <!--重置-->
+                                <!--</button>-->
+                                <!--<button class="layui-btn layui-btn-sm layui-btn-normal" style="float: right;margin-left: 0px;background-color: #239FFF;color: #fff"  id="btn-cost-search">-->
+                                    <!--<img src="../../assets/images/chaxun.png" style=" width: 16px">-->
+                                    <!--查询-->
+                                <!--</button>-->
+
+
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                <!--</div>-->
+                <div class="" style="margin-top: 10px">
+                    <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"
+                            title="新建" id="btn-create">
+                        <i class="layui-icon layui-icon-add-1"></i>
+                        新建
+                    </button>
+
+                    <button class="finishCostBtn"   id="goBack">返回</button>
+                </div>
+
+                <!-- 下部表格容器 -->
+                <table id="tableContent-cost" lay-filter="tableContent-cost"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="barTool">
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-edit">编辑</button>
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-del">删除</button>
+</script>
+<script>
+    // 初始化 layui
+    layui.use(['laydate', 'table', 'upload', 'formSelects'], function () {
+        var table = layui.table,
+            form = layui.form,
+            upload = layui.upload,
+            formSelects = layui.formSelects,
+            laydate = layui.laydate,
+            layer = layui.layer,
+            tools = layui.tools,
+            config = layui.config,
+            admin = layui.admin;
+        var account = config.getAccount();
+        //弹窗注值
+        var setCostValue = function (data) {
+            if(data.type=='edit'){
+                $("#receiverId").val(data.id);
+
+            }
+            for(var item in data){
+                if(data[item]){
+                    if(item=="orgId"){
+                        $("#orgNameReceiver").attr("data-id",data[item]);
+                    } else if(item=="userIds"){
+                        $("#receiverName").attr("data-id",data[item]);
+                    } else{
+                        $(".receiverDataMain input[name='"+item+"']").val(data[item]);
+                    }
+                }
+            }
+            $("#receiverType").val(data.type);
+        };
+        //弹窗
+        var modelBoxOpen = function (type,data) {
+            var width = 700;
+            if (type === 'add') {
+                var title = '新增接收人设置';
+                data = {};
+            } else if (type === 'edit') {
+                var title = '编辑接收人设置'
+            }
+            data.type = type;
+            admin.popupCenter({
+                title: title,
+                width: width,
+                path: 'components/costDataManage/costReceiverCreat.html',
+                finish: function (typeFin) {
+                    if(!typeFin){
+                        table.reload('tableContent-cost', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    }
+                },
+                success: function () {
+                    setCostValue(data);
+                    form.render()
+                }
+            });
+        };
+        //新建
+        $('#btn-create').off('click').on('click',function () {
+            modelBoxOpen("add",{})
+        });
+        //返回
+        $('#goBack').off('click').on('click',function () {
+            window.open("#!ADC_costDataManage_costDataManage_html","_self")
+        });
+
+        //新建确定
+        form.on('submit(btn-receiver-sure)', function (obj) {
+            var costData = obj.field;
+            var type=$("#receiverType").val();
+            var ajaxType="POST";
+            var ajaxMsg="新建成功";
+            if (type === 'edit') {
+                ajaxType = 'PUT';
+                ajaxMsg = '编辑成功';
+                costData.id = $("#receiverId").val();
+            }
+
+            costData.orgId=$("#orgNameReceiver").attr("data-id");
+            costData.userIds=$("#receiverName").attr("data-id");
+            var load2 =layer.load(2);
+            $.ajax({
+                url: "/api/finance/costReceiver",
+                data: JSON.stringify(costData),
+                type: ajaxType,
+                contentType: "application/json",
+                success: function (res) {
+                    layer.close(load2);
+                    if(res.ok){
+                        admin.finishPopupCenter();
+                        return  layer.msg(ajaxMsg, {
+                            icon: 1
+                        });
+                    }else{
+                        return layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+
+                },
+                error:function (err) {
+                    layer.close(load2);
+                    return layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            })
+        });
+        // 渲染表格
+        var renderTable = function (search) {
+            if (!search) {
+                search = {};
+            }
+            // 渲染表格
+            table.render({
+                elem: '#tableContent-cost',
+                id: 'tableContent-cost',
+                url: admin.formatUrl('/api/finance/costReceiver/page'),
+                // contentType: "application/json",
+                // method: 'post',
+                // 格式化后台返回的数据
+                parseData: function (res) { //res 即为原始返回的数据
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "count": res.data.count,
+                        "msg": res.message, //解析提示文本
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                request: {
+                    pageName: 'page',
+                    limitName: 'pageSize'
+                },
+                height: 'full-195',
+                cols: [
+                    [{
+                        type: 'numbers',
+                        title: '序号',
+                        width:80
+                    },
+                     {
+                        field: 'orgName',
+                        title: '部门',
+                        align: 'center',
+                        templet: function (d) {
+                            return '<div title="'+(d.orgName?d.orgName:"")+'"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ (d.orgName?d.orgName:"") +'</div></div>';
+                        }
+                    }, {
+                        field: 'userNames',
+                        title: '接收人',
+                        align: 'center',
+                        templet: function (d) {
+                            return '<div title="'+(d.userNames?d.userNames:"")+'"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ (d.userNames?d.userNames:"") +'</div></div>';
+                        }
+                    }, {
+                        title: '操作',
+                        align: 'center',
+                        toolbar:'#barTool',
+                        width: 200,
+                        fixed:"right"
+                    }
+                    ]
+                ],
+                page: true,
+                limit: 10, //显示的数量
+                limits: [10, 15, 20, 25, 30],
+                cellMinWidth: 90,
+                where: search,
+                done: function (res, curr, count) {
+                    if (curr > 1 && res.data.length == 0) {
+                        var pageValue = curr - 1;
+                        table.reload('tableContent-cost', {
+                            page: { curr: pageValue },// 修改页码
+                        });
+                    }
+                }
+            });
+        }
+
+        // 初始化，执行一次渲染表格
+        renderTable();
+        table.on('tool(tableContent-cost)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'btn-edit') {
+                modelBoxOpen("edit",data)
+            }else if(obj.event==='btn-del'){
+                layer.confirm('确定要删除此数据吗？', {
+                    icon: 3,
+                    title: '提示'
+                }, function() {
+                    var load2 =layer.load(2);
+                    $.ajax({
+                        url: "/api/finance/costReceiver/"+data.id,
+                        type: 'delete',
+                        contentType: 'application/json',
+                        success: function (res) {
+                            layer.close(load2);
+                            if (res.ok) {
+                                table.reload('tableContent-cost', {
+                                    where: {
+                                        reload: new Date().getTime()
+                                    }
+                                });
+                                return  layer.msg('删除成功', {
+                                    icon: 1
+                                });
+                            }else{
+                                return  layer.msg(res.message, {
+                                    icon: 5
+                                });
+                            }
+                        },
+                        error:function (err) {
+                            layer.close(load2);
+                            return layer.msg(err.message, {
+                                icon: 5
+                            });
+                        }
+                    });
+                });
+            }
+        });
+    });
+
+</script>

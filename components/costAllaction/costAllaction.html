@@ -1,0 +1,470 @@
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+    /* .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    } */
+
+    .btn-width {
+        width: 100px;
+    }
+
+    .Kinputs {
+        font-size: 13px;
+        width: 125px !important;
+    }
+
+    .mange .layui-form-select dl {
+        top: 32px;
+    }
+    .finishCostBtn{
+        border: 1px solid #10ADE8 !important;
+        color: #10ADE8;
+        height: 22px;
+        line-height: 20px;
+        float: right;
+        background: #fff;
+        padding: 0 10px;
+        margin-top: 10px;
+        cursor: pointer;
+        display: none;
+    }
+</style>
+
+<div class="layui-row layui-col-space15 mange">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                成本配置
+                <button class="finishCostBtn"   id="goBack">返回</button>
+            </div>
+            <div class="layui-card-body">
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar">
+                        <div class="layui-inline">
+                            <label>成本名称：</label>
+                            <div class="layui-inline Kinputs">
+                                <input type="text" name="businessName" class="layui-input" placeholder="请输入成本名称"
+                                    id="businessName" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label>状态：</label>
+                            <div class="layui-inline Kinputs">
+                                <select name="contactsStatus" id="contactsStatus">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"
+                                lay-filter="btn_search_form" lay-submit title="查询" id="btn_search_form">
+                                <i class="layui-icon layui-icon-search"></i>查询
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"
+                                lay-filter="btn_reset_form" id="btn_reset_form" lay-submit title="重置">
+                                <i class="layui-icon layui-icon-refresh"></i>重置
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="btn_add_form"
+                                lay-submit title="新建" id="created">
+                                <i class="layui-icon layui-icon-add-1"></i>
+                                新建
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="delData"
+                                lay-submit title="删除" id="delData">
+                                <i class="layui-icon layui-icon-delete"></i>删除
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="templateBtn"
+                                id="templateBtn" lay-submit title="下载模板">
+                                <i class="layui-icon layui-icon-download-circle"></i>下载模板
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="toLeadbtn"
+                                id="toLeadbtn" lay-submit title="导入">
+                                <i class="layui-icon layui-icon-upload-drag"></i>导入
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="exportBtn"
+                                id="exportBtn" lay-submit title="导出">
+                                <i class="layui-icon layui-icon-download-circle"></i>导出
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <table id="manageTable" lay-filter="manageTable"></table>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+    <a class="table-control-btn table-control-btn-danger" lay-event="del">删除</a>
+</script>
+<script src="/assetsInfo/js/tempDown.js"></script>
+<script>
+    var ADCFormDesign = null;
+    var ywManage = {};
+    layui.use(['table', 'upload', 'laydate'], function () {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer,
+            upload = layui.upload;
+        var editId = '';
+        var bgNumberOld = '';
+        var bgNameOld = '';
+        var queryName = '';
+        var queryStatus = '';
+        var isCanBack = sessionStorage.getItem("isCanBack");
+        if(isCanBack){
+            $(".finishCostBtn").css("display","inline-block");
+            $('.finishCostBtn').off('click').on('click', function () {
+                window.open("#!ADC_costDataManage_costDataManage_html", "_self")
+            });
+            sessionStorage.removeItem('isCanBack');
+        }
+        // 渲染表格
+        table.render({
+            elem: '#manageTable',
+            id: 'manageTable',
+            url: admin.formatUrl('/api/finance/businessGonfig/page'),
+            parseData: function (res) {
+                return {
+                    "code": res.respCode, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.list //解析数据列表
+                };
+            },
+            // height: 440,
+            cols: [
+                [{
+                    type: 'checkbox', fixed: 'left'
+                },
+                {
+                    type: 'numbers', title: '序号'
+                },
+                {
+                    field: 'bgName',
+                    title: '成本名称',
+                    align: 'center',
+                    templet: function (d) {
+                        var text = d.bgName ? d.bgName : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                },
+                {
+                    field: 'bgNumber',
+                    title: '成本编号',
+                    align: 'center',
+                    templet: function (d) {
+                        var text = d.bgNumber ? d.bgNumber : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                    field: 'departName',
+                    title: '负责部门',
+                    align: 'center',
+                    templet: function (d) {
+                        var text = d.departName ? d.departName : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                    field: 'bgStatusName',
+                    title: '成本状态',
+                    align: 'center',
+                    templet: function (d) {
+                        var text = d.bgStatusName;
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                    templet: '#control-1',
+                    title: '操作',
+                    align: 'center',
+                    unresize: true
+                }]
+            ],
+            cellMinWidth: 120,
+            page: {
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+            },
+            request: {
+                page: 'pageNo',
+                limitName: 'pageSize'
+            },
+            where: {
+                bgType: 2
+            },
+            done: function (res, curr, count) {
+                if (curr > 1 && res.data.length == 0) {
+                    var pageValue = curr - 1;
+                    table.reload('manageTable', {
+                        page: { curr: pageValue },// 修改页码
+                    });
+                }
+            }
+        });
+        // 监听工具条事件 查看、编辑、删除
+        table.on('tool(manageTable)', function (obj) {
+            // 获取点击列的数据
+            var data = obj.data;
+            var layEvent = obj.event;
+            // 判断操作类型
+            if (layEvent === 'edit') {
+                popMenu("edit", data);
+            } else {
+                let ids = data.id;
+                checkDelets(ids, '您确定要删除这条的数据吗？')
+            }
+        });
+        // 搜索
+        form.on('submit(btn_search_form)', function () {
+            searchData();
+        });
+        // 重置
+        form.on('submit(btn_reset_form)', function () {
+            restData();
+        });
+        function searchData() {
+            var businessName = $('#businessName').val();
+            var status = $('#contactsStatus').val();
+            queryName = businessName;
+            queryStatus = status;
+            table.reload('manageTable', {
+                where: {
+                    bgName: businessName,
+                    bgStatus: status
+                }
+            });
+        }
+        function restData() {
+            $('#businessName').val('');
+            $('#contactsStatus').val('');
+            queryName = '';
+            queryStatus = '';
+            form.render();
+            table.reload('manageTable', {
+                where: {
+                    bgStatus: '',
+                    bgName: '',
+                }
+            });
+        }
+        $('#created').off("click").on('click', function () {
+            popMenu('add', {})
+        });
+        // 下拉赋值
+        admin.req('/api/sys/dictype/page?dicId=7BWYU4JQ7B', {}, function (data) {
+            var arr = data.data.list;
+            $.each(arr, function (index, item) {
+                $('#contactsStatus').append(new Option(item.dicTypeName, item.id));
+            })
+            layui.form.render("select");
+        }, { method: 'get' })
+        $('#delData').on('click', function () {
+            var checkStatus = layui.table.checkStatus('manageTable').data;
+            var delids = '';
+            if (checkStatus.length == 0 || checkStatus == []) {
+                layer.msg('请先选取删除数据');
+            } else {
+                for (let i = 0; i < checkStatus.length; i++) {
+                    if (checkStatus.length > 1) {
+                        delids += checkStatus[i].id + ',';
+                    } else {
+                        delids = checkStatus[i].id;
+                    }
+                }
+                checkDelets(delids, '您确定要删除选中的数据吗？')
+            }
+        })
+        function checkDelets(delids, delTitle) {
+            layer.confirm(delTitle, {
+                icon: 3,
+                title: '提示'
+            }, function () {
+                admin.req('/api/finance/businessGonfig/logicDelete/' + delids, {}, function (data) {
+                    if (data.ok) {
+                        layer.msg('删除成功！', {
+                            icon: 1
+                        });
+                        table.reload('manageTable', {
+                        });
+                    } else {
+                        return layer.msg('删除失败：' + data.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: 'delete'
+                });
+                form.render()
+            });
+        }
+        $('#exportBtn').on('click', function () {
+            if (queryName.length > 0) {
+                queryName =encodeURIComponent(queryName); 
+            }
+            // console.log(queryName)
+            window.open(admin.formatUrl('/ADC_info/api/finance/businessGonfig/exportBusinessGonfig?bgName=' + queryName + '&bgStatus=' + queryStatus + '&bgType=2'))
+        });
+        $('#templateBtn').off("click").on('click', function () {
+            tempDownByDicCode("costData_config_template");
+        });
+        upload.render({
+            elem: '#toLeadbtn',
+            url: '/api/finance/businessGonfig/importBusinessGonfig?bgType=2', //上传接口
+            accept: 'file',
+            acceptMime: 'xlsx/xlsm',
+            before: function (obj) {
+                layer.load(); //上传loading
+            },
+            done: function (res) {
+                layer.closeAll();
+
+                if (res.respCode == 0) {
+                    layer.msg('导入成功！', {
+                        icon: 1
+                    });
+                    table.reload('manageTable', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                } else {
+                    return layer.msg('导入失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            },
+            error: function () {
+                //请求异常回调
+                layer.closeAll();
+                return layer.msg('导入出现错误，请重试！', {
+                    icon: 5
+                });
+            }
+        });
+        // 编辑弹框
+        function popMenu(type, data) {
+            if (type === 'add') {
+                var title = '新增成本配置';
+                data = {};
+            } else if (type === 'edit') {
+                var title = '编辑成本配置：'
+            }
+            data.type = type;
+            editId = data.id;
+            bgNumberOld = data.bgNumber;
+            bgNameOld = data.bgName;
+            ywManage = {
+                bgStatus: data.bgStatus
+            }
+            Window.ywManage = ywManage;
+            admin.popupCenter({
+                title: title,
+                area: ['650px', '450px'],
+                path: 'components/costAllaction/addAllaction.html',
+                finish: function () {
+                    table.reload('manageTable', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                },
+                success: function () {
+                    setFormValue(data);
+                    $('#user-area .layui-col-md6').removeClass("layui-col-md6");
+                    admin.showLoading('.roleName-loading');
+                    admin.showLoading('.orgName-loading');
+                    admin.showLoading('.userState-loading');
+                    form.render()
+                }
+            });
+        }
+        // 设置表单内容
+        function setFormValue(obj) {
+            var inputs = $('.layui-tpl-container').find('input'),
+                title = $('.layui-tpl-container .layui-card-header'),
+                formNames = ['bgName', 'bgNumber', 'departId', 'departName', 'bgStatus', 'type'];
+
+            obj.title && title.text(obj.title);
+            for (var i = 0; i < formNames.length; i++) {
+                if (obj[formNames[i]]) {
+                    obj[formNames[i]]=String(obj[formNames[i]]);
+                    obj[formNames[i]] = obj[formNames[i]].replace(/&amp;/g,"&");
+                    obj[formNames[i]] = obj[formNames[i]].replace(/&lt;/g,"<");
+                    obj[formNames[i]] = obj[formNames[i]].replace(/&gt;/g,">");
+                    obj[formNames[i]] = obj[formNames[i]].replace(/&nbsp;/g," ");
+                    obj[formNames[i]] = obj[formNames[i]].replace(/&quot/g,"'");
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                } else {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val('');
+                }
+            }
+        }
+        // 表单提交
+        form.on('submit(research)', function (data) {
+            // 获取表单数据
+            var d = data.field,
+                elem = data.elem;
+            // 判断是编辑还是新增
+            var ajaxName = '';
+            var urlType = '';
+            var construction = '';
+            var urls = '';
+            // console.log(d)
+            var datas = {};
+            datas.bgName = d.bgName;
+            datas.bgNumber = d.bgNumber;
+            datas.departName = d.departName;
+            datas.departId = d.departId;
+            datas.bgStatus = d.bgStatus;
+            datas.bgType = 2;
+            if (d.type === 'add') {
+                ajaxName = '新增成本配置';
+                urlType = 'POST';
+                urls = '/api/finance/businessGonfig/create'
+            } else if (d.type === 'edit') {
+                ajaxName = '编辑成本配置';
+                urlType = 'PUT';
+                datas.id = editId;
+                datas.bgNumberOld = bgNumberOld;
+                datas.bgNameOld = bgNameOld;
+                urls = '/api/finance/businessGonfig/update';
+            }
+            var account = JSON.parse(layui.data(config.tableName).account).usid;
+            // construction.updateUserId = account;
+            // 发送请求
+            admin.req(urls, datas, function (data) {
+                if (data.ok) {
+                    layer.msg(ajaxName + '成功！', {
+                        icon: 1
+                    });
+                    admin.finishPopupCenter();
+                } else {
+                    admin.closePopupCenter();
+                    return layer.msg(ajaxName + '失败：' + data.message, {
+                        icon: 5
+                    });
+                    admin.finishPopupCenter();
+                }
+            }, {
+                method: urlType
+            });
+
+        });
+    });
+</script>

@@ -1,0 +1,1164 @@
+<style>
+    #bth .layui-this{
+        background:#BBDBFB;
+    }
+    #bth>li{
+        width:80px;
+        border:1px solid #eeeeee;
+    }
+    #bth li:nth-child(1){
+        border-right:none
+    }
+    #bth li:nth-child(2){
+        border-left:none
+    }
+
+    body{
+        overflow-y: hidden;
+    }
+    .billManagement .layui-table-box{
+        height: 90% !important;
+    }
+    .billManagement .layui-table-body{
+        height: 93.5% !important;
+    }
+    .billManagement .layui-form.layui-border-box.layui-table-view{
+        height: 480px !important;
+    }
+</style>
+<div class="layui-row layui-col-space15">
+    <div class="layui-col-md12 autoScrollLeft">
+        <div class="layui-tab billManagement"   style="background:#FFFFFF;" lay-filter="tab-all">
+            <div id="bth" class="layui-tab-title" style="position:static">
+                <li data-status="" class="layui-this">明细数据</li>
+                <li data-status="1">归档数据</li>
+            </div>
+            <div class="layui-tab-content" style="position:static;overflow-y:hidden">
+                <div class="layui-tab-item  layui-card-body layui-show" style="overflow: hidden;padding:0">
+                    <div class="layui-form-item" style="padding:0">
+                        <div class="layui-inline">
+                            <button id="btn_add_user" class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_add_user" lay-submit title="新增用户">
+                                <i class="layui-icon layui-icon-add-1"></i>新增
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="btn_add_form" lay-submit title="编辑" id="btn_edit">
+                                <i class="layui-icon layui-icon-edit"></i>编辑
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="btn_add_form" lay-submit title="删除" id="checkData">
+                                <i class="layui-icon layui-icon-delete"></i>删除
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="btn_add_form" lay-submit title="删除全部" id="deleteAll">
+                                <i class="layui-icon layui-icon-delete"></i>删除全部
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="button" class="layui-btn layui-btn-sm layui-import" id="crm-customer-btn-import" title="导入">
+                                <i class="layui-icon layui-icon-upload-drag"></i>导入
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="btn_add_form" lay-submit title="导出" id="btn_download_out">
+                                <i class="layui-icon layui-icon-download-circle"></i>导出
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button id="btn_download_project" class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_download_project" lay-submit title="下载模板">
+                                <i class="layui-icon layui-icon-download-circle"></i>下载模板
+                            </button>
+                        </div>
+                    </div>
+                    <div class="layui-card botTable">
+                        <table class="layui-hide" style="" id="order_all" lay-filter="order_all"></table>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <button id="btn_add_user1" class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_add_user" lay-submit title="新增用户">
+                                <i class="layui-icon layui-icon-add-1"></i>新增
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="btn_add_form" lay-submit title="编辑" id="btn_edit1">
+                                <i class="layui-icon layui-icon-edit"></i>编辑
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="btn_add_form" lay-submit title="删除" id="checkData1">
+                                <i class="layui-icon layui-icon-delete"></i>删除
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"  title="删除全部" id="deleteAll2">
+                                <i class="layui-icon layui-icon-delete"></i>删除全部
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="button" class="layui-btn layui-btn-sm layui-import" id="crm-customer-btn-import2" title="导入">
+                                <i class="layui-icon layui-icon-upload-drag"></i>导入
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"  lay-submit title="导出" id="btn_download_out1">
+                                <i class="layui-icon layui-icon-download-circle"></i>导出
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <button id="btn_download_project2" class="layui-btn layui-btn-sm layui-btn-primary"  title="下载模板">
+                                <i class="layui-icon layui-icon-download-circle"></i>下载模板
+                            </button>
+                        </div>
+                    </div>
+                    <table class="layui-hide" id="order_pay" lay-filter="order_pay"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="btn-edit">编辑</a>
+    <a class="table-control-btn table-control-btn-danger" lay-event="btn-delete">删除</a>
+</script>
+<script src="/assetsInfo/js/tempDown.js"></script>
+<script>
+    layui.use(['table', 'formSelects','upload','laydate','element'], function() {
+        var table = layui.table,
+            form = layui.form,
+            admin = layui.admin,
+            formSelects = layui.formSelects,
+            upload = layui.upload,
+            laydate = layui.laydate,
+            element = layui.element
+        //时间戳转换年月日时分秒
+        function timestampToTime1(timestamp) {
+            var date = new Date(timestamp);
+            Y = date.getFullYear();
+            M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
+            D = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+            h = date.getHours()<10?'0'+date.getHours():date.getHours();
+            mm = date.getMinutes()<10?'0'+date.getMinutes():date.getMinutes();
+            s = date.getSeconds()<10?'0'+date.getSeconds():date.getSeconds();
+            return Y + '-'+ M+ '-' + D+" "+h+':'+mm+':'+s;
+
+        }
+
+        //明细数据表格
+        var renderTable = function() {
+            var heightTable = $(document).height()-140;
+            // 渲染表格
+            table.render({
+                elem: "#order_all",
+                id: 'order_all',
+                url: admin.formatUrl('/api/industymeeting/receivableIncome/page'),
+                // 格式化后台返回的数据
+                parseData: function(res) { //res 即为原始返回的数据
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                height: heightTable,
+                cols:[
+                    [{
+                        type: 'checkbox'
+                    }, {
+                        type: 'numbers',
+                        title: '#'
+                    }, {
+                        field: 'year',
+                        title: '年',
+                        templet: function (d) {
+                            let text = d.year ? d.year : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'month',
+                        title: '月',
+                        templet: function (d) {
+                            let text = d.month ? d.month : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    },
+                        {
+                            field: 'day',
+                            title: '日',
+                            templet: function (d) {
+                                let text = d.day ? d.day : "";
+                                return '<div title="' + text + '"><span>' + text + '</span></div>'
+                            }
+                        }, {
+                        field: 'headquarters',
+                        title: '本部',
+                        templet: function (d) {
+                            let text = d.headquarters ? d.headquarters : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'department',
+                        title: '部门',
+                        templet: function (d) {
+                            let text = d.department ? d.department : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'project',
+                        title: '项目',
+                        templet: function (d) {
+                            let text = d.project ? d.project : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'corpname',
+                        title: '企业名称',
+                        templet: function (d) {
+                            let text = d.corpname ? d.corpname : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'weeklyArrival',
+                        title: '本周到账',
+                        templet: function (d) {
+                            let text = d.weeklyArrival ? d.weeklyArrival : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    },{
+                        field: 'amountReceivable',
+                        title: '应收余额',
+                        templet: function (d) {
+                            let text = d.amountReceivable ? d.amountReceivable : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    },{
+                        field: 'accountTime',
+                        title: '到账时间',
+                        templet: function (d) {
+                            let text = d.accountTime ? d.accountTime : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    },{
+                        field: 'companyName',
+                        title: '公司',
+                        templet: function (d) {
+                            let text = d.companyName ? d.companyName : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    },{
+                        field: 'updateTime',
+                        title: '更新日期',
+                        templet: function (d) {
+                            let text = d.updateTime ?timestampToTime1(d.updateTime) : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'updateUser',
+                        title: '更新人',
+                        templet: function (d) {
+                            let text = d.updateUser ? d.updateUser : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    },{
+                        align: 'center',
+                        title: '操作',
+                        width:120,
+                        toolbar:'#control-1',
+                        unresize: true
+                    }]],
+                cellMinWidth: 90,
+                page: {
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                },
+                request: {
+                    pageName: 'page',
+                    limitName: 'pageSize'
+                },
+                done: function (res, curr, count) {
+                    if (curr > 1 && res.data.length == 0) {
+                        var pageValue = curr - 1;
+                        table.reload('order_all', {
+                            page: { curr: pageValue },// 修改页码
+                        });
+                    }
+                }
+            });
+        };
+        renderTable()
+        // 初始化，执行一次渲染表格树
+        table.on('tool(order_all)', function (obj) {
+            var data=obj.data;
+            if(obj.event === 'btn-edit'){
+                popMenu("edit", data);
+            }else if(obj.event === 'btn-delete'){
+                viewDetail(data);
+            }
+        });
+        //增加
+        $('#btn_add_user').on('click', function() {
+            popMenu('add');
+        });
+        // 弹出框
+        function popMenu(type, data) {
+            // 判断操作事件
+            if (type === 'add') {
+                var title = '新增明细数据';
+            } else if (type === 'edit') {
+                var title = '编辑明细数据'
+
+            }
+            admin.popupCenter({
+                title: title,
+                width:600,
+                path: 'components/billManagement/receivable_add_edit.html',
+                finish: function() {
+                    table.reload('order_all', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                },
+                success: function() {
+                    if(type==="edit"){
+                        setFormValue(data);
+                    }
+                    $('#user-area .layui-col-md6').removeClass("layui-col-md6");
+                    $('#user-detial-area').css("height",'200px');
+                    admin.showLoading('.roleName-loading');
+                    admin.showLoading('.orgName-loading');
+                    admin.showLoading('.userState-loading');
+                }
+            });
+            // 表单提交
+            if(type==='add'){
+                Form_submit(type)
+            }else{
+                Form_submit(type,data.id)
+            }
+        }
+        // 表单提交
+        function Form_submit(type, id) {
+            form.on('submit(menuSave_user)', function (list) {
+                // 获取表单数据
+                var d = list.field,
+                    elem = list.elem;
+                //当本周到账为空时
+                if(d.weeklyArrival===''){
+                    d.weeklyArrival=0
+                }
+                //当应收余额为空时
+                if(d.amountReceivable===''){
+                    d.amountReceivable=0
+                }
+                //当当月应收账款余额为空时
+                if(d.receivableBalance===''){
+                    d.receivableBalance=0
+                }
+                //当当月进账额为空时
+                if(d.income===''){
+                    d.income=0
+                }
+                //年月日
+                var arr=d.test3.split("-")
+                d.year=arr[0]
+                d.month=arr[1]
+                d.day=arr[2]
+                // 判断菜单名称、父级菜单 ID 是否填写
+                // 设置不同的 HTTP 方法，和提示信息
+                if (type === 'add') {
+                    var ajaxType = 'POST',
+                        ajaxName = '新增明细数据';
+                    admin.req('/api/industymeeting/receivableIncome', d,function (data) {
+                        if (data.ok) {
+                            layer.msg(ajaxName + '成功！', {
+                                icon: 1
+                            });
+                            admin.finishPopupCenter();
+                        } else {
+                            admin.closePopupCenter();
+                            return layer.msg(ajaxName + '失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: ajaxType
+                    });
+                } else if (type === 'edit') {
+                    var ajaxType = 'PUT',
+                        ajaxName = '编辑明细数据';
+                    d.id = id;
+                    admin.req('/api/industymeeting/receivableIncome', d, function (data) {
+                        if (data.ok) {
+                            layer.msg(ajaxName + '成功！', {
+                                icon: 1
+                            });
+                            admin.finishPopupCenter();
+                        } else {
+                            admin.closePopupCenter();
+                            return layer.msg(ajaxName + '失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: ajaxType
+                    });
+                }
+
+            });
+        }
+        // 删除
+        function viewDetail(data) {
+            layer.confirm('是否删除此条数据？', {
+                icon: 3,
+                title: '提示'
+            }, function () {
+                admin.req('/api/industymeeting/receivableIncome/' + data.id, {},
+                    function (data) {
+                        if (data.ok) {
+                            layer.msg('删除明细数据成功！', {
+                                icon: 1
+                            });
+                            table.reload('order_all', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        } else {
+                            return layer.msg('删除明细数据失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: 'delete'
+                    });
+            });
+        }
+        // 导入
+        upload.render({
+            elem: '#crm-customer-btn-import',
+            url: '/api/industymeeting/receivableIncome/upload', //上传接口
+            accept: 'file',
+            acceptMime: 'xlsx/xlsm',
+            method: 'POST',
+            before: function (obj) {
+                layer.load(); //上传loading
+            },
+            done: function (res) {
+                layer.closeAll();
+                if (res.respCode == 0) {
+                    layer.msg('导入成功！', {
+                        icon: 1
+                    });
+                    table.reload('order_all', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                } else {
+                    return layer.msg('导入失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            },
+            error: function () {
+                //请求异常回调
+                layer.closeAll();
+                return layer.msg('导入出现错误，请重试！', {
+                    icon: 5
+                });
+            }
+        });
+        // 头部删除数据
+        $('#checkData').click(() => {
+            var checkStatus = layui.table.checkStatus('order_all').data;
+            var delids = '';
+            if (checkStatus.length == 0 || checkStatus == []) {
+                layer.msg('请先选取删除数据');
+            } else {
+                for (let i = 0; i < checkStatus.length; i++) {
+                    if (checkStatus.length > 1) {
+                        delids += checkStatus[i].id + ',';
+                    } else {
+                        delids = checkStatus[i].id;
+                    }
+                }
+                layer.confirm('是否删除此条数据？', {
+                    icon: 3,
+                    title: '提示'
+                }, function () {
+                    admin.req('/api/industymeeting/receivableIncome/' + delids, {},
+                        function (data) {
+                            if (data.ok) {
+                                layer.msg('删除明细数据成功！', {
+                                    icon: 1
+                                });
+                                table.reload('order_all', {
+                                    where: {
+                                        reload: new Date().getTime()
+                                    }
+                                });
+                            } else {
+                                return layer.msg('删除明细数据失败：' + data.message, {
+                                    icon: 5
+                                });
+                            }
+                        }, {
+                            method: 'delete'
+                        });
+                });
+            }
+        })
+        $('#deleteAll').click(() => {
+            layer.confirm('您确定要清空数据吗?', {
+                icon: 3,
+                title: '提示'
+            }, function () {
+                admin.req('/api/industymeeting/receivableIncome', {}, function (data) {
+                    if (data.ok) {
+                        layer.msg('清空成功！', {
+                            icon: 1
+                        });
+                        table.reload('order_all', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    } else {
+                        return layer.msg('清空失败：' + data.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: 'delete'
+                });
+                form.render()
+            });
+        });
+        //明细数据头部编辑
+        $(btn_edit).on('click', function() {
+            var checkStatus = table.checkStatus('order_all');
+            if (checkStatus.data.length != 1) {
+                return layer.msg('请选择1条编辑数据', {
+                    icon: 0
+                });
+            }
+            popMenu("edit", checkStatus.data[0]);
+
+        });
+        // 设置表单内容
+        async function setFormValue(obj) {
+            // await $.ajax({
+            //     type: "get",
+            //     url: "/api/budget/budget/findAllBudgetNameLikeAndByType/",
+            //     data:{budgetName:2020},
+            //     success: function (res) {
+            //         var list = res.data;
+            //     }
+            // });
+            await $.ajax({
+                type: "get",
+                url: "/api/sys/dictype/list?dicCode=companyListData",
+                success: function (res) {
+                    var list = res.data;
+                }
+            });
+            var data=obj.company
+            $('#headquartersId').val(obj.headquartersId);
+            $('#departmentId').val(obj.departmentId);
+            $('.company').find(`option[value=${data}]`).attr("selected",true)
+            // var data1=obj.project
+            // $('.project').find(`option[value=${data1}]`).attr("selected",true)
+            //明细数据年月日
+            var str1=obj.year+'-'+obj.month+'-'+obj.day
+            laydate.render({
+                elem: '#test3'
+                ,value:str1  //必须遵循format参数设定的格式
+            })
+            var formNames=['headquarters','department','corpname','accountTime','weeklyArrival','amountReceivable','project']
+            for (var i = 0; i < formNames.length; i++) {
+                if (obj[formNames[i]]) {
+                    obj[formNames[i]] = ADCFormDesignHelper.htmlDecodeByRegExp(obj[formNames[i]]);
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+
+                } else {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val('');
+                }
+            }
+            if(obj.weeklyArrival===null||obj.weeklyArrival===0){
+                $('#weeklyArrival').val('0')
+            }
+            if(obj.amountReceivable===null||obj.amountReceivable===0){
+                $('#amountReceivable').val('0')
+            }
+        }
+
+
+
+        //归档数据表格
+        var renderTable1 = function() {
+            var heightTable = $(document).height()-140;
+            // 渲染表格
+            table.render({
+                elem: "#order_pay",
+                id: 'order_pay',
+                url: admin.formatUrl('/api/industymeeting/receivableIncomeFiled/page'),
+                // 格式化后台返回的数据
+                parseData: function(res) { //res 即为原始返回的数据
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                height: heightTable,
+                cols:[
+                    [{
+                        type: 'checkbox'
+                    }, {
+                        type: 'numbers',
+                        title: '#'
+                    },{
+                        field: 'year',
+                        title: '年',
+                        templet: function (d) {
+                            let text = d.year ? d.year : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'month',
+                        title: '月',
+                        templet: function (d) {
+                            let text = d.month ? d.month : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'companyName',
+                        title: '公司',
+                        templet: function (d) {
+                            let text = d.companyName ? d.companyName : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    },
+                        {
+                            field: 'areaName',
+                            title: '区域',
+                            templet: function (d) {
+                                let text = d.areaName ? d.areaName : "";
+                                return '<div title="' + text + '"><span>' + text + '</span></div>'
+                            }
+                        },
+                        {
+                            field: 'receivableBalance',
+                            title: '当月应收账款余额（元）',
+                            templet: function (d) {
+                                let text = d.receivableBalance ? d.receivableBalance : "";
+                                return '<div title="' + text + '"><span>' + text + '</span></div>'
+                            }
+                        }, {
+                        field: 'income',
+                        title: '当月进账额（元）',
+                        templet: function (d) {
+                            let text = d.income ? d.income : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'updateTime',
+                        title: '更新日期',
+                        templet: function (d) {
+                            let text = d.updateTime ?timestampToTime1(d.updateTime) : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'updateUser',
+                        title: '更新人',
+                        templet: function (d) {
+                            let text = d.updateUser ? d.updateUser : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        align: 'center',
+                        title: '操作',
+                        width: 120,
+                        toolbar: '#control-1',
+                        unresize: true
+                    }]
+                ],
+                cellMinWidth: 90,
+                page: {
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                },
+                request: {
+                    pageName: 'page',
+                    limitName: 'pageSize'
+                },
+                done: function (res, curr, count) {
+                    if (curr > 1 && res.data.length == 0) {
+                        var pageValue = curr - 1;
+                        table.reload('order_pay', {
+                            page: { curr: pageValue },// 修改页码
+                        });
+                    }
+                }
+            });
+        };
+        // 初始化，执行一次渲染表格树
+        renderTable1()
+        // 初始化，执行一次渲染表格树
+        table.on('tool(order_pay)', function (obj) {
+            var data=obj.data;
+            if(obj.event === 'btn-edit'){
+                popMenu1("edit", data);
+            }else if(obj.event === 'btn-delete'){
+                viewDetail1(data);
+            }
+        });
+        //归档数据导入
+        upload.render({
+            elem: '#crm-customer-btn-import2',
+            url:'/api/industymeeting/receivableIncomeFiled/upload', //上传接口
+            accept: 'file',
+            acceptMime: 'xlsx/xlsm',
+            method: 'POST',
+            before: function (obj) {
+                layer.load(); //上传loading
+            },
+            done: function (res) {
+                layer.closeAll();
+                if (res.respCode == 0) {
+                    layer.msg('导入成功！', {
+                        icon: 1
+                    });
+                    table.reload('order_pay', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                } else {
+                    return layer.msg('导入失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            },
+            error: function () {
+                //请求异常回调
+                layer.closeAll();
+                return layer.msg('导入出现错误，请重试！', {
+                    icon: 5
+                });
+            }
+        });
+        //归档数据全部清空
+        $('#deleteAll2').off("click").on("click",function() {
+            layer.confirm('您确定要清空数据吗?', {
+                icon: 3,
+                title: '提示'
+            }, function () {
+                admin.req('/api/industymeeting/receivableIncomeFiled/deleteAll', {}, function (data) {
+                    if (data.ok) {
+                        layer.msg('清空成功！', {
+                            icon: 1
+                        });
+                        table.reload('order_pay', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    } else {
+                        return layer.msg('清空失败：' + data.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: 'delete'
+                });
+                form.render()
+            });
+        })
+        //增加
+        $('#btn_add_user1').on('click', function() {
+            popMenu1('add');
+        });
+        // 弹出框
+        function popMenu1(type, data) {
+            // 判断操作事件
+            if (type === 'add') {
+                var title = '新增归档数据';
+            } else if (type === 'edit') {
+                var title = '编辑归档数据'
+
+            }
+            admin.popupCenter({
+                title: title,
+                width:600,
+                path: 'components/billManagement/pigeonhole_add_edit.html',
+                finish: function() {
+                    table.reload('order_pay', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                },
+                success: function() {
+                    if(type==="edit"){
+                        setFormValue1(data);
+                    }
+                    $('#user-area .layui-col-md6').removeClass("layui-col-md6");
+                    $('#user-detial-area').css("height",'200px');
+                    admin.showLoading('.roleName-loading');
+                    admin.showLoading('.orgName-loading');
+                    admin.showLoading('.userState-loading');
+                }
+            });
+            // 表单提交
+            if(type==='add'){
+                Form_submit1(type)
+            }else{
+                Form_submit1(type,data.id)
+            }
+        }
+        // 表单提交
+        function Form_submit1(type, id) {
+            form.on('submit(menuSave_user)', function (list) {
+                // 获取表单数据
+                var d = list.field,
+                    elem = list.elem;
+                //当本周到账为空时
+                if(d.weeklyArrival===''){
+                    d.weeklyArrival=0
+                }
+                //当应收余额为空时
+                if(d.amountReceivable===''){
+                    d.amountReceivable=0
+                }
+                //当当月应收账款余额为空时
+                if(d.receivableBalance===''){
+                    d.receivableBalance=0
+                }
+                //当当月进账额为空时
+                if(d.income===''){
+                    d.income=0
+                }
+                //提交年月
+                var arr=d.month1.split("-")
+                d.year=arr[0]
+                d.month=arr[1]
+                // 判断菜单名称、父级菜单 ID 是否填写
+                // 设置不同的 HTTP 方法，和提示信息
+                if (type === 'add') {
+                    var ajaxType = 'POST',
+                        ajaxName = '新增归档数据';
+                    admin.req('/api/industymeeting/receivableIncomeFiled', d,function (data) {
+                        if (data.ok) {
+                            layer.msg(ajaxName + '成功！', {
+                                icon: 1
+                            });
+                            admin.finishPopupCenter();
+                        } else {
+                            admin.closePopupCenter();
+                            return layer.msg(ajaxName + '失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: ajaxType
+                    });
+                } else if (type === 'edit') {
+                    var ajaxType = 'PUT',
+                        ajaxName = '编辑归档数据';
+                    d.id = id;
+                    admin.req('/api/industymeeting/receivableIncomeFiled', d, function (data) {
+                        if (data.ok) {
+                            layer.msg(ajaxName + '成功！', {
+                                icon: 1
+                            });
+                            admin.finishPopupCenter();
+                        } else {
+                            admin.closePopupCenter();
+                            return layer.msg(ajaxName + '失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: ajaxType
+                    });
+                }
+
+            });
+        }
+        // 删除
+        function viewDetail1(data) {
+            layer.confirm('是否删除此条数据？', {
+                icon: 3,
+                title: '提示'
+            }, function () {
+                admin.req('/api/industymeeting/receivableIncomeFiled/' + data.id, {},
+                    function (data) {
+                        if (data.ok) {
+                            layer.msg('删除归档数据成功！', {
+                                icon: 1
+                            });
+                            table.reload('order_pay', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        } else {
+                            return layer.msg('删除归档数据失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: 'delete'
+                    });
+            });
+        }
+        // 头部删除数据
+        $('#checkData1').click(() => {
+            var checkStatus = layui.table.checkStatus('order_pay').data;
+            var delids = '';
+            if (checkStatus.length == 0 || checkStatus == []) {
+                layer.msg('请先选取删除数据');
+            } else {
+                for (let i = 0; i < checkStatus.length; i++) {
+                    if (checkStatus.length > 1) {
+                        delids += checkStatus[i].id + ',';
+                    } else {
+                        delids = checkStatus[i].id;
+                    }
+                }
+                layer.confirm('是否删除此条数据？', {
+                    icon: 3,
+                    title: '提示'
+                }, function () {
+                    admin.req('/api/industymeeting/receivableIncomeFiled/' + delids, {},
+                        function (data) {
+                            if (data.ok) {
+                                layer.msg('删除归档数据成功！', {
+                                    icon: 1
+                                });
+                                table.reload('order_pay', {
+                                    where: {
+                                        reload: new Date().getTime()
+                                    }
+                                });
+                            } else {
+                                return layer.msg('删除归档数据失败：' + data.message, {
+                                    icon: 5
+                                });
+                            }
+                        }, {
+                            method: 'delete'
+                        });
+                });
+            }
+        })
+        //头部编辑
+        $(btn_edit1).on('click', function() {
+            var checkStatus = table.checkStatus('order_pay');
+            if (checkStatus.data.length != 1) {
+                return layer.msg('请选择1条编辑数据', {
+                    icon: 0
+                });
+            }
+            popMenu1("edit", checkStatus.data[0]);
+
+        });
+        // 设置表单内容
+        async function setFormValue1(obj) {
+            await $.ajax({
+                type: "get",
+                url: "/api/sys/dictype/list?dicCode=companyListData",
+                success: function (res) {
+                    var list = res.data;
+                }
+            });
+            //区域
+            await $.ajax({
+                type: "get",
+                url: "/api/sys/dictype/list?dicCode=area",
+                success: function (res) {
+                    var list = res.data;
+                }
+            });
+            var data=obj.company
+            $('.company').find(`option[value=${data}]`).attr("selected",true)
+            //区域
+            var data2=obj.area
+            $('.areaName').find(`option[value=${data2}]`).attr("selected",true)
+
+            //归档数据年月
+            var str=obj.year+'-'+obj.month
+            laydate.render({
+                elem: '#month1'
+                ,value:str  //必须遵循format参数设定的格式
+            })
+            var formNames=['receivableBalance', 'income']
+            for (var i = 0; i < formNames.length; i++) {
+                if (obj[formNames[i]]) {
+                    obj[formNames[i]] = ADCFormDesignHelper.htmlDecodeByRegExp(obj[formNames[i]]);
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+
+                } else {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val('');
+                }
+            }
+            if(obj.receivableBalance===null||obj.receivableBalance===0){
+                $('#receivableBalance').val('0')
+            }
+            if(obj.income===null||obj.income==0){
+                $('#income').val('0')
+            }
+        }
+
+
+        //模板下载
+        $('#btn_download_project').on('click', function() {
+            tempDownByDicCode("accounts_receivable_details_template");
+        });
+        //归档数据模板下载
+        $('#btn_download_project2').off("click").on('click', function() {
+            tempDownByDicCode("receivable_income_filed");
+        });
+        $('#btn_download_out').on('click', function () {
+            window.open(admin.formatUrl('/ADC_info/api/industymeeting/receivableIncome/download'))
+        });
+
+        $('#btn_download_out1').on('click', function () {
+            window.open(admin.formatUrl('/ADC_info/api/industymeeting/receivableIncomeFiled/download'))
+        });
+
+        // //组织机构弹框,选择部门
+        // window.dept = function (callback) {
+        //     layer.open({
+        //         type: 2,
+        //         id: 'orgsSelect',
+        //         title: false,
+        //         moveOut: true,
+        //         content: '/components/tpl/dept_select.html',
+        //         area: ['50%', '70%'],
+        //         btn: ['确定', '取消'],
+        //         yes: function (index, layero) {
+        //             var finalData = $('#orgsSelect iframe')[0].contentWindow
+        //                 .task_orgs_select.finish();
+        //             // 获取到数据，执行回掉函数
+        //             if (finalData.id == '' || finalData.name == '') {
+        //                 return layer.msg('请选择组织机构', {
+        //                     icon: 0
+        //                 });
+        //             }
+        //             callback && typeof callback === 'function' && callback(
+        //                 finalData);
+        //             layer.close(index);
+        //         },
+        //         resize: false
+        //     });
+        // }
+        // // 选择本部
+        // window.dept2 = function (callback) {
+        //     layer.open({
+        //         type: 2,
+        //         id: 'orgsSelect',
+        //         title: false,
+        //         moveOut: true,
+        //         content: '/components/tpl/dept_select.html',
+        //         area: ['50%', '70%'],
+        //         btn: ['确定', '取消'],
+        //         yes: function (index, layero) {
+        //             var finalData = $('#orgsSelect iframe')[0].contentWindow
+        //                 .task_orgs_select.finish();
+        //             // 获取到数据，执行回掉函数
+        //             if (finalData.id == '' || finalData.name == '') {
+        //                 return layer.msg('请选择组织机构', {
+        //                     icon: 0
+        //                 });
+        //             }
+        //             callback && typeof callback === 'function' && callback(
+        //                 finalData);
+        //             layer.close(index);
+        //         },
+        //         resize: false
+        //     });
+        // }
+
+
+        form.verify({
+            // income: function (value, item) {
+            //     // 数字正则
+            //     if (value && !(/^\d+(\.\d{0,2})?$/.test(value))) {
+            //         return '当月进账额字符类型错误，请输入数字类型最多保留2位小数！';
+            //     }
+            // },
+            // receivableBalance: function (value, item) {
+            //     // 数字正则
+            //     if (value && !(/^\d+(\.\d{0,2})?$/.test(value))) {
+            //         return '当月应收账款余额字符类型错误，请输入数字类型最多保留2位小数！';
+            //     }
+            // },
+            month1:function(value,item){
+                if(!value){
+                    return '请填写必填项！'
+                }
+            },
+            test3:function(value,item){
+                if(!value){
+                    return '请填写必填项！'
+                }
+            },
+            headquarters:function(value,item){
+                if(!value){
+                    return '请填写必填项！'
+                }
+            },
+            areaName:function(value,item){
+                if(!value){
+                    return '请填写必填项！'
+                }
+            },
+            department:function(value,item){
+                if(!value){
+                    return '请填写必填项！'
+                }
+            },
+            project:function(value,item){
+                if(!value){
+                    return '请填写必填项！'
+                }
+            },
+            company:function(value,item){
+                if(!value){
+                    return '请填写必填项！'
+                }
+            },
+            corpname:function(value,item){
+                if(!value){
+                    return '请填写必填项！'
+                }
+            },
+            // weeklyArrival:function(value,item){
+            //     if (value && !(/^\d+(\.\d{0,2})?$/.test(value))) {
+            //         return '本周到账字符类型错误，请输入数字类型最多保留2位小数！';
+            //     }
+            // },
+            // amountReceivable:function(value,item){
+            //     if (value && !(/^\d+(\.\d{0,2})?$/.test(value))) {
+            //         return '应收余额字符类型错误，请输入数字类型最多保留2位小数！';
+            //     }
+            // },
+            // accountTime:function(value,item){
+            //     if (value&&value.length<6) {
+            //         return '到账时间错误，请填写6位数！';
+            //     }
+            //     if (value&&!(/^\d{6}$/.test(value))) {
+            //         return '到账时间错误，请填写数字类型！';
+            //     }
+            // }
+        })
+    })
+</script>

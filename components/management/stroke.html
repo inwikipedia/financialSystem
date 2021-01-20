@@ -1,0 +1,1258 @@
+<link rel='stylesheet' href='../../assetsInfo/libs/fullcalendar/fullcalendar.css' />
+<link rel="stylesheet" href="../../assetsInfo/css/duty.css">
+<!-- zTree 样式 -->
+<link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/metroStyle.css">
+
+<script src='../../assetsInfo/libs/fullcalendar/moment.min.js'></script>
+<script src='../../assetsInfo/libs/fullcalendar/fullcalendar.js'></script>
+<script src="../../assetsInfo/libs/fullcalendar/lunar.js"></script>
+<script src="../../assetsInfo/libs/fullcalendar/zh-cn.js"></script>
+<style>
+    element.style {
+        margin-bottom: 20px !important;
+    }
+
+    .fc .fc-toolbar {
+        margin: 10px;
+        text-align: center;
+        color: #999;
+    }
+
+    .fc-toolbar .fc-center {
+        padding-right: 0;
+    }
+
+    .cicle-point {
+        border-radius: 10px;
+        border: 1px solid #ff7168;
+        background: #ff7168;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        color: #FFFFFF;
+
+    }
+
+    .wz_title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        line-height: 18px;
+        height: 18px;
+    }
+
+    .searchValue {
+        width: 88%;
+        border-radius: 20px;
+        border: 1px solid #ccc;
+        height: 26px;
+        text-indent: 15px;
+        margin: 10px 20px 0px 15px
+    }
+
+    .search {
+        font-size: 18px;
+        color: #0D96FF;
+    }
+
+    .personList {
+        height: 100%;
+        overflow: hidden;
+        padding: 0 15px;
+    }
+
+    .personListLine {
+        margin-left: 30px;
+        line-height: 40px;
+    }
+
+    .personListLine:hover {
+        background-color: #F2F6F8;
+    }
+
+    .personListName {
+        margin-right: 10px;
+        margin-left: 20px;
+    }
+
+    .backColr {
+        background-color: #F2F6F8;
+    }
+
+    .backCol {
+        background-color: #E1F1F8 !important;
+    }
+
+    .text {
+        background: url('../../assetsInfo/images/search.png') no-repeat right center;
+        background-position: 95%;
+        background-size: 16px 16px;
+    }
+
+    #allWorkCostTime {
+        background: rgba(238, 238, 238, 1);
+    }
+
+    .FillWorkBox {
+        float: left;
+        text-align: center;
+        width: 133px;
+        padding-top: 5px;
+    }
+
+    .allFillWorkBox {
+        float: left;
+        text-align: center;
+        width: 133px;
+        padding-top: 5px;
+    }
+
+    .approveFillWorkCostTime {
+        color: #008FC3;
+        font-weight: bold;
+    }
+
+    .allFillWorkCostTime {
+        font-weight: bold;
+    }
+
+    .fc-basicWeek-view .wz_title {
+        height: 32px;
+        line-height: 29px;
+        /*white-space: pre;*/
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        white-space: normal;
+        word-break: break-all;
+    }
+
+    .fc-day-cnDate,
+    .fc-day-cnTerm {
+        width: auto;
+    }
+
+    .fc-popover .wz_title {
+        height: 27px;
+        -webkit-line-clamp: 1;
+    }
+
+    /*兼容自适应高度问题*/
+    @media screen and (max-width: 1366px) {
+        .fc-basicWeek-view .wz_title {
+            height: 26px;
+            line-height: 24px;
+        }
+
+        .FillWorkBox {
+            width: 93px;
+        }
+
+        .allFillWorkBox {
+            width: 93px;
+        }
+
+        .fc-popover .wz_title {
+            height: 15px;
+            line-height: 17px;
+            -webkit-line-clamp: 1;
+        }
+    }
+
+    .workStyle {
+        position: relative;
+        left: 5px;
+        cursor: pointer;
+    }
+
+    .layui-layer-tips .layui-layer-content {
+        white-space: pre-wrap;
+    }
+
+    .layui-layer-tips .layui-layer-content {
+        background-color: #fff;
+        color: #000;
+    }
+
+    .finishBtn {
+        border: 1px solid #10ADE8 !important;
+        color: #10ADE8;
+        height: 22px;
+        line-height: 20px;
+        float: left;
+        background: #fff;
+        padding: 0 10px;
+        cursor: pointer;
+        margin: 5px 0px 0px 10px;
+    }
+
+    .redSpan {
+        color: red;
+    }
+
+    .personList .layui-table-cell {
+        padding: 0px;
+    }
+
+    #navBox .layui-nav .layui-nav-more {
+        border-style: none;
+    }
+
+    .personList .layui-table-view .layui-table th {
+        padding: 0;
+        background-color: #f2f2f2;
+    }
+
+    .personList .layui-table-view .layui-table td {
+        padding: 0;
+    }
+
+    .laydate-time-list {
+        padding-bottom: 0;
+        overflow: hidden
+    }
+
+    .laydate-time-list>li {
+        width: 50% !important;
+    }
+
+    .laydate-time-list>li:last-child {
+        display: none;
+    }
+
+    .xiaozi {
+        color: #333;
+        font-size: 12px;
+        line-height: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .fc-event-container a {
+        background-color: #fff;
+        border: none;
+
+    }
+
+    .fc-event-container a .wz_title {
+        background-color: #DEE9FB;
+    }
+
+    .fu_img {
+        float: right;
+    }
+
+    .shuju td input {
+        border: none;
+        width: 87%;
+    }
+
+    .searchValue {
+        border-radius: 4px;
+        width: 91%;
+    }
+
+    .text {
+        background-position: 97%;
+    }
+
+    .yuan {
+        width: 4px;
+        height: 4px;
+        background: rgba(85, 183, 255, 1);
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 4px;
+    }
+
+    .fc-toolbar h2 {
+        color: #333333;
+        font-size: 18px;
+    }
+
+    .layui-layout-admin .layui-body {
+        padding: 0px 14px;
+    }
+
+    .layui-table-main::-webkit-scrollbar {
+        /*滚动条整体样式*/
+        width: 14px;
+        /*高宽分别对应横竖滚动条的尺寸*/
+        height: 1px;
+    }
+
+    .layui-table-main::-webkit-scrollbar-thumb {
+        /*滚动条里面小方块*/
+        border-radius: 2px;
+        background: #e5e5e5;
+    }
+
+    .layui-table-main::-webkit-scrollbar-track {
+        /*滚动条里面轨道*/
+        border-radius: 2px;
+        background: #f2f2f2;
+    }
+    .card-show-list .layui-card{
+        height:calc(100vh - 100px)!important;
+    }
+</style>
+<div class="layui-row layui-col-space15 layui-layout layui-layout-admin" style="height: 100%;overflow: hidden;">
+    <div class="layui-col-md12 card-show-list" style="height: 100%">
+        <div class="layui-card layui-row" style="height:100%;padding-top: 5px;padding-bottom: 25px;">
+            <div id="left" class="layui-col-md3" style="height: 100%;padding-bottom: 2%;width: 23%">
+                <img src="/assetsInfo/images/renyuan_03.png" alt="" style="    padding-left: 16px;
+                padding-right: 6px;
+                margin-top: -4px;">
+                <span>员工列表</span>
+                <input type="text" placeholder="请输入姓名" class="searchValue text" id="searchValue"
+                    onfocus="$(this).css('border','1px solid #18B1EB')" onblur="$(this).css('border','1px solid #ccc')">
+                <!--<ul id="personList" class="personList"></ul>-->
+                <div class="personList">
+                    <table id="personList" lay-filter="personList"></table>
+                </div>
+            </div>
+            <div id="main" class="layui-col-md9"></div>
+        </div>
+    </div>
+</div>
+<!-- 任务列表复选框 -->
+<script type="text/html" id="isCompleteTpl">
+    <input type="checkbox" name="isComplete" value="未完成" lay-filter="isComplete">
+</script>
+
+<!-- zTree js 文件 -->
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+
+<script>
+    // layui初始化
+    layui.use(['admin', 'layer', 'form', 'laydate', 'config', 'formSelects', 'upload'], function () {
+        var admin = layui.admin,
+            layer = layui.layer,
+            form = layui.form,
+            formSelects = layui.formSelects,
+            upload = layui.upload,
+            laydate = layui.laydate,
+            config = layui.config,
+            personList = [],
+            table = layui.table;
+        var thisYear = new Date().getFullYear();
+        var maxYear = thisYear + "-12-31";
+        var minYear = thisYear + "-1-1";
+        var isClick = false;
+        var personIdClick;
+        // 人员id
+        var personId = admin.GetRequest().usid;
+        var personName = admin.GetRequest().usname;
+        var orgId = admin.GetRequest().orgId;
+        var limtItem;
+        var lengthAAA;
+        var dateChange = function (data) {
+            var str = data.replace(/-/g, '/');
+            var date = new Date(str).getTime();
+            return date;
+        };
+        if (!personId) {
+            personId = config.getAccount().usid;
+        }
+        //判断窗口分辨率
+        $(document).ready(function () {
+
+            if (screen.width == 1920) {
+                limtItem = 3;
+            }
+            if (screen.width <= 1366) {
+                limtItem = 1;
+            }
+        });
+        if (!orgId) {
+            // $('#left').hide();
+            // $('#left').removeClass('layui-col-md3');
+            // $('#main').removeClass('layui-col-md9');
+            // $('#main').addClass('layui-col-md12');
+        } else {
+            // getPersonData();
+        }
+        // 日期框初始化
+        laydate.render({
+            elem: '#startTime',
+            btns: ['now', 'confirm']
+        });
+        //渲染左侧人员
+        // $(".search").on('click',function () {
+        //     getPersonData();
+        // });
+        //2019 5.5 优化 前端实现模糊搜索，避免每次都调用接口
+        if (orgId) {
+            // getPersonData();
+
+        }
+        //call lazy load 搜索栏的输入change事件
+        $('#searchValue').bind('input propertychange', function () {
+            var _keywords = $(this).val();
+            if (!_keywords) {
+                isClick = true;
+            }
+            var data = personList.filter(function (item) {
+
+                return (item.usname).indexOf(_keywords) != -1;
+            })
+            setOrgUserData(data);
+
+        });
+        // 搜索栏的回车事件
+        /*$('#searchValue').bind('keypress',function(event){
+            if(event.keyCode == "13"){
+                var _keywords = $(this).val();
+
+                var data = personList.filter(function (item) {
+
+                    return (item.usname).indexOf(_keywords) != -1;
+                })
+                setOrgUserData(data);
+            }
+        });*/
+
+        function getPersonData(option) {
+
+            // if(keyword)
+            // {
+            //     params.usName=keyword;
+            // }
+
+            admin.req('/api/smallprogram/scheudlePermission/getMaintenanceUserList', {}, function (res) {
+
+                personList = res.data;
+
+                setOrgUserData(personList)
+
+            }, {
+                method: 'GET',
+                async: false
+            })
+        }
+
+        function setOrgUserData(data) {
+            table.render({
+                elem: '#personList',
+                id: 'personList',
+                data: data,
+                height: 'full-165',
+                cols: [
+                    [{
+                        field: 'usname',
+                        title: '员工姓名',
+                        align: 'center',
+                        event: 'handle',
+                        templet: function (d) {
+                            var text = d.usname ? d.usname : "";
+                            return '<div title="' + text + '"><span>' + text +
+                                '</span></div>'
+                        }
+                    }, {
+                        field: 'contactAddress',
+                        title: '职务',
+                        // width:80,
+                        align: 'center',
+                        event: 'handle',
+                        templet: function (d) {
+                            var text = d.contactAddress ? d.contactAddress : "暂无职级";
+                            return '<div title="' + text + '"><span>' + text +
+                                '</span></div>'
+                        }
+                    }]
+                ],
+                limit: data.length,
+                cellMinWidth: 80,
+                skin: 'row',
+                even: true,
+                done: function (res, curr, count) {
+                    /*if (!isClick) {
+                        personId = res.data.length>0?res.data[0].usid:"";
+                        $(".personList .layui-table-body tr").eq(0).addClass('backCol').siblings().removeClass('backCol');
+                    } else {
+                        for(var ii = 0 ; ii <res.data.length; ii++ ){
+                            if (personId == res.data[ii].usid){
+                                $(".personList .layui-table-body tr").eq(ii).addClass('backCol').siblings().removeClass('backCol');
+                                break;
+                            }
+                        }
+                    }*/
+                    //   personId = res.data.length > 0 ? res.data[0].usid : "";
+                    console.log(isClick, '666')
+                    if (!isClick) {
+                        personId = res.data.length > 0 ? res.data[0].usid : "";
+                        if (personIdClick) {
+                            personId = personIdClick;
+                        }
+                        for (var ii = 0; ii < res.data.length; ii++) {
+                            if (personId == res.data[ii].usid) {
+                                $(".personList .layui-table-body tr").eq(ii).addClass('backCol')
+                                    .siblings().removeClass('backCol');
+                                break;
+                            }
+                        }
+                    } else {
+                        //   personId = res.data[0].usid
+                        personId = res.data.length > 0 ? res.data[0].usid : "";
+                        $(".personList .layui-table-body tr").eq(0).addClass('backCol').siblings()
+                            .removeClass('backCol');
+                    }
+                    $(".personList .layui-table-main").scrollTop(lengthAAA);
+                }
+            });
+            table.on('tool(personList)', function (obj, elem) {
+                // 获取点击列的数据
+                var data = obj.data;
+                var layEvent = obj.event;
+                // 判断操作类型
+                if (layEvent === 'handle') {
+                    personId = obj.data.usid;
+                    isClick = true;
+                    personIdClick = obj.data.usid;
+                    obj.tr.addClass('backCol').siblings().removeClass('backCol');
+                    $('#main').fullCalendar('refetchEvents');
+                }
+            });
+        }
+
+        // $("ul#personList").on("click","li",function(){      //只需要找到你点击的是哪个ul里面的就行
+        //     personId=$(this).attr('id');
+        //     $('#main').fullCalendar('refetchEvents');
+        //     $(this).addClass('backCol').siblings().removeClass('backCol')
+        // });
+        // $("ul#personList").on("mouseover","li",function(){      //只需要找到你点击的是哪个ul里面的就行
+        //     $(this).addClass('backColr').siblings().removeClass('backColr')
+        // });
+
+        // 渲染任务列表
+        function renderTable(url, data, isEdited) {
+            if (!data) {
+                data = {};
+            }
+            // 加载动画
+            admin.showLoading('.layui-body');
+            table.render({
+                // table参数
+                id: 'task',
+                elem: '#task',
+                url: admin.formatUrl(url),
+                where: data,
+                parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        //"count": res.data.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+                },
+                cols: [
+                    [{
+                        type: 'checkbox'
+                    }, {
+                        type: 'numbers',
+                        title: '序号'
+                    }, {
+                        field: 'childrenName',
+                        title: '任务',
+                        align: 'center'
+                    }, {
+                        field: 'taskName',
+                        title: '任务',
+                        align: 'center',
+                        hide: true
+                    }, {
+                        field: 'workTime',
+                        title: '工时',
+                        align: 'center',
+                        edit: isEdited
+                    }, {
+                        field: 'taskStatus',
+                        title: '是否完成',
+                        templet: '#isCompleteTpl',
+                        align: 'center'
+                    }]
+                ],
+                page: false,
+                // 渲染表格完成后，去除加载动画
+                done: function () {
+                    admin.removeLoading('.layui-body');
+                    $(window).resize();
+                    if (!isEdited) {
+                        // $("[name='isComplete']").attr("disabled", "");
+                    }
+                },
+                // 列宽最少 120，防止在小屏幕上显示不全列标题
+                cellMinWidth: 80
+            });
+        }
+
+        $('#main').on('mousewheel DOMMouseScroll', function (e) {
+            var delta = (e.originalEvent.wheelDelta && (e.originalEvent.wheelDelta > 0 ? 1 : -1)) ||
+                // chrome & ie
+                (e.originalEvent.detail && (e.originalEvent.detail > 0 ? -1 : 1)); // firefox
+
+            if (delta < 0) {
+                $('.fc-next-button').click();
+            } else {
+                $('.fc-prev-button').click();
+            }
+
+        })
+        $(window).resize();
+        var workTimeMap = [];
+        var workMonthMap = [];
+        var allApproveFillWorkCostTime;
+        var exportOption;
+
+        // 日历部分
+        function init() {
+            //  start 和 end参数（Date对象）来表示时间范围。timezone是指Fullcalendar当前使用的时区。另外还有 callback 函数，当自定义函数生成日程之后必须调用，callback的入参是 Event Objects 数组。
+            var updateTagArr = []; // 存放更新标签数组
+            $('#main').fullCalendar({
+                //               customButtons: {
+                //                   myCustomButton: {
+                //                       text: '添加事件',
+                //                       click: function () {
+                //                           $("#endTimeBlock").addClass("layui-hide");
+                //                           var curDate = new Date().Format('yyyy-MM-dd');
+                //                           create(curDate)
+                //                       }
+                //                   },
+                //               },
+                // 日历头部
+                header: {
+                    right: 'prev, next, today, month, basicWeek, listButton',
+                    left: ' myCustomButton',
+                    center: 'title'
+                },
+                // titleFormat:"5666666666",
+                height: "parent",
+                showNonCurrentDates: true,
+                fixedWeekCount: false,
+                eventLimit: false,
+                // views: {
+                //     basicWeek: {
+                //         eventLimit: 6 // adjust to 6 only for timeGridWeek/timeGridDay
+                //     }
+                // },
+                defaultView: "month", //默认选择月还是周
+                // eventLimitText: function (data) {
+                //     return "还有" + data + "项..."
+                // },
+                eventRender: function (eventObj, $el) {
+
+                    var html1 = "";
+                    let overevent = [];
+                    if (eventObj.list.length > limtItem) {
+                        // newevent = event.list.slice(0, 2)
+                        overevent = eventObj.list.slice(limtItem, eventObj.list.length)
+                        // num = event.list.length - 2
+                    } else {
+                        overevent = []
+                    }
+                    //   console.log(overevent)
+                    overevent.forEach(element => {
+                        var scheduleTitle = element.scheduleDetail ? element
+                            .scheduleDetail : "";
+                        html1 += '<div class="xiaozi"><i class="yuan"></i>' +
+                            scheduleTitle +
+                            '</div>'
+                    });
+                    var view = $('#main').fullCalendar('getView');
+
+                    // console.log(eventObj.list.length)
+                    if (eventObj.list.length > limtItem) {
+                        // debugger
+                        //  console.log($el[0].children)
+                        // console.log($el[0].childNodes.morethan)
+                        //  console.log($el.find('a.morethan'))
+                        //   console.log($el.context.lastChild.className)
+                        // $el.on('click', function (param) {
+                        //     event.stopPropagation()
+                        //     console.log($el)
+                        // })
+                        if (view.type === 'month') {
+                            $el.on({
+                                mouseenter: function () {
+                                    var that = this;
+                                    tips = layer.tips(
+                                        "<span style='color:#000;'>" + html1 +
+                                        "</span>",
+                                        that, {
+                                            tips: [3, '#fff'],
+                                            time: 0,
+                                            area: ['10%', 'auto'],
+                                            maxWidth: 500
+                                        });
+                                },
+                                mouseleave: function () {
+                                    layer.close(tips);
+                                }
+                            });
+                        }
+
+                    }
+
+                },
+
+                eventAfterRender: function (event, element, view) {
+                    var view = $('#main').fullCalendar('getView');
+                    // console.log(event, 111)
+                    // console.log(element, 222)
+                    // console.log(view, 333)
+                    var $this = $(element);
+                    //通过 操作 $this 可以从新定义dom
+                    // 通过 wz_title wz_name 自定义css样式  例如：
+                    var html = "";
+                    var html1 = "";
+                    let newevent;
+                    let overevent = [];
+                    let num;
+                    let id = event.obj.id
+                    //  console.log(event, 'id')
+                    // console.log(event.list)
+                    if (view.type === 'month') {
+                        if (event.list.length > limtItem) {
+                            newevent = event.list.slice(0, limtItem)
+                            overevent = event.list.slice(limtItem, event.list.length)
+                            num = event.list.length - limtItem
+                        } else {
+                            newevent = event.list
+                            overevent = []
+                        }
+                        //   console.log(overevent)
+                        newevent.forEach(element => {
+                            var scheduleTitle = element.scheduleDetail ? element
+                                .scheduleDetail : "";
+                            html += '<div class="xiaozi"><i class="yuan"></i>' +
+                                scheduleTitle +
+                                '</div>'
+                        });
+                        overevent.forEach(element => {
+                            var scheduleTitle = element.scheduleDetail ? element
+                                .scheduleDetail : "";
+                            html1 += '<div class="xiaozi"><i class="yuan"></i>' +
+                                scheduleTitle +
+                                '</div>'
+                        });
+                        if (event.list.length > limtItem) {
+                            html += "<a class='morethan' id='more" + event.obj.id +
+                                "' href='javascript:;'>还有" + num + "条</a>"
+                        }
+                    } else {
+                        event.list.forEach(element => {
+                            var scheduleTitle = element.scheduleDetail ? element
+                                .scheduleDetail : "";
+                            html += '<div class="xiaozi"><i class="yuan"></i>' +
+                                scheduleTitle +
+                                '</div>'
+                        });
+                    }
+                    // console.log('#more' + event.obj.id)
+                    // console.log(id)
+                    // $("#more" + 1675).hover(function (param) {
+                    //     console.log(event.obj.id)
+                    // })
+                    // $("#more" + id).on({
+                    //     mouseenter: function () {
+                    //         var that = this;
+                    //         tips = layer.tips(
+                    //             "<span style='color:#000;'>" + id +
+                    //             "</span>",
+                    //             that, {
+                    //                 tips: [2, '#fff'],
+                    //                 time: 0,
+                    //                 area: 'auto',
+                    //                 maxWidth: 500
+                    //             });
+                    //     },
+                    //     mouseleave: function () {
+                    //         layer.close(tips);
+                    //     }
+                    // });
+
+                    if (event.title == '') {
+                        $this.html(html);
+                    } else {
+                        if (event.title == null) {
+                            event.title = ""
+                        }
+                        $this.html("<div title='" + event.title + "' id='" + event.obj.id +
+                            "' class=\"wz_title\">" +
+                            event.title + "</div>" + html);
+                    }
+                },
+                eventOrder: "description",
+                // 日历日程活动事件
+                events: function (start, end, timezone, callback) {
+                    lengthAAA = $(".personList .layui-table-main").scrollTop();
+                    // 获得当前日历月份
+                    var date = this.getDate().format('YYYY-MM');
+                    // 搜索框内有内容时，非首次进入时 不刷新 人员列表
+                    if (!isClick && !$('#searchValue').val()) {
+                        getPersonData();
+                    }
+
+
+                    isClick = false;
+                    // 获得后台数据
+
+                    admin.req("/api/smallProgram/ScheduleHourController/calenderQuery", {
+                        "createUserId": personId,
+                        "researchUserId": layui.config.getAccount().usid,
+                        "scheduleBeginDate": start.format("YYYY-MM-DD"),
+                        "scheduleEndDate": end.format("YYYY-MM-DD")
+                    }, function (json) {
+                        var events = [];
+
+                        if (json.data.length == 7) {
+                            workTimeMap = json.data.scheduleContent ? json.data
+                                .scheduleContent : "";
+                        } else {
+                            // console.log(json.data)
+                            workMonthMap = json.data.scheduleContent ? json.data
+                                .scheduleContent : "";
+                        }
+                        allApproveFillWorkCostTime = json.data.allApproveFillWorkCostTime ?
+                            json.data.allApproveFillWorkCostTime.toFixed(2) : 0;
+                        // 遍历返回数据
+
+                        $.each(json.data, function (i, c) {
+
+
+                            events.push({
+                                title: c.scheduleContent ? c
+                                    .scheduleContent : "",
+                                start: c.scheduleDate, // will be parsed
+                                obj: c,
+                                list: c.scheduleDetailEOList
+                            });
+
+                        });
+                        updateTagArr = []
+                        events.forEach(e => {
+                            if (e.obj.updateFlag == 1) {
+                                var item = new Date(e.obj.scheduleDate).Format(
+                                    'yyyy-MM-dd')
+                                updateTagArr.push(item)
+                            }
+                        })
+                        callback2 = callback
+                        // 回调函数
+                        callback(events);
+                        // $('.wz_title').each(function (index,item) {
+                        //     $(this).attr('title', $(this).html());
+                        // })
+                    }, {
+                        method: "post",
+                        async: false
+                    });
+
+                },
+
+                // 日历框点击事件
+                dayClick: function (date, jsEvent, view) {
+                    var curDate = new Date(date).Format('yyyy-MM-dd');
+                    var events = $('#main').fullCalendar('clientEvents', function (event) {
+                        var eventStart = event.start.format('YYYY-MM-DD');
+                        var eventEnd = event.end ? event.end.format('YYYY-MM-DD') : null;
+                        var theDate = date.format('YYYY-MM-DD');
+                        return (eventStart <= theDate && (eventEnd >= theDate) && !(
+                            eventStart < theDate && (eventEnd == theDate))) || (
+                            eventStart == theDate && (eventEnd === null));
+                    });
+                    if (events && events.length > 0 && events[0].obj.id) {
+                        admin.req('/api/smallprogram/scheduleDetail/find', {
+                            userId: layui.config.getAccount().usid,
+                            destUserId: personId,
+                            id: events[0].obj.id,
+                        }, function (d) {
+                            console.log(d.data, 888888)
+                            popMenu('edit', d.data, timestampToTime(d.data.scheduleDate));
+
+                        }, {
+                            method: "post"
+                        });
+                    } else {
+                        create(curDate)
+                    }
+                },
+                // 日程事件点击事件
+                eventClick: function (calEvent, jsEvent, view) {
+                    // 获得日历当天日期
+                    var curDate = new Date().Format('yyyy-MM-dd');
+                    // 获取点击日程日期
+                    var selectDate = calEvent.start.format('YYYY-MM-DD');
+                    // 弹窗按钮
+                    var btn = null;
+                    // 日程简报弹层查看
+
+                    //    popMenu('edit', calEvent.obj,);
+
+                    admin.req('/api/smallprogram/scheduleDetail/find', {
+                        userId: layui.config.getAccount().usid,
+                        destUserId: personId,
+                        id: calEvent.obj.id,
+                    }, function (d) {
+                        popMenu('edit', d.data, timestampToTime(d.data.scheduleDate));
+                    }, {
+                        method: "post"
+                    });
+                },
+                eventAfterAllRender: function (view) {
+                    if (view.type == 'month') {
+                        $('.workStyle').parent().remove()
+                        updateTagArr.forEach(today => {
+                            if ($('.workCost' + today).length == 0) {
+                                $('td[data-date=' + today + ']').eq(1).prepend(
+                                    '<div style="display: inline-block;float: left;"><span class="workStyle workCost' +
+                                    today +
+                                    '" style="font-size:12px;line-height: 21.5px;color:#ea9f2c">更新</span></div>'
+                                )
+                            }
+                        })
+                    }
+                    $(window).resize();
+                },
+            })
+        }
+        Date.prototype.Format = function (fmt) { //author: meizz
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "H+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp
+                .$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length ==
+                    1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+
+        init();
+        $('#projectId').on('change', function (e, params) {
+            renderTable("/api/Daily/daily/children?projectId=" + params.selected, null, true);
+        });
+
+        function timestampToTime(timestamp) {
+
+            var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+
+            Y = date.getFullYear() + '-';
+
+            M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+
+            D = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+
+            return Y + M + D;
+
+        }
+
+        function setMouse(i, data) {
+            var tip;
+            $(".workCost" + i + "").off('mouseover').on('mouseover', function () {
+                var color;
+                if (data && data.approveFillWorkCostTime < 8) {
+                    color = '#FFB400';
+                } else {
+                    color = '#008FC3';
+                }
+                tip = layer.tips('有效：<span style="color: ' + color + '">' + (data ? data
+                    .approveFillWorkCostTime + 'h' : "--") + '</span>\n累计：' + (data ? data
+                    .allFillWorkCostTime + 'h' : "--") + '', '.workCost' + i + '', {
+                    tips: [1],
+                    time: 0
+                });
+            })
+            $(".workCost" + i + "").off('mouseleave').on('mouseleave', function () {
+                layer.close(tip);
+            })
+        }
+
+        function create(curDate) {
+            popMenu('add', {}, curDate);
+
+        }
+
+        function popMenu(handleType, data, date) {
+            var params = {};
+            var title = "编辑日程";
+            if (handleType == 'add') {
+                params.dailyCreateTime = date;
+                title = "新增日程";
+            }
+            // $('#dailyCreateTime').attr('disabled', 'disabled');
+            if (handleType === 'edit') {
+                title = '编辑日程';
+                data.dailyCreateTime = data.start;
+                params = data;
+
+            }
+            if (params.approveState == 1 || params.approveState == 2) {
+                title = '编辑日报';
+            }
+            params.handleType = handleType;
+            localStorage.usid = personId;
+            admin.popupCenter({
+                title: title,
+                width: 950,
+                // 右上角关闭按钮的点击事件
+                cancel: function () {
+                    admin.closePopupCenter();
+                },
+                path: 'components/tpl/daily_save.html',
+                finish: function () {
+                    $('#main').fullCalendar('refetchEvents');
+                },
+                success: function () {
+
+                    if (handleType === 'edit') {
+                        if (data.scheduleContent != null) {
+                            if (data.scheduleContent == '东丽办公') {
+                                $("#leixing input[name='scheduleType']:eq(0)").attr("checked", true)
+                                $('.chu').hide()
+                            } else if (data.scheduleContent == '西青办公') {
+                                $("#leixing input[name='scheduleType']:eq(1)").attr("checked", true)
+                                $('.chu').hide()
+                            } else if (data.scheduleContent.substring(0, 2) == '出差') {
+                                $("#leixing input[name='scheduleType']:eq(2)").attr("checked", true)
+                                $(".chu input[name='home']").val(data.scheduleContent.substring(3))
+                                $('.chu').show()
+                            } else if (data.scheduleContent == '出国') {
+                                $("#leixing input[name='scheduleType']:eq(3)").attr("checked", true)
+                                $('.chu').hide()
+                            } else if (data.scheduleContent == '休假') {
+                                $("#leixing input[name='scheduleType']:eq(4)").attr("checked", true)
+                                $('.chu').hide()
+                            }
+                        }
+                    }
+                    if (handleType === 'edit') {
+                        var html = '';
+                        var arrIndex = [];
+                        if (data.scheduleDetailEOs.length > 0) {
+                            for (var i = 0; i < data.scheduleDetailEOs.length; i++) {
+                                var itme = data.scheduleDetailEOs[i]
+                                var shi = itme['scheduleDetail'] ? itme['scheduleDetail'] : ""
+                                var jian = itme['timeLimit']
+                                var di = itme['extInfo1']
+                                var ids = itme['id']
+                                var extId = itme['extInfo2']
+                                var extName = itme['extInfo3'] ? itme['extInfo3'] : ""
+                                var index = new Date().getTime() + i
+                                if (jian == null) {
+                                    jian = ''
+                                }
+                                if (di == null) {
+                                    di = ''
+                                }
+                                if (i == 0) {
+                                    html += '<tr class="shuju">\n' +
+                                        '<td><input type="text"  id="text' + index +
+                                        '" placeholder="请选择时间" name="nex" value="' + jian +
+                                        '" data_id="' + ids +
+                                        '" readonly="readonly"><img src="/assetsInfo/images/shijian.png" alt="" class="fu_img"></td>\n' +
+                                        '<td><input type="text" placeholder="请填写日程(最多40字)" maxlength="40" name="nex"  value="' +
+                                        shi + '" class="richeng" data_ip="' + data.id +
+                                        '"></td>\n' +
+                                        '<td><input type="text" placeholder="请填写地点(最多20字)" maxlength="20" name="nex" value="' +
+                                        di + '" class="didian" data_ext="' + extId +
+                                        '" data_name="' + extName + '"></td>\n' +
+                                        '<td><img class="clickImg" onclick="addPlanOutcomes(this)" src="/assetsInfo/images/tianjia_06.png" style="cursor: pointer;" _src="/assetsInfo/images/tianjia_06.png"></td>\n' +
+                                        ' </tr>';
+                                } else {
+                                    html += '<tr class="shuju">\n' +
+                                        '<td><input type="text" id="text' + index +
+                                        '" placeholder="请选择时间" name="nex" value="' + jian +
+                                        '" data_id="' + ids +
+                                        '" readonly="readonly"><img src="/assetsInfo/images/shijian.png" alt="" class="fu_img"></td>\n' +
+                                        '<td><input type="text" placeholder="请填写日程(最多40字)" maxlength="40" name="nex"  value="' +
+                                        shi + '" class="richeng" data_ip="' + data.id +
+                                        '"></td>\n' +
+                                        '<td><input type="text" placeholder="请填写地点(最多20字)" maxlength="20" name="nex" value="' +
+                                        di + '" class="didian" data_ext="' + extId +
+                                        '" data_name="' + extName + '"></td>\n' +
+                                        '<td><i class="clickImg layui-icon layui-icon-delete" style="font-size: 20px; margin-right:-50px;cursor:pointer;color: #bf6a6b;" href="javascript:;" onclick="delPlanOutcomes(this)"></i></td>\n' +
+                                        ' </tr>';
+                                }
+                                arrIndex.push(index)
+                            }
+                        } else {
+                            html += '<tr class="shuju">\n' +
+                                '<td><input type="text"  id="text" placeholder="请选择时间" name="nex"  readonly="readonly"><img src="/assetsInfo/images/shijian.png" alt="" class="fu_img"></td>\n' +
+                                '<td><input type="text" placeholder="请填写日程(最多40字)" maxlength="40" name="nex"  value="" class="richeng" data_ip="' +
+                                data.id + '"></td>\n' +
+                                '<td><input type="text" placeholder="请填写地点(最多20字)" maxlength="20" name="nex" value="" class="didian" data_ext="" data_name=""></td>\n' +
+                                '<td><img class="clickImg" onclick="addPlanOutcomes(this)" src="/assetsInfo/images/tianjia_06.png" style="cursor: pointer;" _src="/assetsInfo/images/tianjia_06.png"></td>\n' +
+                                ' </tr>';
+                            arrIndex.push("text")
+                        }
+
+                        $('#ip').empty().append(html)
+                        $('.richeng').bind('input propertychange', function () {
+                            if ($(this).val().length > 39) {
+                                layer.msg('最多可写40字符');
+                            }
+
+                        });
+                        $('.didian').bind('input propertychange', function () {
+                            if ($(this).val().length > 19) {
+                                layer.msg('最多可写20字符');
+                            }
+
+                        });
+                        for (var i = 0; i < arrIndex.length; i++) {
+                            var itme = arrIndex[i] == "text" ? "" : arrIndex[i];
+                            layui.use(['laydate'], function () {
+                                var laydate = layui.laydate;
+                                laydate.render({
+                                    elem: '#text' + itme,
+                                    type: 'time',
+                                    range: '-',
+                                    format: 'HH:mm'
+                                        // , value: '08:00 - 17:00'
+                                        ,
+                                    isInitValue: false,
+                                    ready: function (date) {
+                                        console.log($('#text' + itme).val());
+                                        if (!$('#text' + itme).val()) {
+                                            $($($(".laydate-time-list li ol")[
+                                                0]).find("li")[8]).trigger(
+                                                "click");
+                                            $($($(".laydate-time-list li ol")[
+                                                3]).find("li")[17]).trigger(
+                                                "click");
+                                        }
+
+                                        var startTimeDate = $($(
+                                            ".laydate-time-list li ol")[
+                                            1]).find("li");
+                                        for (var i = 0; i < startTimeDate
+                                            .length; i++) {
+                                            var t00 = startTimeDate[i]
+                                                .innerText;
+                                            if (t00 != "00" && t00 != "30") {
+                                                startTimeDate[i].remove()
+                                            }
+                                        }
+                                        var endTimeDate = $($(
+                                            ".laydate-time-list li ol")[
+                                            4]).find("li");
+                                        for (var i = 0; i < endTimeDate
+                                            .length; i++) {
+                                            var t00 = endTimeDate[i].innerText;
+                                            if (t00 != "00" && t00 != "30") {
+                                                endTimeDate[i].remove()
+                                            }
+                                        }
+                                    },
+                                    done: function (value, date, endDate) {
+
+                                        var im = value.slice(0, 2)
+                                        var imt = value.slice(8, 10)
+                                        var stateTime = value.slice(3, 5)
+                                        var endTime = value.slice(11, 13)
+
+                                        if (value) {
+                                            var beginTime = value.split(" - ")[
+                                                0];
+                                            var endTime = value.split(" - ")[1];
+                                            if (beginTime >= endTime) {
+                                                $(".laydate-btns-clear")
+                                                    .click();
+                                                layer.msg('开始时间不能大于结束时间');
+                                                io = 1
+                                            }
+                                        }
+
+                                        setTimeout(() => {
+
+                                            var ullp = []
+                                            for (var i = 0; i < $(
+                                                    '.shuju')
+                                                .length; i++) {
+                                                var itme = $('.shuju')
+                                                    .eq(i)
+                                                ullp.push(
+                                                    itme.find(
+                                                        'input').eq(
+                                                        0).val(),
+                                                )
+                                            }
+                                            var beginTime = []
+                                            var endTime = []
+                                            var time = ''
+                                            var time1 = ''
+                                            for (var k = 0; k < ullp
+                                                .length; k++) {
+                                                var ite = ullp[k]
+                                                if (ite && ite.length >
+                                                    0) {
+                                                    time = ite.split(
+                                                        " - ")[0];
+                                                    time1 = ite.split(
+                                                        " - ")[1]
+                                                    beginTime.push(time)
+                                                    endTime.push(time1)
+                                                }
+                                            }
+                                            beginTimeArr = beginTime
+                                                .sort();
+                                            endTimeArr = endTime.sort();
+                                            for (i = 1; i < beginTimeArr
+                                                .length; i++) {
+                                                if (beginTimeArr[i] <
+                                                    endTimeArr[i - 1]) {
+                                                    layer.msg(
+                                                        '时间不能有重叠');
+                                                    io = 2
+                                                    return false;
+                                                } else {
+                                                    io = 0
+                                                }
+                                            }
+                                        }, 500);
+
+                                    }
+                                })
+                            })
+                        }
+
+                        var delPlanOutcomes = function (that) {
+
+                            layer.confirm('确定删除该条吗', {
+                                icon: 3,
+                                title: '提示'
+                            }, function (index) {
+                                $(that).parent().parent().remove();
+                                data.scheduleDetailEOs.splice(index, 1)
+                                layer.msg('删除成功', {
+                                    icon: 1
+                                });
+                            });
+                        };
+                    }
+                    laydate.render({
+                        elem: '#startTime',
+                        value: date
+                    })
+                    form.render();
+                }
+            });
+        };
+        var file = '';
+    })
+    $(function () {
+        $('.layui-card').css('height', 'calc(100vh - 100px)!important');
+    })
+</script>
+
+</html>

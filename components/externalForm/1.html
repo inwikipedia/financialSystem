@@ -1,0 +1,207 @@
+<p>
+    &nbsp;
+</p>
+<table data-sort="sortDisabled" width="453">
+    <tbody>
+    <tr class="firstRow">
+        <td style="-ms-word-break: break-all;" width="80" valign="middle" align="left">
+            项目ID：
+        </td>
+        <td style="-ms-word-break: break-all;" rowspan="1" colspan="3" width="470" valign="middle" align="left"></td>
+    </tr>
+    <tr>
+        <td style="-ms-word-break: break-all;" width="80" valign="middle" align="left">
+            <span style="color: red">*</span> 项目名称：<br/>
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        </td>
+        <td style="word-break: break-all;" width="190" valign="middle" align="left">
+            <input name="input_1543541363646" title="项目名称" id="itemName" class="layui-input" style=" height: 30px; text-align: left; font-size: 14px; box-sizing: border-box;" type="text" placeholder="项目名称" value="" adcform_validate="adcformvalidate_word" adcform_align="left" adcform_width="190" adcform_height="30" adcform_fontsize="14" adcform_hide="0" adcform="adc_form_input" lay-verify="required" maxlength="50"/>
+        </td>
+        <td rowspan="1" colspan="1" width="48" valign="middle" align="left">
+            <span style="color: red">*</span>开始时间：
+        </td>
+        <td rowspan="1" colspan="1" valign="middle" align="left">
+            <input name="datetime_1543542762541" type="text" title="创建时间" placeholder="创建时间" lay-verify="required" adcform="adc_form_datetime" adcform_theme="#37ABFF" adcform_type="_" class="datetime_1543542762541 layui-input" adcform_hide="0" adcform_auto="1" adcform_fontsize="14" adcform_align="left" adcform_width="190" adcform_height="30" style="box-sizing: border-box; font-size: 14px; text-align: left;  height: 30px;"/><script class="datetime_1543542762541_script">(function(){var param = {                                elem: ".datetime_1543542762541"                            };                            var type = document.querySelector(".datetime_1543542762541").getAttribute("adcform_type").split("_");                            var theme = document.querySelector(".datetime_1543542762541").getAttribute("adcform_theme");                            var auto = document.querySelector(".datetime_1543542762541").getAttribute("adcform_auto");                            if(type[0]!==""){param.type=type[0];}                            if(type[1]!==""){param.range=true;}                            if(theme){param.theme=theme;}                            if(auto == "1" && type[1]==""){param.value = new Date();}                            layui.laydate.render(param);})();</script>
+        </td>
+    </tr>
+    <tr>
+        <td width="80" valign="middle" align="left">
+            <span style="color: red">*</span>项目负责人：
+        </td>
+        <td width="190" valign="middle" align="left">
+            {|-<span class="layui-input-inline" style="position: relative;display:block"><input lay-verify="required" name="inputuserselect_1543542717258" type="text" title="项目负责人" adcform="adc_form_user_select" class="layui-input" placeholder="项目负责人" readonly="readonly" onclick="{                            var data = {data: []};                            var that = this;                            function callback (res) {                                if (res.length &gt;0) {                                    that.dataset.usid = res[0].id;                                    that.dataset.usname = res[0].name;                                    that.value = res[0].name;                                }                            }                            ADCFormDesignHelper.personnelSelect(data, callback);                    }" adcform_default="1" adcform_width="" adcform_height="30" adcform_fontsize="14" style="box-sizing: border-box;  height: 30px; font-size: 14px; cursor: pointer; padding-right: 30px;"/><em class="layui-icon layui-icon-username" style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;"></em></span>-|}<script class="inputuserselect_1543542717258_script">(function (that) {                                var adcform_default = that.getAttribute("adcform_default");                                if (adcform_default == "1") {                                    var account = layui.config.getAccount();                                    that.value = account.usname;                                    that.dataset.usname = account.usname;                                    that.dataset.usid = account.usid;                                }                            })(document.querySelector("input[name=\"inputuserselect_1543542717258\"]"));</script>
+        </td>
+        <td rowspan="1" colspan="1" width="48" valign="middle" align="left">
+            <span style="color: red">*</span> 业务方：
+        </td>
+        <td rowspan="1" colspan="1" valign="middle" align="left">
+            <input lay-verify="required" name="input_1543542740018" type="text" title="业务方" value="" adcform="adc_form_input" class="layui-input" placeholder="业务方" adcform_hide="0" adcform_fontsize="14" adcform_align="left" adcform_width="190" adcform_height="30" adcform_validate="adcformvalidate_none" style="box-sizing: border-box; font-size: 14px; text-align: left;  height: 30px;" maxlength="50"/>
+        </td>
+    </tr>
+    <tr>
+        <td width="80" valign="middle" align="left">
+            <span style="color: red">*</span>项目组成员：
+        </td>
+        <td rowspan="1" colspan="1" style="word-break: break-all;" width="190" valign="middle" align="left">
+            {|-<span class="layui-input-inline" style="position: relative;display:block">
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input lay-verify="required" name="inputuserselect_1543556546697" type="text" title="人员" adcform="adc_form_user_select" class="layui-input" placeholder="人员" readonly="readonly" onclick="{                            var data = {data: []};                            var that = this;                            var dataUsid = that.dataset.usid,                                dataUsname = that.dataset.usname;                            if (dataUsid &amp;&amp; dataUsname) {                                dataUsid = dataUsid.split(&quot;,&quot;),                                dataUsname = dataUsname.split(&quot;,&quot;);                                for (var i = 0; i &lt; dataUsid.length; i++) {                                    data.data.push({                                        id: dataUsid[i],                                        name: dataUsname[i]                                    });                                }                            }                            function callback (res) {                                if (res.length &gt;0) {                                    var ids = [], names = [];                                    for (var i = 0; i &lt; res.length; i++) {                                        ids.push(res[i].id);                                        names.push(res[i].name);                                    }                                    that.dataset.usid = ids.join(&quot;,&quot;);                                    that.dataset.usname = names.join(&quot;,&quot;);                                    that.value = names.join(&quot;,&quot;);                                } else {                                    that.dataset.usid = &quot;&quot;;                                    that.dataset.usname = &quot;&quot;;                                    that.value = &quot;&quot;;                                }                            }                            ADCFormDesignHelper.personnelSelect(data, callback);                    }" adcform_default="0" adcform_width="300" adcform_height="30" adcform_fontsize="14" style="box-sizing: border-box; height: 30px; font-size: 14px; cursor: pointer; padding-right: 30px;"/><em class="layui-icon layui-icon-username" style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;"></em></span>-|}<script class="inputuserselect_1543556546697_script">(function (that) {                                var adcform_default = that.getAttribute("adcform_default");                                if (adcform_default == "1") {                                    var account = layui.config.getAccount();                                    that.value = account.usname;                                    that.dataset.usname = account.usname;                                    that.dataset.usid = account.usid;                                }                            })(document.querySelector("input[name=\"inputuserselect_1543556546697\"]"));</script>
+        </td>
+        <td rowspan="1" colspan="1" style="word-break: break-all;" width="470" valign="middle" align="left">
+            <span style="color: red">*</span> 所属业务:
+        </td>
+        <td rowspan="1" colspan="1" style="word-break: break-all; " width="470" valign="middle" align="left">
+            <select id="business_blong" name="select_1543542846560" lay-verify="required" type="select" title="所属业务ID" adcform="adc_form_select" adcform_height="30" adcform_width="190" style="height: 30px; "></select>
+        </td>
+    </tr>
+    <tr>
+        <td style="word-break: break-all;" width="80" valign="middle" align="left">
+            <span style="color: red">*</span>业务类型：
+        </td>
+        <td width="190" valign="middle" align="left">
+            <select id="business_pop" name="select_1543542846563" type="select" lay-verify="required" title="业务类型ID" adcform="adc_form_select" adcform_height="30" adcform_width="190" style="height: 30px; "></select>
+        </td>
+        <td rowspan="1" colspan="1" width="48" valign="middle" align="left">
+            人力投入（人天）：
+        </td>
+        <td style="-ms-word-break: break-all;" rowspan="1" colspan="1" valign="middle" align="left">
+            <input name="input_1543541899736" title="人力投入" id="humanInput" class="layui-input" style=" height: 30px; text-align: left; font-size: 14px; box-sizing: border-box;" type="text" placeholder="人力投入" value="" adcform_validate="adcformvalidate_number" adcform_align="left" adcform_width="190" adcform_height="30" adcform_fontsize="14" adcform_hide="0" adcform="adc_form_input" lay-verify="required" maxlength="9"/>
+        </td>
+    </tr>
+    <tr>
+        <td style="word-break: break-all;" width="80" valign="middle" align="left">
+            合同编号
+        </td>
+        <td style="word-break: break-all;" width="190" valign="middle" align="left">
+            <input name="input_1543541323229" title="合同编号" class="layui-input" style=" height: 30px; text-align: left; font-size: 14px; box-sizing: border-box;" type="text" placeholder="合同编号" value="" adcform_validate="adcformvalidate_word" adcform_align="left" adcform_width="190" adcform_height="30" adcform_fontsize="14" adcform_hide="0" adcform="adc_form_input" maxlength="16"/>
+        </td>
+        <td width="80"></td>
+        <td width="190"></td>
+    </tr>
+    <tr>
+        <td width="80" valign="middle" align="left">
+            项目描述：
+        </td>
+        <td rowspan="1" colspan="3" width="470" valign="middle" align="left">
+            <textarea name="textarea_1543541722653" title="项目描述" id="describe" class="layui-textarea" style=" height: 80px; font-size: 14px; box-sizing: border-box;resize: none" placeholder="项目描述(最大长度为200)" adcform_width="600" adcform_height="80" adcform_fontsize="14" adcform="adc_form_textarea" adcform_rich="1" value="" lay-verify="required" maxlength="200"></textarea>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>
+    <br/>
+</p><script>layui.use(['formSelects'], function(){
+    var form=layui.form;
+    function getOptionValues() {
+        var baseUrl = 'http://'+location.host+'/api/budget/budget?_ts=1546566294351';
+        var dl = [];
+        $.ajax({
+            url:baseUrl,
+            contentType: "application/json",
+            type: "get",
+            async:false,
+            dataType: 'json',
+            success: function (result) {
+                if(result.ok){
+                    var arr=result.data;
+                    var elem = $('#business_blong');
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i].projectName)
+                        {
+                            elem.append('<option value="' + arr[i].id + '">' + arr[i].projectName + '</option>');
+                        }
+                    }
+                    form.render('select');
+                }
+
+            },
+            error:function (result) {
+                console.log("error")
+                console.log(result)
+
+            }
+        });
+
+    };
+    $("input").on("mouseover",function(){
+
+
+        $(this).attr('title',$(this).val());
+
+    });
+    function aa() {
+        var data = {data: [] };
+        var that = this;
+        var dataUsid = that.dataset.usid,
+            dataUsname = that.dataset.usname;
+        if (dataUsid &amp;&amp; dataUsname) {
+            dataUsid = dataUsid.split(&quot;,&quot;),
+            dataUsname = dataUsname.split(&quot;,&quot;);
+            for (var i = 0; i &lt; dataUsid.length; i++) {
+                data.data.push({
+                    id: dataUsid[i],
+                    name: dataUsname[i]
+                });
+            }
+        }
+        function callback (res) {
+            if (res.length &gt;0) {
+                var ids = [], names = [];
+                for (var i = 0; i &lt; res.length; i++) {
+                    ids.push(res[i].id);
+                    names.push(res[i].name);
+                }
+                that.dataset.usid = ids.join(&quot;,&quot;);
+                that.dataset.usname = names.join(&quot;,&quot;);
+                that.value = names.join(&quot;,&quot;);
+            } else {
+                that.dataset.usid = &quot;&quot;;
+                that.dataset.usname = &quot;&quot;;
+                that.value = &quot;&quot;;
+            }
+        }
+        ADCFormDesignHelper.personnelSelect(data, callback);
+    }
+
+
+    function getBusinessType() {
+        var baseUrl = 'http://'+location.host+'/api/budget/business/query/all';
+        var dl = [];
+        $.ajax({
+            url:baseUrl,
+            contentType: "application/json",
+            type: "get",
+            async:false,
+            dataType: 'json',
+            success: function (result) {
+                if(result.ok){
+                    var arr=result.data;
+                    var elem = $('#business_pop');
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i].name)
+                        {
+                            elem.append('<option value="' + arr[i].id + '">' + arr[i].name + '</option>');
+                        }
+                    }
+                    form.render('select');
+                }
+
+            },
+            error:function (result) {
+                console.log("error")
+                console.log(result)
+
+            }
+        });
+
+    }
+    getOptionValues();
+    getBusinessType();
+})</script><style>.layui-form-select dl{
+    top:42px !important;
+    bottom:auto;
+    height: 155px!important;
+}
+.layui-form-selected dl {
+    height: 195px;
+    width: 200px;
+}</style>

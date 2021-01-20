@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="/assetsInfo/css/financeBriefing/financeList.css">
+<div class="layui-row layui-col-space15">
+    <!-- 单列普通表格 -->
+    <div class="layui-col-md12">
+        <div class="layui-card p-main">
+            <div class="layui-card-header" style="height: 0px"></div>
+            <!-- 卡片容器 -->
+            <div class="layui-card-body">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-inline" style="margin-top: 10px">
+                    <button class="layui-btn layui-btn-sm layui-btn-danger"  id="btn-create">
+                        新建
+                    </button>
+                </div>
+
+                <!-- 下部表格容器 -->
+                <table id="financeTbale" lay-filter="financeTbale"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="barTool">
+
+    {{#  if(d.state!=2){ }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-look">预览</button>
+    {{#  } else { }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-edit">编辑</button>
+    {{#  } }}
+    {{# var User = layui.config.getAccount()}}
+    {{#  if(d.createUserId==User.usid){ }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs otherBtn" lay-event="btn-del">删除</button>
+    {{#  } }}
+    {{#  if(d.fileId ){ }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs otherBtn" lay-event="btn-export">导出</button>
+    {{# var User = layui.config.getAccount() } }}
+    {{#  if(((d.state==0||d.state==3)&&d.createUserId==d.receiveUserId&&d.createUserId==User.usid) ){ }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs otherBtn" lay-event="btn-send">发送</button>
+    {{#  } }}
+</script>
+<script src="../assetsInfo/js/financeBriefing/financeList.js"></script>

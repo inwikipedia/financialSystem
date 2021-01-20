@@ -1,0 +1,410 @@
+/*
+ * File   : login.css
+ * Created: Tuesday August 28th 2018 3:50:07 pm
+ * Author : yuchunyu97
+ * License: MIT License
+ * 
+ * Copyright (c) 2018 yuchunyu97
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * -----
+ * Last Modified: Tuesday October 16th 2018 1:55:12 pm
+ * Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+ * -----
+ * Description: 登录 | ADCDA 业务流程管理系统
+ * -----
+ * HISTORY:
+ * 2018-08-29	yuchunyu97	增加波浪动画，将图片与登录框适配大屏居中
+ * 2018-08-28	yuchunyu97	完成登录页样式
+ */
+
+.login-wrapper,
+body,
+html {
+    height: 100%
+}
+
+.layui-input:focus,
+.layui-textarea:focus {
+    border-color: rgba(34, 159, 255, .8) !important;
+}
+/*#form-code{*/
+    /*display: none;*/
+/*}*/
+
+
+.login-wrapper {
+    overflow: auto;
+    /* 防止图片绝对定位将浏览器横向撑开 */
+    overflow-x: hidden;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.form-item-error-tip {
+    top: 100%;
+    left: 0;
+    padding-bottom: 6px;
+    color: #ed3f14;
+    line-height: 20px;
+    height: 20px;
+}
+.layui-form-item{
+
+    width: 320px;
+}
+#form-code{
+
+}
+.layui-del {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -3px;
+    cursor: pointer;
+    border-width: 6px;
+    border-top-color: #c2c2c2;
+    border-top-style: solid;
+}
+
+/*#login-form .layui-input:focus{*/
+
+
+/*border-color:#ed3f14 !important;*/
+
+
+/*}*/
+
+.bor {
+    border-color: #ed3f14 !important;
+}
+
+.login-body {
+    position: relative;
+    /* 下边距90px为了显示出背景图下面的波浪 */
+    padding: 80px 10px 70px 10px;
+    /* 登录框背景图片 */
+    background-image: url('../images/login_page/bg1920.png');
+    background-repeat: no-repeat;
+    /*background-size: cover;*/
+    /* background-image: url('../images/login_page/login_body.png');
+    background-repeat: no-repeat;
+    background-size: cover; */
+    /* DONE: 登录框背景改为渐变色背景，加波浪动画 */
+    /* IE8，IE9 去除波浪动画 */
+    /* 渐变色从左至右：#335CB2 -> #052F75 */
+/*    background: -webkit-linear-gradient(left, #335CB2 0, #052F75 100%);
+    background: -moz-linear-gradient(left, #335CB2 0, #052F75 100%);
+    background: -o-linear-gradient(left, #335CB2 0, #052F75 100%);
+    background: linear-gradient(left, #335CB2 0, #052F75 100%);
+    !* 兼容 IE10，IE11 的背景色渐变 *!
+    background: -ms-linear-gradient(left, #335CB2 0, #052F75 100%);
+    !* 兼容 IE8，IE9 的背景色渐变 *!
+    filter: progid: DXImageTransform.Microsoft.gradient(GradientType=1, startColorstr='#335CB2', endColorstr='#052F75');*/
+    /* 撑开容器，防止浮动造成背景图无法显示 */
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.login-body>.layui-card {
+    max-width: 360px;
+    border-radius: 6px;
+    overflow: hidden;
+    /* 登录框位于右侧 */
+    float: left;
+    margin: 0;
+    margin-left: calc(50% + 150px);
+    /* 撑开一点 */
+    padding-bottom: 30px;
+}
+
+
+/*=============================================
+=            波浪动画            =
+=============================================*/
+
+
+/* 动画，左右移动 + 上下变化 */
+
+@keyframes move_wave {
+    0% {
+        transform: translateX(0) translateZ(0) scaleY(1)
+    }
+    50% {
+        transform: translateX(-25%) translateZ(0) scaleY(0.55)
+    }
+    100% {
+        transform: translateX(-50%) translateZ(0) scaleY(1)
+    }
+}
+
+.waveWrapperInner {
+    width: 100%;
+    height: 120px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+.waveTop {
+    z-index: 15;
+    opacity: 0.04;
+}
+
+.waveMiddle {
+    z-index: 10;
+    opacity: 0.08;
+}
+
+.waveBottom {
+    z-index: 5;
+    opacity: 0.12;
+}
+
+.waveWrapperInner div {
+    position: absolute;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    /* background-repeat: 水平重复 垂直不重复 */
+    background-repeat: repeat no-repeat;
+    /* background-position: 水平位置 垂直位置 */
+    background-position: 0 bottom;
+    /* transform-origin: x-axis y-axis z-axis; 被置于坐标轴的位置 */
+    transform-origin: center bottom;
+}
+
+.waveTop div {
+    /* background-size: 宽度 高度 */
+    background-size: 50% 100px;
+    background-image: url('../images/login_page/wave-top.png');
+    animation: move_wave 7s linear infinite;
+}
+
+.waveMiddle div {
+    background-size: 50% 120px;
+    background-image: url('../images/login_page/wave-mid.png');
+    animation: move_wave 12s linear infinite;
+}
+
+.waveBottom div {
+    background-size: 50% 100px;
+    background-image: url('../images/login_page/wave-bot.png');
+    animation: move_wave 21s linear infinite;
+}
+
+
+/*=====  End of 波浪动画  ======*/
+
+
+/* 登录框 卡片头 */
+
+.login-body .layui-card-header {
+    height: auto;
+    text-align: center;
+    border-bottom: none;
+    padding: 0 20px;
+}
+
+.login-body .layui-card-header h3 {
+    color: #0D96FF;
+    font-size: 20px;
+    line-height: 30px;
+    padding: 20px 0 4px;
+    font-weight: 600;
+}
+
+.login-body .layui-card-header h5 {
+    color: #979797;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 400;
+}
+
+
+/* 登录框 卡片主体 */
+
+.login-body .layui-card-body {
+    padding: 0px 20px;
+}
+
+.login-body .layui-form-pane .layui-form-label {
+    width: 38px;
+    padding: 8px 0;
+    text-align: center;
+}
+
+.login-body .layui-form-pane .layui-input-block {
+    margin-left: 38px;
+}
+
+
+/* 验证码 */
+
+.login-body .login-captcha {
+    height: 38px;
+    width: 108.56px;
+    cursor: pointer;
+}
+
+.login-body .layui-btn {
+    background: #229FFF;
+    box-shadow: 8px 0px 16px rgba(0, 142, 232, 0.31);
+    font-size: 16px;
+}
+
+.login-body input {
+    color: #181818;
+}
+
+
+/* 左右图片 */
+
+.login_image-l {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    -webkit-transform: translateX(-615px);
+    -ms-transform: translateX(-615px);
+    transform: translateX(-615px);
+}
+
+.login_image-r {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    -webkit-transform: translateX(445px);
+    -ms-transform: translateX(445px);
+    transform: translateX(445px);
+}
+
+
+/**
+  *
+  * 顶部 LOGO 及网站标题样式
+  *
+  */
+
+.login-header {
+    height: 130px;
+}
+
+.login-header img {
+    height: 55px;
+    margin: 38px 0;
+    margin-left: calc(50% - 600px);
+}
+
+
+/**
+  *
+  * 底部 FOOTER 版权信息
+  *
+  */
+
+.login-footer {
+    padding: 20px 10px 20px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 24px;
+    color: rgba(76, 76, 76, 0.5) !important;
+    box-sizing: border-box;
+}
+
+.login-footer a {
+    color: rgba(76, 76, 76, 0.5) !important;
+}
+
+.login-footer a:hover {
+    color: rgba(76, 76, 76, 0.4) !important;
+}
+
+
+/**
+  *
+  * 辅助样式
+  *
+  */
+
+.inline-block {
+    display: inline-block;
+}
+
+
+/*----------  移动设备样式  ----------*/
+
+@media screen and (max-width: 1080px) {
+    /* 防止屏幕过窄将输入框挡住 */
+    /* 登录框位置 */
+    .login-body>.layui-card {
+        float: none;
+        /* 保证登录框居中 */
+        margin: 0 auto;
+    }
+    /* 隐藏图片 */
+    .login_image {
+        display: none;
+    }
+    /* 顶部 LOGO */
+    .login-header {
+        height: 60px;
+    }
+    .login-header img {
+        height: 32px;
+        margin: 14px 24px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    /* 认为屏幕宽度小于768px的设备为移动端 */
+    /* 移动端，让波浪变矮一点 */
+    .waveWrapperInner {
+        width: 500%;
+    }
+}
+
+@media screen and (min-height: 670px) {
+    /* 如果屏幕高度大于 670px */
+    /* 为登录框添加上边距 */
+    .login-body {
+        padding: 190px 10px 230px 10px;
+    }
+}
+@media screen and (max-width: 1366px) {
+    .login-body {
+        background-image: url('../images/login_page/bg1366.png');
+        background-position-y: -35px;
+    }
+    .login-header {
+        height: 80px;
+    }
+    .login-body>.layui-card {
+        margin-left: calc(50% + 80px);
+    }
+    .login-header img {
+        height: 42px;
+        margin: 15px 0;
+        margin-left: calc(50% - 515px);
+    }
+}

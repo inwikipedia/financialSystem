@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>文本框</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-ie6.css">
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/ie.css">
+    <![endif]-->
+    <script type="text/javascript" src="../dialogs/internal.js"></script>
+    <script src="./utils.js"></script>
+</head>
+
+<body>
+    <div class="content">
+        <table class="table table-bordered table-striped table-hover">
+            <tr>
+                <th>控件名称（建议使用中文，易辨识）<span class="label label-important">*</span></th>
+                <th>初始值</th>
+            </tr>
+            <tr>
+                <td><input type="text" id="adcform_title" placeholder="必填"></td>
+                <td><input type="text" id="adcform_value" placeholder="选填"></td>
+            </tr>
+            <tr>
+                <th>数据类型</th>
+                <th>对齐方式</th>
+            </tr>
+            <tr>
+                <td>
+                    <select id="adcform_validate">
+                        <option value="adcformvalidate_none">无</option>
+                        <option value="adcformvalidate_mobile">手机</option>
+                        <option value="adcformvalidate_phone">固话</option>
+                        <option value="adcformvalidate_mobileorphone">手机或固话</option>
+                        <option value="adcformvalidate_email">邮件</option>
+                        <option value="adcformvalidate_idcard">身份证号</option>
+                        <option value="adcformvalidate_qq">QQ</option>
+                        <option value="adcformvalidate_number">数字</option>
+                        <option value="adcformvalidate_word">汉字</option>
+                        <option value="adcformvalidate_english">英文</option>
+                    </select>
+                </td>
+                <td>
+                    <select id="adcform_align">
+                        <option value="left">向左对齐</option>
+                        <option value="center">居中对齐</option>
+                        <option value="right">向右对齐</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>长-宽-字体大小</th>
+                <th>可见性</th>
+            </tr>
+            <tr>
+                <td>
+                    <input id="adcform_width" type="text" value="190" class="input-small span1" placeholder="auto" />
+                    -
+                    <input id="adcform_height" type="text" value="30" class="input-small span1" placeholder="auto" />
+                    -
+                    <input id="adcform_fontsize" type="text" value="14" class="input-small span1" placeholder="auto" />
+                    px
+                </td>
+                <td>
+                    <label class="checkbox inline"><input id="adcform_hide" type="checkbox" />隐藏</label>
+                </td>
+            </tr>
+            <tr>
+                <th>列表控件名称（统计对应列表控件可编辑行数）</th>
+            </tr>
+            <tr>
+                <td>
+                    <input id="adcform_listctrlmark" type="text">
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        var oNode = null,
+            thePlugins = 'adc_form_input';
+        window.onload = function () {
+            if (UE.plugins[thePlugins].editdom) {
+                oNode = UE.plugins[thePlugins].editdom;
+                var gValue = oNode.getAttribute('value').replace(/&quot;/g, "\""),
+                    gTitle = oNode.getAttribute('title').replace(/&quot;/g, "\""),
+                    gHidden = oNode.getAttribute('adcform_hide'),
+                    gFontSize = oNode.getAttribute('adcform_fontsize'),
+                    gAlign = oNode.getAttribute('adcform_align'),
+                    gWidth = oNode.getAttribute('adcform_width'),
+                    gHeight = oNode.getAttribute('adcform_height'),
+                    gType = oNode.getAttribute('adcform_validate');
+                    gTablename = oNode.getAttribute('adcform_listctrlmark')
+                gValue = gValue == null ? '' : gValue;
+                gTitle = gTitle == null ? '' : gTitle;
+                $G('adcform_value').value = gValue;
+                $G('adcform_title').value = gTitle;
+                if (gHidden == '1') {
+                    $G('adcform_hide').checked = true;
+                }
+                $G('adcform_fontsize').value = gFontSize;
+                $G('adcform_width').value = gWidth;
+                $G('adcform_height').value = gHeight;
+                $G('adcform_align').value = gAlign;
+                $G('adcform_validate').value = gType;
+                $G('adcform_listctrlmark').value = gTablename;
+            }
+        }
+        dialog.oncancel = function () {
+            if (UE.plugins[thePlugins].editdom) {
+                delete UE.plugins[thePlugins].editdom;
+            }
+        };
+        dialog.onok = function () {
+            if ($G('adcform_title').value == '') {
+                alert('请输入控件名称');
+                return false;
+            }
+            var gValue = $G('adcform_value').value.replace(/\"/g, "&quot;"),
+                gTitle = $G('adcform_title').value.replace(/\"/g, "&quot;"),
+                gFontSize = $G('adcform_fontsize').value,
+                gAlign = $G('adcform_align').value,
+                gWidth = $G('adcform_width').value,
+                gHeight = $G('adcform_height').value,
+                gType = $G('adcform_validate').value;
+                gTablename = $G('adcform_listctrlmark').value;
+
+            if (!oNode) {
+                try {
+                    oNode = createElement('input', 'input');
+                    oNode.setAttribute('type', 'text');
+                    oNode.setAttribute('title', gTitle);
+                    oNode.setAttribute('value', gValue);
+                    oNode.setAttribute('adcform', thePlugins);
+                    // 
+                    oNode.setAttribute('class', 'layui-input');
+                    oNode.setAttribute('placeholder', gTitle);
+                    oNode.setAttribute('adcform_listctrlmark',gTablename);
+                    oNode.style.boxSizing = 'border-box';
+
+                    if ($G('adcform_hide').checked) {
+                        oNode.setAttribute('adcform_hide', 1);
+                    } else {
+                        oNode.setAttribute('adcform_hide', 0);
+                    }
+                    if (gFontSize != '') {
+                        oNode.style.fontSize = gFontSize + 'px';
+                        oNode.setAttribute('adcform_fontsize', gFontSize);
+                    }
+                    if (gAlign != '') {
+                        oNode.style.textAlign = gAlign;
+                        oNode.setAttribute('adcform_align', gAlign);
+                    }
+                    if (gWidth != '') {
+                        oNode.style.width = gWidth + 'px';
+                        oNode.setAttribute('adcform_width', gWidth);
+                    }
+                    if (gHeight != '') {
+                        oNode.style.height = gHeight + 'px';
+                        oNode.setAttribute('adcform_height', gHeight);
+                    }
+                    if (gType != '') {
+                        oNode.setAttribute('adcform_validate', gType);
+                    }
+                    editor.execCommand('insertHtml', oNode.outerHTML);
+                    editor.execCommand('insertHtml', '<script src="/assetsInfo/libs/addtable/addtable.js"><\/script>');
+                } catch (e) {
+                    try {
+                        editor.execCommand('error');
+                    } catch (e) {
+                        alert('控件异常！');
+                    }
+                    return false;
+                }
+            } else {
+                oNode.setAttribute('title', gTitle);
+                oNode.setAttribute('value', gValue);
+                oNode.setAttribute('adcform_listctrlmark',gTablename);
+                if ($G('adcform_hide').checked) {
+                    oNode.setAttribute('adcform_hide', 1);
+                } else {
+                    oNode.setAttribute('adcform_hide', 0);
+                }
+                if (gFontSize != '') {
+                    oNode.style.fontSize = gFontSize + 'px';
+                    oNode.setAttribute('adcform_fontsize', gFontSize);
+                } else {
+                    oNode.style.fontSize = '';
+                    oNode.setAttribute('adcform_fontsize', '');
+                }
+                if (gAlign != '') {
+                    oNode.style.textAlign = gAlign;
+                    oNode.setAttribute('adcform_align', gAlign);
+                } else {
+                    oNode.setAttribute('adcform_align', '');
+                }
+                if (gWidth != '') {
+                    oNode.style.width = gWidth + 'px';
+                    oNode.setAttribute('adcform_width', gWidth);
+                } else {
+                    oNode.style.width = '';
+                    oNode.setAttribute('adcform_width', '');
+                }
+                if (gHeight != '') {
+                    oNode.style.height = gHeight + 'px';
+                    oNode.setAttribute('adcform_height', gHeight);
+                } else {
+                    oNode.style.height = '';
+                    oNode.setAttribute('adcform_height', '');
+                }
+                if (gType != '') {
+                    oNode.setAttribute('adcform_validate', gType);
+                } else {
+                    oNode.setAttribute('adcform_validate', '');
+                }
+                delete UE.plugins[thePlugins].editdom;
+            }
+        };
+    </script>
+</body>
+
+</html>

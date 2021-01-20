@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>人员选择</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-ie6.css">
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/ie.css">
+    <![endif]-->
+    <script type="text/javascript" src="../dialogs/internal.js"></script>
+    <script src="./utils.js"></script>
+</head>
+
+<body>
+    <div class="content">
+        <table class="table table-bordered table-striped table-hover">
+            <tr>
+                <th>控件名称（建议使用中文，易辨识）<span class="label label-important">*</span></th>
+                <th>初始值</th>
+            </tr>
+            <tr>
+                <td><input type="text" id="adcform_title" placeholder="必填"></td>
+                <td>
+                    <label class="checkbox inline"><input id="adcform_default" type="checkbox" checked="checked" />当前登录账户</label>
+                </td>
+            </tr>
+            <tr>
+                <th>长-宽-字体大小</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>
+                    <input id="adcform_width" type="text" value="190" class="input-small span1" placeholder="auto" />
+                    -
+                    <input id="adcform_height" type="text" value="30" class="input-small span1" placeholder="auto" />
+                    -
+                    <input id="adcform_fontsize" type="text" value="14" class="input-small span1" placeholder="auto" />
+                    px
+                </td>
+                <td>
+                    <select id="adcform_type">
+                        <!-- 常规用法 -->
+                        <option value="checkbox">多选</option>
+                        <!-- 其它选择器 -->
+                        <option value="radio">单选</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        var oNode = null,
+            thePlugins = 'adc_form_user_select';
+        window.onload = function () {
+            if (UE.plugins[thePlugins].editdom) {
+                oNode = UE.plugins[thePlugins].editdom;
+                var gTitle = oNode.getAttribute('title').replace(/&quot;/g, "\""),
+                    gDefault = oNode.getAttribute('adcform_default'),
+                    gWidth = oNode.getAttribute('adcform_width'),
+                    gHeight = oNode.getAttribute('adcform_height'),
+                    gFontSize = oNode.getAttribute('adcform_fontsize');
+                gTitle = gTitle == null ? '' : gTitle;
+
+                $G('adcform_title').value = gTitle;
+                if (gDefault == '1') {
+                    $G('adcform_default').checked = true;
+                } else {
+                    $G('adcform_default').checked = false;
+                }
+                $G('adcform_width').value = gWidth;
+                $G('adcform_height').value = gHeight;
+                $G('adcform_fontsize').value = gFontSize;
+            }
+        }
+        dialog.oncancel = function () {
+            if (UE.plugins[thePlugins].editdom) {
+                delete UE.plugins[thePlugins].editdom;
+            }
+        };
+        dialog.onok = function () {
+            if ($G('adcform_title').value == '') {
+                alert('请输入控件名称');
+                return false;
+            }
+            var gTitle = $G('adcform_title').value.replace(/\"/g, "&quot;"),
+                gWidth = $G('adcform_width').value,
+                gHeight = $G('adcform_height').value,
+                gType = $G('adcform_type').value,
+                gFontSize = $G('adcform_fontsize').value;
+
+            if (!oNode) {
+                try {
+                    oNode = createElement('input', 'inputuserselect');
+                    oNode.setAttribute('type', 'text');
+                    oNode.setAttribute('title', gTitle);
+                    oNode.setAttribute('adcform', thePlugins);
+                    // 
+                    oNode.setAttribute('class', 'layui-input');
+                    oNode.setAttribute('placeholder', gTitle);
+                    oNode.setAttribute('readonly', 'readonly');
+                    oNode.style.boxSizing = 'border-box';
+
+                    oNode.setAttribute('onclick',
+                        '{\
+                            var data = {data: []};\
+                            var that = this;\
+                            var dataUsid = that.dataset.usid,\
+                                dataUsname = that.dataset.usname;\
+                            if (dataUsid && dataUsname) {\
+                                dataUsid = dataUsid.split(","),\
+                                dataUsname = dataUsname.split(",");\
+                                for (var i = 0; i < dataUsid.length; i++) {\
+                                    data.data.push({\
+                                        id: dataUsid[i],\
+                                        name: dataUsname[i]\
+                                    });\
+                                }\
+                            }\
+                            function callback (res) {\
+                                if (res.length > 0) {\
+                                    var ids = [], names = [];\
+                                    for (var i = 0; i < res.length; i++) {\
+                                        ids.push(res[i].id);\
+                                        names.push(res[i].name);\
+                                    }\
+                                    that.dataset.usid = ids.join(",");\
+                                    that.dataset.usname = names.join(",");\
+                                    that.value = names.join(",");\
+                                } else {\
+                                    that.dataset.usid = "";\
+                                    that.dataset.usname = "";\
+                                    that.value = "";\
+                                }\
+                            }\
+                            ADCFormDesignHelper.personnelSelect(data, callback,"'+gType+'");\
+                    }'
+                    );
+
+                    if ($G('adcform_default').checked) {
+                        oNode.setAttribute('adcform_default', 1);
+                    } else {
+                        oNode.setAttribute('adcform_default', 0);
+                    }
+
+                    if (gWidth != '') {
+                        oNode.style.width = gWidth + 'px';
+                        oNode.setAttribute('adcform_width', gWidth);
+                    }
+                    if (gHeight != '') {
+                        oNode.style.height = gHeight + 'px';
+                        oNode.setAttribute('adcform_height', gHeight);
+                    }
+                    if (gFontSize != '') {
+                        oNode.style.fontSize = gFontSize + 'px';
+                        oNode.setAttribute('adcform_fontsize', gFontSize);
+                    }
+                    oNode.style.cursor = 'pointer';
+                    oNode.style.paddingRight = '30px';
+
+                    var html = '';
+                    var script = '<script class="' + oNode.getAttribute('name') +
+                        '_script">\
+                            (function (that) {\
+                                var adcform_default = that.getAttribute("adcform_default");\
+                                if (adcform_default == "1") {\
+                                    var account = layui.config.getAccount();\
+                                    that.value = account.usname;\
+                                    that.dataset.usname = account.usname;\
+                                    that.dataset.usid = account.usid;\
+                                }\
+                            })(document.querySelector("input[name=\\\"' +oNode.getAttribute('name') + '\\\"]"));\
+                        <\/script>';
+                    html += '{|-<span class="layui-input-inline" style="position: relative;">';
+                    html += oNode.outerHTML;
+                    html +=
+                        '<img src="/assetsInfo/images/bumenyuangongguanli.png"  style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;"/>';
+                    html += '</span>-|}';
+                    editor.execCommand('insertHtml', html);
+                    editor.execCommand('insertHtml', script);
+                } catch (e) {
+                    try {
+                        editor.execCommand('error');
+                    } catch (e) {
+                        alert('控件异常！');
+                    }
+                    return false;
+                }
+            } else {
+                oNode.setAttribute('title', gTitle);
+                if ($G('adcform_default').checked) {
+                    oNode.setAttribute('adcform_default', 1);
+                } else {
+                    oNode.setAttribute('adcform_default', 0);
+                }
+                if (gWidth != '') {
+                    oNode.style.width = gWidth + 'px';
+                    oNode.setAttribute('adcform_width', gWidth);
+                } else {
+                    oNode.style.width = '';
+                    oNode.setAttribute('adcform_width', '');
+                }
+                if (gHeight != '') {
+                    oNode.style.height = gHeight + 'px';
+                    oNode.setAttribute('adcform_height', gHeight);
+                } else {
+                    oNode.style.height = '';
+                    oNode.setAttribute('adcform_height', '');
+                }
+                if (gFontSize != '') {
+                    oNode.style.fontSize = gFontSize + 'px';
+                    oNode.setAttribute('adcform_fontsize', gFontSize);
+                } else {
+                    oNode.style.fontSize = '';
+                    oNode.setAttribute('adcform_fontsize', '');
+                }
+                delete UE.plugins[thePlugins].editdom;
+            }
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,230 @@
+<div class="layui-form-item briefingForm" style="text-align: center;padding: 40px 110px 0px">
+    <div class="layui-form" style="margin-bottom: 90px">
+        <div class="layui-form-item">
+            <div>
+                <div class="upload-label">
+                    <span style="color:red;">*</span><label > 文件类型：</label>
+                </div>
+                <div class="upload-box">
+                    <select lay-verify="required" placeholder="请输入简报名称" lay-filter="briefingName"  name="briefingName" id="briefingName">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div>
+                <div class="upload-label">
+                    <span style="color:red;">*</span><label> 上传文件：</label>
+                </div>
+                <div class="upload-box" style="text-align: left;">
+                    <input disabled type="text" placeholder="请上传文件" style="display: inline-block;width: calc(100% - 177px)" class="layui-input" id="fileBriefing"  lay-verify="required">
+                    <input style="display: none" id="upFileData" type="file">
+                    <button class="layui-btn briefingBtn layui-btn-normal" style="background-color: #87C459;" id="choiceFile">选择</button>
+                    <button class="layui-btn briefingBtn layui-btn-normal" style="background-color: #FD6567;" id="delFile">删除</button>
+                    <button class="layui-btn briefingBtn layui-btn-normal" style="background-color: #2293F9;" id="uploadFile">上传</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="layui-btn briefing-btn layui-btn-normal " id="submitBriefing" lay-submit lay-filter="submitBriefing">发送</button>
+    <button class="layui-btn briefing-btn layui-btn-primary" id="saveBriefing" lay-submit lay-filter="saveBriefing">保存</button>
+    <button class="layui-btn briefing-btn layui-btn-primary" id="cancelBriefing">取消</button>
+</div>
+<script>
+    layui.use('upload', function() {
+        var upload = layui.upload;
+        var admin = layui.admin;
+        var form = layui.form;
+        $.ajax({
+            type: "get",
+            url: "/api/sys/dictype/list?dicCode=financialFormType",
+            success: function (res) {
+                var list = res.data;
+                var con = '';
+                for (i = 0; i < list.length; i++) {
+                    con += '<option value=' + list[i].dicTypeCode + '>' + list[i].dicTypeName + '</option>'
+                }
+                if (list.length != 0) {
+                    $('select[name=briefingName]')[0].dataset.name = list[0].dicTypeName;
+                    $('select[name=briefingName]')[0].dataset.id = list[0].dicTypeCode;
+                }
+                form.on('select(briefingName)', function (data) {
+                    data.elem.dataset.name = data.elem[data.elem.selectedIndex].innerHTML;
+                    data.elem.dataset.id = data.elem[data.elem.selectedIndex].value;
+                    form.render("select");
+                });
+                $('#briefingName').empty().append(con);
+                form.render("select");
+            }
+        });
+        // 选择文件
+        $('#choiceFile').off('click').on('click', function () {
+            console.log($('#upFileData'));
+            $('#upFileData').click();
+        });
+        var changeFile = function () {
+            $('#upFileData').off('change').on('change', function () {
+                if (this.files[0]) {
+                    $('#fileBriefing').val(this.files[0].name);
+                    $('#fileBriefing').attr("title", this.files[0].name);
+                } else {
+                    $('#fileBriefing').val('');
+                    $('#fileBriefing').attr("title", '');
+                }
+                $('#fileBriefing').attr('data-fileId', '');
+            });
+        };
+        changeFile();
+        $('#briefingName').off('change').on('change', function () {
+            $('#briefingName').attr('title', this.value);
+        });
+        //删除
+        $('#delFile').off('click').on('click', function () {
+            //防止上传相同文件时不会触发change事件，清空file的文件和值
+            var obj = document.getElementById('upFileData');
+            obj.outerHTML = obj.outerHTML;
+            $('#upFileData').val('');
+            changeFile();
+            if (!$('#fileBriefing').val()) {
+                return layer.msg('请选择文件', {
+                    icon: 5,
+                    time: 1000
+                });
+            }
+            $('#fileBriefing').attr('data-fileId', '');
+            $('#fileBriefing').attr('title', '');
+            $('#fileBriefing').val('');
+        });
+        //上传
+        $('#uploadFile').off('click').on('click', function () {
+            var fileBriefingName = $('#fileBriefing').val();
+            var fileDatta = $('#upFileData')[0].files[0];
+            var briefingValue = $('#briefingName').attr('data-name');
+            if (!fileBriefingName || !fileDatta) {
+                return layer.msg('请选择文件', {
+                    icon: 5,
+                    time: 1000
+                });
+            }
+            if(fileBriefingName.indexOf(briefingValue)==-1){
+                return layer.msg('所要上传的文件名称必须包含'+briefingValue, {
+                    icon: 5,
+                    time: 2000
+                });
+            }
+            var fileBriefing = $('#fileBriefing').attr('data-fileId');
+            var exts = 'xlsx|xls|doc|docx';
+            if (!RegExp("\\w\\.(" + exts + ")$", "i").test(escape(fileBriefingName.toLowerCase()))) {
+                return layer.msg('只可上传excel文件', {
+                    icon: 5,
+                });
+            }
+            var formData = new FormData();
+            formData.append("file", $('#upFileData')[0].files[0]);
+            var index = layer.load(2);
+            $.ajax({
+                url: '/api/sys/file/upload', /*接口域名地址*/
+                type: 'post',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    layer.close(index);
+                    if (res.respCode === '0') {
+                        $('#fileBriefing').attr('data-fileId', res.data.fileId);
+                        // $('#delFile').css('display','inline-block');
+                        layer.msg('上传成功！', {
+                            icon: 1,
+                            time: 1000
+                        });
+                    } else {
+                        layer.msg('上传失败！', {
+                            icon: 5
+                        });
+                    }
+                }
+            });
+        });
+        //取消
+        $('#cancelBriefing').off('click').on('click', function () {
+            admin.finishPopupCenter()
+        });
+        var setName = function (personnelData) {
+            var briefingName = $('#briefingName').val();
+            var fileBriefingName = $('#fileBriefing').val();
+            var financialTableType = $('#briefingName').attr('data-id');
+            var fileBriefing = $('#fileBriefing').attr('data-fileId');
+            if (!briefingName) {
+                return layer.msg('请选择文件类型', {
+                    icon: 5,
+                    time: 1000
+                });
+            }
+            if (!fileBriefing) {
+                return layer.msg('请上传文件', {
+                    icon: 5,
+                    time: 1000
+                });
+            }
+            var obj = {
+                financialTableName: fileBriefingName,
+                fileId: fileBriefing,
+                financialTableType:financialTableType
+            };
+            var url ='/api/finicialProcess/financialProcessTable';
+            if(personnelData){
+                url='/api/finicialProcess/financialProcessTable/send';
+            }
+            var index = layer.load(2, {
+                shade: [0.2, '#fff'],
+                content:'<span style="margin-left: -75px;">正在发送中，请稍候...</span>',
+                success: function (layerContentStyle) {
+                    layerContentStyle.find('.layui-layer-content').css({
+                        'padding-top': '35px',
+                        'text-align': 'center',
+                        'width': '140px'
+                    });
+                }
+            });
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: JSON.stringify(obj),
+                contentType: 'application/json',
+                success: function (res) {
+                    layer.close(index);
+                    if (res.ok) {
+
+                        if (!personnelData) {
+                            admin.finishPopupCenter(true);
+                            return layer.msg('新建成功', {
+                                icon: 1,
+                                time: 1000
+                            });
+                        } else {
+                            admin.finishPopupCenter(true);
+                            return layer.msg('发送成功', {
+                                icon: 1,
+                                time: 1000
+                            });
+                        }
+                    } else {
+                        return layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                }
+            });
+        };
+        //保存
+        $('#saveBriefing').off('click').on('click', function () {
+            setName();
+        });
+
+        //发送
+        $('#submitBriefing').off('click').on('click', function () {
+            setName('/api/finicialProcess/financialProcessTable/send');
+        });
+    })
+</script>

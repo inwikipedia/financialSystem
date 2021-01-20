@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>模型预览</title>
+
+<style type="text/css">
+    .center-in-center {
+        position: absolute;
+        top: 40%;
+        left: 46%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+</style>
+
+<link rel="stylesheet" href="../../assetsInfo/css/admin.css" />
+<link rel="stylesheet" href="../../assetsInfo/css/style.css">
+<link rel="stylesheet" href="../../assetsInfo/css/theme.css" />
+<link rel="stylesheet" type="text/css" href="../../assetsInfo/pivot.css">
+
+<script type="text/javascript" src="../../assetsInfo/libs/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../assetsInfo/pivot.js"></script>
+<script type="text/javascript" src="../../assetsInfo/libs/jquery-ui-1.9.2.min.js"></script>
+<script src="../../assetsInfo/echarts.js"></script>
+<script src="../../assetsInfo/walden.js"></script>
+
+
+<script type="text/javascript" src="../../assetsInfo/ec_renderers.js"></script>
+
+
+<div style="padding: 20px;overflow: auto;height: calc(100% - 60px)">
+    <table id="tableContent" lay-filter="tableContent" ></table>
+</div>
+
+<script>
+    layui.use(['element','laypage','tree','util','table','form','laydate'], function () {
+        var element = layui.element,
+            table = layui.table,
+            tree = layui.tree,
+            form = layui.form,
+            admin = layui.admin,
+            laydate = layui.laydate,
+            config = layui.config,
+            layer = layui.layer,
+            tools = layui.tools,
+            util = layui.util;
+        var id = sessionStorage.getItem("id");
+        $.get('/api/model/model', {
+            MId: id
+        }, function(res) {
+            $.get('/api/dataset/page', {
+                    Param: res.data[0].mparam,
+                    associates: res.data[0].massociates,
+                    tableName: res.data[0].mtables,
+                    pageSize:9999,
+                    pageNo:1
+                },
+                function(info) {
+                    var arrData = info.data.list;
+                    var col =[];
+                    for( var item in info.data.list[0]){
+                        col.push({
+                            title:'<span title="'+item+'">'+item+'</span>',
+                            field: item,
+                            align: 'center',
+                            searchIndex:item,//修改源码添加searchIndex字段
+                            templet: function(d,name) {
+                                return '<div title="'+(d[name.searchIndex])+'"><span>'+ (d[name.searchIndex]) +'</span></div>';
+
+                            }
+                        });
+                    }
+                    console.log(77777);
+                    table.render({
+                        elem: '#tableContent',
+                        url: admin.formatUrl("/api/dataset/page"), //数据接口
+                        where:{
+                            Param: res.data[0].mparam,
+                            associates: res.data[0].massociates,
+                            tableName: res.data[0].mtables,
+                            pageSize:9999,
+                            pageNo:1
+                        },
+                        // contentType: 'application/json',
+                        parseData: function (res) { //res 即为原始返回的数据
+
+                            // layer.close(index);
+                            // 返回结果，进行渲染表格
+                            return {
+                                // "count": res.data.count,
+                                "code": res.respCode, //解析接口状态
+                                "msg": res.message, //解析提示文本
+                                "data": res.data.list //解析数据列表
+                            };
+                        },
+                        cols: [
+                            col
+                        ],
+                        limit: arrData.length
+                    });
+                });
+        });
+    });
+</script>

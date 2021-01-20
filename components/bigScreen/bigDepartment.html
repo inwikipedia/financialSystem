@@ -1,0 +1,618 @@
+<style>
+    .bigContent .contentLeft {
+        flex: 1;
+        margin-right: 10px;
+        height: 100%;
+        overflow: auto;
+        background-color: white;
+        border-radius: 2px;
+    }
+
+    .bigContent .contentRight {
+        flex: 4.3;
+        height: 100%;
+    }
+
+    .departmentContent-top {
+        height: calc(24% - 10px);
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .departmentContent-center {
+        height: calc(38% - 10px);
+        width: 100%;
+        margin-bottom: 10px;
+        display: flex;
+    }
+
+    .departmentContent-bottom {
+        height: 38%;
+        width: 100%;
+        display: flex;
+    }
+
+    .departmentContent-top .projectTitle {
+        color: #18B1EB;
+        background-color: #f2f6f8;
+        width: 100%;
+        height: 25%;
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .departmentContent-top .projectInfo {
+        width: 100%;
+        height: 75%;
+        display: flex;
+        flex-flow: row;
+        border-radius: 2px;
+        justify-content: center;
+        background-color: white;
+    }
+
+    .departmentContent-top .projectInfo .projectInfoBox {
+        width: 16.3%;
+        height: 100%;
+        display: flex;
+        flex-flow: row;
+        background-color: white;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .projectInfoCycle {
+        font-size: 20px;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        border: 2px solid #16D0FF;
+        color: #16D0FF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        background: rgba(22, 208, 255, 0.1);
+    }
+
+    .projectInfoText {
+        width: calc(100% - 75px);
+        margin-left: 10px;
+        height: 66px;
+    }
+
+    .infoNumber {
+        color: #008FC3;
+        font-size: 30px;
+    }
+
+    .infoCount {
+        font-size: 12px;
+        color: #858585;
+    }
+
+    .infoMessage {
+        color: #D0D0D0;
+        font-size: 20px;
+        height: 30px;
+    }
+
+    .contentRight .noBusiness {
+        height: 100%;
+    }
+
+    .contentRight .noBusiness .layui-card-header {
+        height: 34px;
+        line-height: 34px;
+    }
+
+    .contentRight .layui-card-header {
+        border-color: #E5E5E5;
+        color: #5D5D5D;
+        font-weight: bold;
+    }
+
+    .centerLine {
+        flex: 2;
+        height: 100%;
+        margin-right: 10px;
+        background-color: white;
+        border-radius: 2px;
+    }
+
+    .centerBar {
+        flex: 1;
+        height: 100%;
+        background-color: white;
+        border-radius: 2px;
+    }
+
+    .pointCanvas, .lineCanvas, .barCanvas {
+        width: 100%;
+        height: calc(100% - 35px);
+        background-color: white;
+    }
+
+    .paddingCard {
+        height: 100%;
+    }
+
+    .departmentTree {
+        padding-top: 10px;
+        border: 1px solid #F5F5F5;
+        overflow: auto;
+        margin: 10px 10px 0 10px;
+    }
+
+    .departmentTree li a cite {
+        font-size: 14px;
+        color: #666;
+        font-weight: 400;
+        width: 140px;
+        display: inline-block;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .departmentTree li ul {
+        margin-left: 40px;
+    }
+
+    .departmentTree ul {
+        margin-bottom: 0;
+    }
+
+    .departmentTree .layui-tree-branch {
+        display: none;
+    }
+
+    .departmentTree li .layui-tree-spread {
+        display: none;
+    }
+
+    .departmentTree .layui-tree-leaf {
+        display: none;
+    }
+
+    .departmentTree li a {
+        color: #666;
+    }
+
+    .departmentTree > li {
+        margin: 0 0 10px 10px;
+        position: relative;
+    }
+
+    .departmentTree > li:first-child {
+        margin-top: 10px;
+    }
+
+    .departmentTree li ul li:first-child {
+        margin: 6px 0 0 0px;
+    }
+
+    .departmentTree li ul li {
+        margin: 6px 0 0 0px;
+    }
+</style>
+<div class="bigHead">
+    <div class="bigHead-content">
+        <img title="返回" src="/assetsInfo/images/fanhuishouye.png" class="goBack"/>
+        <div class="bigHead-title">
+            <span class="card-cycle"></span>
+            <span calss="bigHead-titleCotent">数据中心大数据展板</span>
+            <span class="card-cycle"></span>
+        </div>
+        <img src="/assetsInfo/images/quanping.png" title="全屏" class="allScreen isAll"/>
+        <img src="/assetsInfo/images/esc.png" title="退出全屏" class="allScreen noAll"/>
+    </div>
+</div>
+<div class="bigContent">
+    <div class="contentLeft">
+        <div class="departmentTree" id="departmentTree"></div>
+    </div>
+    <div class="contentRight">
+        <div class="departmentContent-top">
+            <div class="projectTitle">
+            </div>
+            <div class="projectInfo">
+                <div class="projectInfoBox">
+                    <div style="display: inline-block;height: 60px">
+                        <div class="projectInfoCycle">项</div>
+                    </div>
+                    <div class="projectInfoText">
+                        <div class="infoNumber" id="sumProject"></div>
+                        <div class="infoCount">项目总数（个）</div>
+                    </div>
+                </div>
+                <div class="projectInfoBox">
+                    <div style="display: inline-block;height: 60px">
+                        <div class="projectInfoCycle">合</div>
+                    </div>
+                    <div class="projectInfoText">
+                        <div class="infoNumber" id="totalContract"></div>
+                        <div class="infoCount">部门年度合同执行总额（万元）</div>
+                    </div>
+                </div>
+                <div class="projectInfoBox">
+                    <div style="display: inline-block;height: 60px">
+                        <div class="projectInfoCycle">票</div>
+                    </div>
+                    <div class="projectInfoText">
+                        <div class="infoNumber" id="totalBilling"></div>
+                        <div class="infoCount">部门年度开票总额（万元）</div>
+                    </div>
+                </div>
+                <div class="projectInfoBox">
+                    <div style="display: inline-block;height: 60px">
+                        <div class="projectInfoCycle">人</div>
+                    </div>
+                    <div class="projectInfoText">
+                        <div class="infoNumber" id="workTime"></div>
+                        <div class="infoCount">部门年度投入人力（人天）</div>
+                    </div>
+                </div>
+                <div class="projectInfoBox">
+                    <div style="display: inline-block;height: 60px">
+                        <div class="projectInfoCycle">收</div>
+                    </div>
+                    <div class="projectInfoText">
+                        <div class="infoNumber" id="totalCredit"></div>
+                        <div class="infoCount">部门年度进账总额（万元）</div>
+                    </div>
+                </div>
+                <div class="projectInfoBox">
+                    <div style="display: inline-block;height: 60px">
+                        <div class="projectInfoCycle">支</div>
+                    </div>
+                    <div class="projectInfoText">
+                        <div class="infoNumber" id="totalExpenditure"></div>
+                        <div class="infoCount">部门年度支出总额（万元）</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="departmentContent-center">
+            <div class="centerLine">
+                <div class="layui-row noBusiness">
+                    <div class="layui-col-md12 paddingCard">
+                        <div class="layui-card-header lc-header cart-title">
+                            &nbsp;月度开票情况
+                        </div>
+                        <div class="lineCanvas" id="lineCanvas1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="centerBar">
+                <div class="layui-row noBusiness">
+                    <div class="layui-col-md12 paddingCard">
+                        <div class="layui-card-header lc-header cart-title">
+                            &nbsp;人力投入情况
+                        </div>
+                        <div class="barCanvas" id="barCanvas1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="departmentContent-bottom">
+            <div class="centerLine">
+                <div class="layui-row noBusiness">
+                    <div class="layui-col-md12 paddingCard">
+                        <div class="layui-card-header lc-header cart-title">
+                            &nbsp;月度进账情况
+                        </div>
+                        <div class="lineCanvas" id="lineCanvas2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="centerBar">
+                <div class="layui-row noBusiness">
+                    <div class="layui-col-md12 paddingCard">
+                        <div class="layui-card-header lc-header cart-title">
+                            &nbsp;月度支出情况
+                        </div>
+                        <div class="barCanvas" id="barCanvas2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['element', 'form', 'layer'], function () {
+        var thisYear = sessionStorage.getYear;
+        //月度开票图
+        var setlineCanvas1 = function (selfData) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("lineCanvas1"));
+            myChart.resize();
+            var option = {
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: selfData.x,
+                    axisTick: {
+                        lineStyle: {color: '#3B4961'}    // x轴刻度的颜色
+                    },
+                    axisLabel: {color: '#3B4961'}
+                },
+                tooltip: {
+                    padding: 10,
+                    formatter: function (obj) {
+                        var value = obj.value;
+                        return '月度开票（万元）：' + value;
+                    }
+                },
+                color: "#57afff",
+                yAxis: {
+                    type: 'value',
+                    axisTick: {
+                        lineStyle: {color: '#3B4961'}    // x轴刻度的颜色
+                    },
+                    axisLabel: {color: '#3B4961'}
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '5%',
+                    top: '10%',
+                    containLabel: true
+                },
+                series: [{
+                    data: selfData.y,
+                    type: 'line',
+                    areaStyle: {}
+                }]
+            };
+            myChart.setOption(option);
+        };
+        //人力投入图
+        var setBarCanvas1 = function (selfData) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("barCanvas1"));
+            myChart.resize();
+            var option = {
+                xAxis: {
+                    type: 'category',
+                    data: selfData.x,
+                    axisTick: {
+                        lineStyle: {color: '#3B4961'}    // x轴刻度的颜色
+                    },
+                    axisLabel: {color: '#3B4961'}
+                },
+                tooltip: {
+                    padding: 10,
+                    formatter: function (obj) {
+                        var value = obj.value;
+                        return '人力投入（人天）：' + value;
+                    }
+                },
+                color: '#4da9fe',
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '5%',
+                    top: '10%',
+                    containLabel: true
+                },
+                yAxis: {
+                    type: 'value',
+                    axisTick: {
+                        lineStyle: {color: '#3B4961'}    // x轴刻度的颜色
+                    },
+                    axisLabel: {color: '#3B4961'}
+                },
+                series: [{
+                    data: selfData.y,
+                    type: 'bar'
+                }]
+            };
+
+            myChart.setOption(option);
+        };
+        //月度进账图
+        var setlineCanvas2 = function (selfData) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("lineCanvas2"));
+            myChart.resize();
+            var option = {
+                color: '#10EC00',
+                legend: {
+                    data: ['进账额']
+                },
+                tooltip: {
+                    padding: 10,
+                    formatter: function (obj) {
+                        var value = obj.value;
+                        return '月度进账（万元）：' + value;
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '5%',
+                    top: '10%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: selfData.x,
+                    axisTick: {
+                        lineStyle: {color: '#3B4961'}    // x轴刻度的颜色
+                    },
+                    axisLabel: {color: '#3B4961'}
+                },
+                yAxis: {
+                    type: 'value',
+                    axisTick: {
+                        lineStyle: {color: '#3B4961'}    // x轴刻度的颜色
+                    },
+                    axisLabel: {color: '#3B4961'}
+                },
+                series: [{
+                    data: selfData.y,
+                    type: 'line'
+                }]
+            };
+            myChart.setOption(option);
+        };
+        //月度支出图
+        var setBarCanvas2 = function (selfData) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("barCanvas2"));
+            myChart.resize();
+            var option = {
+                xAxis: {
+                    type: 'category',
+                    data: selfData.x,
+                    axisTick: {
+                        lineStyle: {color: '#3B4961'}    // x轴刻度的颜色
+                    },
+                    axisLabel: {color: '#3B4961'}
+                },
+                color: '#4da9fe',
+                tooltip: {
+                    padding: 10,
+                    formatter: function (obj) {
+                        var value = obj.value;
+                        return '月度支出（万元）：' + value;
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '5%',
+                    top: '10%',
+                    containLabel: true
+                },
+                yAxis: {
+                    type: 'value',
+                    axisTick: {
+                        lineStyle: {color: '#3B4961'}    // x轴刻度的颜色
+                    },
+                    axisLabel: {color: '#3B4961'}
+                },
+                series: [{
+                    data: selfData.y,
+                    type: 'bar'
+                }]
+            };
+
+            myChart.setOption(option);
+        };
+        //右侧数据获取
+        var getInfoData = function (deptData) {
+            var index = layer.load(2);
+            $.ajax({
+                url: "/api/dataBoard/detail?deptId=" + deptData.id + "&year=" + thisYear,
+                type: 'get',
+                success: function (res) {
+                    layer.close(index);
+                    if (res.ok) {
+                        $('.projectTitle').html(deptData.name);
+                        var sumProject = res.data.sumProject;
+                        var totalBilling = Math.round(res.data.totalBilling / 10000);
+                        var totalContract = Math.round(res.data.totalContract / 10000);
+                        var totalCredit = Math.round(res.data.totalCredit / 10000);
+                        var totalExpenditure = Math.round(res.data.totalExpenditure / 10000);
+                        var workTime = res.data.workTime;
+                        $("#sumProject").html(sumProject);
+                        $("#totalBilling").html(totalBilling);
+                        $("#totalContract").html(totalContract);
+                        $("#totalCredit").html(totalCredit);
+                        $("#totalExpenditure").html(totalExpenditure);
+                        $("#workTime").html(workTime);
+                        for (var i = 0; i < res.data.billGraph.y.length; i++) {
+                            res.data.billGraph.y[i] = res.data.billGraph.y[i] ? Math.round(res.data.billGraph.y[i] / 10000) : 0;
+                            res.data.creditGraph.y[i] = res.data.creditGraph.y[i] ? Math.round(res.data.creditGraph.y[i] / 10000) : 0;
+                            res.data.expenditureGraph.y[i] = res.data.expenditureGraph.y[i] ? Math.round(res.data.expenditureGraph.y[i] / 10000) : 0;
+                        }
+                        setlineCanvas1(res.data.billGraph);
+                        setBarCanvas1(res.data.workTimeGraph)
+                        setlineCanvas2(res.data.creditGraph)
+                        setBarCanvas2(res.data.expenditureGraph)
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error: function (err) {
+                    layer.msg('获取信息失败！');
+                    console.log(err);
+                }
+            });
+        };
+
+        $.ajax({
+            type: "get",
+            url: "/api/dataBoard/deptTree",
+            success: function (res) {
+                if (res != null) {
+                    var childrenData = [];
+                    var newData = [];
+                    var childrenDataS = [];
+                    var data = res.data;
+                    for (var i = 0; i < data.length; i++) {
+                        data[i].indexType = i;
+                        if (data[i].level == 1) {
+                            newData.push(data[i])
+                        } else if (data[i].level == 2) {
+                            childrenData.push(data[i])
+                        } else if (data[i].level == 3) {
+                            childrenDataS.push(data[i]);
+                        }
+                    }
+                    for (var x = 0; x < childrenData.length; x++) {
+                        childrenData[x].children = [];
+                        for (var z = 0; z < childrenDataS.length; z++) {
+                            if (childrenDataS[z].parentId == childrenData[x].id) {
+                                childrenData[x].children.push(childrenDataS[z])
+                            }
+                        }
+                    }
+                    for (var j = 0; j < newData.length; j++) {
+                        newData[j].children = [];
+                        for (var i = 0; i < childrenData.length; i++) {
+                            if (childrenData[i].parentId == newData[j].id) {
+                                newData[j].children.push(childrenData[i])
+                            }
+                        }
+                    }
+                    layui.tree({
+                        elem: '#departmentTree', // 指定元素
+                        showLine: 'false',
+                        nodes: newData,
+                        click: function (item) { // 点击节点回调
+                            getInfoData(item);
+                        }
+                    });
+                    // 默认选中第一个树节点
+                    $('#departmentTree li a cite').first().css('color', '#18B1EB');
+                    $('#departmentTree li ul').addClass('layui-show');
+                    // 左侧树样式
+                    $('#departmentTree  li a cite').off('click').on('click', function () {
+                        $('#departmentTree li a cite').css('color', '#666')
+                        $(this).css('color', '#18B1EB')
+                    });
+                    $('#departmentTree li>a').off('dblclick')
+                    $('#departmentTree li').find('.layui-tree-spread').parent().prepend('<img src="../../assetsInfo/images/icon/shouqi.png"/>');
+                    $('#departmentTree li ul li ul li').find('.layui-tree-leaf').parent().parent().find('img').css('visibility', 'hidden');
+                    $('#departmentTree li').find('.layui-tree-spread').parent().children('img').off('click').on('click', function () {
+                        $(this).parent().find('img.treeImg').toggle();
+                        $(this).parent().find('ul').toggleClass('layui-show')
+                    });
+                    getInfoData(res.data[0]);
+                    // form.render();
+                }
+            }
+        });
+    })
+</script>

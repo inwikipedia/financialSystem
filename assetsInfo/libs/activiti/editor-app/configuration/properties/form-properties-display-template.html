@@ -1,0 +1,4 @@
+
+<span ng-if="!property.noValue">{{property.value.formProperties[0].id}}</span>
+<span  ng-if="!property.noValue" ng-click="clearFormProperties($index,property);$event.stopPropagation();" class="glyphicon glyphicon-remove" style="display: inline;float:right;line-height: 35px;" ></span>
+<span ng-if="property.noValue" translate>PROPERTY.FORMPROPERTIES.EMPTY</span>

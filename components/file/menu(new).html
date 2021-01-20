@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+
+<style>
+    /* zdy主题风格*/
+    
+    .dtree-zdy-item-this {
+        background-color: #c2c2c2!important;
+    }
+    /* 当前选中行样式*/
+    
+    .dtree-zdy-item:hover {
+        background-color: #f2f2f2!important;
+    }
+    /* 行悬停样式*/
+    
+    .dtree-zdy-item cite {
+        font-size: 14px!important;
+    }
+    /* 行文字样式*/
+    
+    .dtree-zdy-item:hover cite {
+        color: #5FB878!important;
+    }
+    /* 行悬停文字样式*/
+    
+    .dtree-zdy-dtreefont {
+        font-size: 18px!important;
+    }
+    /* 一级图标、二级图标、复选框样式*/
+    
+    .dtree-zdy-ficon {
+        color: #1E9FFF!important;
+    }
+    /*一级图标特定样式*/
+    
+    .dtree-zdy-icon {
+        color: #1E9FFF!important;
+    }
+    /*二级图标特定样式*/
+    
+    .dtree-zdy-checkbox:hover {
+        color: #5FB878!important;
+    }
+    /*复选框悬停样式*/
+    
+    .dtree-zdy-choose {
+        color: #5FB878!important;
+    }
+    /* 复选框选中样式*/
+</style>
+
+
+<!-- dTree 样式 -->
+<link rel="stylesheet" href="../../assetsInfo/libs/layui_ext/dtree/dtree.css">
+<link rel="stylesheet" href="../../assetsInfo/libs/layui_ext/dtree/font/dtreefont.css" <div class="layui-row layui-col-space15">
+<!-- 左侧 -->
+<div class="layui-col-md3">
+    <div class="layui-card p-main">
+        <div class="layui-card-header">目录列表</div>
+        <!-- 卡片容器 -->
+        <div class="layui-card-body">
+
+            <!-- 下部目录容器 -->
+            <div style="height: 550px;overflow: auto;" id="toolbarDiv">
+                <ul id="tableContent-menu002" class="dtree" data-id="0"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 右侧目录对应子菜单列表 -->
+<div class="layui-col-md9 layui-hide autoScrollRight-detail">
+    <div class="layui-card p-form">
+        <div class="layui-card-header">子菜单</div>
+        <!-- 卡片右上角关闭按钮 -->
+        <i class="layui-icon layui-icon-close layui-card-close"></i>
+        <!-- 卡片容器 -->
+        <div class="layui-card-body">
+            <input type="text" name="id" id="id" class="layui-hide">
+            <input type="text" name="menuName" id="menuName" class="layui-hide">
+            <input type="hidden" id="testId" value="" />
+            <!-- 数据表格顶部控制栏 -->
+            <div class="layui-form">
+                <div class="layui-form-item table-top-bar">
+                    <!-- 左侧 -->
+                    <div class="layui-inline">
+                        <div class="layui-inline search-item">
+                            <i class="layui-icon layui-icon-search"></i>
+                            <input type="text" name="name2" placeholder="输入文件名称" class="layui-input">
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-normal" lay-filter="btn_search_detail" lay-submit>查询</button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_reset_detail" lay-submit>重置</button>
+                        </div>
+                    </div>
+                    <!-- 右侧 -->
+                    <div class="layui-inline layui-pull-right">
+                        <div class="layui-inline">
+                            <button id="btn_add_menu002_detail" class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_add_menu002_detail" lay-submit>
+                                    <i class="layui-icon layui-icon-upload"></i>新增文件
+                                </button>
+                            <button id="btn_del_menu0002_detail" class="layui-btn layui-btn-sm layui-btn-danger" lay-filter="btn_del_menu002_detail" lay-submit>
+                                    <i class="layui-icon layui-icon-delete"></i>批量移除
+                                </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 表格容器 -->
+            <table id="tableContent-detail" lay-filter="tableContent-detail"></table>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+
+<script type="text/html" id="control-2">
+    {{# var x; $.ajax({ url: '/api/detail/detail/loginMan', type: "get", async: false, success: function(result) { x = result.data } }) }} {{# if(d.founder === x){ }}
+    <a class="table-control-btn" lay-event="edit">编辑</a> {{# } else { }}
+    <a class="table-control-btn" lay-event="read">预览</a> {{# } }}
+    <a class="table-control-btn" lay-event="download">下载</a>
+    <a class="table-control-btn" lay-event="history">历史记录</a>
+    <a class="table-control-btn table-control-btn-danger" lay-event="del">移除</a>
+</script>
+
+<script type="text/html" id="control-3">
+    <a class="table-control-btn" lay-event="read">预览</a>
+</script>
+
+
+
+
+
+
+
+<script>
+    layui.use(['dtree', 'treeSelect', 'layer', 'jquery'], function() {
+        var table = layui.table,
+            dtree = layui.dtree,
+            treeSelect = layui.treeSelect,
+            form = layui.form,
+            $ = layui.jquery,
+            config = layui.config,
+            admin = layui.admin;
+        layer = layui.layer
+
+        $.get("/api/detailMenu/menu002/listMenu002EOByMenuNameOrId", {}, function(res) {
+            var result = res;
+            var DTree = dtree.render({
+                elem: "#tableContent-menu002", //绑定元素
+                data: result.data,
+                type: "all",
+                initLevel: "3", //展开层级
+                dot: false,
+                skin: "zdy", //皮肤主题，通过css更改
+                icon: ["0", "0"], //一级和二级图标样式
+                toolbar: true, // 开启工具栏
+                toolbarStyle: {
+                    title: "目录",
+
+                }, //菜单栏名称修改
+
+
+
+                menubar: true, //菜单栏
+                menubarTips: {
+                    toolbar: ["moveDown", "moveUp", "searchNode", "refresh"], // 指定工具栏吸附的menubar按钮
+                    group: [] // 按钮组制空
+                },
+                //请求数据
+                dequestRequest: {
+                    nodeId: "id",
+                    parentId: "parentId",
+                    context: "menuName"
+                },
+
+
+                dataFormat: "list", //配置data的风格为list
+                checkbar: false, // 复选框
+                dataStyle: "layuiStyle", //使用layui风格的数据格式
+                //修改response中返回数据的定义
+                response: {
+                    message: "message",
+                    statusName: "respCode",
+                    statusCode: 0,
+                    rootName: "data",
+                    title: "menuName",
+                },
+                toolbarScroll: "#toolbarDiv", // 工具栏绑定div
+                toolbarLoad: "node",
+                toolbarShow: ["add", "edit", "delete"], //工具栏功能
+                //工具栏功能接口
+                toolbarFun: {
+                    //新增
+                    addTreeNode: function(treeNode, $div) {
+                        $.ajax({
+                            url: '/api/detailMenu/menu002',
+                            type: "post",
+                            dataType: "json",
+                            contentType: "application/json;charset=utf-8",
+                            data: JSON.stringify({
+                                menuName: treeNode.addNodeName,
+                                parentId: treeNode.parentId,
+                                parentIds: treeNode.parentId
+                            }),
+                            success: function(result) {
+                                layer.msg('新增成功！', {
+                                    icon: 1
+                                });
+                                var param = result.data;
+                                DTree.changeTreeNodeAdd(param); //成功
+                            },
+                            error: function() {
+                                layer.msg('新增失败！', {
+                                    icon: 5
+                                });
+                                DTree.changeTreeNodeAdd(false); //失败
+                            }
+                        })
+                    },
+                    //编辑
+                    editTreeNode: function(treeNode, $div) {
+                        $.ajax({
+                            url: '/api/detailMenu/menu002',
+                            type: "put",
+                            dataType: "json",
+                            contentType: "application/json;charset=utf-8",
+                            data: JSON.stringify({
+                                id: treeNode.nodeId,
+                                menuName: treeNode.editNodeName,
+                            }),
+                            success: function(result) {
+                                layer.msg('修改成功！', {
+                                    icon: 1
+                                });
+                                DTree.changeTreeNodeEdit(true);
+                            },
+                            error: function() {
+                                layer.msg('修改失败！', {
+                                    icon: 5
+                                });
+                                DTree.changeTreeNodeEdit(false);
+                            }
+                        })
+                    },
+                    //删除
+                    delTreeNode: function(treeNode, $div) {
+                        $.ajax({
+                            url: '/api/detailMenu/menu002/delete/' + treeNode.nodeId,
+                            type: "delete",
+                            success: function(result) {
+                                layer.msg('删除成功！', {
+                                    icon: 1
+                                });
+                                DTree.changeTreeNodeDel(true);
+
+                            },
+                            error: function() {
+                                layer.msg('删除失败！', {
+                                    icon: 5
+                                });
+                                DTree.changeTreeNodeDel(false);
+                            }
+                        })
+                    }
+                },
+
+
+
+
+
+
+            });
+        });
+
+        // 设置表单内容
+        function setFormValue(obj) {
+            var inputs = $('.p-form').find('input'),
+                title = $('.p-form .layui-card-header'),
+                formNames = ['id', 'menuName', 'parentId'];
+
+            obj.title && title.text(obj.title);
+            for (var i = 0; i < formNames.length; i++) {
+                if (obj[formNames[i]]) {
+                    $('.p-form  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                } else {
+                    $('.p-form  input[name="' + formNames[i] + '"]').val('');
+                }
+            }
+        }
+        // 监听表格工具条事件
+        dtree.on("node('tableContent-menu002')", function(obj) {
+            var data = obj.param;
+            $("#testId").val(data.nodeId);
+            showRightMenu('detailinfo', obj.param);
+
+
+
+            //展示右侧对应文件菜单
+            function showRightMenu(type, data) {
+                // 判断操作类型
+                if (type === 'detailinfo') {
+                    setFormValue({
+                        title: data.context + ' 中的文件'
+                    });
+                    // 显示右侧菜单
+                    $('.autoScrollLeft').removeClass('layui-col-md9');
+                    $('.autoScrollLeft').addClass('layui-col-md3');
+                    setTimeout(function() {
+                        $('.autoScrollRight-detail').removeClass('layui-hide');
+                        admin.resize();
+                        $('#id').val(data.id);
+                        $('#menuName').val(data.name);
+                        table.render({
+                            elem: '#tableContent-detail',
+                            id: 'tableContent-detail',
+                            url: admin.formatUrl('/api/detail/detail?menu002Id=' + data.nodeId),
+                            // 格式化后台返回的数据
+                            parseData: function(res) { //res 即为原始返回的数据
+                                // 返回结果，进行渲染表格
+                                return {
+                                    "code": res.respCode, //解析接口状态
+                                    "msg": res.message, //解析提示文本
+                                    "count": res.data.count, //解析数据长度
+                                    "data": res.data.list //解析数据列表
+                                };
+                            },
+                            page: false,
+                            height: 472,
+                            cols: [
+                                [{
+                                    type: 'checkbox'
+                                }, {
+                                    field: 'name',
+                                    title: '文件名'
+                                }, {
+                                    field: 'id',
+                                    title: 'id'
+                                }, {
+                                    field: 'type',
+                                    title: '类型'
+                                }, {
+                                    field: 'size',
+                                    title: '大小'
+                                }, {
+                                    field: 'founder',
+                                    title: '创建者'
+                                }, {
+                                    field: 'creationTime',
+                                    templet: function(d) {
+                                        return new Date(d.creationTime).toLocaleString('chinese', {
+                                            hour12: false
+                                        });
+                                    },
+                                    title: '创建时间',
+                                    width: 160,
+                                }, {
+                                    field: 'modificationTime',
+                                    templet: function(d) {
+                                        if (d.modificationTime != null) {
+                                            return new Date(d.modificationTime).toLocaleString('chinese', {
+                                                hour12: false
+                                            });
+                                        } else {
+                                            return ("尚未修改")
+                                        };
+                                    },
+                                    title: '修改时间',
+                                    width: 160
+                                }, {
+                                    templet: '#control-2',
+                                    title: '操作',
+                                    align: 'center',
+                                    width: 200,
+                                    unresize: true
+                                }]
+                            ],
+                            cellMinWidth: 80,
+                            page: {
+                                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                            },
+                            request: {
+                                pageName: 'pageNo',
+                                limitName: 'pageSize'
+                            }
+
+
+                        });
+
+                        // 监听工具条事件
+                        // 主要是编辑、删除和配置文件菜单
+                        table.on('tool(tableContent-detail)', function(obj) {
+                            // 获取点击列的数据
+                            var data = obj.data;
+                            var layEvent = obj.event;
+
+                            // 判断操作类型
+                            if (layEvent === 'del') {
+                                // 移除
+                                layer.confirm('确定移除目录内文件：' + data.name + ' 吗？', {
+                                    icon: 3,
+                                    title: '提示'
+                                }, function() {
+                                    admin.req('/api/detail/detail/delete/' + data.id + '/' +
+                                        $('#menu002Id').val(), {},
+                                        function(
+                                            data) {
+                                            if (data.ok) {
+                                                layer.msg('移除文件成功！', {
+                                                    icon: 1
+                                                });
+                                                table.reload('tableContent-detail', {
+                                                    where: {
+                                                        reload: new Date().getTime()
+                                                    }
+                                                });
+                                            } else {
+                                                return layer.msg('移除文件失败：' + data.message, {
+                                                    icon: 5
+                                                });
+                                            }
+                                        }, {
+                                            method: 'delete'
+                                        });
+                                });
+                            } else if (layEvent === 'edit') {
+                                sessionStorage.setItem("name", data.name);
+                                sessionStorage.setItem("type", data.type);
+                                sessionStorage.setItem("savePath", data.savePath);
+                                sessionStorage.setItem("root", "true");
+                                sessionStorage.setItem("id", data.id);
+
+                                // function handleVisibilityChange() {
+                                //     if (document.hidden) {
+
+                                //     } else {
+                                //         table.reload('tableContent-detail', {
+                                //             where: {
+                                //                 reload: new Date().getTime()
+                                //             }
+                                //         });
+                                //     }
+                                // }
+
+                                // document.addEventListener("visibilitychange", handleVisibilityChange, false);
+
+                                var winObj = window.open("components/file/editor.html");
+                                var loop = setInterval(function() {
+
+                                    // layer.msg('校验中。。。',{icon:16,time:2000,shade:0});
+                                    if (winObj.closed) {
+                                        clearInterval(loop);
+
+
+                                        table.reload('tableContent-detail', {
+                                            where: {
+                                                reload: new Date().getTime()
+                                            }
+                                        });
+                                    }
+                                }, 300);
+
+                            } else if (layEvent === 'read') {
+                                sessionStorage.setItem("name", data.name);
+                                sessionStorage.setItem("type", data.type);
+                                sessionStorage.setItem("savePath", data.savePath);
+                                sessionStorage.setItem("root", "false")
+
+                                window.open("components/file/editor.html")
+                            } else if (layEvent === 'history') {
+
+                                // 弹出框
+                                admin.popupCenter({
+                                    title: '版本信息',
+                                    path: 'components/file/history.html',
+                                    finish: function() {
+                                        table.reload('tableContent-detail', {
+                                            where: {
+                                                reload: new Date().getTime()
+                                            }
+                                        });
+                                    },
+                                    success: function() {
+                                        table.render({
+                                            elem: '#tableContent-history',
+                                            id: 'tableContent-history',
+                                            url: '/api/history/history/page?chooseId=' + data.id,
+                                            parseData: function(res) { //res 即为原始返回的数据
+                                                // 返回结果，进行渲染表格
+                                                return {
+                                                    "code": res.respCode, //解析接口状态
+                                                    "msg": res.message, //解析提示文本
+                                                    "count": res.data.count, //解析数据长度
+                                                    "data": res.data.list //解析数据列表
+                                                };
+                                            },
+                                            height: 600,
+                                            cols: [
+                                                [{
+                                                    type: 'checkbox'
+                                                }, {
+                                                    type: 'numbers',
+                                                    title: '版本',
+                                                }, {
+                                                    field: 'updateTime',
+                                                    templet: function(d) {
+                                                        return new Date(d.updateTime).toLocaleString('chinese', {
+                                                            hour12: false
+                                                        });
+                                                    },
+                                                    title: '修改时间',
+                                                    width: 160,
+                                                }, {
+                                                    templet: '#control-3',
+                                                    title: '操作',
+                                                    align: 'center',
+                                                    width: 140,
+                                                    unresize: true
+                                                }]
+                                            ],
+                                            cellMinWidth: 90,
+                                            page: {
+                                                layout: ['limit', 'count', 'prev',
+                                                    'page', 'next'
+                                                ]
+                                            }
+                                        });
+                                    }
+                                });
+
+
+
+                            } else if (layEvent === 'download') {
+                                //下载
+                                var $eleForm = $("<form method='get'></form>");
+
+                                $eleForm.attr("action", "/api/detail/detail/" + data.id + "/download");
+
+                                $(document.body).append($eleForm);
+
+                                $eleForm.submit();
+                            }
+
+                        });
+                    }, 300);
+                }
+            }
+
+        });
+
+        // 新增目录子菜单
+        form.on('submit(btn_add_menu002_detail)', function() {
+
+
+            popMenuAddDetail();
+
+        });
+        // 批量删除
+        form.on('submit(btn_del_menu002_detail)', function() {
+            var checkStatus = table.checkStatus('tableContent-detail');
+            if (checkStatus.data.length === 0) {
+                return layer.msg('请选择要移除的文件', {
+                    icon: 0
+                });
+            }
+            var delArr = [];
+            for (var i = 0; i < checkStatus.data.length; i++) {
+                delArr.push(checkStatus.data[i].id);
+            }
+
+            layer.confirm('确定移除选中的目录内的 ' + checkStatus.data.length + ' 个文件吗？', {
+                icon: 3,
+                title: '提示'
+            }, function() {
+                admin.req('/api/detail/detail/delete/' + delArr.join(',') + '/' +
+                    $('#menu002Id').val(), {},
+                    function(data) {
+                        if (data.ok) {
+                            layer.msg('批量移除文件成功！', {
+                                icon: 1
+                            });
+                            table.reload('tableContent-detail', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        } else {
+                            return layer.msg('批量移除文件失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: 'delete'
+                    });
+            });
+        });
+        // 隐藏右侧表单菜单
+        function hideRightMenu(reRender) {
+            // 将表单内的数据清空
+            setFormValue({
+                title: '文件'
+            });
+            // 隐藏右侧菜单
+            $('.autoScrollRight-detail').addClass('layui-hide');
+            $('.autoScrollLeft').removeClass('layui-col-md9');
+            $('.autoScrollLeft').addClass('layui-col-md3');
+            if (reRender) {
+                setTimeout(function() {
+                    admin.resize();
+                }, 300);
+            }
+        }
+
+        // 关闭右侧菜单 点击事件
+        $('.layui-card-close').on('click', function() {
+            hideRightMenu(true);
+        });
+
+        function fmtDate(obj) {
+            var date = new Date(obj);
+            var y = 1900 + date.getYear();
+            var m = "0" + (date.getMonth() + 1);
+            var d = "0" + date.getDate();
+            return y + "-" + m.substring(m.length - 2, m.length) + "-" + d.substring(d.length - 2, d.length);
+        }
+
+        //弹出框
+        function popMenuAddDetail() {
+
+            var id = document.getElementById("testId").value;
+
+            var title = '新增文件';
+            admin.popupCenter({
+                title: title,
+                path: 'components/file/button.html',
+                finish: function() {
+
+                    var detailId = sessionStorage.getItem("detailId");
+
+                    $.ajax({
+
+                        url: '/api/detail/detail/saveDetail/' + detailId + '/' + id,
+                        type: "post",
+                    })
+                    table.reload('tableContent-detail', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                },
+
+            });
+        }
+        // 弹出框取消按钮
+        form.on('submit(popmenuCancle)', function() {
+            admin.closePopupCenter();
+        });
+        // 搜索
+        form.on('submit(btn_search_detail)', function(data) {
+            var searchValue = data.field
+            var id = document.getElementById("testId").value;
+            admin.req('/api/detail/detail', {
+                    pageNo: 1,
+                    pageSize: 10000,
+                    name2: searchValue.name2,
+                    menu002Id: id
+                },
+                function(res) {
+
+                    table.reload('tableContent-detail', {
+                        where: {
+
+                            name2: searchValue.name2,
+                        }
+                    });
+
+                });
+
+        });
+        //子菜单搜索重置
+        form.on('submit(btn_reset_detail)', function() {
+            $('input[name="name2"]').val('');
+
+            table.reload('tableContent-detail', {
+                where: {
+
+                    name2: '',
+                }
+            });
+        });
+
+        // 主要是编辑、删除和配置文件菜单
+        table.on('tool(tableContent-history)', function(obj) {
+            // 获取点击列的数据
+            var data = obj.data;
+            var layEvent = obj.event;
+            var test = null;
+            if (layEvent === 'read') {
+
+                $.ajax({
+                        url: '/api/detail/detail/listDetailEO?id=' + data.chooseId,
+                        type: "get",
+                        async: false,
+                        success: function(result) {
+
+                            test = result.data[0];
+
+
+                        },
+                    })
+                    // console.log(test.name);
+
+                sessionStorage.setItem("name", test.name);
+                sessionStorage.setItem("type", test.type);
+                sessionStorage.setItem("savePath", data.filePath);
+                sessionStorage.setItem("root", "false")
+
+                window.open("components/file/editor.html")
+            }
+        });
+
+    });
+</script>
+
+</html>

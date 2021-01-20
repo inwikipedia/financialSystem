@@ -1,0 +1,107 @@
+<!--
+File   : user.html
+Created: Tuesday September 18th 2020 9:15:20 am
+Author : hetengfei
+License: MIT License
+
+Copyright (c) 2020 hetengfei
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Modified By  : hetengfei
+-----
+-----
+HISTORY:
+-->
+<style>
+    .layui-layer-page .layui-layer-content{
+        overflow: visible;
+    }
+    .layui-tpl-container .layui-form-label{
+        width: 125px;
+    }
+    .layui-input-block{
+        margin-left: 155px;
+    }
+</style>
+<div class="layui-tpl-container layui-form" style="padding-bottom: 60px;">
+    <div class="layui-row" id="user-area">
+        <div class="layui-col-md6">
+            <!-- 新增和编辑表单 -->
+
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red;">*</span> 日期</label>
+                <div class="layui-input-block">
+                    <input type="text" name="epDate" readonly class="layui-input" id="test2" placeholder="请选择日期">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">日期（看板展示）</label>
+                <div class="layui-input-block">
+                    <input type="text" maxlength='10' name="ext2" placeholder="请输入日期" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red;">*</span> 形式</label>
+                <div class="layui-input-block">
+                    <input type="text" maxlength='10' name="epForm" placeholder="请输入形式" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red;">*</span> 企业</label>
+                <div class="layui-input-block">
+                    <input type="text" maxlength='80' name="epEnterprise" placeholder="请输入企业" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red;">*</span> 交流领域</label>
+                <div class="layui-input-block">
+                    <input type="text" maxlength='80' name="epExchangeDomain" placeholder="请输入交流领域" class="layui-input" id="user-account">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label labelWidth"><span style="color: red;">*</span> 建议领导</label>
+                <div class="layui-input-block reduceMarginL" style="position: relative">
+                    <input type="text" maxlength='80' placeholder="请输入建议领导" class="layui-input" name="epLeaderName">
+                </div>
+            </div>
+        </div>
+        <!-- 提交按钮 -->
+        <!-- 取消按钮 -->
+        <div class="layui-form-item" style="text-align: center;position: absolute;bottom: 0;left: 0;right: 0;">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="menuSave_user">保存</button>
+            <button class="layui-btn layui-btn-primary" id="menuCancle_user">取消</button>
+        </div>
+    </div>
+</div>
+<script>
+    // 初始化 layui
+    layui.use(['laydate'], function() {
+        var laydate = layui.laydate;
+
+        //日期控件
+        laydate.render({
+            elem: '#test2'
+        });
+    })
+    // 取消按钮
+    $('#menuCancle_user').on('click', function () {
+        layui.admin.closePopupCenter();
+    });
+</script>

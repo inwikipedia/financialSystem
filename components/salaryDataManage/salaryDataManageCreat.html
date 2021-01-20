@@ -1,0 +1,190 @@
+<style>
+    .salaryDataMain {
+        padding: 20px 20px 0px 20px;
+    }
+
+    .salaryDataMain .leftItem, .salaryDataMain .rightItem {
+        display: inline-block;
+        width: 49%;
+    }
+
+    .salaryDataMain .layui-form-item {
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .salaryDataMain .form-input {
+        position: relative;
+        display: inline-block;
+        width: calc(100% - 100px);
+    }
+
+    .salaryDataMain label {
+        display: inline-block;
+        width: 90px;
+        text-align: left;
+    }
+
+    label {
+        font-weight: normal;
+    }
+
+    .redSpan {
+        color: red;
+    }
+    .layui-layer-load{
+        background-color: white;
+    }
+    .salaryDataMain .layui-disabled, .salaryDataMain .layui-disabled:hover {
+        color: rgb(84, 84, 84)!important;
+    }
+   .salaryDataMain .layui-form-selected dl{
+       /*bottom: 32px;*/
+       height: 180px;
+       width: calc(100% - 100px);
+       top: 32px;
+    }
+</style>
+
+<div class="salaryDataMain layui-form">
+    <div>
+
+    </div>
+    <div class="leftItem">
+        <div class="layui-form-item">
+            <label><span class="redSpan">*</span>部门：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请选择部门" id="orgNameSalary" style="cursor: pointer" readonly lay-verify="required" class="layui-input"
+                       name="orgName" >
+            </div>
+        </div>
+        <!--<div class="layui-form-item">-->
+            <!--<label><span class="redSpan">*</span>月：</label>-->
+            <!--<div class="form-input ">-->
+                <!--<input type="text" placeholder="请选择月" readonly  lay-verify="required"  class="layui-input"-->
+                       <!--name="memberName" id="memberName">-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>所属业务：</label>
+            <div class="form-input businessBox">
+                <select lay-verify="required" id="businessNameSalary" lay-search placeholder="请选择所属业务" lay-filter="businessName"
+                        name="businessName" >
+                </select>
+
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> 对方科目：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入对方科目" maxlength="80" class="layui-input"
+                       name="otherSubjectName" >
+            </div>
+        </div>
+
+
+    </div>
+    <div class="rightItem" style="vertical-align: top">
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>年月：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请选择年月" readonly  lay-verify="required" class=" layui-input"
+                       name="salaryMonth" id="salaryMonth">
+
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> 科目名称：</label>
+            <div class="form-input">
+                <input type="text" placeholder="请输入科目名称"  maxlength="80"  class="layui-input"
+                       name="subjectName" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>金额（元）：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入金额" lay-verify="required" maxlength="13"  class="layui-input"
+                       name="amount" >
+            </div>
+        </div>
+
+    </div>
+    <div class="layui-form-item" style="text-align: center;margin-top: 80px">
+        <button class="layui-btn layui-btn-normal"  lay-submit lay-filter="btn-salary-sure" id="btn-salary-sure">确定</button>
+        <button class="layui-btn layui-btn-primary" id="cancleSalary">取消</button>
+    </div>
+    <input type="text" id="salaryId" readonly style="display: none">
+    <input type="text" id="salaryType" readonly style="display: none">
+</div>
+<script>
+    layui.use('upload', function() {
+        var admin = layui.admin;
+        var laydate = layui.laydate;
+        // laydate.render({
+        //     elem: '.salaryYear',
+        //     type:"year"
+        // });
+        laydate.render({
+            elem: '#salaryMonth',
+            type:"month"
+        });
+        $('#cancleSalary').off('click').on('click',function () {
+            admin.finishPopupCenter(true);
+        });
+        $('#orgNameSalary').off('click').on('click',function () {
+            layer.open({
+                type: 2,
+                id: 'orgsSelectSalary',
+                title: false,
+                moveOut: true,
+                content: 'components/tpl/dept_select.html',
+                area: ['50%', '70%'],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var finalData = $('#orgsSelectSalary iframe')[0].contentWindow.task_orgs_select.finish();
+                    // 获取到数据，执行回掉函数
+                    if (finalData.id == '' || finalData.name == '') {
+                        return layer.msg('请选择组织机构', {
+                            icon: 0
+                        });
+                    }
+                    $('#orgNameSalary').val(finalData.name);
+                    $('#orgNameSalary').attr('data-id',finalData.id);
+                    layer.close(index);
+                },
+                resize: false
+            });
+        });
+        $('input[name="amount"]').off("input").on("input",function () {
+            clearNoNum(this);
+        });
+        function clearNoNum(obj) {
+            if(obj.value.indexOf('.')>-1){ //判断有没有输入小数点
+            }else{
+                var p11 = /[^\d|^\-]/g;
+                var p22 = /(\d{9})\d*$/g;
+                var p44 = /(\d*)\9/g; //删除当我输入第七位的整数时候进行删除
+                obj.value = obj.value.replace(p11, "").replace(p22, "$1").replace(p44,"$1$9");
+            }
+            obj.value = obj.value.replace(/[^\d|^\-|^.]/g, ""); //清除“数字”和“.”以外的字符
+            obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+            obj.value = obj.value.replace(/\-{2,}/g, "-"); //只保留第一个. 清除多余的
+            obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            obj.value = obj.value.replace("-", "$#$").replace(/\-/g, "").replace("$#$", "-");
+            obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'); //只能输入两个小数
+            obj.value = obj.value.replace(/\^/g, ""); //只能输入两个小数
+            if (obj.value.indexOf("-") < 0&&obj.value.indexOf(".") < 0 && obj.value != "") { //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+                obj.value = parseFloat(obj.value);
+            }
+            if (obj.value.indexOf(".") == 0 && obj.value != "") { //首位输入.的按0处理
+                obj.value = parseFloat(obj.value.length==1?0:obj.value);
+            }
+            if(obj.value.indexOf("-")==0&&obj.value.indexOf(".") == 1 && obj.value != ""){
+                obj.value = obj.value.length==2?0:obj.value;
+            }
+            if (obj.value.indexOf("-") > -1 &&obj.value.indexOf("-") !=0&& obj.value != "") { //首位输入.的按0处理
+                obj.value = obj.value.replace(/\-/g, "");
+            }
+        }
+    });
+</script>

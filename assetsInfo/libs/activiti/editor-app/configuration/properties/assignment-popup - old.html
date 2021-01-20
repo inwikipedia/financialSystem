@@ -1,0 +1,96 @@
+<div class="modal" ng-controller="KisBpmAssignmentPopupCtrl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="font-size: 16px;margin: 5px 0;display: inline-block;">{{'PROPERTY.ASSIGNMENT.TITLE' | translate:property}}</p>
+                <button style="margin: 5px 0;display: inline-block;" type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row col-xs-12">
+                    <form class="form-inline" style="margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label>用户名：</label>
+                            <input type="text" class="form-control" ng-model="queryName" style="width:100px;margin-right: 10px;" id="username" placeholder="请输入">
+                        </div>
+                        <div class="form-group">
+                            <label>角色：</label>
+                            <select ng-model="queryRole" ng-options="r.rname as r.rname for r in roleList" style="width:100px;height: 30px; margin-right: 10px;">
+                                <option value="">请选择</option>
+                            </select>
+                            
+                        </div>
+                        <div class="form-group">
+                            <label>部门：</label>
+                            <input type="text" class="form-control" ng-model="queryOrg" style="width:100px;margin-right: 10px;" id="userorg" placeholder="请输入">
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="doSearch();">查询</button>
+                        <button type="button" class="btn" ng-click="doReset();">重置</button>
+                    </form>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="table table-hover table-striped table-bordered center">
+                            <thead>
+                                <tr>
+                                    <th class="center">选择</th>
+                                    <th class="center">序号</th>
+                                    <th class="center">用户ID</th>
+                                    <th class="center">用户名</th>
+                                    <th class="center">角色</th>
+                                    <th class="center">部门</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="user in userItems" ng-click="doSelect(user.usid, $index)" id="{{user.usid}}">
+                                    <td><input type="radio" name="userInfo" /></td>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{user.usid}}</td>
+                                    <td>{{user.usname}}</td>
+                                    <td><span ng-repeat="role in user.roles">{{role.name}}&nbsp;</span></td>
+                                    <td><span ng-repeat="org in user.orgs">{{org.name}}&nbsp;</span></td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        <tm-pagination conf="paginationConf"></tm-pagination>
+                    </div>
+                </div>
+
+
+                <!--
+            	<div class="row row-no-gutter">
+            		<div class="form-group">
+            			<label for="assigneeField">{{'PROPERTY.ASSIGNMENT.ASSIGNEE' | translate}}</label>
+            			<input type="text" id="assigneeField" class="form-control" ng-model="assignment.assignee" placeholder="{{'PROPERTY.ASSIGNMENT.ASSIGNEE_PLACEHOLDER' | translate}}" />
+            		</div>
+            	</div>
+            	
+                <div class="row row-no-gutter">
+                    <div class="form-group">
+                    	<label for="userField">{{'PROPERTY.ASSIGNMENT.CANDIDATE_USERS' | translate}}</label>
+                        <div ng-repeat="candidateUser in assignment.candidateUsers">
+            	            <input id="userField" class="form-control" type="text" ng-model="candidateUser.value" />
+            	            <i class="glyphicon glyphicon-minus clickable-property" ng-click="removeCandidateUserValue($index)"></i>
+            	            <i ng-if="$index == (assignment.candidateUsers.length - 1)" class="glyphicon glyphicon-plus clickable-property" ng-click="addCandidateUserValue($index)"></i>
+                        </div>
+                   	</div>
+            
+                    <div class="form-group">
+                    	<label for="groupField">{{'PROPERTY.ASSIGNMENT.CANDIDATE_GROUPS' | translate}}</label>
+                        <div ng-repeat="candidateGroup in assignment.candidateGroups">
+            	          	<input id="groupField" class="form-control" type="text" ng-model="candidateGroup.value" />
+            	          	<i class="glyphicon glyphicon-minus clickable-property" ng-click="removeCandidateGroupValue($index)"></i>
+            	          	<i ng-if="$index == (assignment.candidateGroups.length - 1)" class="glyphicon glyphicon-plus clickable-property" ng-click="addCandidateGroupValue($index)"></i>
+                        </div>
+                    </div>
+                </div>
+-->
+
+            </div>
+            <div class="modal-footer">
+                <button ng-click="close()" class="btn btn-primary" translate>ACTION.CANCEL</button>
+                <button ng-click="save()" class="btn btn-primary" translate>ACTION.SAVE</button>
+            </div>
+        </div>
+    </div>
+</div>

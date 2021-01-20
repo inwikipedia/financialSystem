@@ -1,0 +1,402 @@
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<link rel="stylesheet" href="assetsInfo/css/report.css">
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+    
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+    
+    @media screen and (min-width: 1366px) and (max-width: 1920px) {
+        #picture {
+            height: 300px;
+        }
+    }
+    
+    @media screen and (min-width: 1920px) {
+        #picture {
+            height: 430px;
+        }
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span class="layui-card-header-title"><strong>2017年支出合同-2018年执行情况:</strong></span>
+                <!-- <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-sm exportbtn">导出PPT</a> -->
+            </div>
+            <div class="toptxt">
+                <p id="subtext" style="font-size: 12px;display: inline-block;"></p>
+                <p id="subtext1" style="font-size: 12px;display: inline-block;"></p>
+            </div>
+            <div class="layui-form-item" id="picture" style="width: 100%;margin-top:10px;margin-bottom: 0"></div>
+            <div class="botTable">
+                <div class="layui-form-item" style="text-align: right; margin-top:30px;margin-bottom: 5px">
+                    <button class="layui-btn layui-btn-primary" lay-submit lay-filter="btnSave_form" title="保存">保存</button>
+                    <button class="layui-btn layui-btn-primary" id="btnCancle_form" title="重置">重置</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-primary btn-myself" lay-filter="btn_download" lay-submit title="导出">
+                        <i class="layui-icon">导出</i><!-- layui-icon-download-circle-->
+                    </button>
+
+                    <button class="layui-btn layui-btn-sm layui-btn-primary btn-myself" lay-filter="btn_upload" lay-submit id='uploadExcel'>
+                        <i class="layui-icon " title="导入">导入</i><!--layui-icon-upload-circle-->
+                    </button>
+                </div>
+
+                <table id="tableContent-form" lay-filter="tableContent-form"></table>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+
+
+
+</script>
+<script>
+    //全局数据id
+    var globleId = 3;
+    //全局获取表格信息
+    var globleData = $.ajax({
+        url: "/api/report/" + globleId,
+        async: false
+    }).responseJSON;
+
+    // 全局表头
+    var globleTitle = globleData.data[0];
+    // console.log(globleData);
+    var echartsOption;
+
+    var myChart = echarts.init(document.getElementById('picture'));
+    // 组装Legend新的数组
+    function newLegendArray(data, start) {
+        var newData = [];
+        for (var i = start; i < data.length; i++) {
+            newData.push(data[i][0])
+        }
+        return newData;
+    }
+    // 处理百分数数组
+    function percentage(data) {
+        var datalist = [];
+        for (var i = 0; i < data.length; i++) {
+            var jsonData = {
+                value: parseFloat(data[i]),
+                tooltip: {
+                    formatter: '{b0}: {c0}%'
+                }
+            }
+            datalist.push(jsonData);
+        }
+        return datalist;
+
+    }
+    //组装x的lable标签数组
+    function newXLableArray(data, start) {
+        var newXlable = [];
+        for (var i = start; i < data.length - 1; i++) {
+            newXlable.push(data[i]);
+        }
+        return newXlable;
+    }
+
+    //组装json数据属性
+    function jsonInfo(data, start) {
+        var jsonPropertiesArray = [];
+        for (var i = start; i < data.length; i++) {
+            var jsonData = {};
+            if (data[i][0].lastIndexOf('率') != -1) {
+                jsonData = {
+                    name: data[i][0],
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: percentage(newXLableArray(data[i], 1)),
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: true,
+                                formatter: '{c}%',
+                                color: '#949494'
+                            }
+                        }
+                    }
+                }
+            } else {
+                jsonData = {
+                    name: data[i][0],
+                    type: 'bar',
+                    data: newXLableArray(data[i], 1)
+                }
+            }
+
+            jsonPropertiesArray.push(jsonData);
+        }
+        console.log(jsonPropertiesArray);
+        return jsonPropertiesArray;
+
+    }
+
+    function subtext(data) {
+        var subtext = "2017年支出合同截止2017年底未执行的金额是<strong  style='font-size: 12px;color: #0D96FF'>";
+
+        subtext += data[1][data[0].length - 1];
+
+        subtext += "</strong>万元，截止目前继续执行了<strong  style='font-size: 12px;color: #0D96FF'>";
+        for (var i = 0; i < data.length; i++) {
+            if (data[i][0].indexOf("支出合同") != -1) {
+                subtext += data[i][data[i].length - 1];
+            }
+        }
+        subtext += "</strong>万元，执行率为<strong  style='font-size: 12px;color: #0D96FF'>";
+        for (var i = 0; i < data.length; i++) {
+            if (data[i][0].indexOf("率") != -1) {
+                subtext += data[i][data[i].length - 1];
+            }
+        }
+        subtext += "%</strong>"
+        return subtext;
+    }
+
+    function subtext1(data) {
+        var subtext = data[1][0] + "整体执行情况:";
+        return subtext;
+    }
+    document.getElementById('subtext').innerHTML = subtext(globleData.data);
+    document.getElementById('subtext1').innerHTML = subtext1(globleData.data);
+    //设置图属性
+    function initOption() {
+        echartsOption = {
+            title: {
+
+
+            },
+            tooltip: {},
+            legend: {
+                data: newLegendArray(globleData.data, 1),
+                top: "bottom"
+            },
+            grid: {
+                left: 80,
+                right: 90,
+                top: 10, //距离容器上边界40像素
+                //bottom: 10   //距离容器下边界30像素
+            },
+            xAxis: {
+                data: newXLableArray(globleData.data[0], 1)
+            },
+            yAxis: [{
+                type: 'value',
+                splitLine: {
+                    lineStyle: {
+                        color: ['#ececec']
+                    },
+                }
+
+            }, {
+                type: 'value',
+                axisLabel: {
+                    show: true,
+                    interval: 'auto',
+                    formatter: '{value} %'
+
+                },
+                splitLine: {
+                    show: false,
+                    lineStyle: {
+                        color: ['#ececec']
+                    },
+                }
+
+            }],
+            color: ["rgba(47,194,91,0.6)", "rgba(24,144,255,0.6)", "rgba(250,204,20,0.6)", "rgba(137,198,255,0.6)"],
+            series: jsonInfo(globleData.data, 1)
+        }
+    };
+
+    /*组装表格属性*/
+    function tableData(data) {
+        var colsList = [];
+        var colDetail = [];
+        for (var i = 0; i < data.length; i++) {
+            if (i == 0) {
+                var jsonTableRow = {
+                    title: data[i],
+                    sort: true,
+                    filed: [i],
+                    width: 180,
+                    align: 'center'
+                };
+            } else {
+                var jsonTableRow = {
+                    edit: 'text',
+                    title: data[i],
+                    sort: true,
+                    filed: [i],
+                    align: 'center'
+                };
+            }
+
+            colDetail.push(jsonTableRow);
+        }
+        colsList.push(colDetail);
+        return colsList;
+    }
+
+    initOption();
+    myChart.setOption(echartsOption);
+
+    layui.use(['table'], function() {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer;
+
+        // 渲染表格
+        function initRender() {
+            table.render({
+                elem: '#tableContent-form',
+                id: 'tableContent-form',
+                url: admin.formatUrl('/api/report/' + globleId),
+                // 格式化后台返回的数据
+                parseData: function(res) {
+                    console.log(res);
+
+                    res.data.shift();
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+                },
+                //height: 472,
+                cols: tableData(globleTitle),
+                //globleCols,
+                cellMinWidth: 120,
+                request: {
+                    pageName: 'pageNo',
+                    limitName: 'pageSize'
+                },
+                where: {
+                    design: 0
+                }
+            });
+        };
+        initRender();
+        // 侧边栏变化时刷新数据表格
+        // 将 table ID 存入数组
+        layui.admin.addTableCache('tableContent-form');
+
+        // 监听工具条事件
+
+
+        // download
+        form.on('submit(btn_download)', function() {
+            window.location.href = admin.formatUrl('/api/report/export/' + globleId);
+        });
+
+
+        // 重置
+        $('#btnCancle_form').on('click', function() {
+            globleData = $.ajax({
+                url: "/api/report/" + globleId,
+                async: false
+            }).responseJSON;
+            syncFunction();
+        });
+
+        // 保存数据
+        form.on('submit(btnSave_form)', function(data) {
+            admin.req('/api/report/save/' + globleId, globleData.data, function(data) {
+                if (data.ok) {
+                    layer.msg('保存成功！', {
+                        icon: 1
+                    });
+                    globleData = data;
+                } else {
+                    layer.msg('保存失败：' + data.message, {
+                        icon: 5
+                    });
+                }
+            }, {
+                method: 'POST'
+            });
+            syncFunction();
+        });
+
+        //监听单元格编辑
+        table.on('edit(tableContent-form)', function(obj) {
+
+            var value = obj.value //得到修改后的值
+                ,
+                data = obj.data //得到所在行所有键值
+                ,
+                field = obj.field; //得到字段
+
+            var firstCol = obj.data[0];
+            for (i = 0; i < globleData.data.length; i++) {
+                if (firstCol == globleData.data[i][0]) {
+                    var rowNum = i;
+                    break;
+                }
+            }
+            //修改全局数据
+            globleData.data[rowNum][field] = value;
+            //同步刷新图表
+            initOption();
+            myChart.setOption(echartsOption, true);
+
+            layer.msg('[row: ' + rowNum++ + '] ' + field + ' 字段更改为：' + value);
+        });
+
+        function syncFunction() {
+            //重置表格
+            initRender();
+            //重置图表
+            initOption();
+            myChart.setOption(echartsOption, true);
+        };
+    });
+
+    layui.use('upload', function() {
+        var upload = layui.upload;
+        //执行实例
+        var uploadInst = upload.render({
+
+            elem: '#uploadExcel' //绑定元素
+                ,
+            url: '/api/report/import/' + globleId //上传接口
+                ,
+            accept: 'file',
+            done: function(res) {
+                //上传完毕回调
+                syncFunction();
+            },
+            error: function() {
+                //请求异常回调
+            }
+        });
+
+        function syncFunction() {
+            //重置表格
+            layui.table.reload("tableContent-form");
+            //重置图表
+            initOption();
+            myChart.setOption(echartsOption, true);
+        };
+    });
+</script>

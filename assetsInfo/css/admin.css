@@ -1,0 +1,774 @@
+/*
+ * File   : admin.css
+ * Created: Tuesday August 28th 2018 4:00:58 pm
+ * Author : yuchunyu97
+ * License: MIT License
+ * 
+ * Copyright (c) 2018 yuchunyu97
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * -----
+ * Last Modified: Sunday September 30th 2018 11:28:07 am
+ * Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+ * -----
+ * Description: index.html 页面样式文件，主要为路由框架样式，包括左侧边栏和上侧状态栏
+ * -----
+ * HISTORY:
+ * 2018-08-30	yuchunyu97	整理完成顶部栏header和侧边栏side的样式，兼容浏览器以及适配移动端
+ */
+
+
+/**
+  *
+  * 定义页面的背景色
+  *
+  */
+
+html {
+    background-color: #F2F6F8;
+}
+
+.layui-anim-upbit hr{
+    margin: 0;
+}
+/*=============================================
+=            Header            =
+=============================================*/
+
+
+/* 重写 layui header 的背景色和高度 */
+
+.layui-layout-admin .layui-header {
+    height: 40px;
+}
+.layui-icon-loading:before{
+    content: "" !important;
+}
+
+/* logo 部分样式 */
+
+.layui-layout-admin .layui-header .layui-logo {
+    width: 215px;
+    line-height: 40px;
+    transition: all .3s;
+    overflow: hidden;
+}
+
+.layui-layout-admin .layui-header .layui-logo img {
+    height: 25px;
+    margin-right: 2px;
+		margin-top: -2px;
+}
+
+.layui-layout-admin .layui-header .layui-logo cite {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 17px;
+    color: #fff;
+}
+
+
+/* 导航条左侧 */
+
+.layui-layout-admin .layui-header .layui-layout-left {
+    left: 205px;
+    padding: 0 14px;
+    transition: all .3s;
+}
+
+
+/* 导航条右侧 */
+
+/*.layui-header .layui-nav-more {*/
+    /*border-color: rgba(4, 4, 4, 1) transparent transparent;*/
+/*}*/
+
+/*.layui-header .layui-nav-mored {*/
+    /*border-color: transparent transparent rgba(4, 4, 4, 1);*/
+/*}*/
+
+.layui-header .layui-nav-item {
+    color: #ffffff!important;
+}
+
+
+/** 高度重写 */
+
+.layui-layout-admin .layui-header .layui-nav .layui-nav-item {
+    line-height: 40px;
+}
+
+.layui-layout-admin .layui-header a {
+    /* padding: 0 15px; */
+    cursor: pointer;
+    font-size: 14px;
+    font-family: PingFangSC-Semibold;
+    ;
+}
+
+.layui-layout-admin .layui-header a:hover {
+    color: rgba(0, 0, 0, 0.65);
+    text-decoration: none;
+}
+
+.layui-layout-admin .layui-header a cite {
+    margin-right: 4px;
+    color: white;
+    line-height: 20px;
+}
+
+.layui-layout-admin .layui-header a.usname {
+    display: block;
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 20px;
+}
+
+
+/** 图标大小 */
+
+.layui-layout-admin .layui-header .layui-nav-item .layui-icon {
+    font-size: 16px;
+}
+
+
+/* 悬浮框据顶部距离 */
+
+.layui-layout-admin .layui-header .layui-nav .layui-nav-item .layui-nav-child {
+    top: 37px;
+}
+
+
+/* 顶部导航条鼠标悬浮指示线 */
+
+#sys-nav .layui-nav .layui-this:after,
+#sys-nav .layui-nav-bar {
+    height: 3px;
+    background-color: #fff;
+}
+#sys-nav .layui-nav .layui-this:hover,
+#sys-nav .layui-nav-bar{
+    background-color: transparent;
+}
+#hearder-right .layui-nav .layui-this:after,
+#hearder-right .layui-nav-bar {
+ height: 0px;
+}
+
+
+/* 左侧的收缩按钮在PC上隐藏 */
+
+.layui-layout-admin .layui-header .layui-nav.layui-layout-left {
+    /* display: none; */
+}
+
+
+/*=====  End of Header  ======*/
+
+
+/*=============================================
+=            侧边栏样式            =
+=============================================*/
+
+
+/* 重写侧边栏宽度和位置 */
+layui-body
+.layui-layout-admin .layui-side {
+    top: 40px;
+    width: 215px;
+    background-color: #1c3955;
+    transition: all .3s;
+    -webkit-transition: all .3s;
+}
+
+.layui-layout-admin .layui-side .layui-side-scroll {
+    width: 215px;
+}
+
+
+/* 隐藏滚动条 */
+
+.layui-layout-admin .layui-side .layui-side-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.layui-layout-admin .layui-side .layui-nav {
+    width: 215px;
+    background-color: transparent;
+}
+
+
+/* 条目样式 */
+
+.layui-layout-admin .layui-side .layui-nav .layui-nav-item>a {
+    padding-top: 5px;
+    /* padding-bottom: 8px; */
+}
+
+.layui-layout-admin .layui-side .layui-nav .layui-nav-item>a:hover {
+    background: transparent;
+}
+
+.layui-side .layui-nav-item a {
+    color: white;
+}
+
+
+/* 条目外框 */
+
+.layui-layout-admin .layui-side .layui-nav .layui-nav-item>.layui-nav-child,
+.layui-layout-admin .layui-side .layui-nav .layui-nav-itemed>.layui-nav-child {
+    padding: 5px 0;
+    background-color: #1c3955 !important;
+}
+
+.layui-layout-admin .layui-side .layui-nav-tree {
+    position: absolute;
+    top: 140px;
+    left: 0;
+    padding-bottom: 50px;
+}
+
+
+/* 选中条目 */
+
+.layui-nav-tree .layui-nav-child dd.layui-this,
+.layui-nav-tree .layui-nav-child dd.layui-this a,
+.layui-nav-tree .layui-this,
+.layui-nav-tree .layui-this>a,
+.layui-nav-tree .layui-this>a:hover {
+    background-color: transparent;
+}
+
+.layui-nav-tree .layui-nav-child dd.layui-this {
+    border-left: 4px solid #55B7FF;
+    text-indent: -4px;
+}
+.layui-nav-tree .layui-nav-child dd:hover:not(.layui-this) a,
+.layui-side .layui-nav-item:hover:not(.layui-this) cite{
+    color: #59b3ff;
+}
+
+
+
+
+/* 隐藏左侧滑动条 */
+
+.layui-nav-tree .layui-nav-bar {
+    background-color: transparent;
+}
+
+
+/* 左侧用户信息 */
+
+.layui-layout-admin .layui-side .admin-user {
+    background-color: #062644;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 140px;
+    z-index: 1001;
+    overflow: hidden;
+}
+
+.layui-layout-admin .layui-side .admin-user img {
+    width: 65px;
+    height: 65px;
+    /* border: 2px solid #fff;
+    border-radius: 65px; */
+    display: block;
+    margin: 14px auto;
+}
+
+.layui-layout-admin .layui-side .admin-user span {
+    font-size: 18px;
+    line-height: 25px;
+    color: #fff;
+    display: block;
+    text-align: center;
+    white-space: nowrap;
+    width: 80%;
+    display: block;
+    overflow: hidden;
+    margin: 0 auto;
+    text-overflow: ellipsis;
+}
+
+.layui-layout-admin.admin-nav-mini .layui-header .layui-logo {
+    width: 60px;
+}
+
+.layui-layout-admin.admin-nav-mini .layui-header .layui-logo cite {
+    display: none;
+}
+
+.layui-layout-admin .layui-side .admin-user p {
+    padding: 4px 0;
+    text-align: center;
+    color: #9b9b9b;
+    font-size: 14px;
+    line-height: 25px;
+}
+
+.layui-layout-admin .layui-side .admin-user p i {
+    color: #7ED321;
+    font-size: 12px;
+    margin-right: 4px;
+}
+
+.layui-layout-admin .layui-side .admin-user .side-hide {
+    color: #A3AEB9;
+    color: rgba(163, 174, 185, 1);
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.layui-layout-admin .layui-side .admin-user .side-hide:hover {
+    color: rgba(163, 174, 185, .8);
+}
+
+.layui-layout-admin .layui-side .admin-user .admin-user-hide {
+    display: none;
+}
+
+
+/* 侧边栏缩小后 个人信息样式 */
+
+.admin-nav-mini .layui-side .admin-user {
+    height: 60px;
+}
+
+.admin-nav-mini .layui-side .layui-nav-tree {
+    top: 60px;
+}
+
+.admin-nav-mini .layui-side .admin-user .admin-user-show {
+    display: none;
+}
+
+.admin-nav-mini .layui-side .admin-user .admin-user-hide {
+    display: block;
+}
+
+.admin-nav-mini .layui-side .admin-user .admin-user-hide img {
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    border: 2px solid #fff;
+    margin: 8px auto;
+    cursor: pointer;
+}
+
+.layui-layout-admin.admin-nav-mini .layui-header .layui-icon-shrink-right:before {
+    content: "\e66b";
+}
+
+.layui-layout-admin.admin-nav-mini .layui-header .layui-layout-left {
+    left: 60px;
+}
+
+
+/* 导航栏图标 */
+
+.layui-layout-admin .layui-side img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+
+/* 导航栏右侧小箭头距离右边框的距离 */
+
+.layui-layout-admin .layui-side .layui-nav .layui-nav-more {
+
+    right: 12px;
+}
+.layui-nav .layui-nav-item a{
+
+}
+.layui-side .layui-nav-more:before,
+.layui-header .layui-nav-more:before {
+    content: "\e61a";
+}
+
+.layui-side .layui-nav-more {
+    font-family: layui-icon !important;
+    font-size: 12px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
+    width: auto;
+    height: auto;
+    line-height: normal;
+    top: 19px;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    transition: all .1s;
+    -webkit-transition: all .1s;
+
+}
+.layui-nav .layui-nav-more{
+    border-style: none;
+}
+
+.layui-nav.arrow2 .layui-nav-more,
+.layui-header .layui-nav-more {
+    font-family: layui-icon !important;
+    font-size: 12px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
+    width: auto;
+    height: auto;
+    line-height: normal;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    transition: all .1s;
+    -webkit-transition: all .1s;
+    top:13px;
+
+}
+
+.layui-nav-itemed>a>.layui-nav-more {
+    transform: rotate(0deg)!important;
+    -ms-transform: rotate(0deg)!important;
+    -moz-transform: rotate(0deg)!important;
+    -webkit-transform: rotate(0deg)!important;
+    -o-transform: rotate(0deg)!important;
+}
+
+.layui-header .layui-nav-mored {
+    transform: rotate(-180deg);
+    -ms-transform: rotate(-180deg);
+    -moz-transform: rotate(-180deg);
+    -webkit-transform: rotate(-180deg);
+    -o-transform: rotate(-180deg);
+    color: #ffffff;
+    top:19px;
+}
+#sys-nav .layui-nav-item>a:hover{
+
+     background: #14a1d4;
+}
+
+ #sys-nav .layui-this
+{
+  background: #33A6D4;
+}
+
+.layui-nav .layui-nav-child a{
+    font-size: 12px;
+    line-height: 30px;
+}
+
+
+
+/*=====  End of 侧边栏样式  ======*/
+
+
+/*=============================================
+=            主体部分样式，即路由页面            =
+=============================================*/
+
+.layui-layout-admin .layui-body {
+    top: 40px;
+    padding: 14px;
+    padding-top: 0px;
+    transition: left .3s;
+    /* overflow-y: scroll; */
+    bottom: 0;
+    z-index: 997;
+    position:static ;
+}
+
+
+/* 面包屑 */
+
+.layui-layout-admin .admin-breadcrumb {
+    /* display: block;
+    position: absolute;
+    line-height: 40px;
+    background-color: #f2f6f8;
+    z-index: 1000;
+    width: 100%; */
+    transition: all .3s;
+    /* box-sizing: border-box;
+    z-index: 998; */
+    padding-left: 14px;
+    font-size: 14px;
+    color: #FFFFFF;
+    height: 38px;
+    display: inline-block;
+    line-height: 38px;
+}
+
+.layui-layout-admin .admin-breadcrumb i {
+    color: #989898;
+    margin-right: 10px;
+    font-weight: 600;
+}
+
+.layui-layout-admin .admin-breadcrumb a {
+    color: #8a8a8a !important;
+}
+
+.layui-layout-admin .admin-breadcrumb a:hover {
+    color: #37ABFF !important;
+}
+
+
+/* 解决面包屑将header的弹出层挡住的问题 */
+
+.layui-layout-admin .layui-header {
+    background:#008FC3 !important;
+    z-index: 2000 !important;
+}
+
+
+/*=====  End of 主体部分样式，即路由页面  ======*/
+
+
+/*=============================================
+=            侧边栏导航条，PC收缩样式            =
+=============================================*/
+
+
+/* 定宽 60px */
+
+.layui-layout-admin.admin-nav-mini .layui-side {
+    width: 60px;
+}
+
+.layui-layout-admin.admin-nav-mini .layui-side-scroll {
+    width: 60px;
+}
+
+.layui-layout-admin.admin-nav-mini .layui-side .layui-nav {
+    width: 60px;
+}
+
+
+/* 主体位置偏移量缩小为 60px */
+
+.layui-layout-admin.admin-nav-mini .layui-body {
+    left: 60px;
+}
+
+
+/* 隐藏文字，只显示图标 */
+
+.layui-layout-admin.admin-nav-mini .layui-side .layui-nav .layui-nav-item>a>cite {
+    display: none;
+}
+
+.layui-layout-admin.admin-nav-mini .layui-side .layui-nav .layui-nav-item>a .layui-nav-more {
+    display: none;
+}
+
+.layui-layout-admin.admin-nav-mini .layui-side .layui-nav .layui-nav-item>a {
+    overflow: visible;
+}
+
+.layui-layout-admin.admin-nav-mini .layui-side .layui-nav .layui-nav-itemed .layui-nav-child {
+    display: none;
+}
+
+
+/* 面包屑 */
+
+.layui-layout-admin.admin-nav-mini .admin-breadcrumb {
+    padding-left: 101px;
+}
+
+
+/* 选中菜单的背景颜色 */
+
+.layui-layout-admin.admin-nav-mini .layui-side .layui-nav .layui-nav-itemed>a {
+    background: #4F556E;
+}
+
+
+/*=====  End of 侧边栏导航条，PC收缩样式  ======*/
+
+
+/*=============================================
+=            移动端样式            =
+=============================================*/
+
+@media screen and (max-width: 750px) {
+    /* header 左侧收缩按钮显示出来 */
+
+    .layui-layout-admin .layui-header .layui-nav.layui-layout-left {
+        display: block;
+        padding: 0;
+        left: 0;
+    }
+    .layui-layout-admin .layui-header a.usname {
+        width: 100px;
+    }
+    /* 将 LOGO 隐藏掉 */
+    .layui-layout-admin .layui-header .layui-logo {
+        display: none;
+    }
+    /* 侧边栏菜单出来后，图标变成向左的 */
+    .layui-layout-admin .layui-header .layui-icon-shrink-right:before {
+        content: "\e66b";
+    }
+    /* 侧边栏样式 */
+    .layui-layout-admin .layui-side {
+        /*position: fixed;*/
+        /*left: -230px;*/
+        /*z-index: 10000;*/
+    }
+    /* 主体样式 */
+    .layui-layout-admin .layui-body {
+        left: 0;
+        padding: 10px;
+        padding-top: 50px;
+    }
+    /* 面包屑 */
+    .layui-layout-admin .admin-breadcrumb {
+        padding-left: 10px;
+    }
+    /* 移动设备侧导航折叠样式 */
+    .admin-nav-mini .layui-side .admin-user {
+        height: 160px;
+    }
+    .admin-nav-mini .layui-side .layui-nav-tree {
+        top: 160px;
+    }
+    .admin-nav-mini .layui-side .admin-user .admin-user-show {
+        display: block;
+    }
+    .admin-nav-mini .layui-side .admin-user .admin-user-hide {
+        display: none;
+    }
+    .admin-nav-mini .layui-side .admin-user .admin-user-show .side-hide {
+        /* 将用户信息内的收缩按钮隐藏 */
+        display: none;
+    }
+    /* 移动设备侧导航展开样式 */
+    .layui-layout-admin.admin-nav-mini .layui-side {
+        width: 230px;
+        left: 0;
+    }
+    .layui-layout-admin.admin-nav-mini .layui-side-scroll,
+    .layui-layout-admin.admin-nav-mini .layui-side .layui-nav {
+        width: 230px;
+    }
+    .layui-layout-admin.admin-nav-mini .layui-side .layui-nav .layui-nav-item>a>cite {
+        display: inline-block;
+    }
+    .layui-layout-admin.admin-nav-mini .layui-side .layui-nav .layui-nav-item>a .layui-nav-more {
+        display: inline-block;
+    }
+    .layui-layout-admin.admin-nav-mini .layui-side .layui-nav .layui-nav-item>a {
+        overflow: hidden;
+    }
+    .layui-layout-admin.admin-nav-mini .layui-side .layui-nav .layui-nav-itemed>.layui-nav-child {
+        display: block;
+    }
+    .layui-layout-admin.admin-nav-mini .layui-body {
+        left: 0;
+    }
+    .layui-layout-admin.admin-nav-mini .layui-side .layui-nav .layui-nav-itemed>a {
+        background: transparent;
+    }
+    .layui-layout-admin.admin-nav-mini .layui-side .layui-nav .layui-nav-itemed::after {
+        background-color: #fff;
+
+    }
+    /* 面包屑 */
+    .layui-layout-admin.admin-nav-mini .admin-breadcrumb {
+        padding-left: 10px;
+    }
+    /* 将收缩按钮变成向左的 */
+    .layui-layout-admin.admin-nav-mini .layui-header .layui-icon-shrink-right:before {
+        content: "\e668";
+    }
+    /* 防止移动端鼠标悬浮状态按钮变黑 */
+    .layui-layout-admin .layui-header a:hover {
+        color: #fff;
+    }
+    /** 移动设备遮罩层 */
+    .layui-layout-admin.admin-nav-mini .site-mobile-shade {
+        content: '';
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, .2);
+        z-index: 9999;
+        cursor: pointer;
+    }
+    /* 顶部操作按钮 */
+    .layui-layout-admin .layui-header a {
+        padding: 0 10px;
+    }
+    .layui-layout-admin .layui-header a cite {
+        margin-right: 8px;
+
+    }
+}
+
+
+/*=====  End of 移动端样式  ======*/
+
+
+/*=============================================
+=            右侧弹出框            =
+=============================================*/
+
+.layui-layer.layui-layer-adminRight {
+    top: 56px !important;
+    bottom: 0;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, .1);
+    border-radius: 0;
+    overflow: auto;
+}
+
+
+/*=====  End of 右侧弹出框  ======*/
+
+
+/*=============================================
+=            loading 组件样式            =
+=============================================*/
+
+.admin-loading {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -16px -15px;
+    font-size: 30px;
+    color: #c2c2c2;
+}
+
+
+/*=====  End of loading 组件样式  ======*/

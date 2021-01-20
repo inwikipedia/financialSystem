@@ -1,0 +1,151 @@
+<style>
+    .layui-tpl-container .p-form,
+    .layui-layout-body .layui-layer-page .layui-layer-content {
+        overflow: visible !important;
+    }
+    .briefing-btn{
+        height: 28px;
+        line-height: 28px;
+    }
+    .upload-label{
+        display: inline-block;
+        width: 75px;
+        text-align: left;
+    }
+    .upload-box{
+        display: inline-block;
+        width: calc(100% - 150px);
+    }
+    .committeeCreate .layui-btn:not(.layui-btn-lg):not(.layui-btn-sm):not(.layui-btn-xs){
+        height: 30px;
+        line-height: 30px;
+    }
+    .committeeCreate .briefingBtn{
+        width: 50px;
+        height: 24px !important;
+        color: white;
+        line-height: 24px !important;
+        padding: 0px !important;
+        margin-left: 5px !important;
+    }
+    .committeeCreate  .layui-form-item{
+        margin-bottom: 15px;
+    }
+    #sendMember{
+        cursor: pointer;
+    }
+    .committeeCreate .layui-input:focus{
+        border:1px solid dodgerblue!important;;
+    }
+    .flexBox{
+        display: flex;
+        justify-content: center;
+    }
+    .inputFlex{
+        display: flex;
+        align-items: center;
+    }
+    .committeeCreate textarea::-webkit-input-placeholder {
+        color: #949494!important;
+        /* placeholder字体大小  */
+        /*font-size: 12px;*/
+        /* placeholder位置  */
+        text-align: left;
+        line-height:28px;
+    }
+   .committeeCreate .layui-form-radioed>i, .committeeCreate .layui-form-radio>i:hover{
+       color: #229FFF!important;
+    }
+   .lookInfo{
+       display: none;
+       width: 540px;
+       padding-left: 35px;
+   }
+    .infoTitle{
+        text-align: left;
+        /*padding-left: 35px;*/
+        font-weight: bold;
+    }
+</style>
+<div class="committeeCreate layui-form" style="text-align: center;padding: 20px 20px 0px">
+    <div  style="margin-bottom: 20px">
+        <div class="layui-form-item">
+            <div class="flexBox">
+                <div class="upload-label inputFlex">
+                    <label > 类别：</label>
+                </div>
+                <div class="upload-box" style="text-align: left">
+                    <input type="radio" lay-skin="primary" title="党委会" name="meetType" checked value="0"/>
+                    <input type="radio" lay-skin="primary" title="办公会" name="meetType" value="1"/>
+                </div>
+                <!--<input type="text" placeholder="请输入主题" maxlength="20" class="layui-input upload-box" id="titleName"  lay-verify="required">-->
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="flexBox">
+                <div class="upload-label inputFlex">
+                    <label > 主题：</label>
+                </div>
+                <input type="text" placeholder="请输入主题" name="title" maxlength="20" class="layui-input upload-box" id="title"  lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="flexBox">
+                <div class="upload-label inputFlex">
+                    <label > 接收人：</label>
+                </div>
+                <div class=" upload-box" id="sendMemberClick" style="position: relative;cursor: pointer">
+                    <input type="text" readonly  placeholder="请选择接收人" maxlength="50" name="sendMember" class="layui-input" id="sendMember"  lay-verify="required">
+                    <img style="position: absolute;right: 4px;top:4px;" src="/assetsInfo/images/zudui.png" >
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="flexBox">
+                <div class="upload-label inputFlex">
+                    <label > 截止日期：</label>
+                </div>
+                <input type="text" placeholder="请选择截止日期" maxlength="50" class="layui-input upload-box" name="deadTime" id="deadTime"  lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="flexBox">
+                <div class="upload-label inputFlex">
+                    <label > 参加地点：</label>
+                </div>
+                <input type="text" placeholder="请输入参加地点" maxlength="20" class="layui-input upload-box" name="address" id="address"  lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="flexBox">
+                <div class="upload-label">
+                    <label > 事项：</label>
+                </div>
+                <textarea   maxlength="80" id="detail" name="detail"  style="height: 80px" lay-verify="required" placeholder="请输入事项" class="layui-input upload-box"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="lookInfo" >
+        <div class="infoTitle">
+            完成情况
+        </div>
+        <div  lay-filter="infoTable" id="infoTable"></div>
+    </div>
+    <button class="layui-btn briefing-btn layui-btn-normal " id="submitBriefing" lay-submit lay-filter="submitBriefing">确定</button>
+    <button class="layui-btn briefing-btn layui-btn-primary" id="cancelBriefing">取消</button>
+</div>
+<script>
+    layui.use('upload', function() {
+        var admin = layui.admin;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        form.render();
+        laydate.render({
+            elem: "#deadTime",
+            type:"datetime"
+        });
+        $("#cancelBriefing").off("click").on("click",function () {
+            admin.finishPopupCenter();
+        });
+    })
+</script>

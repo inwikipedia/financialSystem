@@ -1,0 +1,1053 @@
+<style>
+  .container{
+    height: calc(100% - 60px);
+  }
+  .layui-row {
+    height: 100%;
+  }
+  #left_part_chart1 {
+    width: 100%;
+    height: 3.18rem;
+  }
+  .layui-btn-group {
+    position: absolute;
+    right: 18px;
+    top: 20px;
+    z-index: 8;
+  }
+  #left_part_chart2 {
+    width: 100%;
+    height: 100%;
+  }
+  .left_part {
+    height: 100%;
+    padding: 4px 2px 4px 8px;
+  }
+  @media screen and (min-width: 1900px) {
+    .container{
+      height: calc(100% - 90px);
+    }
+    .left_part{
+      padding: 3px;
+    }
+  }
+  .right_part {
+    height: 100%;
+  }
+  .right_part > .border-background {
+    height: 100%;
+  }
+  .border-background {
+    padding-top: 50px;
+    /*height: 50%;*/
+    height: calc(50% - 4px);
+    background: url('/assetsInfo/images/bigScreen/bg-border.png') no-repeat;
+    background-size: 100% 100%;
+    box-sizing: border-box;
+    position: relative;
+  }
+  .layui-btn-primary{
+    border:1px solid #21A4FF;
+  }
+  .border-background1 {
+    background: url('/assetsInfo/images/darkScreen/border-back3.png') no-repeat;
+    background-size: 100% 100%;
+  }
+  .border-background2 {
+    background: url('/assetsInfo/images/darkScreen/border-back1.png') no-repeat;
+    background-size: 100% 100%;
+  }
+  .border-background header {
+    font-size: 16px;
+    width: 156px;
+    position: absolute;
+    top: 0.08rem;
+    left: 0.08rem;
+    padding: 0.05rem;
+    line-height: 0.30rem;
+    color: #9fe8fd;
+    background: linear-gradient(to right, #0c416f, #2685d7, #0c406e);
+  }
+  .border-background-line{
+    padding-top:30px;
+    margin-top: 8px;
+  }
+  .chartBox {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+  }
+  .chartBox > * {
+    width: 40%;
+    height: 95%;
+  }
+  .layui-table-cell{
+    height: auto;
+    overflow:visible;
+    text-overflow:inherit;
+    white-space:normal;
+}
+.layui-table-view .layui-table td, .layui-table-view .layui-table th {
+    padding: 1px 0;
+    border: 1px solid #479EF8;
+    border-top: none;
+    border-left: none;
+}
+.layui-table-view .layui-table td{
+  color: #479EF8;
+}
+.layui-table{
+  font-family: 'Adobe Heiti Std R';
+  background: transparent;
+}
+.layui-table-view{
+  margin: 9px 8px;
+    border: 1px solid #479EF8;
+  }
+  .layui-table-cell{
+    white-space: normal;
+    word-break: break-all;
+    height: auto;
+    padding: 0;
+  }
+  .layui-table-header{
+    background: rgb(0,120,197);
+    border-color: #479EF8;
+  }
+  .layui-table-header thead tr {
+    background: #0078C5!important;
+    font-size: 14px;
+    font-weight: bold;
+    color: #9FE8FD;
+  }
+  .layui-table-view .layui-table{
+    width: 100%;
+  }
+  .layui-btn-group .layui-btn-primary:first-child{
+    border-color: #21a4ff;
+  }
+.layui-card-body {
+    position: relative;
+    padding: 4px 15px 9px 15px;
+    line-height: 20px;
+}
+.blueColor {
+  /*background: #0078C5!important;*/
+  background-color: rgba(0,120,197,0.5) !important;
+  font-size: 14px;
+  border: 1px solid #479EF8;
+  color: #9FE8FD !important;
+}
+.layui-form-item .layui-inline {
+    margin-bottom: 0;
+}
+.layui-table-view .layui-table td:nth-last-of-type(1), .layui-table-view .layui-table th:nth-last-of-type(1){
+  border-right: none;
+}
+  .layui-table-hover{
+    background-color: rgba(0,120,197,0.5) !important;
+    color: #FFFFFF !important;
+  }
+  .layui-table tbody tr :hover{
+    color: rgba(255,255,255,0.8) ;
+  }
+</style>
+<div class="layui-row layui-col-space10">
+  <div class="left_part layui-col-md7">
+    <div class="border-background border-background2">
+      <div class="mapChart layui-btn-group">
+        <button value="1" type="button" class="layui-btn layui-btn-sm layui-btn-normal">
+          本月开票
+        </button>
+        <button value="2" type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+          本月进账
+        </button>
+      </div>
+      <header>
+        <img
+                src="/assetsInfo/images/darkScreen/shujufenxiyellow.png"
+                alt=""
+        />
+        区域月度经营数据
+      </header>
+      <div class="chartBox" style="margin-top: -1px;">
+        <div id="chartPic1"></div>
+        <div id="chartPic2"></div>
+      </div>
+    </div>
+    <div class="border-background border-background2 border-background-line">
+      <div class="barChart layui-btn-group">
+        <button value="0" type="button" class="layui-btn layui-btn-sm layui-btn-normal">
+          年度合同
+        </button>
+        <button value="1" type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+          年度开票
+        </button>
+      </div>
+      <header>
+        <img
+                src="/assetsInfo/images/darkScreen/shujufenxired.png"
+                alt=""
+        />
+        本部经营数据
+      </header>
+      <div id="left_part_chart2"></div>
+    </div>
+  </div>
+  <div class="right_part layui-col-md5">
+    <div class="border-background border-background1" id="tableBox">
+      <header>
+        <img onclick="fullScreen()" src="/assetsInfo/images/darkScreen/shujufenxipurple.png" alt=""/>
+        各部门数据
+      </header>
+      <div id="workData">
+        <table id="departmentTable" lay-filter="departmentTable"></table>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  layui.use(['element','form','layer'],function(){
+    var renderTable = function () {
+    var heightTable=$('#tableBox').height()-20
+      var element = layui.element,
+            admin = layui.admin,
+            config = layui.config,
+            layer = layui.layer,
+            table = layui.table,
+            tools = layui.tools;
+            // 右侧表格渲染
+            table.render({
+                elem: '#departmentTable',
+                id: "departmentTable",
+                height:heightTable,
+                url: "/ADC_info/api/dashboard/getChartDataList",
+                parseData: function (res) {
+                    res.data = [{
+                        "orgName": "回收利用部",
+                        "orgId": "R7YQVKUNPP",
+                        "monthContractAmount": 219.18,
+                        "monthIncreaseRate": 0.0,
+                        "allContractAmount": 4086.6806,
+                        "finishedRate": 69.27,
+                        "bigOrg": false
+                    },
+                        {
+                            "orgName": "节能研究部",
+                            "orgId": "J52VZJPJ97",
+                            "monthContractAmount": 189.9,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 2377.3409,
+                            "finishedRate": 55.29,
+                            "bigOrg": false
+                        },
+                        {
+                            "orgName": "材料研究部",
+                            "orgId": "8MU47SJ55C",
+                            "monthContractAmount": 9.4000,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 1092.3789,
+                            "finishedRate": 52.02,
+                            "bigOrg": false
+                        },
+                        {
+                            "orgName": "绿色发展部",
+                            "orgId": "TTYVBPRUYR",
+                            "monthContractAmount": 10.2,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 726.5307,
+                            "finishedRate": 51.90,
+                            "bigOrg": false
+                        },
+                        {
+                            "orgName": "新能源研究部",
+                            "orgId": "V4QMW72V27",
+                            "monthContractAmount": 17.0,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 262.28,
+                            "finishedRate": 17.49,
+                            "bigOrg": false
+                        },
+                        {
+                            "orgName": "咨询业务本部",
+                            "orgId": "LG2Q52HH7Y",
+                            "monthContractAmount": 445.68,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 8545.21,
+                            "finishedRate": 60.46,
+                            "bigOrg": true
+                        },
+                        {
+                            "orgName": "智能网联数据部",
+                            "orgId": "R352EDSA82",
+                            "monthContractAmount": 0.0,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 1424.9057,
+                            "finishedRate": 54.38,
+                            "bigOrg": false
+                        },
+                        {
+                            "orgName": "网联技术研究部",
+                            "orgId": "Q7RQKRGX2B",
+                            "monthContractAmount": 0.0,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 1111.4882,
+                            "finishedRate": 63.30,
+                            "bigOrg": false
+                        },
+                        {
+                            "orgName": "智能技术应用部",
+                            "orgId": "UGQDZGMTKZ",
+                            "monthContractAmount": 0.0,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 1218.7402,
+                            "finishedRate": 60.94,
+                            "bigOrg": false
+                        },
+                        {
+                            "orgName": "智能网联平台部",
+                            "orgId": "FAVGNJRJYJ",
+                            "monthContractAmount": 0.0,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 818.3732,
+                            "finishedRate": 51.15,
+                            "bigOrg": false
+                        },
+                        {
+                            "orgName": "智能业务本部",
+                            "orgId": "X2JQL6ZGVF",
+                            "monthContractAmount": 0.0,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 4573.5073,
+                            "finishedRate": 57.34,
+                            "bigOrg": true
+                        },
+                        {
+                            "orgName": "研发信息系统部",
+                            "orgId": "LW9UESTLCR",
+                            "monthContractAmount":130.83,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 3332.9964,
+                            "finishedRate": 52.18,
+                            "bigOrg": false
+                        },
+                        {
+                            "orgName": "制造信息系统部",
+                            "orgId": "V95C4QR4KR",
+                            "monthContractAmount": 14.88,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 561.1599,
+                            "finishedRate": 27.21,
+                            "bigOrg": false
+                        },
+                        {
+                            "orgName": "软件业务本部",
+                            "orgId": "TT8S672VLL",
+                            "monthContractAmount": 145.71,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 3894.1564,
+                            "finishedRate":46.08,
+                            "bigOrg": true
+                        },
+                        {
+                            "orgName": "产品数据部",
+                            "orgId": "AR6HK9WQNT",
+                            "monthContractAmount": 18.5500,
+                            "monthIncreaseRate": 100.0,
+                            "allContractAmount": 1725.0389,
+                            "finishedRate": 49.29,
+                            "bigOrg": false
+                        },
+                        {
+                            "orgName": "市场数据部",
+                            "orgId": "V3PJQG56BY",
+                            "monthContractAmount": 122.33,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 3232.4336,
+                            "finishedRate": 71.51,
+                            "bigOrg": false
+                        },
+                        {
+                            "orgName": "数据平台部",
+                            "orgId": "9EJM4X9XD6",
+                            "monthContractAmount": 36.7,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 2197.1610,
+                            "finishedRate": 58.59,
+                            "bigOrg": false
+                        },
+                        {
+                            "orgName": "后市场数据部",
+                            "orgId": "UUEV2PLBUH",
+                            "monthContractAmount": 0.0,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 531.5306,
+                            "finishedRate": 26.26,
+                            "bigOrg": false
+                        },
+                        {
+                            "orgName": "数据业务本部",
+                            "orgId": "YYKU3J77UA",
+                            "monthContractAmount": 177.58,
+                            "monthIncreaseRate": 0.0,
+                            "allContractAmount": 7686.1643,
+                            "finishedRate": 55.72,
+                            "bigOrg": true
+                        }];
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+                },
+                done: function (res) {
+                    $("#workData").find(".bigOrg").parent().parent().addClass("blueColor");
+                },
+                cols: [[
+                    {
+                        field: 'orgName',
+                        title: '部门',
+                        align: 'center',
+                        width:'25%',
+                        templet: function (d) {
+                            var text = d.orgName ? d.orgName : "";
+                            return '<div class="'+(d.bigOrg?"bigOrg":"")+' " title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'monthContractAmount',
+                        title: '本月开票额(万元)',
+                        align: 'center',
+                        width:'25%',
+                        templet: function (d) {
+                            var styleColor="";
+                            if(d.isBigOrg){
+                                styleColor="style='backgrond-color:#AED6FE;'";
+                            }
+                            var text = (d.monthContractAmount||d.monthContractAmount==0) ? d.monthContractAmount.toFixed(2) : "";
+                            return '<div class="'+(d.bigOrg?"bigOrg":"")+' title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    },
+                    // {
+                    //     field: 'monthIncreaseRate',
+                    //     title: '月增长率',
+                    //     align: 'center',
+                    //     width:65,
+                    //     templet: function (d) {
+                    //         var text = d.monthIncreaseRate ? (d.monthIncreaseRate+"%") : "0%";
+                    //         return '<div class="'+(d.bigOrg?"bigOrg":"")+' title="' + text + '"><span>' + text + '</span></div>'
+                    //     }
+                    // },
+                    {
+                        field: 'allContractAmount',
+                        title: '累计开票额(万元)',
+                        align: 'center',
+                        width:'25%',
+                        templet: function (d) {
+                            var text = (d.allContractAmount||d.allContractAmount==0) ? d.allContractAmount.toFixed(2) : "";
+                            return '<div class="'+(d.bigOrg?"bigOrg":"")+' title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'finishedRate',
+                        title: '全年目标完成率',
+                        align: 'center',
+                        width:'25%',
+                        templet: function (d) {
+                            var text = (d.finishedRate||d.finishedRate==0) ? (d.finishedRate.toFixed(2)+"%") : "";
+                            return '<div class="'+(d.bigOrg?"bigOrg":"")+' title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }
+                ]],
+                page: false,
+                limit:50,
+                where: {
+                    design: 0
+                }
+            });
+        };
+        renderTable()
+  })
+  // 点击切换按钮样式
+  $('.mapChart .layui-btn').click(function () {
+    $(this).attr('class', 'layui-btn layui-btn-sm layui-btn-normal');
+    $(this).siblings().attr('class', 'layui-btn layui-btn-sm layui-btn-primary');
+    getChartInfo($(this).attr('value'))
+  });
+  $('.barChart .layui-btn').click(function () {
+    $(this).attr('class', 'layui-btn layui-btn-sm layui-btn-normal');
+    $(this).siblings().attr('class', 'layui-btn layui-btn-sm layui-btn-primary');
+    getInfoData($(this).attr('value'))
+  });
+  // 挂载三个echarts图表
+  var myChart = echarts.init(document.getElementById('chartPic2'));
+  var myMap = echarts.init(document.getElementById('chartPic1'));
+  var myChart2 = echarts.init(document.getElementById('left_part_chart2'));
+  // 获取数据
+  function getChartInfo(typeData){
+    $.ajax({
+        url: "/ADC_info/api/dashboard/getMapData/"+typeData,
+        type: 'get',
+        success: function (res) {
+            if (res.ok) {
+                if(typeData==1){
+                    res.data = {
+                        "mapData": [{
+                            "name": "上海",
+                            "value": 0.0
+                        },
+                            {
+                                "name": "云南",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "内蒙古",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "北京",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "台湾",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "吉林",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "四川",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "天津",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "宁夏",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "安徽",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "山东",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "山西",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "广东",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "广西",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "新疆",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "江苏",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "江西",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "河北",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "河南",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "浙江",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "海南",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "湖北",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "湖南",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "澳门",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "甘肃",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "福建",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "西藏",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "贵州",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "辽宁",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "重庆",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "陕西",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "青海",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "香港",
+                                "value": 0.0
+                            },
+                            {
+                                "name": "黑龙江",
+                                "value": 0.0
+                            }],
+                        "areaSet": ["上海区",
+                            "东北区",
+                            "东南区",
+                            "北京区",
+                            "华中区",
+                            "华南区",
+                            "重庆区"],
+                        "currentTimeDataList": [31,
+                            25,
+                            38,
+                            271,
+                            169,
+                            33,
+                            203],
+                        "lastTimeDataList": [316,
+                            183,
+                            54,
+                            329,
+                            47,
+                            385,
+                            203],
+                        "rateList": [-90.1,
+                            -86.3,
+                            -30.9,
+                            -75.1,
+                            100.4,
+                            -99.7,
+                            -67.4],
+                        "currentYear": 2020,
+                        "lastYear": 2019
+                    }
+                }
+                setMapChart(res.data)
+                setLineChart(res.data)
+            } else {
+                layer.msg(res.message, {
+                    icon: 5
+                });
+            }
+        },
+        error:function (err) {
+            layer.msg(err.message, {
+                icon: 5
+            });
+        }
+    });
+  }
+  // 获取上方折线图
+  function setLineChart(lineData){
+    var lastTimeDataList = lineData.lastTimeDataList.map(function(v){ return Math.round(v)} )
+    var currentTimeDataList = lineData.currentTimeDataList.map(function(v){ return Math.round(v)} )
+    var rateList = lineData.rateList.map(function(v){ return v.toFixed(1)} )
+
+    var chartData = {
+      tooltip: {
+        trigger: 'axis',
+        // formatter: '{b}<br />{a0}:{c0}<br />{a1}:{c1}<br />{a2}:{c2}%',
+        formatter: '{b}<br />{a0}:{c0}<br />{a1}:{c1}',
+      },
+      legend: {
+        data: [String(lineData.currentYear), String(lineData.lastYear), '增长率'],
+        // data: ['2020', '2019', '增长率'],
+        bottom: '0',
+        icon: 'roundRect',
+        itemWidth: 22,
+        itemHeight: 8,
+        textStyle: {
+          padding: [3, 0, 0, 0],
+          color:'#5CABFC',
+          fontSize: 14
+        },
+      },
+      grid: {
+        left: '3%',
+        bottom: '15%',
+        top: '7%',
+        right:'20%',
+        containLabel: true,
+      },
+      color: ['#5892FF', '#A9C7FF', '#FFEA00'],
+      yAxis: {
+        type: 'category',
+        boundaryGap: true,
+        data:lineData.areaSet,
+        // data:['东南区','重庆区','中部区','上海区','华南区','南湖区','北京区','北方区'],
+        axisTick: {
+          show:false,
+          lineStyle: { color: '#e8e8e8' }, // x轴刻度的颜色
+        },
+        axisLabel: { color: '#479EF8',fontSize: 12 },
+        axisLine: {
+          lineStyle: {
+            color: '#fff',
+          },
+        },
+      },
+      xAxis: [
+        {
+          type: 'value',
+          name: '万元',
+          nameTextStyle: {
+            padding: [0, 0, 0, 0],
+            color: '#479EF8',
+          },
+          axisTick: {
+          show:false,
+            lineStyle: {show:false, color: '#e8e8e8' }, // x轴刻度的颜色
+          },
+          splitLine:{show: false},
+          axisLabel: {show:false, color: '#3B4961' },
+          axisLine: {
+            show:false,
+            lineStyle: {
+              color: '#e8e8e8',
+            },
+          },
+        },
+        {
+          type: 'value',
+          nameTextStyle: {
+            padding: [0, 0, 0, -40],
+          },
+          nameGap: 10,
+          splitLine:{show: false},
+          axisTick: {
+          show:false,
+            lineStyle: {show:false, color: '#e8e8e8' }, // x轴刻度的颜色
+          },
+          axisLabel: {
+            show:false,
+            color: '#3B4961',
+            formatter: '{value}%',
+          },
+          axisLine: {
+            show:false,
+            lineStyle: {
+              color: '#e8e8e8',
+            },
+          },
+        },
+      ],
+      series: [
+        {
+          name: lineData.lastYear,
+          // name: 2019,
+          type: 'bar',
+          xAxisIndex: 0,
+          label: {
+            show: true,
+            position: 'right',
+          },
+          splitLine:{show: false},
+          data: lastTimeDataList // lineData.lastTimeDataList
+          // data: [3333, 13332, 6666, 6666, 2222, 1111, 2222, 4444],
+        },
+        {
+          name: lineData.currentYear,
+          // name: 2020,
+          type: 'bar',
+          xAxisIndex: 0,
+          label: {
+            show: true,
+            position: 'right',
+          },
+          splitLine:{show: false},
+          data: currentTimeDataList
+          // data: [1111, 6666, 6666, 6666, 3333, 4444, 5555, 4444],
+        },
+        /*{
+          name: '增长率',
+          type: 'line',
+          xAxisIndex:1,
+          //symbol:'circle',
+          //symbolSize: 8,
+          splitLine:{show: false},
+          label: {
+              show: false,
+              position: [10, -6],
+              formatter: '{c} %'
+          },
+          itemStyle:{
+            normal:{
+              lineStyle:{
+                color:'rgba(255,255,255,0)'
+              }
+            }
+          },
+          data: rateList
+          // data: [0, 10, 0, 5, 0, 0, 2, 0],
+        },*/
+      ],
+    };
+    myChart.setOption(chartData);
+  }
+  // 获取左上角地图
+  function setMapChart(typeData){
+    typeData.mapData.push({name:"南海诸岛",value:0});
+    var mapData = {
+      tooltip: {
+        formatter: function (params, ticket, callback) {
+          return params.name + '<br />' + '单位（万元）' + '：' + params.value;
+        }, //数据格式化
+      },
+      geo: {
+        map: 'china',
+        roam: false, //不开启缩放和平移
+        zoom: 1.23, //视角缩放比例
+        label: {
+          normal: {
+            show: false,
+            fontSize: '10',
+            color: 'rgba(0,0,0,0.7)',
+          },
+        },
+        itemStyle: {
+          normal: {
+            borderColor: 'rgba(99,172,173, 0.5)',
+            areaColor:'rgba(125,151,176,0.5)'
+          },
+          emphasis: {
+            areaColor: '#45DAFF', //鼠标选择区域颜色
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+            shadowBlur: 20,
+            borderWidth: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+          },
+        },
+      },
+      series: [
+        {
+          type: 'map',
+          geoIndex: 0,
+          data: typeData.mapData,
+        },
+      ],
+    };
+    myMap.setOption(mapData);
+  }
+  // 请求数据
+  function getInfoData (dataType) {
+    $.ajax({
+        url: "/ADC_info/api/dashboard/getOrgChartDataVO/"+dataType,
+        type: 'get',
+        success: function (res) {
+            if (res.ok) {
+                if(dataType==1){
+                    res.data.currentTimeDataList = [4695,8694,4781,8078];
+                    res.data.lastTimeDataList = [2263,9110,4936,7595];
+                    res.data.mapData = {智能业务本部: 4695, 咨询业务本部: 8694, 软件业务本部: 4781, 数据业务本部: 8078}
+                    res.data.orgNameSet = ["智能业务本部", "咨询业务本部", "软件业务本部", "数据业务本部"];
+                    res.data.rateList = [107.51, -4.57, -3.13, 6.36];
+                }
+                setPartChart(res.data);
+            } else {
+                layer.msg(res.message, {
+                    icon: 5
+                });
+            }
+        },
+        error:function (err) {
+            layer.msg(err.message, {
+                icon: 5
+            });
+        }
+    });
+  };
+  // 获取柱形折线图
+  function setPartChart(lineData){
+          var option1 = {
+            tooltip: {
+              trigger: 'axis',
+              formatter: '{b}<br />{a0}:{c0}<br />{a1}:{c1}<br />{a2}:{c2}%',
+            },
+            legend: {
+              data: ['2020', '2019', '增长率'],
+              top: '0',
+              icon: 'roundRect',
+              itemWidth: 22,
+              itemHeight: 8,
+              textStyle: {
+                padding: [3, 0, 0, 0],
+                color:'#5CABFC',
+                fontSize: 14
+              },
+            },
+            grid: {
+              left: '5%',
+              right: '4%',
+              bottom: '3%',
+              top: '24%',
+              containLabel: true,
+            },
+            color: ['#5892FF', '#A9C7FF', '#FFEA00'],
+            xAxis: {
+              type: 'category',
+              // boundaryGap: false,
+              data: lineData.orgNameSet,
+              axisTick: {
+                show:false,
+                lineStyle: { color: '#A9C7FF' }, // x轴刻度的颜色
+              },
+              axisLabel: { color: '#4F98FF' },
+              axisLine: {
+                show:false,
+                lineStyle: {
+                  color: '#A9C7FF',
+                },
+              },
+            },
+            yAxis: [
+              {
+                type: 'value',
+                name: '万元',
+                nameTextStyle: {
+                  padding: [0, 0, 0, -40],
+                  color: '#5CABFC',
+                },
+                nameGap: 10,
+                axisTick: {
+                  show:false,
+                  lineStyle: { color: '#5CABFC' }, // x轴刻度的颜色
+                },
+                axisLabel: { color: '#5892FF' },
+                splitLine:{show:false},
+                axisLine: {
+                  show:false,
+                  lineStyle: {
+                    color: '#5CABFC',
+                  },
+                },
+              },
+              {
+                type: 'value',
+                nameTextStyle: {
+                  padding: [0, 0, 0, -40],
+                },
+                nameGap: 10,
+                axisTick: {
+                  show:false,
+                  lineStyle: { color: '#5CABFC' }, // x轴刻度的颜色
+                },
+                axisLabel: {
+                  color: '#5892FF',
+                  formatter: '{value}%',
+                },
+                splitLine:{
+                  lineStyle:{
+                    type:'dash'
+                  }
+                },
+                axisLine: {
+                  show:false,
+                  lineStyle: {
+                    color: '#5CABFC',
+                  },
+                },
+              },
+            ],
+            series: [
+              {
+                name: lineData.lastYear,
+                // name: 2019,
+                type: 'bar',
+                barWidth: 10,
+                yAxisIndex: 0,
+                label: {
+                  show: true,
+                  position: 'top',
+                },
+                splitLine:{show: false},
+                data: lineData.lastTimeDataList
+                // data: [0, 13332, 6666, 6666, 0, 0, 0, 0, 0, 0, 0, 0],
+              },
+              {
+                name: lineData.currentYear,
+                // name: 2020,
+                type: 'bar',
+                yAxisIndex: 0,
+                barWidth: 10,
+                splitLine:{show: false},
+                label: {
+                  show: true,
+                  position: 'top',
+                },
+                data: lineData.currentTimeDataList
+                // data: [0, 6666, 6666, 6666, 0, 0, 0, 0, 0, 0, 0, 0],
+              },
+              {
+                name: '增长率',
+                type: 'line',
+                symbol:'circle',
+                symbolSize: 10,
+                splitLine:{show: false},
+                itemStyle:{
+                  normal:{
+                    lineStyle:{
+                      color:'rgba(255,255,255,0)'
+                    }
+                  }
+                },
+                yAxisIndex: 1,
+                label: {
+                  show: true,
+                  position: 'top',
+                  formatter: '{c}%',
+                },
+                data: lineData.rateList
+                // data: [0, -50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              },
+            ],
+          };
+          myChart2.setOption(option1);
+  }
+  getChartInfo(1)
+  getInfoData(0)
+  // 窗口大小变化图表自适应
+  window.onresize = function () {
+    myChart.resize();
+    myChart2.resize();
+    myMap.resize();
+  };
+</script>

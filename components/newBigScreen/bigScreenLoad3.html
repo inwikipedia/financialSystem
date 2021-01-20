@@ -1,0 +1,747 @@
+<style>
+    .around {
+        width:100%;
+        height:100%
+    }
+
+    /*.flexs {*/
+    /*    display: flex;*/
+    /*}*/
+    .around .layui-table-header thead tr{
+        background:#479EF8!important;
+        font-size:14px;
+        font-family:Source Han Sans CN;
+        font-weight:bold;
+        color:rgba(255,255,255,1);
+    }
+    .around .layui-table-body tbody tr:nth-child(2n){
+        background:rgba(236,249,255,1);
+    }
+
+    .around .case {
+        /*padding: 10px 10px;*/
+        height:15%;
+        border-bottom: 1px solid #ddd;
+        background: url("../../assetsInfo/images/dataBoard3/59665a3fa270e_610.png");
+    }
+    .around .tables{
+        height:85%!important;
+    }
+    .around .caseLogo {
+        width: 30px;
+        height: 30px;
+        margin: 0 5px;
+    }
+
+    .around .caseTitle {
+        /*font-weight: bold;*/
+        height:100%;
+        line-height: 6vh;
+        /*margin-left: 10px;*/
+        font-size:16px;
+        font-family:Source Han Sans CN;
+        font-weight:bold;
+        color:rgba(93,93,93,1);
+    }
+
+    .around .tables {
+        width: 97%;
+        padding-left: 8px;
+    }
+
+    .around #top_left{
+        width:59.74%;
+        height:100%;
+        float: left;
+        background:#FFFFFF;
+        box-shadow:0px 0px 16px 0px rgba(214,214,214,0.34);
+        border-radius:4px;
+    }
+    .around #top_right{
+        width:39.56%;
+        height:100%;
+        float: right;
+        background:#FFFFFF;
+        box-shadow:0px 0px 16px 0px rgba(214,214,214,0.34);
+        border-radius:4px;
+    }
+    .around #bottom_left{
+        width:25.9%;
+        height:100%;
+        float: left;
+        /*background:#FFFFFF;*/
+        display: flex;
+        justify-content: space-between;
+        flex-direction:column;
+        box-shadow:0px 0px 16px 0px rgba(214,214,214,0.34);
+        border-radius:4px;
+    }
+    .around #bottom_conter{
+        width:33.14%;
+        height:100%;
+        float: left;
+        margin-left:0.7%;
+        background:#FFFFFF;
+        box-shadow:0px 0px 16px 0px rgba(214,214,214,0.34);
+        border-radius:4px;
+    }
+    .around #bottom_right{
+        width:39.56%;
+        height:100%;
+        float: right;
+        background:#FFFFFF;
+        box-shadow:0px 0px 16px 0px rgba(214,214,214,0.34);
+        border-radius:4px;
+    }
+    .around #bottom_left .item{
+        height:17.4%;
+        /*margin-top:2.5%;*/
+        overflow: hidden;
+        width:100%;
+        line-height: 6.8vh;
+        background:#FFFFFF;
+        background: url("../../assetsInfo/images/dataBoard3/59665a3fa270e_610.png");
+        box-shadow:0px 0px 16px 0px rgba(214,214,214,0.34);
+        border-radius:4px;
+    }
+    .around #bottom_left .item:nth-child(1){
+        margin-top:0
+    }
+    .around #bottom_left .item .sort{
+        display: block;
+        float: left;
+        margin-left:11px;
+        height:4.5vh;
+        width:4.5vh;
+        margin-top:1.13vh;
+    }
+
+    .around .left{
+        float:left;
+        line-height: 6vh;
+        /*height:30px;*/
+    }
+    .around .top{
+        overflow: hidden;
+        width:100%;
+        height:49%;
+        box-shadow:0px 0px 16px 0px rgba(214,214,214,0.34);
+        border-radius:4px;
+    }
+    .around .bottom{
+        margin-top:0.7%;
+        overflow: hidden;
+        width:100%;
+        height:49%;
+
+    }
+    /*.layui-table-box{*/
+    /*    height: auto!important;*/
+    /*}*/
+    /*.layui-table-page{*/
+    /*    height: 30%!important;*/
+    /*}*/
+    .around .layui-table-body {
+        height: 85% !important;
+        background: #FFFFFF;
+        /*height:calc(100%)!important;*/
+    }
+    .around .layui-form.layui-border-box.layui-table-view{
+        height: calc(100% - 10px)!important;
+    }
+    .around .layui-form.layui-border-box.layui-table-view .layui-table-box{
+        height: 80.5%!important;
+        margin-bottom:1.1%
+    }
+    .around .layui-form.layui-border-box.layui-table-view .layui-table-page{
+        height: 17.1%!important;
+        padding: 0 1% 0;
+    }
+    .around .name{
+        float: left;
+        /*line-height: 6.8vh;*/
+        margin-left:15px;
+        font-size:16px;
+        font-weight:bold;
+        color:rgba(51,51,51,1);
+        font-family:Source Han Sans CN;
+    }
+    .around .jia{
+        float: right;
+        margin-right:27px;
+        /*line-height: 6.8vh;*/
+        font-size:16px;
+        color:rgba(51,51,51,1);
+        font-family:Source Han Sans CN;
+    }
+    .around .num{
+        float: right;
+        font-size:16px;
+        font-family:Source Han Sans CN;
+        font-weight:bold;
+        line-height: 6.8vh;
+        color:rgba(51,51,51,1);
+    }
+
+    #projectOwnerNum{
+        font-size:31px;
+        font-family:Source Han Sans CN;
+        font-weight:400;
+        color:rgba(62,222,54,1);
+    }
+    #currentYearIncreaseProjectOwnerNum{
+        font-size:31px;
+        font-family:Source Han Sans CN;
+        font-weight:400;
+        color:rgba(54,188,222,1);
+    }
+    #contactNum{
+        font-size:31px;
+        font-family:Source Han Sans CN;
+        font-weight:400;
+        color:rgba(148,153,255,1);
+    }
+    #currentYearContactIncreaseNum{
+        font-size:31px;
+        font-family:Source Han Sans CN;
+        font-weight:400;
+        color:rgba(56,209,247,1);
+    }
+    #policymakerNum{
+        font-size:31px;
+        font-family:Source Han Sans CN;
+        font-weight:400;
+        color:rgba(255,241,0,1);
+    }
+    #bottom_conter1{
+        height:100%
+    }
+</style>
+<div class="around">
+    <div class="top">
+        <div id="top_left">
+            <div class="case">
+                <div class='left'><img src="../../assetsInfo/images/dataBoard3/huiyishi.png" class="caseLogo"></div>
+                <div class="caseTitle">行业会议安排（季度）</div>
+            </div>
+            <div class="tables">
+                <table id="companyCase" lay-filter="companyCase"></table>
+            </div>
+        </div>
+        <div id="top_right">
+            <div class="case">
+                <div class='left'><img src="../../assetsInfo/images/dataBoard3/jihua.png" class="caseLogo"></div>
+                <div class="caseTitle">近期交流计划</div>
+            </div>
+            <div class="tables">
+                <table id="ranking" lay-filter="ranking"></table>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div id="bottom_left">
+            <div class="item">
+                <img class="sort" src="../../assetsInfo/images/dataBoard3/企业.png" alt="" />
+                <div class="name" id="bottom_right_name1">合作企业总数</div>
+                <div class="jia">家</div>
+                <div class="num">
+                    <div id="projectOwnerNum" class="dw_right"></div>
+                </div>
+            </div>
+            <div class="item">
+                <img class="sort" src="../../assetsInfo/images/dataBoard3/新增企业.png" alt="" />
+                <div class="name" id="bottom_right_name2">新增合作企业数</div>
+                <div class="jia">家</div>
+                <div class="nums2 num">
+                    <div id="currentYearIncreaseProjectOwnerNum" class="dw_right"></div>
+                </div>
+            </div>
+            <div class="item">
+                <img class="sort" src="../../assetsInfo/images/dataBoard3/联系人.png" alt="" />
+                <div class="name" id="bottom_right_name3">联系人总数</div>
+                <div class="jia">人</div>
+                <div class="nums3 num" >
+                    <div id="contactNum" class="dw_right"></div>
+                </div>
+            </div>
+            <div class="item">
+                <img class="sort" src="../../assetsInfo/images/dataBoard3/新增联系人.png" alt="" />
+                <div class="name" id="bottom_right_name4">本年新增数</div>
+                <div class="jia">人</div>
+                <div class="nums4 num" >
+                    <div id="currentYearContactIncreaseNum" class="dw_right"></div>
+                </div>
+            </div>
+            <div class="item">
+                <img class="sort" src="../../assetsInfo/images/dataBoard3/核心决策人.png" alt="" />
+                <div class="name" id="bottom_right_name5">核心决策人总数</div>
+                <div class="jia">人</div>
+                <div class="nums5 num">
+                    <div id="policymakerNum" class="dw_right"></div>
+                </div>
+            </div>
+        </div>
+        <div id="bottom_conter">
+            <div class="case">
+                <div class='left'><img src="../../assetsInfo/images/dataBoard3/shujufenxi 拷贝 2.png" class="caseLogo"></div>
+                <div class="caseTitle">交流频次热点图</div>
+            </div>
+            <div id="bottom_conter1"></div>
+        </div>
+        <div id="bottom_right">
+            <div class="case">
+                <div class='left'><img src=".../../assetsInfo/images/dataBoard3/ziyuan.png" class="caseLogo"></div>
+                <div class="caseTitle">30天内新开拓客户</div>
+            </div>
+            <div class="tables">
+                <table id="automobile" lay-filter="automobile"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<script src="../../assetsInfo/echarts.js"></script>-->
+<!--<script src="../../assetsInfo/libs/china.js"></script>-->
+<script>
+
+    //地图
+    window.addEventListener("resize", function () {
+        bottom_center.resize();
+    });
+    var bottom_center = echarts.init($("#bottom_conter1")[0]);
+    setMapData()
+
+    function setMapData(){
+        var success = function (data) {
+            if(data.length === 0){
+                setmyChart3([]);
+                return
+            }
+            var callback = JSON.stringify(data)
+            callback = callback.replace(/province/g,"name")
+            callback = callback.replace(/frequency/g,"value")
+            var json = JSON.parse(callback)
+            setmyChart3(json);//调用柱状图数据
+        }
+        $.ajax({
+            type: "get",
+            url: "/api/industymeeting/communicationFrequency?order=desc&orderBy=frequency",
+            success: success
+        });
+    }
+    function setmyChart3(json){
+        bottom_center.setOption(getmyChart4(json), true)
+
+    }
+    function getmyChart4(json) {
+        var mapFeatures = echarts.getMap('china').geoJson.features;
+        let res = []
+        var data = json.data
+        //获取各省市的经纬度
+        //存放结果数组
+        mapFeatures.forEach(function (v) {
+            // 地区名称
+            let name = v.properties.name;
+            //经纬度的数组,深拷贝一下
+            let value = JSON.parse(JSON.stringify(v.properties.cp))
+            //显示的value值先都弄成0,之后再换成后台传的
+            value.push(0)
+            res.push({name,value})
+            // 地区经纬度
+        });
+        //处理南海的显示问题
+        res.push({name:"南海诸岛",value:[0,0,0]})
+        //处理真正的值
+        if(json.length !== 0){
+            res.forEach(item=>{
+                data.forEach(ite=>{
+                    if(item.name == ite.name){
+                        item.value[2] = ite.value
+                    }
+                })
+            })
+            //因为传过来的就是排好的,所以第一个值就是最大值
+            var max = function (data) {
+                if(data.length===0){
+                    return Number(0)
+                }else{
+                    return Number(data[0].value)
+                }
+            }
+            // //最后一个就是最小值
+            // var min = function (data) {
+            //     return Number(data[data.length-1].value)
+            // }
+        }else{
+            var max = function (data) {
+                return 0
+            }
+            //最后一个就是最小值
+            var min = function (data) {
+                return 0
+            }
+        }
+        //最终值处理完的结果是[{name:"天津",value[经度,纬度,值]}]
+        var option = {
+            tooltip: {
+                trigger: 'item',
+                triggerOn:"click",
+                confine:true,
+                //提示框的位置
+                position:"left",
+                //提示框是否能被点击
+                enterable: true,
+                //提示框是否一直展示
+                alwaysShowContent: false,
+                formatter: function (params) {
+                    if(!params.data.value[2]&&params.data.value[2]!=0){
+                        return params.name + '：<span style="font-size:22px;color:rgba(122,233,229,1);">无数据</span>'
+                    }else{
+                        var res = params.name + '：<span style="font-size:22px;color:rgba(122,233,229,1);">' + params.data.value[2] + '</span>频次'
+                    }
+                    return res
+                },
+                textStyle: {
+                    fontFamily: 'PingFangSC-Regular',
+                    fontSize: 12,
+                    lineHeight: 18
+                },
+                backgroundColor: 'rgba(0,22,30,0.4)',
+                borderColor: 'rgba(27, 113, 110, 0.5)',
+                borderWidth: '1px',
+                padding: [10, 10, 10, 10],
+                extraCssText: 'border-radius:2px;',
+            },
+            legend: {
+            },
+            visualMap: {
+                // 左上角的颜色区域
+                type: "piecewise", // 定义为分段型 visualMap
+                min: 0,
+                max: max(data),
+                inverse: true,
+                itemWidth: 40,
+                top: 10,
+                left: 10,
+                pieces: [
+                    { gt: 30, lte: 999999999, label: "30以上", color: "#00478B" },
+                    { gt: 20, lte: 30, label: "30", color: "#0089EA" },
+                    { gt: 10, lte: 20, label: "20", color: "#86CDFF" },
+                    { gt: 0, lte: 10, label: "10", color: "#D1F6FD" },
+                    { value:0, label: "无数据", color: "#D8D8D8" }
+                ]
+            },
+            geo: {
+                map: 'china',
+                zoom:0.9,
+                roam: true,
+                left:"23%",
+                top:"6%",
+                label: {
+                    normal: {
+                        show: true,
+                        textStyle: {
+                            color: "#e2e2e2",
+                            fontSize: 8
+                        },
+                    },
+                    emphasis: {
+                        show: false,
+                        textStyle: {
+                            color: "#000000"
+                        },
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        areaColor: 'rgba(15, 118, 132, 0.9)',
+                        color: 'rgba(128, 128, 128, 0)'
+                    },
+                    emphasis: {
+                        areaColor: 'rgba(239,197,73,0.9)',
+                    }
+                }
+            },
+
+            series: [
+                {
+                    type: 'map',
+                    geoIndex: 0,
+                    data: res,
+                    showLegendSymbol:false,
+                }
+            ]
+        };
+        return option;
+    }
+
+
+
+    //时间戳转换年月日
+    function timestampToTime(timestamp) {
+        var date = new Date(timestamp);
+        Y = date.getFullYear();
+        M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
+        D = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+        return Y + '-'+ M+ '-' + D;
+
+    }
+
+    layui.use(['table', 'admin'], function () {
+        var table = layui.table,
+            admin = layui.admin;
+
+        var now = new Date();                    //当前日期
+        var nowDayOfWeek = now.getDay();         //今天本周的第几天
+        var nowDay = now.getDate();              //当前日
+        var nowMonth = now.getMonth();           //当前月
+        var nowYear = now.getYear();             //当前年
+        nowYear += (nowYear < 2000) ? 1900 : 0;  //
+        //格式化日期
+        function formatDate(date) {
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth()+1;
+            var myweekday = date.getDate();
+            if(mymonth < 10){
+                mymonth = "0" + mymonth;
+            }
+            if(myweekday < 10){
+                myweekday = "0" + myweekday;
+            }
+            return (myyear+"-"+mymonth + "-" + myweekday);
+        }
+
+        //获得某月的天数
+        function getMonthDays(myMonth){
+            var monthStartDate = new Date(nowYear, myMonth, 1);
+            var monthEndDate = new Date(nowYear, myMonth + 1, 1);
+            var   days   =   (monthEndDate   -   monthStartDate)/(1000   *   60   *   60   *   24);
+            return   days;
+        }
+
+        //获得本季度的开始月份
+        function getQuarterStartMonth(){
+            var quarterStartMonth = 0;
+            if(nowMonth<3){
+                quarterStartMonth = 0;
+            }
+            if(2<nowMonth && nowMonth<6){
+                quarterStartMonth = 3;
+            }
+            if(5<nowMonth && nowMonth<9){
+                quarterStartMonth = 6;
+            }
+            if(nowMonth>8){
+                quarterStartMonth = 9;
+            }
+            return quarterStartMonth;
+        }
+
+        //获得本周的开始日期
+        function getWeekStartDate() {
+            var weekStartDate = new Date(nowYear, nowMonth, nowDay+1 - nowDayOfWeek);
+            return formatDate(weekStartDate);
+        }
+
+        //获得本周的结束日期
+        function getWeekEndDate() {
+            var weekEndDate = new Date(nowYear, nowMonth, nowDay + (7 - nowDayOfWeek));
+            return formatDate(weekEndDate);
+        }
+        //获得本季度的开始日期
+        function getQuarterStartDate(){
+
+            var quarterStartDate = new Date(nowYear, getQuarterStartMonth(), 1);
+            return formatDate(quarterStartDate);
+        }
+
+        //获取本季度的结束日期
+        function getQuarterEndDate(){
+            var quarterEndMonth = getQuarterStartMonth() + 2;
+            var quarterStartDate = new Date(nowYear, quarterEndMonth, getMonthDays(quarterEndMonth));
+            return formatDate(quarterStartDate);
+        }
+        //获取当前日期
+        var myDate = new Date();
+        var nowY = myDate.getFullYear();
+        var nowM = myDate.getMonth()+1;
+        var nowD = myDate.getDate();
+        var enddate = nowY+"-"+(nowM<10 ? "0" + nowM : nowM)+"-"+(nowD<10 ? "0"+ nowD : nowD);//当前日期
+        //获取30天前的日期
+        var lw = new Date(myDate - 1000 * 60 * 60 * 24 * 29);//最后一个数字30可改，30天的意思
+        var lastY = lw.getFullYear();
+        var lastM = lw.getMonth()+1;
+        var lastD = lw.getDate();
+        var startdate=lastY+"-"+(lastM<10 ? "0" + lastM : lastM)+"-"+(lastD<10 ? "0"+ lastD : lastD);//三十天之前日期
+        // 行政会议安排（季度）
+        var companyCols = [
+            [
+                {
+                    field: 'imDate',
+                    title: '日期',
+                    align: 'center',
+                    templet: function (d) {
+                        var text = d.imDate ? timestampToTime(d.imDate) : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                },
+                {
+                    field: 'imPlace',
+                    title: '地点',
+                    align: 'center',
+                    templet: function (d) {
+                        var text = d.imPlace ? d.imPlace : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                field: 'imName',
+                title: '会议',
+                align: 'center',
+                templet: function (d) {
+                    var text = d.imName ? d.imName : "";
+                    return '<div title="' + text + '"><span>' + text + '</span></div>'
+                }
+            }, {
+                field: 'departName',
+                title: '负责部门',
+                align: 'center',
+                templet: function (d) {
+                    var text = d.departName ? d.departName : "";
+                    return '<div title="' + text + '"><span>' + text + '</span></div>'
+                }
+            }]
+        ]
+        showTable('companyCase', '/api/industymeeting/meeting/page', companyCols,{imDate1:enddate+' 00:00:00',imDate2:getQuarterEndDate()+" 23:59:59",orderBy : 'IM_DATE',
+            order : 'ASC'})
+        // 近期交流计划
+        var rankingCols = [
+            [
+                {
+                    field: 'epDate',
+                    title: '日期',
+                    align: 'center',
+                    templet: function (d) {
+                        var text = d.ext2 ? d.ext2 : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                field: 'epForm',
+                title: '形式',
+                align: 'center',
+                templet: function (d) {
+                    var text = d.epForm ? d.epForm : "";
+                    return '<div title="' + text + '"><span>' + text + '</span></div>'
+                }
+            },
+                {
+                    field: 'epEnterprise',
+                    title: '企业',
+                    align: 'center',
+                    templet: function (d) {
+                        var text = d.epEnterprise ? d.epEnterprise : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                field: 'epExchangeDomain',
+                title: '交流领域',
+                align: 'center',
+                templet: function (d) {
+                    var text = d.epExchangeDomain ? d.epExchangeDomain : "";
+                    return '<div title="' + text + '"><span>' + text + '</span></div>'
+                }
+            }, {
+                field: 'epLeaderName',
+                title: '建议领导',
+                align: 'center',
+                templet: function (d) {
+                    var text = d.epLeaderName ? d.epLeaderName : "";
+                    return '<div title="' + text + '"><span>' + text + '</span></div>'
+                }
+            }]];
+        // ext1 用于标记是否是看板页面的请求
+        showTable('ranking', '/api/exchangeplan/exchangePlan/page', rankingCols,{orderBy :"EP_DATE",
+            order : 'ASC',ext1:"1"})
+        // 30天内新开拓客户
+        var automobileClos = [[
+            {
+                field: 'enterpriseName',
+                title: '企业',
+                align: 'center',
+                templet: function (d) {
+                    var text = d.enterpriseName ? d.enterpriseName : "";
+                    return '<div title="' + text + '"><span>' + text + '</span></div>'
+                }
+            }, {
+                field: 'enterpriseDomain',
+                title: '领域',
+                align: 'center',
+                templet: function (d) {
+                    var text = d.enterpriseDomain ? d.enterpriseDomain : "";
+                    return '<div title="' + text + '"><span>' + text + '</span></div>'
+                }
+            },
+        ]];
+        showTable('automobile', '/api/customerresourcemanage/enterprise/page', automobileClos,
+            {createTime1:startdate+' 00:00:00',createTime2:enddate+" 23:59:59",sql_filter:'order by CREATE_TIME desc,id'})
+        // 请求数据
+        function showTable(tableId, api, cols,data={}) {
+            var heightTable = $(document).height()-140;
+            table.render({
+                elem: '#' + tableId,
+                id: tableId,
+                url: admin.formatUrl(api),
+                where:data,
+                parseData: function (res) {
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                cols: cols,
+                height: heightTable,
+                cellMinWidth: 90,
+                page: {
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                },
+                request: {
+                    page: 'pageNo',
+                    limitName: 'pageSize'
+                }
+            });
+        }
+    })
+    //获取当前年份
+    var myDate = new Date();
+    var tYear = myDate.getFullYear();
+    //合作企业总数
+    bottom_lef('/api/customerresourcemanage/contacts/newContactsStatistics/'+tYear,{},'#bottom_right_num1')
+    //
+    // //新增合作企业数
+    // bottom_lef('/api/budget/project/projectOwnerStatistics',{projectYear:tYear},'#bottom_right_num2')
+    // //联系人总数
+    // bottom_lef('/api/customerresourcemanage/contacts/contactsStatistics',{},'#bottom_right_num3')
+    // //本年新增数
+    // bottom_lef('/api/customerresourcemanage/contacts/contactsStatistics',{year:tYear},'#bottom_right_num4')
+    // //核心决策人总数
+    // bottom_lef('/api/customerresourcemanage/contacts/contactsStatistics',{effectName:'高层'},'#bottom_right_num5')
+
+    //左下角
+    function bottom_lef(url,data={},name) {
+        $.ajax({
+            type: "get",
+            url: url,
+            data:data,
+            success: function (res) {
+                for (var item in res.data){
+                    if(res.data[item]){
+                        $("#"+item).text(res.data[item])
+                    }else{
+                        $("#"+item).text(0)
+                    }
+                }
+            }
+        });
+    }
+
+</script>

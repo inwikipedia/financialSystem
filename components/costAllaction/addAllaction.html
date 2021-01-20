@@ -1,0 +1,127 @@
+<style>
+    .addResearch .layui-layer-page .layui-layer-content {
+        overflow: visible;
+    }
+
+    .addResearch .layui-form-label {
+        width: 105px;
+    }
+
+    .addResearch .layui-input-block {
+        margin-left: 145px;
+    }
+
+    .addResearch .layui-form-select dl {
+        top: 32px;
+    }
+</style>
+<div class="layui-tpl-container layui-form addResearch" style="padding-bottom: 60px;">
+    <div class="layui-row" id="user-area">
+        <div class="layui-col-md6">
+            <!-- 新增和编辑表单 -->
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red;">*</span> 成本名称</label>
+                <div class="layui-input-block">
+                    <input type="text" placeholder="请输入成本名称" class="layui-input" name="bgName" id="bgName"
+                        lay-verify="required" maxlength="80" autocomplete="off">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red;">*</span> 成本编号</label>
+                <div class="layui-input-block">
+                    <input type="text" placeholder="请输入成本编号" class="layui-input" name="bgNumber" id="bgNumber"
+                        lay-verify="required" maxlength="80" autocomplete="off">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red;">*</span> 负责部门</label>
+                <div class="layui-input-block">
+                    <input type="text" placeholder="请输入部门" class="layui-input" name="departName" id="departName"
+                        lay-verify="required" autocomplete="off">
+                    <input type="text" name="departId" id="departId" style="display: none;">
+                    <img class="deptName" src="/assetsInfo/images/bumen.png" alt=""
+                        style="position:absolute; right:23px;top:6px">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red;">*</span> 成本状态</label>
+                <div class="layui-input-block">
+                    <select name="bgStatus" id="bgStatus" lay-filter="bgStatus" lay-verify="required">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <input type="text" name="type" id="type" style="display: none;">
+        </div>
+    </div>
+    <!-- 提交按钮 -->
+    <!-- 取消按钮 -->
+    <div class="layui-form-item" style="text-align: center;position: absolute;bottom: 0;left: 0;right: 0;">
+        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="research">保存</button>
+        <button class="layui-btn layui-btn-primary" id="menuCancle_user">取消</button>
+    </div>
+</div>
+</div>
+
+<script>
+    layui.use(['laydate', 'admin'], function () {
+        var laydate = layui.laydate,
+            admin = layui.admin,
+            form = layui.form;
+        laydate.render({
+            elem: "#deadTime",
+            type: "year"
+        });
+        // 本部选择
+        $('#departName').on('click', function () {
+            function deptName(data) {
+                $('#departName').val(data.name);
+                $('#departId').val(data.id);
+            }
+            dept(deptName)
+        })
+        // 下拉框赋值
+        admin.req('/api/sys/dictype/page?dicId=7BWYU4JQ7B', {}, function (data) {
+            var arr = data.data.list;
+            $.each(arr, function (index, item) {
+                $('#bgStatus').append(new Option(item.dicTypeName, item.id));
+            })
+            if (parent.ywManage.bgStatus != '') {
+                $('#bgStatus').val(parent.ywManage.bgStatus)
+            }
+            layui.form.render("select");
+        }, { method: 'get' })
+        function dept(callback) {
+            layer.open({
+                type: 2,
+                id: 'orgsSelect',
+                title: false,
+                moveOut: true,
+                content: 'components/manageYw/caderLayer.html',
+                area: ['50%', '70%'],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var finalData = $('#orgsSelect iframe')[0].contentWindow
+                        .task_orgs_select.finish();
+                    // 获取到数据，执行回掉函数
+                    if (finalData.id == '' || finalData.name == '') {
+                        return layer.msg('请选择组织机构', {
+                            icon: 0
+                        });
+                    }
+                    callback && typeof callback === 'function' && callback(
+                        finalData);
+                    layer.close(index);
+                },
+                resize: false
+            });
+        }
+    })
+    function getValue(obj) {
+        company = obj;
+    }
+    // 取消按钮
+    $('#menuCancle_user').on('click', function () {
+        layui.admin.closePopupCenter();
+    });
+</script>

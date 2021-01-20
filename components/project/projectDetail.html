@@ -1,0 +1,1062 @@
+<link rel="stylesheet" href="../../assetsInfo/css/duty.css">
+<link rel="stylesheet" href="../../assetsInfo/libs/adcganttchart/jquery.fn.adcganttchart.css">
+<link rel='stylesheet' href='../../assetsInfo/libs/fullcalendar/fullcalendar.css' />
+
+<script src='../../assetsInfo/libs/fullcalendar/moment.min.js'></script>
+<script src='../../assetsInfo/libs/fullcalendar/fullcalendar.js'></script>
+<script src="../../assetsInfo/libs/fullcalendar/lunar.js"></script>
+<script src="../../assetsInfo/libs/fullcalendar/zh-cn.js"></script>
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<div class="layui-tab layui-tab-brief" lay-filter="adc-tab">
+    <!-- tab头部内容 -->
+    <ul class="layui-tab-title">
+        <li class="layui-this">概览</li>
+        <!-- <li>任务</li>
+        <li>账目</li> -->
+        <li>日程表</li>
+    </ul>
+    <div >
+        <div class="layui-tab-item layui-show">
+            <div class="layui-row layui-col-space12">
+                <div class="layui-col-md12" style="margin-top: 6px">
+                    <!--卡片面板-->
+                    <div class="layui-card ">
+                        <!--<div class="layui-card-header"><span class="layui-card-header-title">项目组职责及项目现状</span></div>-->
+                        <!--卡片面板body-->
+                        <div class="layui-card-body layui-data-top">
+                            <!--顶部数据-->
+                            <div class="layui-row layui-col-space12">
+                                <div class="layui-col-sm6 layui-col-md3">
+                                    <div class="dataDiv">
+                                        <div class="dataDivimg"><img src="../assetsInfo/images/duty-img1.png"></div>
+                                        <div class="dataDivtxt">
+                                            <p class="dataval data01" id="taskTotal">0</p>
+                                            <p class="datatit">任务总数</p>
+                                        </div>
+                                        <div class="line"></div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-sm6 layui-col-md3">
+                                    <div class="dataDiv">
+                                        <div class="dataDivimg"><img src="../assetsInfo/images/duty-img2.png"></div>
+                                        <div class="dataDivtxt">
+                                            <p class="dataval data02" id="finisheNum">0</p>
+                                            <p class="datatit">已完成任务</p>
+                                        </div>
+                                        <div class="line"></div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-sm6 layui-col-md3">
+                                    <div class="dataDiv">
+                                        <div class="dataDivimg"><img src="../assetsInfo/images/duty-img3.png"></div>
+                                        <div class="dataDivtxt">
+                                            <p class="dataval data03" id="joinPersion">0</p>
+                                            <p class="datatit">项目参与人员</p>
+                                        </div>
+                                        <div class="line"></div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-sm6 layui-col-md3">
+                                    <div class="dataDiv dataDiv-last">
+                                        <div class="dataDivimg"><img src="../assetsInfo/images/duty-img4.png"></div>
+                                        <div class="dataDivtxt">
+                                            <p class="dataval data04" id="projectExpense">0</p>
+                                            <p class="datatit">项目总支出</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!--图表区域-->
+            <div class="layui-row layui-col-space12">
+                <!--图表1-->
+                <div class="layui-col-md6 layui-col-sm6 layui-col-xs12">
+                    <div class="layui-card">
+                        <div class="layui-card-header"><span class="layui-card-header-title">任务完成情况表</span></div>
+                        <div class="layui-card-body" style="padding: 0px">
+                            <div id="chart-bar" style=" height:260px; margin: auto;"></div>
+                        </div>
+                    </div>
+                </div>
+                <!--图表2-->
+                <div class="layui-col-md6 layui-col-sm6 layui-col-xs12">
+                    <div class="layui-card">
+                        <div class="layui-card-header"><span class="layui-card-header-title">人员投入工时情况表</span></div>
+                        <div class="layui-card-body" style="padding: 0px">
+                            <div id="chart-line" style=" height:260px; margin: auto;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row layui-col-space12">
+                <!--甘特图-->
+                <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+                    <div id="GantChart"></div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="layui-tab-item"></div>
+        <div class="layui-tab-item"></div> -->
+        <div class="layui-tab-item" style="height:100%">
+            <div class="layui-row layui-col-space12" style="height:100%">
+                <div class="layui-col-md12 card-show-list" style="height:100%">
+                    <div class="layui-card" style="height:95%;padding-top: 15px;padding-bottom: 30px;">
+                        <div id="main"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 新增/编辑日程弹窗 -->
+            <div id="addEventTpl" class="layui-form" lay-filter="addEventTpl" style="display: none;padding: 20px 20px 0px 20px;">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 事件名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="eventName" id="eventName" placeholder="请输入任务名称" class="layui-input" lay-verify="required">
+                    </div>
+                </div>
+                <table id="task" lay-filter="task"></table>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="description"><span style="color: red;">*</span> 工作描述</label>
+                    <div class="layui-input-block">
+                        <textarea type="text" placeholder="输入日程内容" class="layui-textarea" id="workDescription" name="workDescription" lay-verify="required"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 日报简要弹层 -->
+            <div id="eventSimpleTpl" class="layui-form" lay-filter="eventSimpleTpl" style="display: none;padding: 20px;margin-top: 15px;">
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="eventSimpleContent">日程内容</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="输入日程内容" class="layui-input" id="eventSimpleContent" name="eventSimpleContent" disabled>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="startTimeSimple">开始时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="选择开始时间" class="layui-input" id="startTimeSimple" name="startTimeSimple" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 任务列表复选框 -->
+<script type="text/html" id="isCompleteTpl">
+    <input type="checkbox" name="isComplete" value="未完成" lay-filter="isComplete">
+</script>
+
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<script src="../../assetsInfo/libs/adcganttchart/jquery.fn.adcganttchart.js"></script>
+<!-- <script src="http://192.168.1.13:8888/ADCGanttChart/js/jquery.fn.adcganttchart.js"></script> -->
+
+<script>
+    layui.use(['admin', 'layer', 'laydate', 'form', 'config', 'element', 'table', 'formSelects'], function() {
+        var admin = layui.admin;
+        var layer = layui.layer;
+        var laydate = layui.laydate;
+        var form = layui.form;
+        var config = layui.config;
+        var element = layui.element;
+        var table = layui.table;
+        var formSelects = layui.formSelects;
+
+
+        var itemData={};
+        // 项目信息
+        var isManage = false;
+        var projectId = admin.GetRequest().id;
+        var projectName = admin.GetRequest().name;
+
+        var myChartBar = echarts.init(document.getElementById('chart-bar'));
+        var myChartLine = echarts.init(document.getElementById('chart-line'));
+        showGant = function (){
+            admin.req('/api/budget/project/status/query/page/' + projectId, {}, function(res) {
+                isManage = res.data.projectLeader;
+                if (!res.data) {
+                    $('#chart-bar').html('<img src="../assetsInfo/images/empty.png">');
+                    $('#chart-bar img').css({
+                        "display": "block",
+                        'max-width': '220px',
+                        "margin": "auto"
+                    });
+                    $('#chart-line').html('<img src="../assetsInfo/images/empty.png">');
+                    $('#chart-line img').css({
+                        "display": "block",
+                        'max-width': '220px',
+                        "margin": "auto"
+                    });
+                    return layer.msg("暂无数据");
+                }
+                //顶部四块内容数据填充
+                var taskTotal = res.data.smaryNum.taskTotal;
+                var joinPersion = res.data.smaryNum.joinPersion;
+                var finisheNum = res.data.smaryNum.finisheNum;
+                var projectExpense = res.data.smaryNum.projectExpense;
+                $("#taskTotal").text(taskTotal);
+                $("#joinPersion").text(joinPersion);
+                $("#finisheNum").text(finisheNum);
+                $("#projectExpense").text(projectExpense);
+                //console.log(res.data.smaryNum.taskTotal);
+                //任务完成情况表
+                var arrT = res.data.taskStatus;
+                var newArrX = new Array();
+                var newArrY = new Array();
+                var temp = "";
+                var flagT = false; //用于标识Y轴是否又大于0的数据
+                //console.log(arrT);
+                $.each(arrT, function(index, value) {
+                    if (value.week < 0) {
+                        temp = "前" + Math.abs(value.week) + "周";
+                    } else {
+                        temp = "第" + value.week + "周";
+                    }
+                    if (value.taskNum > 0) {
+                        flagT = true;
+                    }
+                    newArrX.push(temp);
+                    newArrY.push(value.taskNum);
+                });
+                //人员投入工时情况表
+                var arrWorkT = res.data.workTime;
+                var newArrWorkX = new Array();
+                var newArrWorkY = new Array();
+                var temp = "";
+                var flagW = false; //用于标识Y轴是否又大于0的数据
+                $.each(arrWorkT, function(index, value) {
+                    if (value.week < 0) {
+                        temp = "前" + Math.abs(value.week) + "周";
+                    } else {
+                        temp = "第" + value.week + "周";
+                    }
+                    if (value.workTime > 0) {
+                        flagW = true;
+                    }
+                    newArrWorkX.push(temp);
+                    newArrWorkY.push(value.workTime);
+                });
+                //XY轴的数组不为空并且Y轴有大于0的数据 才执行填充图表
+                //console.log(newArrY);
+                //任务完成情况表
+                if (newArrX.length > 0 && newArrY.length > 0 && flagT == true) {
+                    optionOne(newArrX, newArrY);
+                } else {
+                    //$('#chart-bar').text('暂无数据').css({"font-size":"18px","color":"#afafaf","display":"flex","flex-direction":"column","justify-content":"center","align-items":"center"});
+                    $('#chart-bar').html('<img src="../assetsInfo/images/empty.png">');
+                    $('#chart-bar img').css({
+                        "display": "block",
+                        'max-width': '220px',
+                        "margin": "auto"
+                    });
+                }
+                //人员投入工时情况表
+                if (newArrWorkX.length > 0 && newArrWorkY.length > 0 && flagW == true) {
+                    optionTwo(newArrWorkX, newArrWorkY);
+                } else {
+                    //$('#chart-line').text('暂无数据').css({"font-size":"18px","color":"#afafaf","display":"flex","flex-direction":"column","justify-content":"center","align-items":"center"});
+                    $('#chart-line').html('<img src="../assetsInfo/images/empty.png">');
+                    $('#chart-line img').css({
+                        "display": "block",
+                        'max-width': '220px',
+                        "margin": "auto"
+                    });
+                }
+
+            });
+
+
+            function optionOne(dataX, dataY) {
+                // 图表1
+                var optionBar = {
+                    title: {
+                        show: false,
+                        text: '14.11个/天',
+                        x: 'center',
+                        textStyle: {
+                            color: '#888888',
+                            fontSize: 22,
+                            fontWeight: 100
+                        },
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#999'
+                            }
+                        }
+                    },
+                    legend: {
+                        show: false,
+                        data: ['任务']
+                    },
+                    xAxis: [{
+                        show: true, //---是否显示
+                        type: 'category',
+                        data: dataX,
+                        axisPointer: {
+                            //type: 'shadow'
+                        },
+                        axisLine: { //---坐标轴 轴线
+                            show: true, //---是否显示
+                            //------------------- 线 -------------------------
+                            lineStyle: {
+                                color: '#888888',
+                                width: 1,
+                                type: 'solid',
+                            },
+                        },
+                        axisTick: { //---坐标轴 刻度
+                            show: true, //---是否显示
+                            inside: false, //---是否朝内
+                            length: 3, //---长度
+                            lineStyle: {
+                                //color:'red',          //---默认取轴线的颜色
+                                width: 1,
+                                type: 'solid',
+                            },
+                        },
+                        axisLabel: { //---坐标轴 标签
+                            show: true, //---是否显示
+                            inside: false, //---是否朝内
+                            rotate: 0, //---旋转角度
+                            margin: 5, //---刻度标签与轴线之间的距离
+                            //color:'#000',              //---默认取轴线的颜色
+                        }
+                    }],
+                    yAxis: [{
+                        type: 'value',
+                        name: '任务',
+                        nameTextStyle: {
+                            color: '#888',
+                            fontSize: 14,
+                        },
+                        //min: 0,
+                        //max: 30,
+                        splitLine: {
+                            show: false
+                        },
+                        interval: 10,
+                        nameGap: 15, //---坐标轴名称与轴线之间的距离
+                        axisLine: { //---坐标轴 轴线
+                            show: true, //---是否显示
+                            //------------------- 线 -------------------------
+                            lineStyle: {
+                                color: '#888888',
+                                width: 1,
+                                type: 'solid',
+                            },
+                        },
+                        axisTick: { //---坐标轴 刻度
+                            show: true, //---是否显示
+                            inside: true, //---是否朝内
+                            length: 3, //---长度
+                            lineStyle: {
+                                //color:'red',          //---默认取轴线的颜色
+                                width: 1,
+                                type: 'solid',
+                            }
+                        },
+                        axisLabel: { //---坐标轴 标签
+                            show: true, //---是否显示
+                            inside: false, //---是否朝内
+                            rotate: 0, //---旋转角度
+                            margin: 5, //---刻度标签与轴线之间的距离
+                            //color:'#888888'              //---默认取轴线的颜色
+                        }
+                    }],
+                    series: [{
+                        name: '任务',
+                        type: 'bar',
+                        barWidth: '55%',
+                        data: dataY,
+                        barMaxWidth: '30',
+                        itemStyle: {
+                            normal: {
+                                //barBorderRadius: 15,
+                                color: new echarts.graphic.LinearGradient(
+                                    0, 0, 0, 1, [{
+                                        offset: 0,
+                                        color: '#36cbcc'
+                                    }, {
+                                        offset: 1,
+                                        color: '#24a3f6'
+                                    }]
+                                )
+                            }
+                        }
+                    }],
+                    color: ['#24a3f6']
+                };
+                myChartBar.setOption(optionBar);
+            }
+
+            function optionTwo(dataX, dataY) {
+                // 图表2
+                var optionLine = {
+                    title: {
+                        show: false,
+                        text: '124人/天',
+                        x: 'center',
+                        textStyle: {
+                            color: '#888888',
+                            fontSize: 22,
+                            fontWeight: 100
+                        },
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#999'
+                            }
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: dataX,
+                        axisLine: { //---坐标轴 轴线
+                            show: true, //---是否显示
+                            //------------------- 线 -------------------------
+                            lineStyle: {
+                                color: '#888888',
+                                width: 1,
+                                type: 'solid',
+                            },
+                        },
+                        axisTick: { //---坐标轴 刻度
+                            show: true, //---是否显示
+                            inside: false, //---是否朝内
+                            lengt: 3, //---长度
+                            lineStyle: {
+                                //color:'red',          //---默认取轴线的颜色
+                                width: 1,
+                                type: 'solid',
+                            },
+                        },
+                        axisLabel: { //---坐标轴 标签
+                            show: true, //---是否显示
+                            inside: false, //---是否朝内
+                            rotate: 0, //---旋转角度
+                            margin: 5, //---刻度标签与轴线之间的距离
+                            //color:'#000',              //---默认取轴线的颜色
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        name: '工时',
+                        nameTextStyle: {
+                            color: '#888',
+                            fontSize: 14,
+                        },
+                        min: 0,
+                        //max: 30,
+                        interval: 10,
+                        //minInterval : 5,
+                        //splitNumber:30,
+                        splitLine: {
+                            show: false
+                        },
+                        axisLine: { //---坐标轴 轴线
+                            show: true, //---是否显示
+                            //------------------- 线 -------------------------
+                            lineStyle: {
+                                color: '#898989',
+                                width: 1,
+                                type: 'solid',
+                            },
+                        },
+                        axisTick: { //---坐标轴 刻度
+                            show: true, //---是否显示
+                            inside: true, //---是否朝内
+                            length: 3, //---长度
+
+                            lineStyle: {
+                                //color:'red',          //---默认取轴线的颜色
+                                width: 1,
+                                type: 'solid',
+                            }
+                        },
+                        axisLabel: { //---坐标轴 标签
+                            show: true, //---是否显示
+                            inside: false, //---是否朝内
+                            rotate: 0, //---旋转角度
+                            margin: 5, //---刻度标签与轴线之间的距离
+                            //color:'#24a3f6'              //---默认取轴线的颜色
+                        }
+                    },
+                    series: [{
+                        data: dataY,
+                        type: 'line',
+                        smooth: true,
+                        symbolSize: 1,
+                        areaStyle: {
+                            color: '#d7f2ff'
+                        }
+                    }],
+                    color: ['#24a3f6']
+                };
+                myChartLine.setOption(optionLine);
+            }
+
+            setTimeout(function() {
+                $("#GantChart").empty();
+                    var demo = $('#GantChart').ADCGanttChart({
+                        url: '/api/budget/project/status/query/' + projectId + '/gantt',
+                        styleBarStart: ""
+                    });
+                    var ele = ' <button style="float: right;height: 34px;line-height: 33px; padding: 0px 11px 0 10px;border-color: #ddd;color: #949494;" class="layui-btn layui-btn-sm layui-maincolor" id="btn-add-task" title="添加任务">\n' +
+                        '                                    <i class="layui-icon  layui-icon-add-1"></i>\n' +
+                        '                                    添加任务\n' +
+                        '                                </button>';
+                    $("#GantChart .adc-ganttchart-toolbar").append(ele);
+                    if ( !isManage ){
+                        $("#btn-add-task").hide();
+                    }
+                    /*
+                              任务添加
+                            */
+                    $('#btn-add-task').on('click', function() {
+                        popMenu('add')
+                    });
+                    // 最下方甘特图全屏
+                    $(".adc-ganttchart-container").css(
+                        {"min-height": $(window).height() - $(".adc-ganttchart-container").offset().top -15,
+                            "overflow": "auto"});
+                },
+                500);
+        };
+
+        showGant();
+
+        /*
+         任务弹窗
+        */
+        function popMenu(handleType, data) {
+            var params = {};
+            var title = "任务添加";
+            if (handleType === 'edit') {
+                title = data.name + '任务编辑';
+                params = data;
+            }
+            params.handleType = handleType;
+            admin.popupCenter({
+                title: title,
+                path: 'components/tpl/task_save_form.html',
+                finish: function() {
+                    $('#projectListSelect').val();
+                    form.render('select');
+                    showGant();
+                },
+                success: function() {
+                    setFormValue(params);
+                }
+            });
+        };
+        /*
+            初始化表单
+          */
+        function setFormValue(obj) {
+            var title = $('.layui-tpl-container .layui-card-header');
+            var formNames = ['id', 'handleType', 'name', 'planStartTime', 'planEndTime', 'taskStatus'];
+            obj.title && title.text(obj.title);
+            obj.planStartTime = obj.planStartTime ? formatDate(obj.planStartTime) : '';
+            obj.planEndTime = obj.planEndTime ? formatDate(obj.planEndTime) : '';
+            for (var i = 0; i < formNames.length; i++) {
+                if (obj[formNames[i]]) {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                } else {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val('');
+                }
+            }
+
+            //初始化项目
+
+            setTaskMember(obj);
+            formSelects.data('taskStatus_blong', 'local', {
+                arr: [{name:'未完成',value:'未完成',},{name:'已完成',value:'已完成'}]
+            });
+
+            if(obj.taskStatus)
+            {
+                formSelects.value('taskStatus_blong', [obj.taskStatus]);
+                form.render();
+            }
+
+            formSelects.data('priority_blong', 'local', {
+                arr: [{name:'普通',value:'普通'},{name:'紧急',value:'紧急'},{name:'十分紧急',value:'十分紧急'}]
+            });
+
+            if(obj.priority)
+            {
+                formSelects.value('priority_blong', [obj.priority]);
+                form.render();
+            }
+            obj.projectId=projectId;
+
+            if(obj.handleType=='add')
+            {
+                $('#business_form').hide();
+                setTaskMember(0,obj.projectId,obj);
+                setProjectData(obj);
+                obj.type=0;
+                $('input:radio:last').prop('checked', 'checked');
+            }
+            form.render('radio');
+            itemData=obj;
+
+        };
+
+        function setTaskMember(type,id) {
+
+            if(!id)
+            {
+                var elem = $('#memberIds_blong');
+                elem.empty().append('');
+                formSelects.render('memberIds_blong');
+                formSelects.btns('memberIds_blong', []);
+                return;
+            }
+            var url='';
+            url='/api/budget/project/query/' + id;
+            admin.req(url, {
+
+            }, function(res) {
+
+                if(type==0)
+                {
+                    var arr = res.data.mapList;
+                }
+                else {
+                    var arr = res.data;
+                }
+                elem = $('#memberIds_blong');
+                if (arr == null || arr.length == 0) {
+                    elem.empty().append('');
+                }
+                else{
+                    elem.empty();
+                    for (var i = 0; i < arr.length; i++) {
+                        if(arr[i].name)
+                        {
+                            elem.append('<option value="' + arr[i].id + '">' + arr[i].name + '</option>');
+                        }
+                    }
+                }
+                formSelects.render('memberIds_blong');
+                formSelects.btns('memberIds_blong', []);
+            });
+
+        }
+
+        function setProjectData(obj)
+        {
+            admin.req('/api/budget/task/currentUserProject', {
+            }, function(res) {
+                var arr = res.data,
+                    elem = $('#project_blong');
+                if(arr.length==0)
+                {
+                    elem.empty().append('');
+                }
+                else {
+                    for (var i = 0; i < arr.length; i++) {
+                        if(arr[i].name)
+                        {
+                            if(i == 0) {
+                                elem.empty().append('<option value="' + arr[i].id + '">' + arr[i].name + '</option>');
+                            }else{
+                                elem.append('<option value="' + arr[i].id + '">' + arr[i].name + '</option>');
+                            }
+                        }
+                    }
+                }
+                formSelects.render('project_blong');
+                formSelects.btns('project_blong', []);
+                $("input:radio").attr("disabled","disabled");
+                $(".layui-input-block").css("overflow","");
+                $("dd[lay-value=" + projectId + "]").trigger("click");
+                if(obj.projectId)
+                {
+                    formSelects.value('project_blong', [obj.projectId]);
+                }
+                formSelects.disabled("project_blong");
+                form.render();
+            });
+
+        }
+
+    setTimeout(function() {
+            window.onresize = function() {
+                myChartBar.resize();
+                myChartLine.resize();
+                // myChartLine.resize();
+                // myChartPie.resize();
+            }
+        }, 200);
+
+
+        // ********************************************************************************
+
+        // 日期框初始化
+        laydate.render({
+            elem: '#startTime'
+        });
+        // 渲染任务列表
+        function renderTable(url, data, isEdited) {
+            if (!data) {
+                data = {};
+            }
+            // 加载动画
+            admin.showLoading('.layui-body');
+            table.render({
+                // table参数
+                id: 'task',
+                elem: '#task',
+                url: admin.formatUrl(url),
+                where: data,
+                parseData: function(res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        //"count": res.data.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+                },
+                cols: [
+                    [{
+                        type: 'checkbox'
+                    }, {
+                        type: 'numbers',
+                        title: '序号'
+                    }, {
+                        field: 'childrenName',
+                        title: '任务',
+                        align: 'center'
+                    }, {
+                        field: 'taskName',
+                        title: '任务',
+                        align: 'center',
+                        hide: true
+                    }, {
+                        field: 'workTime',
+                        title: '工时',
+                        align: 'center',
+                        edit: isEdited
+                    }, {
+                        field: 'taskStatus',
+                        title: '是否完成',
+                        templet: '#isCompleteTpl',
+                        align: 'center'
+                    }]
+                ],
+                page: false,
+                // 渲染表格完成后，去除加载动画
+                done: function() {
+                    admin.removeLoading('.layui-body');
+                    $(window).resize();
+                    if (!isEdited) {
+                        $("[name='isComplete']").attr("disabled", "");
+                    }
+                },
+                // 列宽最少 120，防止在小屏幕上显示不全列标题
+                cellMinWidth: 80
+            });
+        }
+        renderTable("/api/Daily/daily/children?projectId=" + projectId, null, true);
+        // 公共弹层方法
+        function layerfn(title, content, calEvent) {
+            var btn = null;
+            if (title.substr(0, 4) == "日程详情") {
+                btn = ["关闭"];
+            } else {
+                btn = ['确定', '关闭'];
+            }
+            layer.open({
+                type: 1,
+                title: title,
+                content: $("#" + content),
+                area: '500px',
+                success: function(layero, index) {
+                    // 解决蒙层遮住全部页面bug
+                    var mask = $(".layui-layer-shade");
+                    mask.appendTo(layero.parent());
+                    if (title.substr(0, 4) == "新增日程") {
+                        renderTable("/api/Daily/daily/children?projectId=" + projectId, null, true);
+                        //添加form标识
+                        layero.addClass("layui-form");
+                        layero.find(".layui-layer-btn0").attr("lay-filter", "btn-daily-save").attr("lay-submit", "");
+                        // 清空表单
+                        form.val("addEventTpl", {
+                            "eventName": "",
+                            "workDescription": ""
+                        });
+                        // 将表单变为可编辑状态
+                        $("#eventName").removeAttr("disabled").removeClass("layui-disabled");
+                        $("#workDescription").removeAttr("disabled").removeClass("layui-disabled");
+                    } else if (title.substr(0, 4) == "日程详情") {
+                        // renderTable("api/Daily/findOne/" + calEvent.id, null, false);
+                        // 表单回显
+                        form.val("addEventTpl", {
+                            "eventName": calEvent.title,
+                            "workDescription": calEvent.description
+                        });
+                        var arr = [];
+                        for (var i = 0; i < calEvent.taskIdArray.length; i++) {
+                            var obj = {};
+                            obj.childrenName = calEvent.taskIdArray[i];
+                            obj.workTime = calEvent.worktimeArray[i];
+                            obj.taskStatus = calEvent.taskStatusArray[i];
+                            arr.push(obj);
+                        }
+                        table.reload('task', {
+                            url: '',
+                            data: arr,
+                            cols: [
+                                [{
+                                    type: 'checkbox'
+                                }, {
+                                    type: 'numbers',
+                                    title: '序号'
+                                }, {
+                                    field: 'childrenName',
+                                    title: '任务',
+                                    align: 'center'
+                                }, {
+                                    field: 'taskName',
+                                    title: '任务',
+                                    align: 'center',
+                                    hide: true
+                                }, {
+                                    field: 'workTime',
+                                    title: '工时',
+                                    align: 'center',
+                                    edit: false
+                                }, {
+                                    field: 'taskStatus',
+                                    title: '是否完成',
+                                    templet: '#isCompleteTpl',
+                                    align: 'center'
+                                }]
+                            ],
+                            done: function() {
+                                $("td[data-field = 'taskStatus']").each(function() {
+                                    if ($(this).attr("data-content") == '已完成') {
+                                        $(this).find('.layui-unselect').addClass('layui-form-checked');
+                                    }
+                                })
+                            }
+                        });
+                        // 设置表单不可编辑状态
+                        $("#eventName").attr("disabled", "").addClass("layui-disabled");
+                        $("#workDescription").attr("disabled", "").addClass("layui-disabled");
+                        $("input[name='isComplete']").attr("disabled", "").addClass("layui-disabled");
+                    }
+                },
+                btn: btn,
+                btnAlign: 'c',
+                btn1: function(index, layero) {
+                    if (title.substr(0, 4) == "日程详情") {
+                        layer.close(index);
+                    } else {
+                        form.on('submit(btn-daily-save)', function(obj) {
+                            var data = obj.field,
+                                elem = data.elem;
+
+                            data.projectId = projectId;
+                            var checkStatus = table.checkStatus('task');
+                            if (checkStatus.data.length === 0) {
+                                return layer.msg('请选择子任务', {
+                                    icon: 0
+                                });
+                            }
+                            data.taskIdArray = [];
+                            data.taskStatusArray = [];
+                            var status = $("input[name='layTableCheckbox']").next(".layui-form-checked");
+                            for (var j = 0; j < status.length; j++) {
+                                var value = $(status[j]).parent().parent().siblings("[data-field='taskStatus']").find("input[type='checkbox']").val();
+                                if (value) {
+                                    data.taskStatusArray.push(value);
+                                }
+                            }
+                            data.workTimeArray = [];
+                            for (var i = 0; i < checkStatus.data.length; i++) {
+                                data.taskIdArray.push(checkStatus.data[i].Id);
+                                // data.taskStatusArray.push(checkStatus.data[i].taskName);
+                                if (checkStatus.data[i].workTime) {
+                                    data.workTimeArray.push(checkStatus.data[i].workTime);
+                                } else {
+                                    return layer.msg('请输入任务工时', {
+                                        icon: 0
+                                    });
+                                }
+                            }
+                            var ajaxType = 'post';
+                            delete data.handleType;
+                            delete data.layTableCheckbox;
+                            delete data.isComplete;
+                            admin.req('/api/Daily/save', data, function(data) {
+                                $(elem).attr('disabled', false);
+                                if (data.ok) {
+                                    layer.msg('保存成功！', {
+                                        icon: 1
+                                    });
+                                    layer.close(index);
+                                    $('#main').fullCalendar('refetchEvents');
+                                } else {
+                                    return layer.msg('保存失败：' + data.message, {
+                                        icon: 5
+                                    });
+                                    layer.close(index);
+                                }
+                            }, {
+                                method: ajaxType
+                            });
+                            // return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                    }
+                }
+            })
+        }
+        // 监听tab切换
+        element.on('tab(adc-tab)', function(data) {
+            $(window).resize();
+        });
+        form.on('checkbox(isComplete)', function(data) {
+            if (data.elem.checked) {
+                // $("input[name='isComplete']").val("完成");
+                data.othis.prev().val("已完成");
+            } else {
+                // $("input[name='isComplete']").val("未完成");
+                data.othis.prev().val("未完成");
+            }
+        });
+        // 日历部分
+        $('#main').fullCalendar({
+            customButtons: {
+                myCustomButton: {
+                    text: '添加事件',
+                    click: function() {
+                        $("#endTimeBlock").addClass("layui-hide");
+                        layerfn("新增日程", "addEventTpl", {
+                            time: "",
+                            isEnabled: true
+                        });
+                    }
+                },
+                listButton: {
+                    text: '列表',
+                    click: function() {
+
+                    }
+                }
+            },
+            // 日历头部
+            header: {
+                right: 'month, basicWeek, listButton',
+                left: 'prev, next, today, myCustomButton',
+                center: 'title'
+            },
+            height: "parent",
+            showNonCurrentDates: false,
+            eventLimit: true,
+            eventLimitText: function(data) {
+                return "还有" + data + "项..."
+            },
+            eventAfterRender: function(event, element, view) {
+                var $this = $(element);
+                //通过 操作 $this 可以从新定义dom
+                // 通过 wz_title wz_name 自定义css样式  例如：
+                $this.html("<div class=\"wz_title\">" + event.person + event.title + "</div>");
+                // $this.after("<div class=\"wz_name\">" + event.description + "</div>");
+            },
+            eventOrder: "description",
+            // 日历日程活动事件
+            events: function(start, end, timezone, callback) {
+                // 获得当前日历月份
+                var date = this.getDate().format('YYYY-MM');
+                // 获得后台数据
+                admin.req("/api/budget/projectSchedule/query", {
+                    "projectId": projectId,
+                    "scheduleBeginDate": start.format("YYYY-MM-DD"),
+                    "scheduleEndDate": end.format("YYYY-MM-DD")
+                }, function(json) {
+                    var events = [];
+                    // 遍历返回数据
+                    $.each(json.data, function(i, c) {
+                        // 将日程事件加入events数组
+                        events.push({
+                            id: c.id,
+                            title: c.dailyName,
+                            start: c.dailyCreateTime, // will be parsed
+                            color: '#ffddc6',
+                            description: c.description,
+                            createUserId: c.personId,
+                            taskIdArray: c.taskNameArray,
+                            worktimeArray: c.worktimeArray,
+                            taskStatusArray: c.taskStatusArray,
+                            person: c.personName
+                        });
+                    });
+                    // 回调函数
+                    callback(events);
+                }, {
+                    method: "post"
+                });
+            },
+            // 日历框点击事件
+            dayClick: function(date, jsEvent, view) {
+                var curDate = new Date().Format('yyyy-MM-dd');
+                var selectDate = date.format('YYYY-MM-DD');
+                // 根据项目id查询项目组成员
+                admin.req("/api/budget/project/query/" + projectId, {}, function(res) {
+                    // 新增日程弹层
+                    if (curDate == selectDate && res.data.projectMemberIds.indexOf(config.getAccount().usid) > -1) {
+                        layerfn("新增日程：" + projectName, "addEventTpl", {
+                            time: curDate
+                        });
+                    }
+                });
+            },
+            // 日程事件点击事件
+            eventClick: function(calEvent, jsEvent, view) {
+                // 获得日历当天日期
+                var curDate = new Date().Format('yyyy-MM-dd');
+                // 获取点击日程日期
+                var selectDate = calEvent.start.format('YYYY-MM-DD');
+                // 弹窗按钮
+                var btn = null;
+                layerfn("日程详情：" + calEvent.title, "addEventTpl", calEvent);
+            }
+        })
+
+        // 对Date的扩展，将 Date 转化为指定格式的String
+        // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
+        // 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+        Date.prototype.Format = function(fmt) { //author: meizz
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "H+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+
+    });
+</script>

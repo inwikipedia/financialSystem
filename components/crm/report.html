@@ -1,0 +1,587 @@
+<style>
+    .layui-tab {
+        visibility: visible !important;
+    }
+    
+    .card {
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px;
+        border-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1);
+    }
+    
+    .layui-card-body {
+        height: auto;
+    }
+    /*.report .layui-tab-content{ top:40px;}*/
+</style>
+
+<div class="report layui-tab layui-tab-brief" lay-filter="report-tab">
+    <ul class="layui-tab-title">
+        <li class="layui-this">经营合同</li>
+        <li>开票收入</li>
+        <li> 六大平台</li>
+        <li>三大板块</li>
+        <li>本部</li>
+        <li>合同，开票同期对比</li>
+        <li>合同汇总</li>
+    </ul>
+    <div class="layui-tab-content" style="top:40px;">
+        <div class="layui-tab-item layui-show">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <table id="tableContent-report1" lay-filter="tableContent-report1"></table>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab-item">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <table id="tableContent-report2" lay-filter="tableContent-report2"></table>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab-item">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    六大平台合同签定同期对比
+                </div>
+                <div class="layui-card-body">
+                    <div id="report3">
+                        <table id="tableContent-report3" lay-filter="tableContent-report3"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    六大平台开票收入同期对比
+                </div>
+                <div class="layui-card-body">
+                    <div id="report4">
+                        <table id="tableContent-report4" lay-filter="tableContent-report4"></table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-tab-item">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    三大模块合同签定同期对比
+                </div>
+                <div class="layui-card-body">
+                    <div id="report5">
+                        <table id="tableContent-report5" lay-filter="tableContent-report5"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    三大模块开票收入同期对比
+                </div>
+                <div class="layui-card-body">
+                    <div id="report6">
+                        <table id="tableContent-report6" lay-filter="tableContent-report6"></table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-tab-item">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    本部合同签定同期对比
+                </div>
+                <div class="layui-card-body">
+                    <div id="report7">
+                        <table id="tableContent-report7" lay-filter="tableContent-report7"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    本部开票收入同期对比
+                </div>
+                <div class="layui-card-body">
+                    <div id="report8">
+                        <table id="tableContent-report8" lay-filter="tableContent-report8"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab-item">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    合同、开票同期对比
+                </div>
+                <div class="layui-form ">
+                    <div class="layui-form-item table-top-bar">
+                        <label class="layui-form-label" style="width: 60px">年月</label>
+                    <div class="layui-inline search-item">
+                        <i class="layui-icon layui-icon-date"></i>
+                        <input type="text" name="year-month" id="year-month" placeholder="开始时间" class="layui-input" style="width: 200px
+">
+                    </div>
+                    </div>
+                </div>
+
+                <div class="layui-card-body">
+                    <div id="report9">
+                        <table id="tableContent-report9" lay-filter="tableContent-report9"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab-item">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    已签订合同汇总表
+                </div>
+                <div class="layui-card-body">
+                    <div id="report10">
+                    <table id="tableContent-report10" lay-filter="tableContent-repor10"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    var execRowspan = function(id, fieldName, index, flag) {
+            console.log($("#" + id + "").find('.layui-table-body').length);
+            // 1为不冻结的情况，左列为冻结的情况
+            var fixedNode = index == "1" ? $("#" + id + "").find('.layui-table-body')[index - 1] : (index == "3" ? $(".layui-table-fixed-r") : $(".layui-table-fixed-l"));
+            //console.log(fixedNode);
+            // 左侧导航栏不冻结的情况
+            var child = $(fixedNode).find("td");
+            var childFilterArr = [];
+
+            // 获取data-field属性为fieldName的td
+            for (var i = 0; i < child.length; i++) {
+                if (child[i].getAttribute("data-field") == fieldName) {
+                    childFilterArr.push(child[i]);
+                }
+            }
+            // 获取td的个数和种类
+            var childFilterTextObj = {};
+            for (var i = 0; i < childFilterArr.length; i++) {
+                var childText = flag ? childFilterArr[i].innerHTML : childFilterArr[i].textContent;
+                if (childFilterTextObj[childText] == undefined) {
+                    childFilterTextObj[childText] = 1;
+                } else {
+                    var num = childFilterTextObj[childText];
+                    childFilterTextObj[childText] = num * 1 + 1;
+                }
+            }
+            var canRowspan = true;
+            var maxNum; //以前列单元格为基础获取的最大合并数
+            var finalNextIndex; //获取其下第一个不合并单元格的index
+            var finalNextKey; //获取其下第一个不合并单元格的值
+            for (var i = 0; i < childFilterArr.length; i++) {
+                (maxNum > 9000 || !maxNum) && (maxNum = $(childFilterArr[i]).prev().attr("rowspan") && fieldName != "8" ? $(childFilterArr[i]).prev().attr("rowspan") : 9999);
+                var key = flag ? childFilterArr[i].innerHTML : childFilterArr[i].textContent; //获取下一个单元格的值
+                var nextIndex = i + 1;
+                var tdNum = childFilterTextObj[key];
+                var curNum = maxNum < tdNum ? maxNum : tdNum;
+                if (canRowspan) {
+                    for (var j = 1; j <= curNum && (i + j < childFilterArr.length);) { //循环获取最终合并数及finalNext的index和key
+                        finalNextKey = flag ? childFilterArr[i + j].innerHTML : childFilterArr[i + j].textContent;
+                        finalNextIndex = i + j;
+                        if ((key != finalNextKey && curNum > 1) || maxNum == j) {
+                            canRowspan = true;
+                            curNum = j;
+                            break;
+                        }
+                        j++;
+                        if ((i + j) == childFilterArr.length) {
+                            finalNextKey = undefined;
+                            finalNextIndex = i + j;
+                            break;
+                        }
+                    }
+                    childFilterArr[i].setAttribute("rowspan", curNum);
+                    if ($(childFilterArr[i]).find("div.rowspan").length > 0) { //设置td内的div.rowspan高度适应合并后的高度
+                        $(childFilterArr[i]).find("div.rowspan").parent("div.layui-table-cell").addClass("rowspanParent");
+                        $(childFilterArr[i]).find("div.layui-table-cell")[0].style.height = curNum * 38 - 10 + "px";
+                    }
+                    canRowspan = false;
+                } else {
+                    childFilterArr[i].style.display = "none";
+                }
+                if (--childFilterTextObj[key] == 0 | --maxNum == 0 | --curNum == 0 | (finalNextKey != undefined && nextIndex == finalNextIndex)) { //||(finalNextKey!=undefined&&key!=finalNextKey)
+                    canRowspan = true;
+                }
+            }
+        }
+        //合并数据表格行
+    var layuiRowspan = function(id, fieldNameTmp, index, flag) {
+        var fieldName = [];
+        if (typeof fieldNameTmp == "string") {
+            fieldName.push(fieldNameTmp);
+        } else {
+            fieldName = fieldName.concat(fieldNameTmp);
+        }
+        for (var i = 0; i < fieldName.length; i++) {
+            execRowspan(id, fieldName[i], index, flag);
+        }
+    }
+    layui.use('element', function() {
+        var element = layui.element,
+            table = layui.table,
+            admin = layui.admin,
+            laydate = layui.laydate;
+        laydate.render({
+            elem: '#year-month'
+            ,type: 'month'
+            ,value:new Date()
+            ,done:function (value,date) {
+                getTableData(9,date.year,date.month);
+            }
+        });
+        var renderTable2 = function(id, data) {
+                // 渲染表格
+                table.render({
+                    elem: '#' + id,
+                    id: id,
+                    data: data,
+                    // height: 472,
+                    cols: [
+                        [{
+                            field: 'year',
+                            title: '月份'
+                        }, {
+                            field: 'january',
+                            title: '1月'
+                        }, {
+                            field: 'february',
+                            title: '2月'
+                        }, {
+                            field: 'march',
+                            title: '3月'
+                        }, {
+                            field: 'april',
+                            title: '4月'
+                        }, {
+                            field: 'may',
+                            title: '5月'
+                        }, {
+                            field: 'june',
+                            title: '6月'
+                        }, {
+                            field: 'july',
+                            title: '7月'
+                        }, {
+                            field: 'august',
+                            title: '8月'
+                        }, {
+                            field: 'september',
+                            title: '9月'
+                        }, {
+                            field: 'october',
+                            title: '10月'
+                        }, {
+                            field: 'november',
+                            title: '11月'
+                        }, {
+                            field: 'december',
+                            title: '12月'
+                        }, ]
+                    ],
+
+                });
+            }
+            //三大模块表格
+        var renderTable3 = function(id, data, rowCol, rowColName, parentId) {
+            // 渲染表格
+            table.render({
+                elem: '#' + id,
+                id: id,
+                data: data,
+                // height: 472,
+                cols: [
+                    [{
+                            field: rowCol,
+                            title: rowColName
+                        }, {
+                            field: 'year',
+                            title: '年度'
+                        }, {
+                            field: 'q1th',
+                            title: '一季度'
+                        }, {
+                            field: 'q2th',
+                            title: '二季度'
+                        }, {
+                            field: 'q3th',
+                            title: '三季度'
+                        }, {
+                            field: 'q4th',
+                            title: '四季度'
+                        },
+
+                        {
+                            field: 'total',
+                            title: '合计'
+                        },
+
+                    ]
+                ],
+                done: function(res, curr, count) {
+                    layuiRowspan(parentId, rowCol, 1);
+                }
+
+            });
+
+        };
+        var renderTable4 = function(id, data, rowCol, rowColName, parentId,year1,year2,month) {
+            // 渲染表格
+            table.render({
+                elem: '#' + id,
+                id: id,
+                data: data,
+                // height: 472,
+                cols: [
+                    [{
+                            field: rowCol,
+                            rowspan:3,
+                            align:'center',
+                            title: rowColName
+                        },
+                        {
+                            field: 'bumen',
+                            rowspan:3,
+                            align:'center',
+                            title: '部门'
+                        }, {
+                            colspan:4,
+                            align:'center',
+                            title: '合同额'
+                        },
+                        {
+                            field: 'compC',
+                            rowspan:3,
+                            align:'center',
+                            width:150,
+                            title: '合同额1-'+month+'对比'
+                        },
+                        {
+                            colspan:4,
+                            align:'center',
+                            title: '开票额'
+                        },
+                        {
+                            field: 'compK',
+                            rowspan:3,
+                            align:'center',
+                            width:150,
+                            title: '开票额1-'+month+'对比'
+                         }
+                        ],
+                      [
+                         {
+
+                             colspan:2,
+                             align:'center',
+                            title:year1
+                        },
+
+                        {
+                            colspan:2,
+                            align:'center',
+                            title: year2
+                        },
+                        {
+
+                            colspan:2,
+                            align:'center',
+                            title:year1
+                        },
+
+                        {
+                            colspan:2,
+                            align:'center',
+                            title: year2
+                        },
+                          ],
+                      [
+                        {
+                            field: 'hte1m1',
+                            align:'center',
+                            title:month,
+                        },
+                        {
+                            field: 'hte1tt1',
+                            align:'center',
+                            title:'累计',
+                        },
+                        {
+                            field: 'hte2m2',
+                            align:'center',
+                            title:month,
+                        },
+                        {
+                            field: 'hte2tt2',
+                            align:'center',
+                            title:'累计',
+                        },
+                        {
+                            field: 'kpe1m3',
+                            align:'center',
+                            title:month,
+                        },
+                        {
+                            field: 'kpe1tt3',
+                            align:'center',
+                            title:'累计',
+                        },
+                        {
+                            field: 'kpe2m4',
+                            align:'center',
+                            title:month,
+                        },
+                        {
+                            field: 'kpe2tt4',
+                            align:'center',
+                            title:'累计',
+                        },
+
+                    ]
+                ],
+                done: function(res, curr, count) {
+                    layuiRowspan(parentId, rowCol, 1);
+                }
+
+            });
+
+        };
+        var renderTable5 = function(id, data, rowCol, rowColName, parentId) {
+            // 渲染表格
+            table.render({
+                elem: '#' + id,
+                id: id,
+                data: data,
+                // height: 472,
+                cols: [
+                    [{
+                        field: rowCol,
+                        title: rowColName
+                    },
+                        {
+                        field: 'bumen',
+                        title: '部门'
+                    }, {
+                        field: 'nopay',
+                        title: '2017已签订合同尾款（万元）'
+                    }, {
+                        field: 'contractTotal',
+                        title: '2018已签订合同金额（万元）'
+                    }, {
+                        field: 'contractThisYear',
+                        title: '2018已跟进合同金额（万元）'
+                    },
+                        {
+                            field: 'total',
+                            width:'140',
+                            title: '合计（万元）'
+                        },
+
+                    ]
+                ],
+                done: function(res, curr, count) {
+                    layuiRowspan(parentId, rowCol, 1);
+                }
+
+            });
+
+        }
+
+        getTableData(1);
+        //一些事件监听
+        element.on('tab(report-tab)', function(data) {
+            if (data.index == 0 || data.index == 1) {
+                getTableData(data.index + 1);
+            }
+           else  if (data.index == 2) {
+                getTableData(3);
+                getTableData(4);
+            }
+           else if (data.index == 3) {
+                getTableData(5);
+                getTableData(6);
+
+            }
+           else if (data.index == 4) {
+                getTableData(7);
+                getTableData(8);
+
+            }
+            else  if (data.index==5)
+            {
+                getTableData(9,new Date().getFullYear(),new Date().getMonth()+1);
+            }
+           else  if (data.index==6)
+            {
+                getTableData(10);
+            }
+
+
+        });
+
+        function getTableData(type,year,month) {
+            var url='/api/crm/content/excelData?type=' + type;
+            if (year)
+            {
+                url+="&year="+year+'&month='+month;
+            }
+            admin.req(url, {}, function(data) {
+                if (data.ok) {
+                    if (type == 1 || type == 2) {
+                        renderTable2('tableContent-report' + type, data.data);
+                    }
+                    else if (type == 3 || type == 4) {
+                        renderTable3('tableContent-report' + type, data.data, 'group', '平台', 'report' + type);
+                    }
+                    else if (type == 5 || type == 6) {
+                        renderTable3('tableContent-report' + type, data.data, 'block', '模块', 'report' + type);
+                    }
+                    else if (type == 7 || type == 8) {
+                        renderTable3('tableContent-report' + type, data.data, 'dept', '本部', 'report' + type);
+                    }
+                    else if (type==9)
+                    {
+                        for (var  item of data.data)
+                        {
+                            item.kpe1tt3=item.kpe1[0].tt3;
+                            item.kpe2tt4=item.kpe2[0].tt4;
+                            item.kpe1m3=item.kpe1[0].m3;
+                            item.kpe2m4=item.kpe2[0].m4;
+                            item.hte1tt1=item.hte1[0].tt1;
+                            item.hte1m1=item.hte1[0].m1;
+                            item.hte2tt2=item.hte2[0].tt2;
+                            item.hte2m2=item.hte2[0].m2;
+                        }
+                       // console.log(JSON.stringify(data.data))
+                        renderTable4('tableContent-report' + type, data.data, 'benbu', '本部', 'report' + type,year+'年',year-1+'年',month+'月');
+                    }
+
+                    else if (type==10)
+                    {
+                        renderTable5('tableContent-report' + type, data.data, 'benbu', '本部', 'report' + type);
+                    }
+
+                } else {
+                    return layer.msg('获取报表信息失败：' + data.message, {
+                        icon: 5
+                    });
+                }
+            }, {
+                method: 'get'
+            });
+
+
+        }
+    });
+</script>

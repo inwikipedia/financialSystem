@@ -1,0 +1,717 @@
+<style>
+    /*<!--面包屑隐藏-->*/
+    .layui-breadcrumb .admin-breadcrumb{
+        visibility: hidden!important;
+    }
+    /*.main {*/
+    /*background-color: #fff;*/
+    /*}*/
+    .layui-row{
+        margin: 2.5px 0;
+    }
+    #centerOfficeWorkTime {
+        height: 210px;
+        width: 500px;
+        float: left;
+    }
+    .workTimeTable li{
+        border: 1px solid #E5E5E5;
+        width: 100px;
+        height: 45px;
+        line-height: 45px;
+        text-align: center;
+        color: #666;
+    }
+    .workTimeTable li:nth-of-type(odd){
+        background-color: #F5F5F5;
+    }
+    .workTimeTable li:nth-of-type(even){
+        background-color: #FAFAFA;
+    }
+    .workTimeTable p:first-child{
+        background-color: #EBEBEB;
+    }
+    .workUl ul{
+        float: left;
+    }
+    .layui-col-space5>*{
+        padding: 0;
+    }
+    .pie-right {
+        float: right;
+        width: calc(100vw - 572px);
+        margin-top: 5px;
+    }
+    .workUl{
+        width: calc(100vw - 673px);
+        overflow-x: auto;
+        padding-left: 100px;
+    }
+    .table-fix-col{
+        position: absolute;
+    }
+    .table-kuang{
+        width: 10000px;
+    }
+    .width100{
+        width: calc(100% - 100px);
+    }
+    .bar-block{
+        height: 280px;
+        width: 100%;
+    }
+    #departmentWorkTime,#itemWorkTime{
+        width: 100%;
+        height: 320px;
+    }
+    .layui-card-header{
+        height: 36px;
+        line-height: 36px;
+    }
+    .headerTitle{
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+    }
+    .total{
+        font-size:14px;
+        font-family:SourceHanSansCN-Medium;
+        font-weight:500;
+        color:#999999;
+    }
+    .buttonGroup button{
+        padding: 0 5px;
+    }
+    .buttonGroup i{
+        font-size: 14px!important;
+    }
+    .btn-active {
+        border: 1px solid #10ADE8 ;
+        color: #10ADE8;
+    }
+    .time-blobk{
+        width: 100px;
+        height: 25px;
+        border: 1px solid #eee;
+        border-radius: 4px;
+        color: #999;
+        font-size: 12px;
+        text-indent: 4px;
+    }
+</style>
+<link rel="stylesheet" href="../../assetsInfo/css/dragula.css">
+<link rel="stylesheet" href="../../assetsInfo/css/duty.css">
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<div class="main">
+    <div class="layui-row">
+        <div class="layui-col-md12">
+            <div class="layui-card layui-row">
+                <div class="layui-card-header" style="overflow: hidden">
+                    <img src="../../assetsInfo/images/icon/worktime.png"/>&nbsp;
+                    <span class="headerTitle">本qwqwqqwqw部投入工时一览</span>&nbsp;&nbsp; | &nbsp;
+                    <span class="total">工时投总计：458962 人天</span>
+                    <div  style="float: right;">
+                        <input type="text" id="startTime" class="time-blobk"> ~ <input type="text" id="endTime"  class="time-blobk">
+                        <button type="button" class="layui-btn layui-btn-normal" style="border-radius: 4px;height: 29px;line-height: 29px;padding: 0 14px;">确定</button>
+                    </div>
+                    <div class="layui-btn-group buttonGroup" style="float: right;margin:1px 8px 0 0" >
+                        <button class="layui-btn layui-btn-primary layui-btn-sm btn-active"
+                                style="border-top-left-radius: 4px;border-bottom-left-radius:4px;" id="week">
+                            <i class="layui-icon">组织</i>
+                        </button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" id="item">
+                            <i class="layui-icon">项目</i>
+                        </button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm"
+                                style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;" id="year">
+                            <i class="layui-icon">人员</i>
+                        </button>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-col-space5">
+                        <div id="centerOfficeWorkTime"></div>
+                    </div>
+                    <div class="layui-col-space5 pie-right">
+                        <ul class="workTimeTable table-fix-col" style="float: left">
+                            <li>序号</li>
+                            <li>本部</li>
+                            <li>工时</li>
+                            <li>占比</li>
+                        </ul>
+                        <div class="workUl">
+                            <div id="centerOfficeTable" class="table-kuang">
+                                <ul class="workTimeTable">
+                                    <li>1</li>
+                                    <li>智能技术应用部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>2</li>
+                                    <li>数据业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" >
+        <div class="layui-col-md12">
+            <div class="layui-card layui-row">
+                <div class="layui-card-header">
+                    <img src="../../assetsInfo/images/icon/worktime.png"/>&nbsp;
+                    <span class="headerTitle">部门投入工时一览</span>&nbsp;&nbsp; | &nbsp;
+                    <span class="total">工时投总计：458962 人天</span>
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-col-space5">
+                        <div id="departmentWorkTime" class="bar-block"></div>
+                    </div>
+
+
+                    <div class="layui-col-space5">
+                        <ul class="workTimeTable table-fix-col" style="float: left">
+                            <li>序号</li>
+                            <li>本部</li>
+                            <li>工时</li>
+                            <li>占比</li>
+                        </ul>
+                        <div class="workUl width100">
+                            <div id="departmentTable" class="table-kuang">
+                                <ul class="workTimeTable">
+                                    <li>1</li>
+                                    <li>智能技术应用部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>2</li>
+                                    <li>数据业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" >
+        <div class="layui-col-md12">
+            <div class="layui-card layui-row">
+                <div class="layui-card-header">
+                    <img src="../../assetsInfo/images/icon/worktime.png"/>&nbsp;
+                    <span class="headerTitle">项目组投入工时一览</span>&nbsp;&nbsp; | &nbsp;
+                    <span class="total">工时投总计：458962 人天</span>
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-col-space5">
+                        <div id="itemWorkTime" class="bar-block"></div>
+                    </div>
+
+
+                    <div class="layui-col-space5">
+                        <ul class="workTimeTable table-fix-col" style="float: left">
+                            <li>序号</li>
+                            <li>本部</li>
+                            <li>工时</li>
+                            <li>占比</li>
+                        </ul>
+                        <div class="workUl width100">
+                            <div id="itemTable" class="table-kuang">
+                                <ul class="workTimeTable">
+                                    <li>1</li>
+                                    <li>智能技术应用部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>2</li>
+                                    <li>数据业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                                <ul class="workTimeTable">
+                                    <li>3</li>
+                                    <li>咨询业务本部</li>
+                                    <li>4554</li>
+                                    <li>20%</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['form', 'formSelects', 'laydate'], function () {
+        var admin = layui.admin,
+            laydate = layui.laydate,
+            config = layui.config;
+        laydate.render({
+            elem: '#startTime',
+            type: 'date',
+            value: new Date().toLocaleDate()
+        });
+        laydate.render({
+            elem: '#endTime',
+            type: 'date',
+            value: new Date().toLocaleDate()
+        });
+        //tab页切换
+        $('#item').click(function () {
+            window.location.href="#!ADC_operate_item_html"
+        });
+        function centerOfficeWorkTime() {
+            var myChart = echarts.init(document.getElementById('centerOfficeWorkTime'));
+            var option = {
+                title: {
+                    show: true,
+                    x: 'center',
+                    y: 'center',
+                    textStyle: {
+                        fontSize: '16',
+                        color: '#3BA0FF',
+                        fontWeight: 'normal'
+                    }
+                },
+                grid: {
+                    top: '1%',
+                    bottom: '1%',
+                    containLabel: true
+                },
+                tooltip: { //提示框组件
+                    trigger: 'item', //触发类型(饼状图片就是用这个)
+                    formatter: "{b} : {c}" //提示框浮层内容格式器
+                },
+                color: ['#3BA0FF', '#36CBCB', '#4ECB74', '#FAD337'],  //手动设置每个图例的颜色
+                legend: {  //图例组件
+                    icon: 'circle',
+                    //right:100,  //图例组件离右边的距离
+                    //orient : 'horizontal',  //布局  纵向布局 图例标记居文字的左边 vertical则反之
+                    // width:240, //图行例组件的宽度,默认自适应
+                    orient: 'vertical',
+                    x : 'right',   //图例显示在右边
+                    y: 'center',   //图例在垂直方向上面显示居中
+                    itemWidth:10,  //图例标记的图形宽度
+                    itemHeight:10, //图例标记的图形高度
+                    type:'scroll',
+                    // data:['正常','一般','提示','较急'],
+
+                },
+                series: [ //系列列表
+                    {
+                        name: '',  //系列名称
+                        type: 'pie',   //类型 pie表示饼图
+                        center:['35%','50%'], //设置饼的原心坐标 不设置就会默认在中心的位置
+                        radius: ['10%', '60%'],  //饼图的半径,第一项是内半径,第二项是外半径,内半径为0就是真的饼,不是环形
+                        itemStyle: {  //图形样式
+                            normal: { //normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式，比如在鼠标悬浮或者图例联动高亮时。
+                                label: {  //饼图图形上的文本标签
+                                    show: true,  //平常显示
+                                    formatter: "{c} \n{b}",//提示框浮层内容格式器
+                                    textStyle: {    //图例文字的样式
+                                        color: '#333',  //文字颜色
+                                        fontSize: 12    //文字大小
+                                    }  ,
+                                },
+                                labelLine: {     //标签的视觉引导线样式
+                                    show: true,  //平常显示
+                                    color: '#e9e9e9',
+                                    length:11,
+                                    length2:11,
+                                    textStyle: {    //图例文字的样式
+                                        color: '#333',  //文字颜色
+                                        fontSize: 12    //文字大小
+                                    }
+                                },
+                                borderWidth: 3,
+                                borderColor: '#fff'
+                            },
+                            emphasis: {   //normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式，比如在鼠标悬浮或者图例联动高亮时。
+                                label: {  //饼图图形上的文本标签
+                                    show: true,
+                                    position: 'center',
+                                    textStyle: {
+                                        fontSize: '14',
+                                        fontWeight: 'bold'
+                                    }
+                                }
+                            }
+                        },
+                        data: [
+                            {value: 9, name: '软件业务本部'},
+                            {value: 12, name: '市场发展本部'},
+                            {value: 8, name: '数据业务本部'},
+                            {value: 11, name: '智能业务本部'},
+                            {value: 9, name: '软件业务本部1'},
+                            {value: 12, name: '市场发展本部2'},
+                            {value: 8, name: '数据业务本部3'},
+                            {value: 11, name: '智能业务本部2'},
+                            {value: 9, name: '软件业务本部1'},
+                            {value: 12, name: '市场发展本部9'},
+                            {value: 8, name: '数据业务本部2'},
+                            {value: 11, name: '智能业务本部8'},
+                            {value: 9, name: '软件业务本部8'},
+                            {value: 12, name: '市场发展本部8'},
+                            {value: 8, name: '数据业务本8部'},
+                            {value: 11, name: '智能业务5本部'}
+                        ]
+                    }
+                ]
+            };
+            myChart.setOption(option)
+        }
+        centerOfficeWorkTime();
+        function departmentWorkTime() {
+            var myChart = echarts.init(document.getElementById('departmentWorkTime'));
+            var option = {
+                grid: {
+                    top: '2%',
+                    left: '1%',
+                    right: '1%',
+                    bottom: '1%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    axisLine: {
+                        lineStyle: {
+                            type: 'solid',
+                            color: '#EEEEEE',//左边线的颜色
+                            width:'1'//坐标线的宽度
+                        }
+                    },
+                    axisLabel: {
+                        rotate:60, //横坐标字体倾斜程度
+                        textStyle: {
+                            color: '#999999' //坐标值得具体的颜色
+
+                        }
+                    },
+                    data: ['智能技术应用部', '智能技术应用部', '智能技术应用部', '智能技术应用部', '智能技术', '术应用部', '智能技术应用部','智能技术应用部', '智能技术应用部', '智能技术应用部', '智能技术应用部', '智能技术', '术应用部', '智能技术应用部','智能技术应用部', '智能技术应用部', '智能技术应用部', '智能技术应用部', '智能技术', '术应用部', '智能技术应用部']
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: {
+                        show:false
+                    },
+                    axisTick:{show:false},
+                    splitLine: {
+                        show: true,
+                        lineStyle:{
+                            type:'dashed',
+                            color:"#E8E8E8"
+                        }
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#999999' //坐标值得具体的颜色
+
+                        }
+                    }
+                },
+                series: [{
+                    data: [120, 200, 150, 80, 70, 110, 130,120, 200, 150, 80, 70, 110, 130,120, 200, 150, 80, 70, 110, 130],
+                    type: 'bar',
+                    color:'#55ADFF',
+                    barWidth : 23,//柱图宽度
+                }]
+            };
+            myChart.setOption(option)
+        }
+        departmentWorkTime();
+        function itemWorkTime() {
+            var myChart = echarts.init(document.getElementById('itemWorkTime'));
+            var option = {
+                grid: {
+                    top: '2%',
+                    left: '1%',
+                    right: '1%',
+                    bottom: '1%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    axisLine: {
+                        lineStyle: {
+                            type: 'solid',
+                            color: '#EEEEEE',//左边线的颜色
+                            width:'1'//坐标线的宽度
+                        }
+                    },
+                    axisLabel: {
+                        rotate:60, //横坐标字体倾斜程度
+                        textStyle: {
+                            color: '#999999' //坐标值得具体的颜色
+
+                        }
+                    },
+                    data: ['某个项目组', '某个项目组', '某个项目组', '某个项目组', '智能技术', '术应用部', '某个项目组','某个项目组', '某个项目组', '某个项目组', '某个项目组', '智能技术', '术应用部', '某个项目组','某个项目组', '某个项目组', '某个项目组', '某个项目组', '智能技术', '术应用部', '智能技术应用部']
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: {
+                        show:false
+                    },
+                    axisTick:{show:false},
+                    splitLine: {
+                        show: true,
+                        lineStyle:{
+                            type:'dashed',
+                            color:"#E8E8E8"
+                        }
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#999999' //坐标值得具体的颜色
+
+                        }
+                    }
+                },
+                series: [{
+                    data: [120, 200, 150, 80, 70, 110, 130,120, 200, 150, 80, 70, 110, 130,120, 200, 150, 80, 70, 110, 130],
+                    type: 'bar',
+                    color:'#40D56D',
+                    barWidth : 23,//柱图宽度
+                }]
+            };
+            myChart.setOption(option)
+        }
+        itemWorkTime();
+    });
+
+
+
+</script>

@@ -1,0 +1,105 @@
+{
+	"respCode": "0",
+	"data": {
+		"pageNo": 1,
+		"pageSize": 10,
+		"count": 6,
+		"pageCount": 1,
+		"list": [{
+			"department": "软件开发部",
+			"proName": "共享汽车",
+			"teamName": "前端技术组",
+			"nature": "0",
+			"pm": "王萌",
+			"platform": "E61841U05334",
+			"saddleNum": 5,
+			"energyType": "新能源",
+			"status": {
+				"value": 1,
+				"display": "启用"
+			},
+			"realTimeVehicleStatusMongoDO": null
+		},
+		{
+			"id": "22462584325378048",
+			"sn": "2",
+			"plateNum": "津AD72102",
+			"model": "荣威ERX5",
+			"vin": "LSJA24067JS139346",
+			"terminalNum": "E61841U05337",
+			"saddleNum": 5,
+			"energyType": "新能源",
+			"status": {
+				"value": 1,
+				"display": "启用"
+			},
+			"realTimeVehicleStatusMongoDO": null
+		},
+		{
+			"id": "1234567890123456789",
+			"sn": "3",
+			"plateNum": "津AD70693",
+			"model": "荣威ERX5",
+			"vin": "LSJA24065JS138969",
+			"terminalNum": "E61834U05079",
+			"saddleNum": 5,
+			"energyType": "新能源",
+			"status": {
+				"value": 1,
+				"display": "启用"
+			},
+			"realTimeVehicleStatusMongoDO": null
+		},
+		{
+			"id": "22462899946754048",
+			"sn": "5",
+			"plateNum": "津AD76305",
+			"model": "荣威ERX5",
+			"vin": "LSJA24061JS138967",
+			"terminalNum": "E61841U05333",
+			"saddleNum": 5,
+			"energyType": "新能源",
+			"status": {
+				"value": 1,
+				"display": "启用"
+			},
+			"realTimeVehicleStatusMongoDO": null
+		},
+		{
+			"id": "22807504223440896",
+			"sn": "7",
+			"plateNum": "津A0007",
+			"model": "荣威ERX5",
+			"vin": "QYM",
+			"terminalNum": "qym",
+			"saddleNum": 6,
+			"energyType": "新能源",
+			"status": {
+				"value": 0,
+				"display": "未启用"
+			},
+			"realTimeVehicleStatusMongoDO": null
+		},
+		{
+			"id": "22463759007322112",
+			"sn": "9",
+			"plateNum": "津AD72199",
+			"model": "荣威ERX5",
+			"vin": "LSJA24063JS138582",
+			"terminalNum": "E61841U05335",
+			"saddleNum": 5,
+			"energyType": "新能源",
+			"status": {
+				"value": 1,
+				"display": "启用"
+			},
+			"realTimeVehicleStatusMongoDO": null
+		}],
+		"ext": {
+			
+		},
+		"orderBy": ""
+	},
+	"ok": true,
+	"message": ""
+}

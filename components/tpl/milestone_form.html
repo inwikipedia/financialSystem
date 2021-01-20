@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>里程碑</title>
+</head>
+<style>
+    .milestoneInfo{
+        overflow: hidden;
+        height:80px;
+    }
+    .milestoneInfo ul li span:first-child{
+        font-weight: bold;
+    }
+    /*.milestoneInfo ul li{
+        margin-bottom: 5px;
+    }*/
+    #milestone_details .milestone-box table{
+        width: 100%;
+    }
+    .milestone-box .layui-table thead tr{
+        background-color: #EBEEF4;
+    }
+    layui-table-body tr:nth-child(even){
+        background-color: #F7F9FC;
+    }
+    .milestone-box table tr{
+        height: 31px
+    }
+    .target-right{
+        color: #999;
+        font-size: 14px;
+        line-height: 24px;
+    }
+    .target-left{
+        color:#666;
+        font-size: 14px;
+        font-weight: bold;
+        float:left;
+        line-height: 24px;
+    }
+
+</style>
+<link rel="stylesheet" href="../../assetsInfo/libs/layui/css/layui.css" />
+<link rel="stylesheet" href="../../assetsInfo/css/style.css">
+<body>
+<div style="padding: 20px" id="milestone_details">
+
+</div>
+
+</body>
+<script type="text/javascript" src="../../assetsInfo/libs/jquery-1.12.4.min.js"></script>
+<!-- Q.js 轻量路由框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/q.js"></script>
+<!-- jQuery 轻量级 MVVM 框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/pandyle.min.js"></script>
+<!-- layui 脚本文件 -->
+<script type="text/javascript" src="../../assetsInfo/libs/layui/layui.js"></script>
+<!-- zTree js 文件 -->
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+<script type="text/html" id="control">
+    <a class="table-control-btn" lay-event="download" style="color: #999;"><img src="../../assetsInfo/images/icon/xiazai.png"/> 下载</a>
+</script>
+
+<script>
+
+    layui.use(['table'], function () {
+        var table = layui.table;
+        var parent_json = eval('('+parent.json+')');
+        var milepostBeginTime = parent_json.milepostBeginTime?layui.util.toDateString(parent_json.milepostBeginTime,'yyyy-MM-dd'):'';
+        var milepostEndTime = parent_json.milepostEndTime?layui.util.toDateString(parent_json.milepostEndTime,'yyyy-MM-dd'):'';
+        var finishTime = parent_json.finishTime?layui.util.toDateString(parent_json.finishTime,'yyyy-MM-dd'):'';
+        var milepostManagerName = parent_json.milepostManagerName?parent_json.milepostManagerName:'';
+        var milepostTarget = parent_json.milepostTarget?parent_json.milepostTarget:'';
+        var con = '<div class="milestoneInfo">'+
+            '<ul style="float: left; width: 40%;height: 68px">'+
+                '<li><span style="color:#666;font-size: 14px">负责人：</span><span class="target-right">'+ milepostManagerName +'</span></li>'+
+                '<li><span style="color:#666;font-size: 14px">起止时间：</span><span class="target-right">'+ milepostBeginTime+'&nbsp至&nbsp'+milepostEndTime +'</span></li>'+
+                '<li><span style="color:#666;font-size: 14px">完成时间：</span><span class="target-right">'+ finishTime +'</span></li>'+
+            '</ul>'+
+            '<div style="float: right; width: 60%;height:68px"><div class="target-left" >目标：</div><div style="float: left;width: 500px;word-break: break-all;" class="target-right">'+ milepostTarget +'</div></div>'+
+        '</div>'+
+        '<div class="milestone-box" style="width: 100%;"><table id="milestone-result" lay-filter="milestone-result"></table></div>'
+        $('#milestone_details').append(con)
+        console.log(parent_json)
+        var id = parent_json.id
+        var renderTable = function (id) {
+            console.log("33333");
+            table.render({
+                elem: '#milestone-result',
+                id: 'milestone-result',
+                url: '/ADC_info/api/progress/projectMilepost/getMilepostResultAndFile/'+id,
+                parseData: function (res) {
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.projectMilepostResultVOList //解析数据列表
+                    };
+                },
+                cols: [
+                    [{
+                        field: 'resultFileName',
+                        title: '成果物',
+                        templet:function(d) {
+                            var text= d.resultFileName ? d.resultFileName : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }, {
+                        field: 'fileName',
+                        title: '文件名称',
+                        align: 'center',
+                        templet:function(d) {
+                            var text= d.fileName ? d.fileName : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }, {
+                        field: 'fileSize',
+                        title: '大小',
+                        align: 'center',
+                        templet:function(d) {
+                            var text= d.fileSize ? d.fileSize : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }, {
+                        field: 'uploadUserName',
+                        title: '上传人',
+                        align: 'center',
+                        templet:function(d) {
+                            var text= d.uploadUserName ? d.uploadUserName : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }, {
+                        field: 'uploadTime',
+                        title: '上传时间',
+                        align: 'center',
+                        templet: function(d) {
+                            return d.uploadTime?layui.util.toDateString(d.uploadTime,'yyyy-MM-dd'):'';
+                        }
+                    }, {
+                        templet: '#control',
+                        title: '操作',
+                        align: 'center',
+                        unresize: true
+                    }]
+                ],
+                cellMinWidth: 80,
+                skin: 'row',
+                even: true
+            });
+            table.on('tool(milestone-result)', function (obj) {
+                // 获取点击列的数据
+                var data = obj.data;
+                var layEvent = obj.event;
+                if (layEvent === 'download'){
+                    if(data.fileId){
+                        window.location.href = "/ADC_info/api/progress/projectMilepostResult/"+data.fileId+'/download';
+                    }else{
+                        layer.msg('当前成果物下没有文件')
+                    }
+                }
+            })
+        }
+        renderTable(id)
+    })
+
+</script>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>下拉菜单</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-ie6.css">
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/ie.css">
+    <![endif]-->
+    <script type="text/javascript" src="../dialogs/internal.js"></script>
+    <script src="./utils.js"></script>
+    <script src="./jquery-1.7.2.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+    <table class="table table-bordered table-striped table-hover">
+        <tr>
+            <th>控件名称（建议使用中文，易辨识）<span class="label label-important">*</span></th>
+            <th>控件样式</th>
+        </tr>
+        <tr>
+            <td><input id="adcform_title" placeholder="必填" type="text" /></td>
+            <td>宽 <input id="adcform_width" type="text" value="190" class="input-small span1" /> px&nbsp;
+                高 <input id="adcform_height" type="text" value="30" class="input-small span1" /> px
+            </td>
+        </tr>
+        <tr >
+            <td colspan="2" style="display: none">
+                <select  id="adcform_list" multiple="multiple" class="span14">
+                    <option value="请选择">请选择</option>
+                </select>
+            </td>
+            <td colspan="2">
+                <select id="adcform_type">
+                    <!-- 常规用法 -->
+                    <option value="1">经营类所属业务</option>
+                    <option value="2">事务类所属业务</option>
+                    <!-- 其它选择器 -->
+                    <option value="3">业务类型</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+<script type="text/javascript">
+    var oNode = null,
+        // 列表值选择框
+        oListText = '',
+        thePlugins = 'adc_form_select';
+    window.onload = function () {
+        oListText = $G('adcform_list');
+        // 初始化数据字典
+        if (UE.plugins[thePlugins].editdom) {
+            oNode = UE.plugins[thePlugins].editdom;
+
+            var gTitle = oNode.getAttribute('title').replace(/&quot;/g, "\""),
+                gWidth = oNode.getAttribute('adcform_width'),
+                gType = oNode.getAttribute('adcform_type') ,
+                gHeight = oNode.getAttribute('adcform_height');
+            gTitle = gTitle == null ? '' : gTitle;
+            $G('adcform_value').innerHTML = oNode.value;
+            $G('adcform_title').value = gTitle;
+            $G('adcform_type').value=gType;
+            $G('adcform_height').value = gHeight;
+            $G('adcform_width').value = gWidth;
+            for (var i = 0; i < oNode.options.length; i++) {
+                var sText = oNode.options[i].value;
+                fnAddComboOption(oListText, sText, sText);
+            }
+        }
+    }
+    dialog.oncancel = function () {
+        if (UE.plugins[thePlugins].editdom) {
+            delete UE.plugins[thePlugins].editdom;
+        }
+    };
+    dialog.onok = function () {
+        if ($G('adcform_title').value == '') {
+            alert('控件名称不能为空');
+            return false;
+        }
+        if (oListText.options.length == 0) {
+            alert('当前账户下没有项目');
+            return false;
+        }
+        var gHeight = $G('adcform_height').value;
+        var gWidth = $G('adcform_width').value;
+        var gTitle = $G('adcform_title').value.replace(/&quot;/g, "\"");
+        var gType = $G('adcform_type').value;
+        if (!oNode) {
+            try {
+                oNode = createElement('select', 'select');
+                oNode.setAttribute('type', 'select');
+                oNode.setAttribute('title', gTitle);
+                oNode.setAttribute('lay-filter', oNode.name);
+                oNode.setAttribute('adcform', thePlugins);
+                oNode.setAttribute('lay-search', true);
+                if (gHeight != '') {
+                    oNode.style.height = gHeight + 'px';
+                    oNode.setAttribute('adcform_height', gHeight);
+                }
+                if (gWidth != '') {
+                    oNode.style.width = gWidth + 'px';
+                    oNode.setAttribute('adcform_width', gWidth);
+                }
+                // Add all available options.
+                for (var i = 0; i < oListText.options.length; i++) {
+                    var sText = oListText.options[i].value;
+                    var sId = oListText.options[i].id;    //需要加id就用这个，顺便要改fnAddComboOption方法传的参数，以及当前html中所有其它使用了这个方法的地方
+                    if (sText.length == 0) {
+                        sText = sText;
+                    }
+                    //console.log(sText);
+                    var oOption = fnAddComboOption(oNode, sText, sText,false,true,sId);
+                    // fnSetAttribute(oOption, 'selected', 'selected');
+                    // oOption.selected = true;
+                }
+
+
+                //firefox要利用span
+                // editor.execCommand('insertHtml', '{|-<span adcform="select">' + oNode.outerHTML +
+                //     '&nbsp;&nbsp;</span>-|}');
+                //console.log(oNode.outerHTML);
+                editor.execCommand('insertHtml', oNode.outerHTML);
+                var script ='';
+                // 1 经营类所属业务  2 事务类所属业务 3业务类型
+                if(gType==1){
+                    script='<script>\n' +
+                        '    ADCFormDesignHelper.businessSelectInit("'+oNode.name+'")\n' +
+                        '<\/script>';
+                }else if(gType==2){
+                    script='<script>\n' +
+                        '    ADCFormDesignHelper.affairSelectInit("'+oNode.name+'")\n' +
+                        '<\/script>';
+                }else{
+                    script='<script>\n' +
+                        '    ADCFormDesignHelper.businessSelectTypeInit("'+oNode.name+'")\n' +
+                        '<\/script>';
+                }
+                editor.execCommand('insertHtml', script);
+                return true;
+            } catch (e) {
+                try {
+                    editor.execCommand('error');
+                } catch (e) {
+                    alert('控件异常！');
+                }
+                return false;
+            }
+        } else {
+            oNode.setAttribute('title', gTitle);
+            if (gHeight != '') {
+                oNode.style.width = gHeight + 'px';
+                oNode.setAttribute('adcform_height', gHeight);
+            }
+            if (gWidth != '') {
+                oNode.style.width = gWidth + 'px';
+                oNode.setAttribute('adcform_width', gWidth);
+            }
+            // Remove all options.
+            while (oNode.options.length > 0) {
+                oNode.remove(0);
+            }
+            for (var i = 0; i < $G('adcform_list').options.length; i++) {
+                var sText = $G('adcform_list').options[i].value;
+                var sId = $G('adcform_list').options[i].id;
+                if (sText.length == 0) {
+                    sText = sText;
+                }
+                var oOption = fnAddComboOption(oNode, sText, sText,false,true,sId);
+                // fnSetAttribute(oOption, 'selected', 'selected');
+                // oOption.selected = true;
+            }
+            delete UE.plugins[thePlugins].editdom;
+        }
+    };
+    // Add a new option to a SELECT object (combo or list)
+    function fnAddComboOption(combo, optionText, optionValue, documentObject, index,id) {
+        var oOption;
+        if (documentObject) {
+            oOption = documentObject.createElement("option");
+        } else {
+            oOption = document.createElement("option");
+        }
+        if (index != null) {
+            combo.options.add(oOption, index);
+        } else {
+            combo.options.add(oOption);
+        }
+        oOption.innerHTML = optionText.length > 0 ? fnHTMLEncode(optionText) : '&nbsp;';
+        oOption.value = optionValue;
+        oOption.id = id;    //对应前文
+        return oOption;
+    }
+
+    function fnHTMLEncode(text) {
+        if (!text) {
+            return '';
+        }
+        text = text.replace(/&/g, '&amp;');
+        text = text.replace(/</g, '&lt;');
+        text = text.replace(/>/g, '&gt;');
+        return text;
+    }
+
+    function fnHTMLDecode(text) {
+        if (!text) {
+            return '';
+        }
+        text = text.replace(/&gt;/g, '>');
+        text = text.replace(/&lt;/g, '<');
+        text = text.replace(/&amp;/g, '&');
+        return text;
+    }
+
+    function fnSetAttribute(element, attName, attValue) {
+        if (attValue == null || attValue.length == 0) {
+            element.removeAttribute(attName, 0);
+        } else {
+            element.setAttribute(attName, attValue, 0);
+        }
+    }
+    // getFormUrl();
+</script>
+
+</body>
+
+</html>

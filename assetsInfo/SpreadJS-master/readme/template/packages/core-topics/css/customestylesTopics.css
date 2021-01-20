@@ -1,0 +1,32 @@
+﻿/* Custom Styles for Topics*/
+.i-footer-content {
+  padding: 5px 0px 40px; }
+  .i-footer-content .footelinks ul.social {
+    float: right;
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-right: 20px; }
+    .i-footer-content .footelinks ul.social li {
+      list-style: none;
+      display: inline-block; }
+      .i-footer-content .footelinks ul.social li a {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        padding-right: 4px;
+        margin-right: 2px;
+        outline: none;
+        text-decoration: none; }
+      .i-footer-content .footelinks ul.social li:first-child a {
+        background: #ffffff url("../images/facebook.png") no-repeat; }
+      .i-footer-content .footelinks ul.social li:nth-child(2) a {
+        background: #ffffff url("../images/twitter.png") no-repeat; }
+      .i-footer-content .footelinks ul.social li:nth-child(3) a {
+        background: #ffffff url("../images/linkedin.png") no-repeat; }
+      .i-footer-content .footelinks ul.social li:nth-child(4) a {
+        background: #ffffff url("../images/GooglePlus.png") no-repeat;
+        padding-right: 12px; }
+
+

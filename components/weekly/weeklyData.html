@@ -1,0 +1,326 @@
+<style>
+#btn-create{
+    display: none;
+}
+.otherBtn{
+    background-color: white;
+    color: #333;
+    border: 1px solid #229FFF;
+}
+.otherBtn:hover{
+    color: #229FFF;
+}
+</style>
+<div class="layui-row layui-col-space15">
+    <!-- 单列普通表格 -->
+    <div class="layui-col-md12">
+        <div class="layui-card p-main">
+            <div class="layui-card-header" style="height: 0px"></div>
+            <!-- 卡片容器 -->
+            <div class="layui-card-body">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-inline" style="margin-top: 10px">
+                    <button class="layui-btn layui-btn-sm layui-btn-danger"  id="btn-create">
+                        <!--<img src="../../assetsInfo/images/yiyue.png" style="position: relative;top: -1px;">-->
+                        新建
+                    </button>
+                    <!--<button class="layui-btn layui-btn-sm layui-btn-danger" id="btn-export">-->
+                        <!--&lt;!&ndash;<img src="../../assetsInfo/images/bohui.png" style="position: relative;top: -1px;">&ndash;&gt;-->
+                        <!--导出-->
+                    <!--</button>-->
+                </div>
+
+                <!-- 下部表格容器 -->
+                <table id="weeklyTbale" lay-filter="weeklyTbale"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="barTool">
+    <!--<button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-look">预览</button>-->
+    <!--<button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-export">导出</button>-->
+    {{#  if(d.state==4 ||(d.state==3&&d.eventEO.createUserId!=d.receiveUserId)){ }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-look">预览</button>
+    {{#  } else if( d.state==0||d.state==1||d.state==2||(d.state==3&&d.eventEO.createUserId==d.receiveUserId)){ }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-edit">编辑</button>
+    {{#  } }}
+    {{# var User = layui.config.getAccount()}}
+    {{#  if(d.eventEO.createUserId==User.usid){ }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs otherBtn" lay-event="btn-del">删除</button>
+    {{#  } }}
+    {{#  if(d.fileEO.fileId ){ }}
+        <button class="layui-btn layui-btn-normal layui-btn-xs otherBtn" lay-event="btn-export">导出</button>
+    {{#  } }}
+    {{#  if(((d.state==0||d.state==2||d.state==3||d.state==1)&&d.eventEO.createUserId==d.receiveUserId) ){ }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs otherBtn" lay-event="btn-send">发送</button>
+    {{#  } }}
+
+</script>
+<script>
+    layui.use(['table', 'config'], function () {
+        var config = layui.config,admin = layui.admin,table = layui.table,tools=layui.tools;
+        var account = config.getAccount();
+        // 渲染表格
+        var renderTable = function (search) {
+            if (!search) {
+                search = {};
+            }
+            // 渲染表格
+            table.render({
+                elem: '#weeklyTbale',
+                id: 'weeklyTbale',
+                url: admin.formatUrl('/api/event/eventReceive/querySearchPage?queryFlag=0'),
+                // 格式化后台返回的数据
+                parseData: function (res) { //res 即为原始返回的数据
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                // height: 472,
+                cols: [
+                    [ {
+                        field: 'eventEO.eventTitle',
+                        title: '名称',
+                        align: 'center',
+                        minWidth: 240,
+                        templet:function(d) {
+                            var text= d.eventEO.eventTitle ? d.eventEO.eventTitle : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }, {
+                        field: 'eventEO.createTime',
+                        title: '创建日期',
+                        align: 'center',
+                        minWidth: 240,
+                        templet:function(d) {
+                            var text= d.eventEO.createTime ? tools.getDate(d.eventEO.createTime, "YYYY-MM-DD HH:mm:ss") : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    },  {
+                        field: 'eventEO.createUserName',
+                        title: '发布者',
+                        align: 'center',
+                        minWidth: 240,
+                        templet:function(d) {
+                            var text= d.eventEO.createUserName ? d.eventEO.createUserName : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    },{
+                        title: '操作',
+                        align: 'left',
+                        width: 240,
+                        toolbar:'#barTool',
+                        unresize: true
+                    }]
+                ],
+                cellMinWidth: 90,
+                page: {
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                },
+                request: {
+                    pageName: 'pageNo',
+                    limitName: 'pageSize'
+                },
+                where: search
+            });
+        };
+        $.ajax({
+            url: "api/sys/dictype/list?dicCode=workReport",
+            type: 'get',
+            // data:JSON.stringify(objData),
+            contentType: 'application/json',
+            success: function (res) {
+                if (res.ok) {
+                    var arrId=[];
+                    for (var i = 0; i <res.data.length ; i++) {
+                        arrId.push(res.data[i].dicTypeCode);
+                    }
+                    if(arrId.indexOf(account.usid)!=-1){
+                        $('#btn-create').css('display','block');
+                    }
+                }else{
+                    return  layer.msg(res.message, {
+                        icon: 5
+                    });
+                }
+            }
+        });
+        renderTable();
+        table.on('tool(weeklyTbale)', function (obj) {
+            var data=obj.data;
+            // if (obj.event === 'btn-look') {
+            //     sessionStorage.setItem("name", data.eventEO.eventTitle);
+            //     sessionStorage.setItem("type", data.fileEO.fileType);
+            //     sessionStorage.setItem("savePath", data.fileEO.savePath);
+            //     sessionStorage.setItem("root", false);
+            //     sessionStorage.setItem("id", data.fileEO.fileId);
+            //     sessionStorage.setItem("eventReceiveId", data.id);
+            //     sessionStorage.setItem("loginUserId", account.usid);
+            //     sessionStorage.setItem("documentKey", data.eventEO.extInfo6);
+            //     var winObj = window.open("components/weekly/spreadHtml.html");
+            //     // var loop = setInterval(function() {
+            //     //     // layer.msg('校验中。。。',{icon:16,time:2000,shade:0});
+            //     //     if (winObj.closed) {
+            //     //         clearInterval(loop);
+            //     //
+            //     //
+            //     //         table.reload('weeklyTbale', {
+            //     //             where: {
+            //     //                 reload: new Date().getTime()
+            //     //             }
+            //     //         });
+            //     //     }
+            //     // }, 300);
+            // }else
+            if(obj.event === 'btn-edit'||obj.event === 'btn-look'){
+                sessionStorage.setItem("name", data.eventEO.eventTitle);
+                sessionStorage.setItem("type", data.fileEO.fileType);
+                sessionStorage.setItem("savePath", data.fileEO.savePath);
+                sessionStorage.setItem("root", true);
+                sessionStorage.setItem("id", data.fileEO.fileId);
+                sessionStorage.setItem("eventReceiveId", data.id);
+                sessionStorage.setItem("loginUserId", account.usid);
+                sessionStorage.setItem("loginUsname", account.usname);
+                sessionStorage.setItem("eventId", data.eventEO.id);
+                var dateTime=Date.now().toString();
+                var port=window.location.port;
+                var protocol=window.location.protocol;
+                var domain = document.domain;
+                // var winObj = window.open("http://123.127.164.20:21936/Editor?eventReceiveId="+data.id+"&fileId="+data.fileEO.fileId);
+                // var winObj = window.open("http://192.168.13.34:8081/Editor?eventReceiveId="+data.id+"&fileId="+data.fileEO.fileId);
+                var winObj = window.open("http://"+domain+":"+port+"/ADC_info/Editor?eventReceiveId="+data.id+"&fileId="+data.fileEO.fileId);
+                // var winObj = window.open("components/weekly/spreadHtml.html");
+                sessionStorage.setItem("documentKey", data.eventEO.extInfo6);
+                var loop = setInterval(function() {
+                    // layer.msg('校验中。。。',{icon:16,time:2000,shade:0});
+                    if (winObj.closed) {
+                        clearInterval(loop);
+
+
+                        table.reload('weeklyTbale', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    }
+                }, 300);
+            }else if(obj.event === 'btn-export'){
+                var dateTime=Date.now().toString();
+                window.location.href = "/ADC_info/api/sys/file/"+data.fileEO.fileId+"/download";
+            }else if(obj.event === 'btn-send'){
+                var data={
+                    data:[]
+                };
+                layer.open({
+                    type: 2,
+                    id: 'personnelSelect',
+                    title: '请选择',
+                    content: 'components/tpl/personnel_group_select.html',
+                    area: ['96%', '80%'],
+                    btn: ['确定', '取消'],
+                    yes: function (index, layero) {
+                        var finalData = $('#personnelSelect iframe')[0].contentWindow
+                            .task_personnel_select.finish();
+                        var receiveUsersId=[];
+                        for (var i = 0; i <finalData.length ; i++) {
+                            receiveUsersId.push(finalData[i].id)
+                        }
+                        var objData={
+                            eventId:obj.data.eventEO.id,
+                            receiveUsersId:receiveUsersId,
+                            eventReceiveId:obj.data.id,
+                            queryFlag:0
+                        };
+                        if(receiveUsersId.length>0){
+                            $.ajax({
+                                url: "/api/event/eventReceive/create",
+                                type: 'post',
+                                data:JSON.stringify(objData),
+                                contentType: 'application/json',
+                                success: function (res) {
+                                    if (res.ok) {
+                                        layer.close(index);
+                                        table.reload('weeklyTbale', {
+                                            where: {
+                                                reload: new Date().getTime()
+                                            }
+                                        });
+                                        return  layer.msg('发送成功', {
+                                            icon: 1
+                                        });
+                                    }else{
+                                        return  layer.msg(res.message, {
+                                            icon: 5
+                                        });
+                                    }
+                                }
+                            });
+                        }else{
+                            return  layer.msg('请选择要发送的人员', {
+                                icon: 5,
+                                time:1000
+                            });
+                        }
+                    },
+                    success: function () {
+                        // 执行 iframe 内的方法
+                        $('#personnelSelect iframe')[0].contentWindow.task_personnel_select
+                            .init(data);
+                    },
+                    resize: false
+                });
+            }else if(obj.event === 'btn-del'){
+                layer.confirm('确定删除该条简报吗？', {
+                    icon: 3,
+                    title: '提示'
+                }, function() {
+                    $.ajax({
+                        url: "/api/event/eventReceive/delByEventId/"+data.eventEO.id,
+                        type: 'delete',
+                        contentType: 'application/json',
+                        success: function (res) {
+                            if (res.ok) {
+                                table.reload('weeklyTbale', {
+                                    where: {
+                                        reload: new Date().getTime()
+                                    }
+                                });
+                                return  layer.msg('删除成功', {
+                                    icon: 1
+                                });
+                            }else{
+                                return  layer.msg(res.message, {
+                                    icon: 5
+                                });
+                            }
+                        }
+                    });
+                });
+            }
+        });
+        $('#btn-create').off('click').on('click',function () {
+            admin.popupCenter({
+                title: '新建',
+                area: ['652px', '310px'],
+                path: 'components/weekly/uploadButton.html',
+                finish: function(data) {
+
+                    if(data){
+                        table.reload('weeklyTbale', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    }
+                },
+                success: function () {
+                    $('#queryFlag').val('0');
+                }
+            });
+        });
+    });
+</script>

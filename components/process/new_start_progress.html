@@ -1,0 +1,151 @@
+<style>
+    .card-ul .card-li{
+        float: left;
+        width: 25%;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+        color: #666666;
+        cursor: pointer;
+        margin: 5px 0px;
+        padding-left: 10px;
+        box-sizing: border-box;
+    }
+    .card-ul .card-li:hover{
+        background-color: #E3F5FD;
+        color: #00A0E9;
+    }
+    .card-ul .card-li .card-cycle{
+        width:4px;
+        height:4px;
+        border-radius:50%;
+        display: inline-block;
+        background-color: #666666;
+        vertical-align: middle;
+        margin-right: 5px;
+    }
+    .card-ul .card-li:hover .card-cycle{
+        background-color: #00A0E9;
+    }
+</style>
+<link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/ebizStyle.css">
+<div id="progressStart">
+    <!--<div class="layui-row layui-col-space10">-->
+        <!--<div class="layui-col-md12">-->
+            <!--<div class="layui-card card-padding">-->
+                <!--<div class="layui-card-header lc-header cart-title"><img src="../../assetsInfo/images/icon/business_3.png"/>&nbsp;&nbsp;哈哈哈哈哈哈-->
+                <!--</div>-->
+                <!--<div class="layui-card-body">-->
+                    <!--<ul class="card-ul">-->
+                        <!--<li class="card-li"><span class="card-cycle"></span>啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦</li>-->
+                        <!--<li class="card-li"><span class="card-cycle"></span>力量联盟积极</li>-->
+                        <!--<li class="card-li"><span class="card-cycle"></span>啦啦啦啦</li>-->
+                        <!--<li class="card-li"><span class="card-cycle"></span>力量联盟积极</li>-->
+                        <!--<li class="card-li"><span class="card-cycle"></span>啦啦啦啦</li>-->
+                        <!--<li class="card-li"><span class="card-cycle"></span>力量联盟积极</li>-->
+                        <!--<li class="card-li"><span class="card-cycle"></span>啦啦啦啦</li>-->
+                        <!--<li class="card-li"><span class="card-cycle"></span>力量联盟积极</li>-->
+                        <!--<li class="card-li"><span class="card-cycle"></span>啦啦啦啦</li>-->
+                        <!--<li class="card-li"><span class="card-cycle"></span></li>-->
+                    <!--</ul>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+</div>
+<!-- 表单辅助方法，用于启动表单时的权限控制和数据获取与提交 -->
+<script src="../../assetsInfo/js/ADCFormDesignHelper.js"></script>
+<script>
+    layui.use(['table', 'config'], function () {
+        var config = layui.config,admin = layui.admin;
+        $.ajax({
+            url:"/api/category/deploymentCategory",
+            type:"GET",
+            contentType: 'application/json',
+            async:false,
+            success:function (data) {
+                var html='';
+                var imgSrc='';
+                for (var i = 0; i <data.data.length ; i++) {
+                    data.data[i].deploymentList.reverse();
+                    var lihtml='';
+                    for (var j = 0; j <data.data[i].deploymentList.length ; j++) {
+                        var res=data.data[i].deploymentList[j];
+                        lihtml+='<li data-processid="'+res.processId+'" title="'+res.processName+'" class="card-li"><span class="card-cycle"></span>'+res.processName+'</li>';
+                    }
+                    if(data.data[i].id==1){
+                        imgSrc="assetsInfo/images/jingyingicon.png";
+                    }else if(data.data[i].id==2){
+                        imgSrc="assetsInfo/images/icon-test.png";
+                    }
+                    html+='<div class="layui-row layui-col-space10">\n' +
+                        '                    <div class="layui-col-md12">\n' +
+                        '                    <div class="layui-card card-padding">\n' +
+                        '                    <div class="layui-card-header lc-header cart-title"><img src='+imgSrc+' />&nbsp;&nbsp;'+data.data[i].name+'\n' +
+                        '                </div>\n' +
+                        '                <div class="layui-card-body">\n' +
+                        '                    <ul class="card-ul">\n' +
+                        lihtml +
+                        '                </ul>\n' +
+                        '                </div>\n' +
+                        '                </div>\n' +
+                        '                </div>\n' +
+                        '                </div>';
+                }
+                $('#progressStart').empty().append(html);
+                $('.card-ul').off('click').on('click','.card-li',function () {
+                    var processId=$(this).attr('data-processid');
+                    admin.req('/api/activiti/repository/getProcessStartRequestForm', {
+                        processDefinitionId: processId
+                    }, function (result) {
+                        if (result.ok && result.data != null) {
+                            if (result.data.id.indexOf('.html') > 0) {
+                                admin.popupCenter({
+                                    title: '启动流程',
+                                    path: 'components/tpl/process_def_tpl_start.html',
+                                    area: ['100%', '100%'],
+                                    finish: function () {
+                                        table.reload(
+                                            'tableContent-modelDef');
+                                    },
+                                    success: function () {
+                                        // 动态加载 正文表格内容
+                                        config.businessParam.processType = "start";
+                                        config.businessParam.departmentName = "";
+                                        config.businessParam.processInstanceId = "";
+                                        $("#process_def_tpl_start").load(result.data.id, function () {
+                                            $("#process_id").val(processId);
+                                            $("#process_key").val(processId);
+                                            $("#isExternalForm").val('1');
+                                        });
+
+                                        //loadWithParams("#process_def_tpl_start", result.data.id, paramArr);
+                                        //$("#processType").val("start");
+
+                                    }
+                                });
+                            } else {
+                                admin.req('/api/form/' + result.data.id, {}, function (response) {
+                                    if (response.data.design == 1) { } else {
+                                        var newData = $.extend({}, data, result);
+                                        newData.processId= processId;
+                                        ADCFormDesignHelper.startProcess(newData, function () {
+                                        });
+                                    }
+                                });
+                            }
+                        }
+
+                    }, {
+                        method: 'POST'
+                    });
+                })
+            },
+            error:function (err) {
+                layer.msg('获取信息失败！');
+                console.log(err);
+            }
+        })
+    });
+
+</script>

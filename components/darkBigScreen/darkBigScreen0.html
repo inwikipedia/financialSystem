@@ -1,0 +1,309 @@
+<style>
+  .layui-btn-primary {
+    border: 1px solid #21a4ff;
+  }
+  .right_info span{
+    font-weight: bold;
+  }
+  .layui-btn-group .layui-btn-primary:first-child{
+    border-color: #21a4ff;
+  }
+  .lineChart{ padding-top: 30px;}
+
+  @media screen and (min-width:1900px){
+  .header{
+    height: 90px;
+  }
+  .right_info{
+    width: calc(100% - 138px);
+  }
+  .info_item>img{
+    width: 138px;
+    height: 138px;
+  }
+  .info_item>.right_info>p{
+    font-size: 20px;
+  }
+}
+</style>
+<div class="infoBox">
+  <div class="info_item">
+    <img src="/assetsInfo/images/bigScreen/icon.png" alt="" />
+    <div class="right_info">
+      <p>
+        累计合同额 <span id="yearContractAmount"></span> 万
+        <span id="yearContractAmountRate"></span>
+        <span id="totalContractArr"></span>
+      </p>
+      <p>本月合同额 <span id="monthContractAmount"></span> 万</p>
+    </div>
+  </div>
+  <div class="info_item">
+    <img src="/assetsInfo/images/bigScreen/icon(1).png" alt="" />
+    <div class="right_info">
+      <p>
+        累计开票额 <span id="yearInvoiceAmount"></span> 万
+        <span id="yearInvoiceAmountRate"></span>
+        <span id="totalInvoiceArr"></span>
+      </p>
+      <p>本月开票额 <span id="monthInvoiceAmount"></span> 万</p>
+    </div>
+  </div>
+  <div class="info_item">
+    <img src="/assetsInfo/images/bigScreen/icon(2).png" alt="" />
+    <div class="right_info">
+      <p>
+        累计进账额 <span id="yearIncomeAmount"></span> 万
+        <span id="yearIncomeAmountRate"></span>
+        <span id="totalBillingArr"></span>
+      </p>
+      <p>本月进账额 <span id="monthIncomeAmount"></span> 万</p>
+    </div>
+  </div>
+  <div class="info_item">
+    <img src="/assetsInfo/images/bigScreen/icon(3).png" alt="" />
+    <div class="right_info">
+      <p>累计应收额 <span id="receivableAmount"></span> 万</p>
+      <p></p>
+    </div>
+  </div>
+</div>
+<div class="clipBox">
+  <div class="title">
+    <img src="/assetsInfo/images/darkScreen/shujufenxiyellow.png" alt="">
+    月度数据
+  </div>
+  <div class="layui-btn-group">
+    <button
+      type="button"
+      value="0"
+      class="layui-btn layui-btn-sm layui-btn-normal"
+    >
+      月度合同
+    </button>
+    <button
+      type="button"
+      value="1"
+      class="layui-btn layui-btn-sm layui-btn-primary"
+    >
+      月度开票
+    </button>
+    <button
+      type="button"
+      value="2"
+      class="layui-btn layui-btn-sm layui-btn-primary"
+    >
+      月度进账
+    </button>
+  </div>
+  <div class="lineChart" id="lineChart"></div>
+  <script>
+    var myChart = echarts.init(document.getElementById('lineChart'));
+    var currentTimeDataList=[], lastTimeDataList=[], rateList=[];
+    // 渲染首页图表
+    function getChartInfo() {
+      var option = {
+        tooltip: {
+          trigger: 'axis',
+          formatter: '{b}<br />{a0}:{c0}<br />{a1}:{c1}<br />{a2}:{c2}%',
+        },
+        legend: {
+          data: ['2019','2020', '增长率'],
+          top: '0',
+          icon: 'roundRect',
+          itemWidth: 22,
+          itemHeight: 8,
+          textStyle: {
+            padding: [3, 0, 0, 0],
+            color: '#5CABFC',
+            fontSize: 14
+          },
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          top: '20%',
+          containLabel: true,
+        },
+        color: ['#5892FF', '#A9C7FF', '#FFEA00'],
+        xAxis: {
+          type: 'category',
+          // boundaryGap: false,
+          data: [
+            '1月',
+            '2月',
+            '3月',
+            '4月',
+            '5月',
+            '6月',
+            '7月',
+            '8月',
+            '9月',
+            '10月',
+            '11月',
+            '12月',
+          ].slice(0,new Date().getMonth()),
+          axisTick: {
+            show: false,
+            lineStyle: { color: '#4F98FF' }, // x轴刻度的颜色
+          },
+          splitLine: { show: false },
+          axisLabel: { color: '#4F98FF' },
+          axisLine: {
+            lineStyle: {
+              color: '#4F98FF',
+            },
+          },
+        },
+        yAxis: [
+          {
+            type: 'value',
+            name: '万元',
+            nameTextStyle: {
+              padding: [0, 0, 0, -40],
+              color: '#4F98FF',
+            },
+            nameGap: 10,
+            splitLine: { show: false },
+            axisTick: {
+              show:false,
+              lineStyle: { color: '#4F98FF' }, // x轴刻度的颜色
+            },
+            axisLabel: {
+              color: '#4F98FF',
+            },
+            axisLine: {
+              show: false,
+              lineStyle: {
+                color: '#4F98FF',
+              },
+            },
+          },
+          {
+            type: 'value',
+            nameTextStyle: {
+              padding: [0, 0, 0, -40],
+            },
+            splitLine: {
+              lineStyle: {
+                type: 'dash',
+              },
+            },
+            nameGap: 10,
+            axisTick: {
+              show:false,
+              lineStyle: { color: '#4F98FF' }, // x轴刻度的颜色
+            },
+            axisLabel: {
+              color: '#4F98FF',
+              formatter: '{value}%',
+            },
+            axisLine: {
+              show: false,
+              lineStyle: {
+                color: '#4F98FF',
+              },
+            },
+          },
+        ],
+        series: [
+          {
+            name: '2019',
+            type: 'bar',
+            yAxisIndex: 0,
+            label: {
+              show: true,
+              position: 'top',
+            },
+            barWidth: 10,
+            data: lastTimeDataList.slice(0,new Date().getMonth()),
+          },
+            {
+                name: '2020',
+                type: 'bar',
+                // barWidth: '10px',
+                yAxisIndex: 0,
+                label: {
+                    show: true,
+                    position: 'top',
+                },
+                barWidth: 10,
+                data: currentTimeDataList.slice(0,new Date().getMonth()),
+            },
+          {
+            name: '增长率',
+            type: 'line',
+            yAxisIndex: 1,
+            symbol:'circle',
+            symbolSize:1,
+            label: {
+              show: true,
+              position: 'top',
+              formatter: '{c}%',
+            },
+            data: rateList.slice(0,new Date().getMonth()),
+          },
+        ],
+      };
+      myChart.setOption(option);
+    }
+    // 点击切换按钮样式
+    $('.layui-btn').click(function () {
+      getInfoData($(this).attr('value'));
+      $(this).attr('class', 'layui-btn layui-btn-sm layui-btn-normal');
+      $(this).siblings().attr('class', 'layui-btn layui-btn-sm layui-btn-primary');
+    });
+    // 请求数据获取收支情况
+    var getMonthData = function () {
+      $.ajax({
+        url: '/ADC_info/api/dashboard/getContractDashBoardHeaderVO',
+        type: 'get',
+        success: function (res) {
+          if (res.ok) {
+              res.data["yearInvoiceAmount"] = 26249.40;
+              res.data["monthInvoiceAmount"] = 769.71;
+            for (var item in res.data) {
+              if (item.includes('Rate')) {}
+              else {
+                $('#' + item)
+                  .empty()
+                  .html(res.data[item]);
+              }
+            }
+          }
+        },
+        error: function (err) {
+          console.log(err);
+        },
+      });
+    };
+    getMonthData();
+    // 获取图表信息
+    var getInfoData = function (dataType) {
+      $.ajax({
+        url: '/ADC_info/api/dashboard/getContractDashBoardBodyVO/' + dataType,
+        type: 'get',
+        success: function (res) {
+          currentTimeDataList = res.data.currentTimeDataList;
+          lastTimeDataList = res.data.lastTimeDataList;
+          rateList = res.data.rateList;
+          if(dataType==1){
+              currentTimeDataList = [1370,3223,4368,3498,3045,7696,1813,0,0,0,0,0];
+              lastTimeDataList = [2302,2338,3539,2609,3446,6503,1606,0,0,0,0,0];
+              rateList = [-40.49,37.85,23.42,34.07,-11.64,18.35,12.89,0,0,0,0,0];
+          }
+          getChartInfo();
+        },
+        error: function (err) {
+          console.log(err);
+        },
+      });
+    };
+    // 打开首页默认渲染
+    getInfoData(0);
+    window.onresize = function () {
+      myChart.resize();
+    };
+  </script>
+</div>

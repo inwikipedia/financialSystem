@@ -1,0 +1,371 @@
+<!--
+File   : login.html
+Created: Tuesday August 28th 2018 3:50:41 pm
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Last Modified: Tuesday October 16th 2018 1:48:12 pm
+Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+-----
+Description: 登录页
+-----
+HISTORY:
+2018-09-12	yuchunyu97	修改登录接口为 POST 方法
+2018-08-30	yuchunyu97	优化登录流程，登录后 700ms 跳转到主页
+2018-08-29	yuchunyu97	登录按钮登录过程中设为禁用
+2018-08-29	yuchunyu97	增加波浪动画，将图片与登录框适配大屏居中
+2018-08-28	yuchunyu97	完成登录页基本样式与功能
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 定义浏览器的渲染方式 -->
+    <!-- 如果存在客户端Chrome Frame并启用，那么浏览器访问页面会被Chrome内核渲染 -->
+    <!-- 使用IE内核浏览器来访问，会渲染至该浏览器的最高版本 -->
+    <!-- 比如你使用IE9浏览器，那么就算在兼容模式切换至IE7，但仍会渲染成IE9的样子 -->
+    <!-- 建议测试IE8兼容性的时候注释掉这一行 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- 移动端适配 viewport -->
+    <!-- width 设置 layout viewport 的宽度，为一个正整数，使用字符串”width-device”表示设备宽度 -->
+    <!-- initial-scale 设置页面的初始缩放值，为一个数字，可以带小数 -->
+    <!-- maximum-scale 允许用户的最大缩放值，为一个数字，可以带小数 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- 字符集 -->
+    <meta charset="utf-8" />
+    <!-- Page Title -->
+    <title>登录 | ADC智能信息化系统</title>
+
+    <!-- Favorites Icon Start -->
+    <link rel="shortcut icon" href="./favicon.ico">
+    <link rel="icon" href="./favicon.ico">
+    <!-- Favorites Icon End -->
+
+    <!-- CSS Links -->
+    <link rel="stylesheet" href="assetsInfo/libs/layui/css/layui.css" />
+    <link rel="stylesheet" href="assetsInfo/css/login.css" media="all">
+
+    <!--[if lt IE 9]>
+        <script src="./assetsInfo/libs/html5.min.js"></script>
+        <script src="./assetsInfo/libs/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div class="login-wrapper">
+        <!-- 登录页头部 LOGO -->
+        <div class="login-header">
+            <!-- 财务系统 -->
+            <!--<img src="assetsInfo/images/login_page/login_header_logo1.png">-->
+            <!-- 信息化 -->
+            <img src="assetsInfo/images/login_page/login_header_logo_xxh.png">
+            <p style="float:right;margin-right: 62px;height:100%;display: flex;line-height: 35px;align-items: flex-end">
+                <span style="color:#999999;font-size:14px">推荐浏览器：谷歌浏览器、360浏览器极速模式、搜狗浏览器极速模式</span>
+            </p>
+        </div>
+        <!-- 登录页主体 -->
+        <div class="login-body">
+            <div class="layui-card">
+                <!-- 卡片头 -->
+                <div class="layui-card-header">
+                    <h3>欢迎登录</h3>
+                    <h5>ADC智能信息化系统</h5>
+                </div>
+
+                <input type="text" value="admin" style="position: absolute;z-index: -1;" disabled autocomplete = "off"/><!-- 这个username会被浏览器记住，我随便用个admin-->
+                <input type="password"  value=" " style="position: absolute;z-index: -1;" disabled autocomplete = "off"/>
+
+
+                <!-- 卡片主体 -->
+                <div class="layui-card-body layui-form layui-form-pane" id="login-form">
+                    <!-- TODO: 用户名、密码输入框输入内容后，添加小叉叉，可以删除输入的内容 -->
+                    <!-- TODO: IE8 下 placeholder属性不起作用，需要进行兼容性处理 -->
+                    <div class="form-item-error-tip">
+                    </div>
+                    <div class="layui-form-item" id="form-username">
+                        <label class="layui-form-label">
+                            <i class="layui-icon layui-icon-username"></i>
+                        </label>
+                        <div class="layui-input-block"  >
+                            <input name="username" type="text" placeholder="请输入用户名" class="layui-input " autocomplete="off" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="form-password">
+                        <label class="layui-form-label">
+                            <i class="layui-icon layui-icon-password"></i>
+                        </label>
+                        <div class="layui-input-block">
+                            <input name="password" type="password"  placeholder="请输入密码" class="layui-input" autocomplete="off" minlength="6" maxlength="20">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="form-code" style="display: none">
+                        <label class="layui-form-label">
+                            <i class="layui-icon layui-icon-vercode"></i>
+                        </label>
+                        <div class="layui-input-block">
+                            <div class="layui-row inline-block" >
+                                <div class="layui-col-md6 layui-col-xs7">
+                                    <input name="verifyCode" type="text"  placeholder="请输入验证码"
+                                        maxlength="4" class="layui-input">
+                                </div>
+                                <div class="layui-col-md6 layui-col-xs5" style="text-align: right;padding-left: 10px;">
+                                    <img class="login-captcha" id="vercode" src="/ADC_info/api/verifyCode" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <button lay-filter="login-submit" class="layui-btn layui-btn-fluid" lay-submit id="login-submit">
+                            登录
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 左部图片 -->
+            <div class="login_image login_image-l">
+                <!--<img src="./assetsInfo/images/login_page/login_body_left.png" alt="image" style="width: 700px;">-->
+            </div>
+            <!-- 右部图片 -->
+            <div class="login_image login_image-r">
+                <!--<img src="./assetsInfo/images/login_page/login_body_right.png" alt="image" style="width: 170px;">-->
+            </div>
+
+            <!-- 底部波浪动画，IE8、IE9 不支持 -->
+            <!--[if !IE]><!-->
+            <div class="waveWrapperInner waveTop">
+                <div></div>
+            </div>
+            <div class="waveWrapperInner waveMiddle">
+                <div></div>
+            </div>
+            <!-- <div class="waveWrapperInner waveBottom">
+                <div></div>
+            </div> -->
+            <!--<![endif]-->
+
+        </div>
+        <!-- 页脚 -->
+        <div class="login-footer">
+            <p>
+                <span>版权所有：</span>
+                <a href="http://www.catarc.info/" target="_blank">中国汽车技术研究中心有限公司数据资源中心</a>
+                <span>版本号：v1.0.0</span>
+            </p>
+        </div>
+    </div>
+
+    <!--[if IE 8]>
+        <script>
+            var IE8 = true;
+        </script>
+    <![endif]-->
+
+    <script type="text/javascript" src="./assetsInfo/libs/layui/layui.js"></script>
+    <script type="text/javascript" src="./assetsInfo/libs/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="./assetsInfo/js/base64.js"></script>
+    <script type="text/javascript" src="./assetsInfo/js/jsencrypt.min.js"></script>
+    <script type="text/javascript" src="./module/ajaxSet.js"></script>
+    <script>
+        "use strict";
+        layui.config({
+            base: 'module/'
+        }).use(['config', 'form'], function () {
+            var $ = layui.jquery;
+            var form = layui.form;
+            var config = layui.config;
+
+            if (typeof (IE8) !== 'undefined') {
+                // 图片和 LOGO 以及登录框定位 兼容 IE8
+                var screenWidth = window.screen.width;
+                $('.login-header>img').css('margin-left', (screenWidth / 2 - 515) + 'px'); //
+                $('.login_image-l').css('left', (screenWidth / 2 - 615) + 'px'); //
+                $('.login_image-r').css('left', (screenWidth / 2 + 445) + 'px'); //
+                $('.layui-card').css('margin-left', (screenWidth / 2 + 85) + 'px'); //
+            }
+
+            // 先判断登录状态，如果登录了直接跳转首页
+            if (config.getAccount()) {
+                location.replace('./');
+                return;
+            }
+            $('#login-form').find("input").blur(function(){
+
+                var thisVal =  $(this).val();
+
+                if (thisVal) {
+                    $(this).removeClass("bor");
+                }
+
+                var name=$(this).attr("name");
+
+                if (name=='verifyCode'&thisVal!='') {
+                    $('.form-item-error-tip').html('')
+                    if(thisVal.length!=4) {
+                        $('.form-item-error-tip').html('您输入的验证码不正确');
+                        $('#form-code .layui-input').addClass('bor');
+                        return;
+                    }
+                    $.ajax({
+                        url: config.base_server + '/ADC_info/api/judgeVerify?verify='+thisVal,
+                        data: {},
+                        type: 'put',
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: 'JSON',
+                        timeout: 5000,
+                        success: function (data) {
+
+                            if (data.ok) {
+
+                            } else {
+                                //layer.closeAll('loading');
+                                $('.form-item-error-tip').html('您输入的验证码不正确');
+                                $('#form-code .layui-input').addClass('bor');
+                            }
+                        },
+                        error: function (xhr) {
+                            layer.closeAll('loading');
+                            layer.msg('服务错误！' + xhr.statusText);
+                        }
+                    });
+                }
+            });
+
+            function addErrorTip(elem,content) {
+               elem.append('<div class="form-item-error-tip">' +content +'</div>');
+            }
+
+            // 登录表单提交
+            form.on('submit(login-submit)', function (obj) {
+                // 获取输入框中的数据
+                var field = obj.field;
+                $('.form-item-error-tip').html("");
+                if (field.username=='')
+                {
+                    $('.form-item-error-tip').html('用户名不能为空');
+                    $('#form-username .layui-input').addClass('bor');
+                    return;
+                }
+                if (field.password=='')
+                {
+                    $('.form-item-error-tip').html('密码不能为空');
+                    $('#form-password .layui-input').addClass('bor');
+                    return;
+                }
+                // if (field.verifyCode=='')
+                // {
+                //     $('.form-item-error-tip').html('验证码不能为空');
+                //     $('#form-code .layui-input').addClass('bor');
+                //     return;
+                // }
+
+                $('button').attr('disabled', 'disabled');
+                $('button').css('opacity',0.4);
+                $('button').html('<i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>登录中');
+                // field.password=$.base64.encode(field.password);
+                // field.username=$.base64.encode(field.username);
+                function encryptedData (publicKey, pwd) {
+                    // 私钥 和后端沟通
+                    // 新建JSEncrypt对象
+                    var encryptor = new JSEncrypt()
+                    // 设置公钥
+                    encryptor.setPublicKey(publicKey)
+                    // 加密数据
+                    var decrypt = encryptor.encrypt(pwd.toString())
+                    return decrypt
+                }
+                var pubKey="MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKtSP3y2DkyoDQsFGr6sn4saLBFwcijEPWsWQ1Hnz8sIvn7V3TyNrSesf+7nPgnUk9Gt/7aKsXUkY67BzMJ5xkECAwEAAQ==";
+                field.password=encryptedData(pubKey,field.password);
+                field.username=encryptedData(pubKey,field.username);
+        /* 发送登录请求 */
+                $.ajax({
+                    url: config.base_server + '/ADC_info/api/login',
+                    data: JSON.stringify(field),
+                    type: 'POST',
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: 'JSON',
+                    timeout: 5000,
+                    success: function (data) {
+                        if (data.ok) {
+                            // 保存登录信息
+                            config.putAccount(data.data);
+                            // 跳转主页
+                            // window.location.replace('./');
+                            window.location.replace('./homePage.html');
+                        } else {
+                            $('.form-item-error-tip').html(data.message);
+                            if(data.respCode=='r0011')
+                            {
+                                $('#form-username .layui-input').addClass('bor');
+                                $('#form-code .layui-input').removeClass('bor');
+
+                            }
+                            if( data.message == "您输入的验证码不正确"){
+                                $("#form-code").show();
+                            }
+                            if(!data.ok && data.data){
+                                $("#form-code").show();
+                            }
+                            else if (data.respCode=='r0012')
+                            {
+                                $('#form-code .layui-input').addClass('bor');
+                                $('#form-username .layui-input').removeClass('bor');
+                            }
+                            // 刷新验证码
+                            $("#vercode").attr('src',$("#vercode")[0].src + '?t=' + (new Date).getTime());
+                            $('button').html('登录');
+                            $('button').css('opacity',1);
+                            $('button').removeAttr('disabled');
+                        }
+                    },
+                    error: function (xhr) {
+                        layer.closeAll('loading');
+                        layer.msg('服务错误！' + xhr.statusText);
+                        // 刷新验证码
+                       $("#vercode").attr('src',$("#vercode")[0].src + '?t=' + (new Date).getTime());
+                        $('button').removeAttr('disabled');
+                        $('button').html('登录');
+                        $('button').css('opacity',1);
+                    }
+                });
+            });
+
+            // 点击刷新图形验证码
+            $('.login-captcha').click(function () {
+                this.src = this.src + '?t=' + (new Date).getTime();
+            });
+
+            // input输入框点击回车提交
+            $('input').keyup(function (event) {
+
+                if (event.keyCode === 13) {
+
+                    $('#login-submit').click();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

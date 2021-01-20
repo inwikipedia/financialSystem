@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>文本框</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-ie6.css">
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/ie.css">
+    <![endif]-->
+    <script type="text/javascript" src="../dialogs/internal.js"></script>
+    <script src="./utils.js"></script>
+    <script src="./jquery-1.7.2.min.js"></script>
+</head>
+
+<body>
+    <div id="container">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>表格编号</th>
+                    <th>表格内容</th>
+                    <th>初始化行数</th>
+                    <th>设置为可扩展表格</th>
+                </tr>
+            </thead>
+            <tbody id="expand-con"></tbody>
+        </table>
+    </div>
+
+    <script>
+        var thePlugins = 'adc_form_expand',
+            editorContent = '',
+            editorIns = null;
+        window.onload = function () {
+            var editorName = UE.ADCFormDesignEditor;
+            if (editorName === undefined) return alert('未配置 `UE.ADCFormDesignEditor` 变量，找不到 ADCFormDesign 实例名称');
+            try {
+                editorIns = UE.getEditor(editorName);
+            } catch (err) {
+                return alert('`UE.ADCFormDesignEditor` 变量配置错误');
+            }
+
+            editorContent = editorIns.getContent();
+            var dom = $('<div>' + editorContent + '</div>');
+            var tableDom = dom.find('table'),
+                tableHtml = '';
+            $.each(tableDom, function (index, item) {
+                var isExpand = $(item).attr('adcform') === thePlugins,
+                    checkStatus = isExpand ? 'checked="checked"' : '',
+                    checkText = isExpand ? '<span style="color: green;">可扩展</span>' : '<span style="color: red;">不可扩展</span>',
+                    row = $(item).attr('expand_row') ? $(item).attr('expand_row') : 0;
+                tableHtml += '<tr>\
+                                <td>' + (Number(index) + 1) + '</td>\
+                                <td>' + item.outerText + '</td>\
+                                <td><input type="number" name="expand_' + index + '" value="' + row + '" style="width: 40px;" disabled="disabled" /></td>\
+                                <td>\
+                                    <label class="checkbox inline"><input onchange="checkboxOnchange(this)" name="expand" type="checkbox" ' + checkStatus + ' />' + checkText + '</label>\
+                                </td>\
+                            </tr>';
+            });
+            $('#expand-con').html(tableHtml);
+        }
+
+        dialog.onok = function () {
+            var checkArray = $('input[name="expand"]');
+            var ind = 0;
+            // 在 table 标签上增加标记，标记是否为可扩展表格
+            editorContent = editorContent.replace(/<table(.*?)>/ig, function () {
+                var attrs = arguments[1];
+                var checkStatus = checkArray[ind].checked;
+                var row = Number($('input[name="expand_' + ind + '"]').val());
+                if (checkStatus) {
+                    if (row < 0) row = 0;
+                    attrs += ' adcform="' + thePlugins + '"';
+                    attrs += ' expand_row="' + row + '"';
+                    attrs += ' data-expandid="' + parseInt(Math.random() * 100000, 10) + '"';
+                } else {
+                    attrs.replace('adcform="' + thePlugins + '"', '');
+                    attrs.replace(/expand_row="(.*?)"/, '');
+                }
+                ind++;
+                return '<table' + attrs + '>'
+            });
+            if (editorContent.match('class="adcform_plugin_extend"')) {
+                editorContent = editorContent.replace(/<script class="adcform_plugin_extend">(.*?)<\/script>/ig, '');
+            }
+            editorIns.setContent(editorContent);
+            editorIns.setContent('{|-<script class="adcform_plugin_extend">\
+                (function () {\
+                    var ext = $("table[adcform=\'' + thePlugins + '\']");\
+                    for (var i = 0; i < ext.length; i++) {\
+                        (function (num) {\
+                            var item = $(ext[num]);\
+                            var row = $(ext[num]).attr("expand_row");\
+                            item.css("position", "relative");\
+                            var iElem = $("<i></i>");\
+                            iElem.attr("class", "layui-icon layui-icon-add-1");\
+                            iElem.css({\
+                                "position": "absolute",\
+                                "bottom": "-20px",\
+                                "right": "0",\
+                                "width": "20px",\
+                                "height": "20px",\
+                                "line-height": "20px",\
+                                "text-align": "center",\
+                                "cursor": "pointer"\
+                            });\
+                            iElem.on("click", function () {\
+                                expand_row();\
+                            });\
+                            \
+                            function expand_row() {\
+                                var newHtml = ADCFormDesignHelper.formatExpandHtml(item.find("tr")[1].outerHTML);\
+                                item.find("tbody").append(newHtml);\
+                                layui.form.render();\
+                            }\
+                            item.find("tbody").append(iElem);\
+                            \
+                            for (var j = 0; j < row; j++) {\
+                                expand_row();\
+                            }\
+                            \
+                            $(item.find("tr")[1]).css("display", "none");\
+                        })(i);\
+                    }\
+                })();\
+            <\/script>-|}', true);
+        };
+        function checkboxOnchange(e) {
+            var el = $(e),
+                checked = el.attr('checked');
+            el.parent().find('span').css('color', checked ? 'green' : 'red');
+            el.parent().find('span').text(checked ? '可扩展' : '不可扩展');
+        }
+    </script>
+</body>
+
+</html>

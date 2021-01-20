@@ -1,0 +1,663 @@
+<style>
+    .selectProject {
+        height: 26px;
+        border: 1px solid #999;
+        border-radius: 3px;
+    }
+</style>
+<div class="layui-row">
+    <div class="layui-col-md12">
+        <div class="layui-card p-main">
+            <!-- 卡片容器 -->
+            <div class="layui-card-body" style="height: auto; overflow: hidden;">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar">
+
+                        <input type="hidden" id="extTableName" value="tableContent-confirmProject">
+                        <input type="hidden" id="extTableUrl" value="/api/budget/buinessComfirmContract/updateprocessInstanceIdByIdList">
+                        <div class="layui-inline">
+                            <span>冻结方向：</span>
+                            <div class="layui-inline" style="width: 70px;">
+                                <select name="colsDir" id="colsDir" lay-filter="colsDir">
+                                    <option value="forward">前</option>
+                                    <option value="behind">后</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <span>冻结列数：</span>
+                            <div class="layui-inline" style="width: 70px;">
+                                <select name="colsNum" id="colsNum" lay-filter="colsNum">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- 右侧 -->
+                        <div class="layui-inline layui-pull-right">
+                            <div class="layui-inline">
+                                <button id="btn_add_project" class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_add_project" lay-submit title="新增">
+                                    <i class="layui-icon layui-icon-add-1"></i>新增
+                                </button>
+                                <button id="btn_upload_project" class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_upload_project" lay-submit title="上传">
+                                    <i class="layui-icon layui-icon-upload-circle"></i>上传
+                                </button>
+
+                                <button id="btn_download_project" class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_download_project" lay-submit title="下载">
+                                    <i class="layui-icon layui-icon-download-circle"></i>下载
+                                </button>
+
+                                <button id="btn_del_project_batch" class="layui-btn layui-btn-sm layui-btn-danger" lay-filter="btn_del_project_batch" lay-submit title="删除">
+                                    <i class="layui-icon layui-icon-delete"></i>删除
+                                </button>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 下部表格容器 -->
+                <table id="tableContent-confirmProject" layui-hide lay-filter="tableContent-confirmProject"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  新增弹层 -->
+<div id="addelectronicTpl" class="layui-form" lay-filter="addelectronicTpl" style="display: none;padding: 20px;margin-top: 15px;">
+    <input type="hidden" id="electronicId">
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="longitude">经度</label>
+        <div class="layui-input-block">
+            <input type="text" placeholder="输入经度" class="layui-input" id="longitude" name="longitude">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="latitude">纬度</label>
+        <div class="layui-input-block">
+            <input type="text" placeholder="输入纬度" class="layui-input" id="latitude" name="latitude">
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="proState">
+    <input type="hidden" value={{d.proState}}>
+    <select name="proState_selected" class="selectProject" lay-filter="proState_selected" lay-ignore>
+        <option value="">-- 请选择 --</option>
+        <option value="正常审批项目">正常审批项目</option>
+        <option value="终止项目">终止项目</option>
+        <option value="超预算项目">超预算项目</option>
+    </select>
+</script>
+
+<script type="text/html" id="ifContinueExecute">
+    <input type="hidden" value={{d.ifContinueExecute}}>
+    <select name="ifContinueExecute_selected" class="selectProject" id="ifContinueExecute_selected" lay-ignore>
+        <option value="">-- 请选择 --</option>
+        <option value="是">是</option>
+        <option value="否">否</option>
+    </select>
+</script>
+
+<script type="text/html" id="contractType">
+    <input type="hidden" value={{d.contractType}}>
+    <select name="contractType_selected" class="selectProject" lay-filter="contractType_selected" lay-ignore>
+        <option value="">-- 请选择 --</option>
+        <option value="费用">费用</option>
+        <option value="资产">资产</option>
+    </select>
+</script>
+
+<script type="text/html" id="contractSigningTime">
+    <input type="hidden" value={{d.contractSigningTime}}>
+    <select name="contractSigningTime_selected" class="selectProject" lay-filter="contractSigningTime_selected" lay-ignore>
+        <option value="">-- 请选择 --</option>
+        <option value="11月">11月</option>
+        <option value="12月">12月</option>
+        <option value="2019年">2019年</option>
+    </select>
+</script>
+
+<script>
+    layui.use(['table', 'upload', 'config', 'jquery', 'laydate', 'pageAuth'], function() {
+        var table = layui.table,
+            form = layui.form,
+            admin = layui.admin,
+            config = layui.config,
+            $ = layui.jquery,
+            laydate = layui.laydate,
+            pageAuth = layui.pageAuth,
+            upload = layui.upload;
+
+        pageAuth.init(); //初始化页面权限变量
+        //动态调整表格高度
+        var tableHeight = 360;
+        if(config.businessParam.tableHeight){
+           tableHeight = config.businessParam.tableHeight;
+           }
+        var tableAuth = {}; //表格权限
+        var searchObj = {}; //查询条件
+
+        //获取表格权限、按钮权限、查询条件，并渲染表格
+        var initPage = function() {
+            var auth = pageAuth.getTableAuth();
+            searchObj = pageAuth.getQueryConditions();
+            var buttonAuth = pageAuth.getButtonAuth();
+            $('#btn_add_project').css('display', buttonAuth[0]);
+            $('#btn_del_project_batch').css('display', buttonAuth[1]);
+            $('#btn_upload_project').css('display', buttonAuth[2]);
+            $('#btn_download_project').css('display', buttonAuth[3]);
+            //获取列权限
+            admin.req('components/externalForm/projectDataAuth.json', {}, function(req) {
+                if (req.ok) {
+                    tableAuth = req.data[auth];
+                }
+                //初始化渲染表格
+                renderTable(searchObj, {
+                    "direction": "",
+                    "num": ""
+                });
+            });
+        }
+
+        // 渲染表格
+        var renderTable = function(data, colsParam) {
+            if (!data) {
+                data = {};
+            }
+
+            var tableIns = table.render({
+                // table参数
+                elem: '#tableContent-confirmProject',
+                //url: admin.formatUrl('components/externalForm/projectData.json'),
+                url: admin.formatUrl('/api/budget/buinessComfirmContract'),
+                where: data,
+                height: tableHeight,
+                parseData: function(res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        //"count": res.data.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+                },
+                cols: getCols(colsParam.direction, colsParam.num),
+                page: false,
+                //height: 450,
+                done: function(res, curr, count) {
+                    if (pageAuth.enableLock()) {  //行锁定权限是否生效
+                        //锁定行的权限控制
+                        var dataCache = table.cache['tableContent-confirmProject'],
+                            el = this.elem.next('.layui-table-view');
+                        $.each(dataCache, function(ind, item) {
+                            if (item.islock === '是') {
+                                var i = item.LAY_TABLE_INDEX;
+                                el.find('tr[data-index="' + i + '"]').find('input[name="layTableCheckbox"]')
+                                    .attr({
+                                        name: 'layTableCheckboxDisabled',
+                                        disabled: 'disabled'
+                                    })
+                            }
+                        });
+                    }
+                    //下拉回显及权限控制
+                    setSelected(['proState', 'ifContinueExecute', 'contractType', 'contractSigningTime']);
+                    //修复表格中放下拉框，下拉框下部被隐藏一部分的bug
+                    var tableElem = this.elem.next('.layui-table-view');
+                    layui.each(tableElem.find('tbody select'), function(index, item) {
+                        var elem = $(item);
+                        elem.parents('div.layui-table-cell').css('overflow', 'visible');
+                    });
+                    //重新渲染表格下拉框
+                    form.render();
+                    //修复表格固定列的问题
+                    $(window).resize();
+                    //初始化表格编辑校验
+                    LayValidator.init({
+                        filter: 'tableContent-confirmProject', //与待校验table元素的lay-filter属性对应
+                        cols: [ //需要校验的列设置
+                            {
+                                field: 'meetingDate',
+                                maxLength: 40
+                            }, {
+                                field: 'deptId',
+                                maxLength: 40,
+                                notEmpty: true
+                            }, {
+                                field: 'projectName',
+                                maxLength: 40,
+                                notEmpty: true
+                            }, {
+                                field: 'proMoney',
+                                type: 'float2',
+                                notEmpty: true
+                            }, {
+                                field: 'contractNo',
+                                maxLength: 40,
+                                notEmpty: true
+                            }, {
+                                field: 'secondParty',
+                                maxLength: 40,
+                                notEmpty: true
+                            }, {
+                                field: 'proMoney2',
+                                type: 'float2',
+                                notEmpty: true
+                            }, {
+                                field: 'zerenren',
+                                maxLength: 10
+                            }, {
+                                field: 'remark',
+                                maxLength: 450,
+                                notEmpty: true
+                            }
+                            //some other cols..
+                        ],
+                        success: function(obj) {
+                            var updateData = {
+                                id: obj.data.id
+                            };
+                            updateData[obj.field] = obj.value;
+                            admin.req('/api/budget/buinessComfirmContract', updateData, function(res) {
+                                if (res.ok) {
+
+                                } else {
+                                    layer.msg('更新失败' + res.message, {
+                                        icon: 5
+                                    });
+                                }
+                            }, {
+                                method: 'PUT'
+                            });
+                        },
+                        error: function(obj) {},
+                        final: function(obj) {}
+                    });
+                },
+                // 列宽最少 120，防止在小屏幕上显示不全列标题
+                cellMinWidth: 120
+            });
+        }
+        
+        // 初始化，执行一次渲染表格
+        initPage();
+
+        //Select回显+权限控制
+        var setSelected = function(arr) {
+            for (var i = 0; i < arr.length; i++) {
+                $("[data-field = " + arr[i] + "]").children().each(function() {
+                    var value = $($(this).find("input")[0]).val();
+                    var select = $(this).children("select")[0];
+                    if (value != "null") {
+                        $(select).val(value);
+                    }
+                    if (!tableAuth[arr[i]]) {
+                        $(select).attr("disabled", "disabled");
+                    }
+                });
+            }
+        }
+        
+        //获得表格渲染所需列数据
+        function getCols(direction, num) {
+            var cols = [
+                [{
+                    checkbox: true,
+                    fixed: 'left',
+                    rowspan: '2'
+                }, {
+                    field: 'id',
+                    hide: true
+                }, {
+                    type: 'numbers',
+                    title: '序号',
+                    fixed: 'left',
+                    rowspan: '2'
+                }, {
+                    field: 'meetingDate',
+                    title: '上会时间',
+                    align: 'center',
+                    rowspan: '2',
+                    edit: tableAuth.meetingDate
+                }, {
+                    field: 'deptId',
+                    title: '部门',
+                    align: 'center',
+                    rowspan: '2',
+                    width: 150,
+                    edit: tableAuth.deptId,
+                    templet:function(d) {
+                        var text= d.deptId ? d.deptId : "";
+                        return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                    }
+                }, {
+                    field: 'projectName',
+                    title: '项目名称',
+                    align: 'center',
+                    rowspan: '2',
+                    width: 260,
+                    edit: tableAuth.projectName,
+                    templet:function(d) {
+                        var text= d.projectName ? d.projectName : "";
+                        return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                    }
+                }, {
+                    field: 'proMoney',
+                    title: '预算金额',
+                    align: 'center',
+                    rowspan: '2',
+                    edit: tableAuth.proMoney
+                }, {
+                    field: 'proState',
+                    templet: '#proState',
+                    title: '项目状态',
+                    align: 'center',
+                    width: 150,
+                    rowspan: '2'
+                }, {
+                    field: 'yqht',
+                    title: '已签合同',
+                    align: 'center',
+                    colspan: '3'
+                }, {
+                    field: 'ifContinueExecute',
+                    templet: '#ifContinueExecute',
+                    title: '是否继续执行',
+                    align: 'center',
+                    rowspan: '2'
+                }, {
+                    field: 'yjzxqk',
+                    title: '预计执行情况',
+                    align: 'center',
+                    colspan: '2'
+                }, {
+                    field: 'zerenren',
+                    title: '责任人',
+                    align: 'center',
+                    rowspan: '2',
+                    edit: tableAuth.zerenren,
+                    templet:function(d) {
+                        var text= d.zerenren ? d.zerenren : "";
+                        return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                    }
+                }, {
+                    field: 'remark',
+                    title: '备注',
+                    align: 'center',
+                    rowspan: '2',
+                    edit: tableAuth.remark,
+                    templet:function(d) {
+                        var text= d.remark ? d.remark : "";
+                        return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                    }
+                }],
+                [{
+                    field: 'contractNo',
+                    title: '合同编号',
+                    align: 'center',
+                    width: '160',
+                    edit: tableAuth.contractNo,
+                    templet:function(d) {
+                        var text= d.contractNo ? d.contractNo : "";
+                        return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                    }
+                }, {
+                    field: 'secondParty',
+                    title: '乙方',
+                    align: 'center',
+                    width: '160',
+                    edit: tableAuth.secondParty,
+                    templet:function(d) {
+                        var text= d.secondParty ? d.secondParty : "";
+                        return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                    }
+                }, {
+                    field: 'proMoney2',
+                    title: '合同金额',
+                    align: 'center',
+                    width: '160',
+                    edit: tableAuth.proMoney2
+                }, {
+                    field: 'contractType',
+                    templet: '#contractType',
+                    title: '合同类型',
+                    align: 'center',
+                    width: '160'
+                }, {
+                    field: 'contractSigningTime',
+                    templet: '#contractSigningTime',
+                    title: '合同签订时间',
+                    align: 'center',
+                    width: '160'
+                }]
+            ]
+            if (direction == "forward") {
+                for (var i = 0; i <= num; i++) {
+                    cols[0][i].fixed = "left";
+                }
+            } else if (direction == "behind") {
+                for (var i = cols[0].length - 1; i >= (cols[0].length - num); i--) {
+                    cols[0][i].fixed = "right";
+                }
+            }
+            return cols;
+        }
+
+        //监听冻结方向下拉框选择
+        form.on('select(colsDir)', function(data) {
+            var option;
+            if (data.value == "forward") {
+                option = '<option value="1">1</option>' +
+                    '<option value="2">2</option>' +
+                    '<option value="3">3</option>' +
+                    '<option value="4">4</option>' +
+                    '<option value="5">5</option>';
+            } else {
+                option = '<option value="1">1</option>' +
+                    '<option value="2">2</option>';
+            }
+            $("#colsNum").empty().append(option);
+            form.render("select");
+        });
+
+        //layui下拉框监听选择
+        form.on('select(colsNum)', function(data) {
+            var params = {};
+            params.direction = $("#colsDir").val();
+            params.num = data.value
+            renderTable(searchObj, params);
+        });
+
+        //下拉框监听修改提交
+        $("body").on("change", ".selectProject", function() {
+            var id = $(this).parent().parent().siblings("[data-field='id']")[0].innerText;
+            var updateData = {
+                id: id
+            };
+            var this_field = $(this).attr('name');
+            this_field = this_field.substr(0, this_field.length - 9);
+            updateData[this_field] = $(this).val();
+            console.log(updateData);
+            admin.req('/api/budget/buinessComfirmContract', updateData, function(res) {
+                if (res.ok) {
+
+                } else {
+                    layer.msg('更新失败' + res.message, {
+                        icon: 5
+                    });
+                }
+            }, {
+                method: 'PUT'
+            });
+        });
+
+        // 新增 按钮事件
+        $('#btn_add_project').on('click', function() {
+            var orgs = config.getAccount().orgs;
+            var org = "";
+            if (orgs.length > 0) {
+                org = orgs[0].name;
+            }
+            layer.open({
+                type: 1,
+                area: ['500px', '300px'], //宽高
+                success: function(layero, index) {
+                    laydate.render({
+                        elem: '#meetingDate',
+                        type: 'date'
+                    });
+                    //添加form标识
+                    layero.addClass("layui-form");
+                    layero.find(".layui-layer-btn0").attr("lay-filter", "addEdit").attr("lay-submit", "");
+                },
+                content: '<div id="addBranchTpl" class="layui-form" lay-filter="branch"; style="padding: 20px" ">\
+                    <input type="hidden" id="branchId">\
+                    <div class="layui-form-item">\
+                       <label class="layui-form-label" for="meetingDate"><span style="color: red;">*</span>上会时间</label>\
+                       <div class="layui-input-block">\
+                           <input type="text" placeholder="请选择上会日期" class="layui-input" id="meetingDate" name="meetingDate" lay-verify="required">\
+                        </div>\
+                        <input type="hidden" id="roleId">\
+                        <input type="hidden" id="roleName">\
+                    </div>\
+                    <div class="layui-form-item">\
+                        <label class="layui-form-label" for="projectName"><span style="color: red;">*</span>项目名称</label>\
+                        <div class="layui-input-block">\
+                            <input type="text" placeholder="输入项目名称" class="layui-input" id="projectName" name="projectName" lay-verify="required">\
+                        </div>\
+                    </div>\
+                    <div class="layui-form-item">\
+                        <label class="layui-form-label" for="proMoney"><span style="color: red;">*</span>项目预算</label>\
+                        <div class="layui-input-block">\
+                            <input type="text" placeholder="输入项目预算金额" class="layui-input" id="proMoney" name="proMoney" lay-verify="required">\
+                        </div>\
+                    </div>\
+                </div>',
+                btn: ['提交', '关闭'],
+                btnAlign: 'c', // l => 居左, c => 居中, r => 居右, 默认居右,
+                // 每个按钮触发的事件
+                btn1: function(index) {
+                    var params = {};
+                    var processInstanceId = config.businessParam.processInstanceId;
+                    if (processInstanceId != null && processInstanceId != "") {
+                        params.processInstanceId = processInstanceId;
+                    }
+                    params.deptId = org;
+                    params.meetingDate = $("#meetingDate").val();
+                    params.projectName = $("#projectName").val();
+                    params.proMoney = $("#proMoney").val();
+                    form.on("submit(addEdit)", function(formData) {
+                        admin.req('/api/budget/buinessComfirmContract', params, function(res) {
+                            if (res.ok) {
+                                layer.msg('新增成功！');
+                                layer.close(index);
+                                table.reload('tableContent-confirmProject', {
+                                    where: {
+                                        reload: new Date().getTime()
+                                    }
+                                });
+                            } else {
+                                layer.msg('更新失败' + res.message, {
+                                    icon: 5
+                                });
+                            }
+                        }, {
+                            method: 'POST'
+                        });
+                    })
+
+                }
+            });
+
+        });
+
+        // 下载 按钮事件
+        $('#btn_download_project').on('click', function() {
+            var url = '/api/budget/buinessComfirmContract/excelExport';
+            url += '?fileName=' + '2018年项目执行情况_' + pageAuth.getNowFormatDate();
+            if (config.businessParam.hasOwnProperty('processInstanceId') && config.businessParam.processInstanceId != null && config.businessParam.processInstanceId != '') {
+                url += '&processInstanceIdIsNull=false&processInstanceId=' + config.businessParam.processInstanceId;
+            } else {
+                url += '&processInstanceIdIsNull=true';
+            }
+            window.location.href = url;
+        });
+
+        //文件上传
+        upload.render({
+            elem: '#btn_upload_project',
+            url: '/api/budget/buinessComfirmContract/excelImport',
+            field: 'file',
+            accept: 'file',
+            exts: 'xls|xlsx',
+            acceptMime: 'application/vnd.ms-excel,application/x-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            before: function(obj) {
+                // admin.showLoading();
+            },
+            done: function(res) {
+                // admin.removeLoading();
+                if (res.ok) {
+                    layer.msg('数据上传成功！', {
+                        icon: 1
+                    });
+                    table.reload('tableContent-confirmProject', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                } else {
+                    layer.msg('数据上传失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            }
+        });
+
+        // 批量删除 按钮事件
+        $('#btn_del_project_batch').on('click', function() {
+            var checkStatus = table.checkStatus('tableContent-confirmProject');
+            console.log(checkStatus);
+            if (checkStatus.data.length === 0) {
+                return layer.msg('请选择要删除的数据！', {
+                    icon: 0
+                });
+            }
+            var delArr = [];
+            for (var i = 0; i < checkStatus.data.length; i++) {
+                delArr.push(checkStatus.data[i].id);
+            }
+
+            layer.confirm('确定删除选中的 ' + checkStatus.data.length + ' 条数据吗？', {
+                icon: 3,
+                title: '提示'
+            }, function() {
+                admin.req('/api/budget/buinessComfirmContract/deleteBatch', delArr,
+                    function(data) {
+                        if (data.ok) {
+                            layer.msg('数据删除成功！', {
+                                icon: 1
+                            });
+                            table.reload('tableContent-confirmProject', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        } else {
+                            return layer.msg('数据删除失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: 'delete'
+                    });
+            });
+        });
+
+    });
+
+</script>

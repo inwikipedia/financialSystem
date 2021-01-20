@@ -1,0 +1,14 @@
+
+<div ng-controller="ConditionExpressionDisplayCtrl">
+    <!--
+<span ng-if='property.value==&apos;${approve=="agree"}&apos;'>agree</span>
+<span ng-if='property.value==&apos;${approve=="rollback"}&apos;'>rollback</span>
+-->
+
+    <span ng-if="property.value">{{name}}</span>
+    <span ng-if="!property.value">{{'PROPERTY.SEQUENCEFLOW.CONDITION.NO-CONDITION-DISPLAY' | translate}}</span>
+    <span ng-if="property.value!=null && property.value != ''" ng-click="clearConditionExpression();$event.stopPropagation();" class="glyphicon glyphicon-remove" style="display: inline;float:right;line-height: 35px;" ></span>
+
+    <!--
+    <span ng-if='a==`${approve=="agree"}`'></span>-->
+</div>

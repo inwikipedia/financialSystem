@@ -1,0 +1,938 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>列表控件属性</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-ie6.css">
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/ie.css">
+    <![endif]-->
+    <script type="text/javascript" src="../dialogs/internal.js"></script>
+    <script src="./utils.js"></script>
+    <script type="text/javascript" src="./jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/assetsInfo/js/ADCFormDesignHelper.js"></script>
+    <script type="text/javascript" src="/assetsInfo/libs/layui/lay/modules/layer.js"></script>
+</head>
+
+<body>
+    <div class="content">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>
+                        <span> 控件名称 ：</span>
+                        <input id="adcform_title" placeholder="必填项" type="text" class="input-medium" value="列表控件" /> <span
+                            class="label label-important">*</span>
+                    </td>
+                    <td>
+                        宽 <input id="adcform_width" type="text" value="97%" class="input-small span1"
+                            placeholder="auto" />
+                        % 或 px
+                    </td>
+                    <td>
+                        备注
+                        <input type="checkbox" id="remark">
+                    </td>
+                    <td>
+                        <button onclick="addnewTitle()" class="btn btn-default pull-right">添加</button>
+                    </td>
+                </tr>
+            </thead>
+        </table>
+
+
+        <table class="table table-striped table-bordered table-condensed" id="tbl">
+            <thead>
+                <tr>
+                    <th> <span>序号</span> </th>
+                    <th> <span>表头</span> </th>
+                    <th> <span>类型</span> </th>
+                    <th> <span>单位</span> </th>
+                    <th> <span>数据字典</span></th>
+                    <th> <span>合计</span> <a id="showCountTips" title="在该列的底部显示该列的合计数值，数据类型只允许数值类型" rel="popover"><i
+                                class="icon-info-sign"></i></a> </th>
+                    <th> <span>默认值</span> </th>
+                    <th> <span>规则校验</span> </th>
+                </tr>
+            </thead>
+            <tbody id="tbl1">
+                <tr linenumber='0'>
+                    <td><span class="badge">1</span></td>
+                    <td title="Tab键切换输入框"> <input id="item_1" type="text" class="input-medium"> </td>
+                    <td title="Tab键切换输入框">
+                        <select id="coltype_1" class="input-medium" onchange="javascript:selectchange(this)">
+                            <option value="text">单行输入框</option>
+                            <option value="textarea">多行输入框</option>
+                            <option value="int">数值</option>
+                            <option value="select">下拉框</option>
+                            <option value="datetime">日期选择</option>
+                            <option value="user_select">人员选择</option>
+                            <option value="org_select">组织机构选择</option>
+                        </select>
+                    </td>
+                    <td title="Tab键切换输入框"> <label><input type="text" class="input-mini" id="unit_1" value=""> </label>
+                    </td>
+                    <td title="Tab键切换输入框"><input type="text" class="input-mini" id="select_1" value="">
+                    </td>
+                    <td title="Tab键切换输入框"> <label> <input type="checkbox" id="sum_1" class="csum" value="1"> </label>
+                    </td>
+                    <td title="Tab键切换输入框"><input id="colvalue_1" type="text" class="input-medium" /></td>
+                    <td title="Tab键切换输入框">
+                        <select id="rule_1" onchange="javascript:ruleselectchange(this)">
+                            <option value="nothing">无</option>
+                            <option value="notnull">非空</option>
+                            <option value="number">数字</option>
+                            <option value="word">字母</option>
+                            <option value="postcode">邮政编码</option>
+                            <option value="phonenumber">手机号码</option>
+                            <option value="email">电子邮件</option>          
+                            <option value="url">网址</option>
+                            <option value="str616">6到16位任意字符</option>
+                            <option value="num616">6到16位数字</option>
+                            <option value="str618">6到18位字符串</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr linenumber='1'>
+                    <td><span class="badge">2</span></td>
+                    <td title="Tab键切换输入框"> <input id="item_2" type="text" class="input-medium"> </td>
+                    <td title="Tab键切换输入框">
+                        <select id="coltype_2" class="input-medium" onchange="javascript:selectchange(this)">
+                            <option value="text">单行输入框</option>
+                            <option value="textarea">多行输入框</option>
+                            <option value="int">数值</option>
+                            <option value="select">下拉框</option>
+                            <option value="datetime">日期选择</option>
+                            <option value="user_select">人员选择</option>
+                            <option value="org_select">组织机构选择</option>
+                        </select>
+                    </td>
+                    <td title="Tab键切换输入框"> <label><input type="text" class="input-mini" id="unit_2" value=""> </label>
+                    </td>
+                    <td title="Tab键切换输入框"> <input type="text" class="input-mini" id="select_2" value="">
+                    </td>
+                    <td title="Tab键切换输入框"> <label> <input type="checkbox" id="sum_2" class="csum" value="2"> </label>
+                    </td>
+                    <td title="Tab键切换输入框"><input id="colvalue_2" type="text" class="input-medium" /></td>
+                    <td title="Tab键切换输入框">
+                            <select id="rule_2" onchange="javascript:ruleselectchange(this)">
+                                <option value="nothing">无</option>
+                                <option value="notnull">非空</option>
+                                <option value="number">数字</option>
+                                <option value="word">字母</option>
+                                <option value="postcode">邮政编码</option>
+                                <option value="phonenumber">手机号码</option>
+                                <option value="email">电子邮件</option>          
+                                <option value="url">网址</option>
+                                <option value="str616">6到16位任意字符</option>
+                                <option value="num616">6到16位数字</option>
+                                <option value="str618">6到18位字符串</option>
+                            </select>
+                        </td>
+                </tr>
+
+                <tr linenumber='2'> 
+                    <td><span class="badge">3</span></td>
+                    <td title="Tab键切换输入框"> <input id="item_3" type="text" class="input-medium"> </td>
+                    <td title="Tab键切换输入框">
+                        <select id="coltype_3" class="input-medium" onchange="javascript:selectchange(this)">
+                            <option value="text">单行输入框</option>
+                            <option value="textarea">多行输入框</option>
+                            <option value="int">数值</option>
+                            <option value="select">下拉框</option>
+                            <option value="datetime">日期选择</option>
+                            <option value="user_select">人员选择</option>
+                            <option value="org_select">组织机构选择</option>
+                        </select>
+                    </td>
+                    <td title="Tab键切换输入框"> <label><input type="text" class="input-mini" id="unit_3" value=""> </label>
+                    </td>
+                    <td title="Tab键切换输入框"> <input type="text" class="input-mini" id="select_3" value=""> 
+                    </td>
+                    <td title="Tab键切换输入框"> <label> <input type="checkbox" id="sum_3" class="csum" value="3"> </label>
+                    </td>
+                    <td title="Tab键切换输入框"><input id="colvalue_3" type="text" class="input-medium" /></td>
+                    <td title="Tab键切换输入框">
+                            <select id="rule_3" onchange="javascript:ruleselectchange(this)">
+                                <option value="nothing">无</option>
+                                <option value="notnull">非空</option>
+                                <option value="number">数字</option>
+                                <option value="word">字母</option>
+                                <option value="postcode">邮政编码</option>
+                                <option value="phonenumber">手机号码</option>
+                                <option value="email">电子邮件</option>          
+                                <option value="url">网址</option>
+                                <option value="str616">6到16位任意字符</option>
+                                <option value="num616">6到16位数字</option>
+                                <option value="str618">6到18位字符串</option>
+                            </select>
+                        </td>
+                </tr>
+                <tr linenumber='3'>
+                    <td><span class="badge">4</span></td>
+                    <td title="Tab键切换输入框"> <input id="item_4" type="text" class="input-medium"> </td>
+                    <td title="Tab键切换输入框">
+                        <select id="coltype_4" class="input-medium" onchange="javascript:selectchange(this)">
+                            <option value="text">单行输入框</option>
+                            <option value="textarea">多行输入框</option>
+                            <option value="int">数值</option>
+                            <option value="select">下拉框</option>
+                            <option value="datetime">日期选择</option>
+                            <option value="user_select">人员选择</option>
+                            <option value="org_select">组织机构选择</option>
+                        </select>
+                    </td>
+                    <td title="Tab键切换输入框"> <label><input type="text" class="input-mini" id="unit_4" value=""> </label>
+                    </td>
+                    <td title="Tab键切换输入框"> <input type="text" class="input-mini" id="select_4" value="">
+                    </td>
+                    <td title="Tab键切换输入框"> <label> <input type="checkbox" id="sum_4" class="csum" value="4"> </label>
+                    </td>
+                    <td title="Tab键切换输入框"><input id="colvalue_4" type="text" class="input-medium" /></td>
+                    <td title="Tab键切换输入框">
+                            <select id="rule_4" onchange="javascript:ruleselectchange(this)">
+                                <option value="nothing">无</option>
+                                <option value="notnull">非空</option>
+                                <option value="number">数字</option>
+                                <option value="word">字母</option>
+                                <option value="postcode">邮政编码</option>
+                                <option value="phonenumber">手机号码</option>
+                                <option value="email">电子邮件</option>          
+                                <option value="url">网址</option>
+                                <option value="str616">6到16位任意字符</option>
+                                <option value="num616">6到16位数字</option>
+                                <option value="str618">6到18位字符串</option>
+                            </select>
+                        </td>
+                </tr>
+                <tr linenumber='4'>
+                    <td><span class="badge">5</span></td>
+                    <td title="Tab键切换输入框"> <input id="item_5" type="text" class="input-medium"> </td>
+                    <td title="Tab键切换输入框">
+                        <select id="coltype_5" class="input-medium" onchange="javascript:selectchange(this)">
+                            <option value="text">单行输入框</option>
+                            <option value="textarea">多行输入框</option>
+                            <option value="int">数值</option>
+                            <option value="select">下拉框</option>
+                            <option value="datetime">日期选择</option>
+                            <option value="user_select">人员选择</option>
+                            <option value="org_select">组织机构选择</option>
+                        </select>
+                    </td>
+                    <td title="Tab键切换输入框"> <label><input type="text" class="input-mini" id="unit_5" value=""> </label>
+                    </td>
+                    <td title="Tab键切换输入框"> <input type="text" class="input-mini" id="select_5" value="">
+                    </td>
+                    <td title="Tab键切换输入框"> <label> <input type="checkbox" id="sum_5" class="csum" value="5"> </label>
+                    </td>
+                    <td title="Tab键切换输入框"><input id="colvalue_5" type="text" class="input-medium" /></td>
+                    <td title="Tab键切换输入框">
+                            <select id="rule_5" onchange="javascript:ruleselectchange(this)">
+                                <option value="nothing">无</option>
+                                <option value="notnull">非空</option>
+                                <option value="number">数字</option>
+                                <option value="word">字母</option>
+                                <option value="postcode">邮政编码</option>
+                                <option value="phonenumber">手机号码</option>
+                                <option value="email">电子邮件</option>          
+                                <option value="url">网址</option>
+                                <option value="str616">6到16位任意字符</option>
+                                <option value="num616">6到16位数字</option>
+                                <option value="str618">6到18位字符串</option>
+                            </select>
+                        </td>
+                </tr>
+
+                <tr linenumber='5'>
+                    <td><span class="badge">6</span></td>
+                    <td title="Tab键切换输入框"> <input id="item_6" type="text" class="input-medium"> </td>
+                    <td title="Tab键切换输入框">
+                        <select id="coltype_6" class="input-medium" onchange="javascript:selectchange(this)">
+                            <option value="text">单行输入框</option>
+                            <option value="textarea">多行输入框</option>
+                            <option value="int">数值</option>
+                            <option value="select">下拉框</option>
+                            <option value="datetime">日期选择</option>
+                            <option value="user_select">人员选择</option>
+                            <option value="org_select">组织机构选择</option>
+                        </select>
+                    </td>
+                    <td title="Tab键切换输入框"> <label><input type="text" class="input-mini" id="unit_6" value=""> </label>
+                    </td>
+                    <td title="Tab键切换输入框"> <input type="text" class="input-mini" id="select_6" value="">
+                    </td>
+                    <td title="Tab键切换输入框"> <label> <input type="checkbox" id="sum_6" class="csum" value="6"> </label>
+                    </td>
+                    <td title="Tab键切换输入框"><input id="colvalue_6" type="text" class="input-medium" /></td>
+                    <td title="Tab键切换输入框">
+                            <select id="rule_6" onchange="javascript:ruleselectchange(this)">
+                                <option value="nothing">无</option>
+                                <option value="notnull">非空</option>
+                                <option value="number">数字</option>
+                                <option value="word">字母</option>
+                                <option value="postcode">邮政编码</option>
+                                <option value="phonenumber">手机号码</option>
+                                <option value="email">电子邮件</option>          
+                                <option value="url">网址</option>
+                                <option value="str616">6到16位任意字符</option>
+                                <option value="num616">6到16位数字</option>
+                                <option value="str618">6到18位字符串</option>
+                            </select>
+                        </td>
+                </tr>
+
+                <tr linenumber='6'>
+                    <td><span class="badge">7</span></td>
+                    <td title="Tab键切换输入框"> <input id="item_7" type="text" class="input-medium"> </td>
+                    <td title="Tab键切换输入框">
+                        <select id="coltype_7" class="input-medium" onchange="javascript:selectchange(this)">
+                            <option value="text">单行输入框</option>
+                            <option value="textarea">多行输入框</option>
+                            <option value="int">数值</option>
+                            <option value="select">下拉框</option>
+                            <option value="datetime">日期选择</option>
+                            <option value="user_select">人员选择</option>
+                            <option value="org_select">组织机构选择</option>
+                        </select>
+                    </td>
+                    <td title="Tab键切换输入框"> <label><input type="text" class="input-mini" id="unit_7" value=""> </label>
+                    </td>
+                    <td title="Tab键切换输入框"> <input type="text" class="input-mini" id="select_7" value="">
+                    </td>
+                    <td title="Tab键切换输入框"> <label> <input type="checkbox" id="sum_7" class="csum" value="7"> </label>
+                    </td>
+                    <td title="Tab键切换输入框"><input id="colvalue_7" type="text" class="input-medium" /></td>
+                    <td title="Tab键切换输入框">
+                            <select id="rule_7" onchange="javascript:ruleselectchange(this)">
+                                <option value="nothing">无</option>
+                                <option value="notnull">非空</option>
+                                <option value="number">数字</option>
+                                <option value="word">字母</option>
+                                <option value="postcode">邮政编码</option>
+                                <option value="phonenumber">手机号码</option>
+                                <option value="email">电子邮件</option>          
+                                <option value="url">网址</option>
+                                <option value="str616">6到16位任意字符</option>
+                                <option value="num616">6到16位数字</option>
+                                <option value="str618">6到18位字符串</option>
+                            </select>
+                        </td>
+                </tr>
+
+                <tr linenumber='7'>
+                    <td><span class="badge">8</span></td>
+                    <td title="Tab键切换输入框"> <input id="item_8" type="text" class="input-medium"> </td>
+                    <td title="Tab键切换输入框">
+                        <select id="coltype_8" class="input-medium" onchange="javascript:selectchange(this)">
+                            <option value="text">单行输入框</option>
+                            <option value="textarea">多行输入框</option>
+                            <option value="int">数值</option>
+                            <option value="select">下拉框</option>
+                            <option value="datetime">日期选择</option>
+                            <option value="user_select">人员选择</option>
+                            <option value="org_select">组织机构选择</option>
+                        </select>
+                    </td>
+                    <td title="Tab键切换输入框"> <label><input type="text" class="input-mini" id="unit_8" value=""> </label>
+                    </td>
+                    <td title="Tab键切换输入框"> <input type="text" class="input-mini" id="select_8" value="">
+                    </td>
+                    <td title="Tab键切换输入框"> <label> <input type="checkbox" id="sum_8" class="csum" value="8"> </label>
+                    </td>
+                    <td title="Tab键切换输入框"><input id="colvalue_8" type="text" class="input-medium" /></td>
+                    <td title="Tab键切换输入框">
+                            <select id="rule_8" onchange="javascript:ruleselectchange(this)">
+                                <option value="nothing">无</option>
+                                <option value="notnull">非空</option>
+                                <option value="number">数字</option>
+                                <option value="word">字母</option>
+                                <option value="postcode">邮政编码</option>
+                                <option value="phonenumber">手机号码</option>
+                                <option value="email">电子邮件</option>          
+                                <option value="url">网址</option>
+                                <option value="str616">6到16位任意字符</option>
+                                <option value="num616">6到16位数字</option>
+                                <option value="str618">6到18位字符串</option>
+                            </select>
+                        </td>
+                </tr>
+            </tbody>
+        </table>
+        <!--div class="alert alert-danger">提示：</div-->
+    </div>
+    <script type="text/javascript">
+        var oNode = null,
+            thePlugins = 'adc_form_listctrl';
+        var tablerowsLength = 0;
+        var tbnum = 7;
+        var adefaultDatatype = ['text', 'textarea', 'int', 'select', 'datetime', 'user_select', 'org_select'];
+        var tableName = new Date().getTime();
+        window.onload = function () {
+                //弹出窗口初始化函数，这里主要是判断是编辑下拉列表还是新增
+                //判断编辑器里是否有dom
+                if( UE.plugins[thePlugins].editdom ){
+                    //把内容存到oNode中去
+                    oNode = UE.plugins[thePlugins].editdom;
+                    //渲染新增的表头
+                    var rowlength = oNode.getAttribute('rowlength');
+                    if ( rowlength > 0){
+                        for(var m = 0;m < rowlength;m++){
+                            addnewTitle();
+                        }
+                        tablerowsLength = 0;
+                    } 
+                    //将之前设置的title属性的值传给adcform_title的value，回显控件名称；
+                    $G('adcform_title').value = oNode.getAttribute('title');
+                    //回显宽度的设置
+                    var gWidth=oNode.getAttribute('width'); 
+                    var dicnum = 0; 
+                    $G('adcform_width').value = gWidth;
+            
+                    var gTitle = oNode.getAttribute('table_title'),
+                        gSum = oNode.getAttribute('adcform_Sum'),
+                        gColType = oNode.getAttribute('adcform_ColType'),
+                        gColValue = oNode.getAttribute('adcform_ColValue'),
+                        gUnit = oNode.getAttribute('adcform_UnitValue'),
+                        //从adcform_rule属性中获取规则校验的数据
+                        gRule = oNode.getAttribute('adcform_Rule'),
+                        //从adcform_dic属性中获取数据字典下拉框的选择
+                        gDic = oNode.getAttribute('adcform_dic'),
+                        gRemark = oNode.getAttribute('adcform_Remark');
+
+                    var bTitle = gTitle.split('`'),
+                        bColType = gColType ? gColType.split('`') : null,
+                        bUnit = gUnit ? gUnit.split('`') : null,
+                        bSum = gSum ? gSum.split('`') : null,
+                        bColValue = gColValue ? gColValue.split('`') : null;
+                        bRule = gRule ? gRule.split('`') : null,
+                        bDic = gDic ? gDic.split('`') : null;
+                    for (i = 0;i < bTitle.length;i++) {
+                        var sItem = 'item_' + (i + 1),
+                        sColtype = 'coltype_' + (i + 1),
+                        sUnit = 'unit_' + (i + 1),
+                        sNum = 'sum_' + (i + 1),
+                        sColValue = 'colvalue_' + (i + 1),
+                        sRule = 'rule_' + (i + 1);
+
+                        $G(sItem).value = bTitle[i];
+                        if( gUnit ){
+                            $('#' + sUnit).value = bUnit[i];
+                        }
+                        if ( gSum ) {
+                        $G(sNum).checked = bSum[i] == 1 ? true : false;
+                        }
+                        if ( gColType ) {
+                            $('#' + sColtype).val(bColType[i]);
+                            if ( bColType[i] == 'select'){
+                            //如果第 i 个类型是select，那么执行selectchange函数，将第 i 行的数据字典变成下拉框
+                            selectchange($('#' + sColtype)[0]);
+                            //因为数据字典不是每列都要变，所以用一个dicnum存储需要改变的数据字典，数据字典的编号从0开始递增 + 1
+                            $('#adcform_dic_' + dicnum)[0].value = bDic[dicnum];
+                            //将第 i 行的数据字典的id输入进去，获得oparr数组，来渲染修改后的select里的内容
+                            Dictionarychange($('#adcform_dic_' + dicnum)[0]);
+                            dicnum++;
+                            }
+                        }
+                        if ( gColValue ) {
+                        if($.inArray(bColType[i],adefaultDatatype) !== -1){
+                            $G(sColValue).value = bColValue[i];
+                            }
+                        }
+                        //回显规则校验数据
+                        if( gRule ){
+                            $('#' + sRule).val(bRule[i]);
+                        }
+                    }
+
+                    for(var n = 0;n < bRule.length;n++){
+                        ruleselectchange($('#rule_'+ (n + 1))[0]);
+                    }
+                    if( gRemark == 1 ){
+                        $G('remark').checked = 1;
+                    }
+                }
+            //     //合计，强制选择 int
+            $(".csum").click(function () {
+                //取this的value
+                var i = $(this).val();
+                //如果合计单选框被选中，则改变第 i-1 行的type为int
+                if ($(this).attr("checked")) {
+                    $("#coltype_" + i).val('int');
+                }
+                //重新判断条件，如果type是select，且合计被选中，那么将数组字典的变成input
+                else if($(this).attr("checked") && $("#coltype" + i).value == 'select'){
+                    $("#adcform_dic_" + (i-1))[0].outerHTML = "<input type='text' value='' class='input-mini'>";
+                }
+            });
+        }
+        dialog.oncancel = function () {
+            if (UE.plugins[thePlugins].editdom) {
+                delete UE.plugins[thePlugins].editdom;
+            }
+        };
+
+        dialog.onok = function () {
+            
+            var gName = $G('adcform_title').value.replace(/\"/g, "&quot;"),
+                gWidth = $G('adcform_width').value; //控件名称输入框
+
+            if ($G('adcform_title').value == '') {
+                layer.alert('请输入控件名称');
+                return false;
+            }
+            //1
+            var gTitle = '',
+                gColType = '',
+                gUnitValue = '',
+                gSum = '',
+                gColValue = '',
+                gRule = '',
+                gRemark = '',
+                //存储表头长度
+                nCount = 0;
+            for (var i = 1; i <= (tbnum + 1); i++) {
+                var oItem = $G("item_" + i), //表头
+                    oColType = $G('coltype_' + i), //类型
+                    oUnit = $G('unit_' + i), //单位
+                    oSum = $G('sum_' + i), //合计
+                    oColValue = $G('colvalue_' + i); //默认值
+                    //加工表格内填入数据，组成字符串
+                    oRule = $G('rule_' + i);
+                if (oItem.value != '') {
+                    
+                    gTitle += oItem.value + '`'; //表头
+                    gRule += oRule.value + '`';
+                    nCount++;
+                    if (oSum.checked) { //合计
+                        gSum += '1`';
+                    } else {
+                        gSum += '0`';
+                    }
+                    gColType += oColType.value + '`';
+                    gColValue += oColValue.value + '`';
+                    gUnitValue += oUnit.value + '`';
+
+                } //end if
+            } //end for
+            var oRemark = $G('remark');
+            if(oRemark.checked){
+                gRemark = 1;
+            }else{
+                gRemark = 0;
+            }
+            //如果表头未输入数据，则报错
+            if (nCount == 0) {
+                layer.alert("表头项目不能为空");
+                return false;
+            }
+            var aTitle = "";
+            var aSum = "";
+            var aColType = "";
+            var aColValue = "";
+            var aUnitValue = "";
+            var aRuleValue = "";
+
+            //从字符串的第0个提取length-1个字符
+            aTitle = gTitle.substr(0, gTitle.length - 1);
+            //将字符串以 ` 为分界拆分成数组
+            gTitle = aTitle.split("`"); //表头填入数据数组
+            aSum = gSum.substr(0, gSum.length - 1);
+            gSum = aSum.split("`"); //合计填入数据数组
+            aColType = gColType.substr(0, gColType.length - 1);
+            gColType = aColType.split("`"); //类型填入数据数组
+            aColValue = gColValue.substr(0, gColValue.length - 1);
+            gColValue = aColValue.split("`"); //默认值填入数据数组
+            aUnitValue = gUnitValue.substr(0, gUnitValue.length - 1);
+            gUnitValue = aUnitValue.split("`"); //单位填入数据数组
+            aRuleValue = gRule.substr(0, gRule.length - 1);
+            gRule = aRuleValue.split('`');//规则校验填入数据数组
+
+            //用来存放table所有的HTML代码
+            var str = "";
+            //用来存放合计那一行的HTML代码
+            var sumstr = "";
+            //用来存放第一行name的字符串
+            var firstrowname = "";
+            //用来存放备注行
+            var remarkstr = "";
+            if (!oNode) {
+                try {
+                    oNode = createElement('table');
+                    oNode.setAttribute('adcform', thePlugins);
+                    oNode.setAttribute('id', 'table');
+                    oNode.setAttribute('width', gWidth);
+                    oNode.setAttribute('class', 'layui-table');
+                    oNode.setAttribute('title', gName);
+                    oNode.setAttribute('table_title', aTitle);
+                    oNode.setAttribute('adcform_Sum', aSum);
+                    oNode.setAttribute('adcform_ColType', aColType);
+                    oNode.setAttribute('adcform_ColValue', aColValue);
+                    oNode.setAttribute('adcform_UnitValue', aUnitValue);
+                    oNode.setAttribute('adcform_Rule', aRuleValue);
+                    oNode.setAttribute('adcform_Remark', gRemark);
+                    oNode.setAttribute('rowlength',tablerowsLength);
+                    //循环表头列数的次数，把所有的规则校验都检测一遍，保证不会出现undefined     可以修改成循环gTitle长度的次数，减少代码执行时间（但是today太晚了不想改）
+                    for(var i = 0;i < (tablerowsLength + 8);i++){
+                        ruleselectchange($('#rule_'+ (i + 1))[0]);
+                    }
+                    if (gWidth != '') { //判断控件名称输入框是否为空
+                        oNode.style.width = gWidth;
+                    }
+                    str += "<tbody>";
+                    str += "<tr>";
+                    //循环渲染表头，最后一个单元格加入按钮
+                    for (var i = 0; i < gTitle.length; i++) {
+                        if (i == gTitle.length - 1) {
+                            str += "<td name='table_"+tableName+'_' + (i + 1) + "'>" + gTitle[i] +
+                                "<span class = 'pull-right' style='margin-right:-50px'><i class='layui-icon layui-icon-add-circle' style = 'font-size: 30px;cursor:pointer' onclick='addLine(this),tableNum(this)' href='javascript:;'></i></span></td>"
+                        } else {
+                            str += "<td name='table_"+tableName+'_' + (i + 1) + "'>" + gTitle[i] + "</td>";
+                        }
+                    }
+                    str += "</tr>";
+                    //根据填入内容，渲染表格；
+                    str += "<tr>";
+                    for (var j = 0; j < gTitle.length; j++) {
+                        if (gColType[j] == 'text') {
+                            str += "<td name='input'>" + "<input name = 'input_" + 1 + "_" + j + "_listctrl_" + Date.now().toString(36) + "' value = '" + gColValue[j] + "' lay-verify = '"+ ostr[j] + "'onblur = 'checkstr(this)'" +  "placeholder='"+ (pstr[j] = pstr[j] ? pstr[j] : " ") + "' class='layui-input'" + ">" + gUnitValue[j] +
+                                "</td>";
+                            //合计未被勾选的列，添加一个空的单元格
+                            sumstr += "<td></td>";
+                            //为第一行的每一列设置一个name
+                            firstrowname += "table_"+tableName+'_' + (j + 1) + "`";
+                        } else if (gColType[j] == 'textarea') {
+                            str += "<td name='textarea'>" + "<textarea name = 'textarea_" + 1 + "_" + j + "_listctrl_" + Date.now().toString(36) + "'class='layui-textarea" +"' value = '" + gColValue[j] + "'></textarea>" +
+                                gUnitValue[j] +
+                                "</td>";
+                            sumstr += "<td></td>";
+                            firstrowname += "table_" +tableName+'_'+ (j + 1) + "`";
+                        } else if (gColType[j] == 'select') {
+                            //将Dictionarychange加工过的字符串数组按顺序写入str字符串中
+                            str += "<td name='select'>" + "<select name = 'select_" + 1 + "_" + j + "_listctrl_" + Date.now().toString(36) + "'>" + oparr[j] + "</select>" +"</td>";
+                            sumstr += "<td></td>";
+                            firstrowname += "table_" +tableName+'_'+ (j + 1) + "`";
+                        } else if (gColType[j] == 'datetime') {
+                            //如果是日期选择，则添加一个id为gColType_ + 当前时间 的input
+                            str += "<td name='datetime'>" + "<input name = 'datetime_" + 1 + "_" + j +  "_listctrl_" + Date.now().toString(36) + "' class='laydate-icon layui-input' id = 'gColType_" + Date.now().toString(36) + "'>" + "</td>";
+                            sumstr += "<td></td>";
+                            var script = '<script>\
+                            layui.laydate.render({\
+                            elem: "#gColType_' + Date.now().toString(36) + '"\
+                            });\
+                            <\/script>';
+                            editor.execCommand('insertHtml', script);
+                            firstrowname += "table_"+tableName+'_' + (j + 1) + "`";
+                        } else if (gColType[j] == 'user_select'){
+                            str += "<td name='inputuserselect'>" + "{|-<input name = 'inputuserselect_" + 1 + "_" + j + "_listctrl_" + Date.now().toString(36) + "' onclick = 'javascript:userlistctrlselect(this)' class='layui-input' readonly='readonly' style='position: relative;'>" + "<i class='layui-icon layui-icon-username' style='position: absolute; top: 50%; right: 20px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;'></i>"+ "-|}" + "</td>";
+                            sumstr += "<td></td>";
+                            firstrowname += "table_"+tableName+'_' + (j + 1) + "`";
+                        } else if (gColType[j] == 'org_select'){
+                            str += "<td name ='inputorgselect'>" + "{|-<input name = 'inputorgselect_" + 1 + "_" + j + "_listctrl_" + Date.now().toString(36) + "' onclick = 'javascript:orglistctrlselect(this)' class='layui-input' readonly='readonly' style='position: relative;'>" + "<i class='layui-icon layui-icon-website' style='position: absolute; top: 50%; right: 20px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;'></i>"+ "-|}" + "</td>"
+                            sumstr += "<td></td>";
+                            firstrowname += "table_"+tableName+'_' + (j + 1) + "`";
+                        }  else if (gColType[j] == 'int' && gSum[j] == 0){
+                            str += "<td name = 'int'>" + "<input name = 'int_" + 1 + "_" + j + "_listctrl_" + Date.now().toString(36) + "' value = ''  onkeyup = 'replaceit(this)' class = 'layui-input'>" + gUnitValue[j] +"</td>";
+                            firstrowname += "table_"+tableName+'_' + (j + 1) + "`";
+                        }
+                        if(gSum[j] > 0){
+                            str += "<td name = '" + j +"'>" + "<input name = 'sum_" + 1 + "_" + j + "_listctrl_" + Date.now().toString(36) + "' value = '' onblur='javascript:numbersum(this)'  onkeyup = 'replaceit(this)' class='layui-input'>" + gUnitValue[j] +"</td>";
+                            sumstr += "<td name = '" + j +"'>合计："+"<input readonly='readonly' name = 'sum_" + j + Date.now().toString(36) + "'value = '' onblur='javascript:numbersum(this)'  onkeyup = 'replaceit(this)' class='layui-input' style='width:90%;display:inline' >" + gUnitValue[j] + "</td>";
+                            firstrowname += "table_"+tableName+'_' + (j + 1) + "`";
+                        }
+                    }
+                    str += "</tr>";
+                    for (n = 0;n < gSum.length; n++){
+                        if(gSum[n] > 0){
+                            str += "<tr name='sum'>" + sumstr + "</tr>";
+                            break;
+                        }
+                        else{
+                            continue;
+                        }
+                    }
+                    if(gRemark == 1){
+                        str += "<tr name = 'remark'>" + "<td colspan='"+ gTitle.length +"'>备注:<input class='layui-input' style='width:98%'></td>" + "</tr>"
+                    }
+                    str += "</tbody>";
+                    firstrowname = firstrowname.substr(0,firstrowname.length-1);
+                    oNode.setAttribute('name', firstrowname);
+                    oNode.setAttribute('adcform_dic', dicselectvalue);
+                    oNode.setAttribute('tableid',Date.now().toString(36));
+                    oNode.innerHTML = str;
+                    editor.execCommand('insertHtml', oNode.outerHTML);
+                    editor.execCommand('insertHtml', '<script src="/assetsInfo/libs/addtable/addtable.js"><\/script>');
+                    return true;
+                }catch (e) {
+                    try {
+                        editor.execCommand('error');
+                    } catch (e) {
+                        layer.alert('控件异常');
+                    }
+                    return false;
+                }
+            }else {
+                //修改
+                //获取新增的表头列数
+                var rowlength = oNode.getAttribute('rowlength');
+                tablerowsLength = parseFloat(rowlength) + parseFloat(tablerowsLength);
+                oNode.setAttribute('adcform', thePlugins);
+                oNode.setAttribute('title', gName);
+                oNode.setAttribute('table_title', aTitle);
+                oNode.setAttribute('adcform_Sum', aSum);
+                oNode.setAttribute('adcform_ColType', aColType);
+                oNode.setAttribute('adcform_ColValue', aColValue);
+                oNode.setAttribute('adcform_UnitValue', aUnitValue);
+                oNode.setAttribute('adcform_Rule', aRuleValue);
+                oNode.setAttribute('adcform_Remark', gRemark);
+                oNode.setAttribute('rowlength',tablerowsLength);
+                //循环表头列数的次数，把所有的规则校验都检测一遍，保证不会出现undefined
+                for(var i = 0;i < (tablerowsLength + 8);i++){
+                        ruleselectchange($('#rule_'+ (i + 1))[0]);
+                    }
+
+                if (gWidth != '') {
+                    oNode.style.width = gWidth;
+                } else {
+                    oNode.style.width = '';
+                }
+                oNode.setAttribute('width', gWidth);
+                str += "<tbody>";
+                    str += "<tr>";
+                    //循环渲染表头，最后一个单元格加入按钮
+                    for (var i = 0; i < gTitle.length; i++) {
+                        if (i == gTitle.length - 1) {
+                            str += "<td name='table_" +tableName+'_'+ (i + 1) + "'>" + gTitle[i] +
+                                "<span class = 'pull-right' style='margin-right:-50px'><i class='layui-icon layui-icon-add-circle' style = 'font-size: 30px;cursor:pointer' onclick='addLine(this),tableNum(this)' href='javascript:;'></i></span></td>"
+                        } else {
+                            str += "<td name='table_"+tableName+'_' + (i + 1) + "'>" + gTitle[i] + "</td>";
+                        }
+                    }
+                    str += "</tr>";
+                    //根据填入内容，渲染表格；
+                    str += "<tr>";
+                    for (var j = 0; j < gTitle.length; j++) {
+                        if (gColType[j] == 'text') {
+                            str += "<td name='input'>" + "<input name = 'input_" + 1 + "_" + j + "_listctrl_" + Date.now().toString(36) + "' value = '" + gColValue[j] + "' lay-verify = '"+ ostr[j] + "' onblur = 'checkstr(this)'" + "placeholder='"+ pstr[j] +"' class='layui-input'>" + gUnitValue[j] +
+                                "</td>";
+                            //合计未被勾选的列，添加一个空的单元格
+                            sumstr += "<td></td>";
+                            //为第一行的每一列设置一个name
+                            firstrowname += "table_"+tableName+'_' + (j + 1) + "`";
+                        } else if (gColType[j] == 'textarea') {
+                            str += "<td name='textarea'>" + "<textarea name = 'textarea_" + 1 + "_" + j + "_listctrl_" + Date.now().toString(36) + "'class='layui-textarea" + "' value = '" + gColValue[j] + "'></textarea>" +
+                                gUnitValue[j] +
+                                "</td>";
+                            sumstr += "<td></td>";
+                            firstrowname += "table_"+tableName+'_' + (j + 1) + "`";
+                        } else if (gColType[j] == 'select') {
+                            //将Dictionarychange加工过的字符串数组按顺序写入str字符串中
+                            str += "<td name='select'>" + "<select name = 'select_" + 1 + "_" + j + "_listctrl_" + Date.now().toString(36) + "'>" + oparr[j] + "</select>" +"</td>";
+                            sumstr += "<td></td>";
+                            firstrowname += "table_"+tableName+'_' + (j + 1) + "`";
+                        } else if (gColType[j] == 'datetime') {
+                            //如果是日期选择，则添加一个id为gColType_ + 当前时间 的input
+                            str += "<td name='datetime'>" + "<input name = 'datetime_" + 1 + "_" + j +  "_listctrl_" + Date.now().toString(36) + "' class='laydate-icon layui-input' id = 'gColType_" + Date.now().toString(36) + "'>" + "</td>";
+                            sumstr += "<td></td>";
+                            var script = '<script>\
+                            layui.laydate.render({\
+                            elem: "#gColType_' + Date.now().toString(36) + '"\
+                            });\
+                            <\/script>';
+                            editor.execCommand('insertHtml', script);
+                            firstrowname += "table_"+tableName+'_' + (j + 1) + "`";
+                        } else if (gColType[j] == 'user_select'){
+                            str += "<td name='inputuserselect'>" + "{|-<input name = 'inputuserselect_" + 1 + "_" + j + "_listctrl_" + Date.now().toString(36) + "' onclick = 'javascript:userlistctrlselect(this)' class='layui-input' readonly='readonly' style='position: relative;'>" + "<i class='layui-icon layui-icon-username' style='position: absolute; top: 50%; right: 20px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;'></i>"+ "-|}" + "</td>";
+                            sumstr += "<td></td>";
+                            firstrowname += "table_"+tableName+'_' + (j + 1) + "`";
+                        } else if (gColType[j] == 'org_select'){
+                            str += "<td name ='inputorgselect'>" + "{|-<input name = 'inputorgselect_" + 1 + "_" + j + "_listctrl_" + Date.now().toString(36) + "' onclick = 'javascript:orglistctrlselect(this)' class='layui-input' readonly='readonly' style='position: relative;'>" + "<i class='layui-icon layui-icon-website' style='position: absolute; top: 50%; right: 20px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;'></i>"+ "-|}" + "</td>"
+                            sumstr += "<td></td>";
+                            firstrowname += "table_"+tableName+'_' + (j + 1) + "`";
+                        } else if (gColType[j] == 'int' && gSum[j] == 0){
+                            str += "<td name = 'int'>" + "<input name = 'int_" + 1 + "_" + j + "_listctrl_" + Date.now().toString(36) + "' value = ''  onkeyup = 'replaceit(this)' class= 'layui-input'>" + gUnitValue[j] +"</td>";
+                            firstrowname += "table_"+tableName+'_' + (j + 1) + "`";
+                        }
+                        if(gSum[j] > 0){
+                            str += "<td name = '" + j +"'>" + "<input name = 'sum_" + 1 + "_" + j + "_listctrl_" + Date.now().toString(36) + "' value = '' onblur='javascript:numbersum(this)'  onkeyup = 'replaceit(this)'>" + gUnitValue[j] +"</td>";
+                            sumstr += "<td name = '" + j +"'>合计:" + "<input readonly='readonly' name = 'sum_" + j + Date.now().toString(36) + "'value = '' onblur='javascript:numbersum(this)'  onkeyup = 'replaceit(this)'>" + gUnitValue[j] + "</td>";
+                            firstrowname += "table_"+tableName+'_' + (j + 1) + "`";
+                        }
+                    }
+                    str += "</tr>";
+                    for (n = 0;n < gSum.length; n++){
+                        if(gSum[n] > 0){
+                            str += "<tr name='sum'>" + sumstr + "</tr>";
+                            break;
+                        }
+                        else{
+                            continue;
+                        }
+                    }
+                    if(gRemark == 1){
+                        str += "<tr name = 'remark'>" + "<td colspan='"+ gTitle.length +"'>备注:<input class='layui-input' style='width:98%'></td>" + "</tr>"
+                    }
+                    str += "</tbody>";
+                firstrowname = firstrowname.substr(0,firstrowname.length-1);
+                oNode.setAttribute('adcform_dic', dicselectvalue);
+                oNode.setAttribute('name', firstrowname);
+                oNode.innerHTML = str;
+                delete UE.plugins[thePlugins].editdom; //使用后清空这个对象，变回新增模式
+            }   
+        };
+        //定义一个参数用来传递接口获得的HTML代码
+        var seLe = "";
+        //定义字典ID时用来标记不同的select
+        var selectvalue = 0;
+        //点击下拉框选择不同的选项时，表格内的数据字典变化，传入一个this
+        function selectchange(obj) {
+            //通过父节点找到this指向的这一行
+            var Sele = obj.parentNode.parentNode;
+            //children获取数据字典节点
+            var td1 = Sele.children[4];
+            //每次改变先清空td1的HTML代码，再做判断；
+            td1.innerHTML = "";
+            //如果选项为下拉框，数据字典变为下拉框，选择其他选项则便会输入框
+            if (obj.value == 'select') {
+                td1.innerHTML = "<select onchange='javascript:Dictionarychange(this)' id='adcform_dic_" + selectvalue + "'></select>"
+                //初始化数组字典下拉框
+                initDataDictionary();
+                selectvalue++;
+            } else {
+                td1.innerHTML = "<input type='text' class='input-mini' value=''>"
+            }
+        }
+        // 初始化数据字典
+        function initDataDictionary() {
+            $.ajax({
+                url: "/ADC_info/api/sys/dictionary",
+                type: "GET",
+                async: false,
+                success: function (data) {
+                    var cur = data.data.list;
+                    var option = '<option value="0">通过数据字典添加列表值</option>';
+                    for (var i = 0; i < cur.length; i++) {
+                        var land = cur[i];
+                        option += '<option value="' + land.id + '">' + land.dictionaryName + '</option>';
+                    }
+                    $("#adcform_dic_" + selectvalue).empty();
+                    $("#adcform_dic_" + selectvalue).append(option);
+                    $("option:first #adcform_dic_" + selectvalue).prop("selected", 'selected');
+                },
+                error: function (data) {
+                    layer.msg('获取信息失败！');
+                }
+            });
+        }
+        //定义一个数组用来存储option字符串
+        var oparr = new Array();
+        //用来存储数组字典中选中的value
+        var dicselectvalue = "";
+        //数据字典下拉框选择不同选项传递不同的参数
+        function Dictionarychange(obj) {
+            //找到this对应的tr节点
+            var trchange = obj.parentNode.parentNode; 
+            dicselectvalue += obj.value + '`';
+            //获取表格长度
+            var dic1 = document.getElementById('tbl1');
+            var dicnum = dic1.children.length;
+            $.ajax({
+                url: "/ADC_info/api/sys/dictype/page?dicId=" + obj.value,
+                type: "GET",
+                async: false,
+                success: function (data) {
+                    var cur = data.data.list;
+                    var option = "";
+                    for (var i = 0; i < cur.length; i++) {
+                        var land = cur[i];
+                        option += '<option value="' + land.dicTypeName + '">' + land.dicTypeName +
+                            '</option>';
+                    }
+                    //现方法,定义了一个数组oparr用来存储对应的option的HTML代码
+                    for(i=0;i < dicnum; i++){
+                    //判断onchange触发的行的linenumber与i是否相等，相等则说明是第i行，则把option字符串插入数组的第i个
+                    if(trchange.getAttribute('linenumber') == i){
+                        oparr[i] = option;
+                        }
+                    }
+                },
+                error: function (data) {
+                    layer.msg('获取信息失败！');
+                }
+            });
+        }
+        //存储value值
+        var ostr = [];
+        //存储text文本
+        var pstr = [];
+        function ruleselectchange(obj){
+            var key = obj.value;
+            var trchange = obj.parentNode.parentNode;
+            var tabl = document.getElementById('tbl1');
+            var rulenum = tabl.children.length;
+            var options = obj.options;
+            var text1 = "";
+            //找到对应value值的文本
+            for(j = 0;j < options.length;j++){
+                    if(options[j].value == obj.value){
+                        text1 = options[j].innerText;
+                    }
+                }
+            //现方法,定义了一个8位数组ostr用来存储对应的option的HTML代码
+            for(i=0;i < rulenum; i++){
+                //给数组每一个元素添加一个空格，防止出现undefined
+                if(pstr[i] == 'undefined'){
+                    pstr[i] = " ";
+                }
+                //判断onchange触发的行的linenumber与i是否相等，相等则说明是第i行，则把option字符串插入数组的第i个
+                if(trchange.getAttribute('linenumber') == i){
+                    ostr[i] = key;
+                    //判断如果是nothing，则给文本数组元素加一个空格，防止出现都是无无无无无无；
+                    if(key != 'nothing'){
+                        pstr[i] = text1;
+                    }else if(key == 'nothing'){
+                        pstr[i] = " ";
+                    }
+                }
+            }
+        }
+        //添加表头项
+        function addnewTitle() { 
+            var tbody1 = document.getElementById('tbl1');
+            tbnum = tbody1.children.length;
+            var lastNode = tbody1.children[tbnum - 1];
+            var tablestr = "";
+            tablestr += "<td><span class='badge'>"+ (tbnum + 1) +"</span></td>";
+            tablestr += "<td title='Tab键切换输入框'> <input id='item_"+ (tbnum + 1) +"' type='text' class='input-medium'></td>";
+            tablestr += "<td title='Tab键切换输入框'><select id='coltype_"+ (tbnum + 1) +"' class='input-medium' onchange='javascript:selectchange(this)'><option value='text'>单行输入框</option><option value='textarea'>多行输入框</option><option value='int'>数值</option><option value='select'>下拉框</option><option value='datetime'>日期选择</option><option value='user_select'>人员选择</option><option value='org_select'>组织机构选择</option></select></td>";
+            tablestr += "<td title='Tab键切换输入框'> <label><input type='text' class='input-mini' id='unit_" + (tbnum + 1) + "' value=''></label></td>";
+            tablestr += "<td title='Tab键切换输入框'> <input type='text' class='input-mini' id='select_"+ (tbnum + 1) +"' value=''></td>";
+            tablestr += "<td title='Tab键切换输入框'> <label> <input type='checkbox' id='sum_"+ (tbnum + 1) +"' class='csum' value='"+ (tbnum + 1) +"'> </label></td>";
+            tablestr += "<td title='Tab键切换输入框'><input id='colvalue_"+ (tbnum + 1) +"' type='text' class='input-medium' /></td>";
+            tablestr += "<td title='Tab键切换输入框'>"+
+                            "<select id='rule_"+ (tbnum + 1) +"' onchange='javascript:ruleselectchange(this)'>"+
+                                "<option value='nothing'>无</option>"+
+                                "<option value='notnull'>非空</option>"+
+                                "<option value='number'>数字</option>"+
+                                "<option value='word'>字母</option>"+
+                                "<option value='postcode'>邮政编码</option>"+
+                                "<option value='phonenumber'>手机号码</option>"+
+                                "<option value='email'>电子邮件</option>     "+     
+                                "<option value='url'>网址</option>"+
+                                "<option value='str616'>6到16位任意字符</option>"+
+                                "<option value='num616'>6到16位数字</option>"+
+                                "<option value='str618'>6到18位字符串</option>"+ "</select></td>";
+            var newtr = tbody1.insertRow(tbnum);
+            newtr.innerHTML = tablestr;
+            newtr.setAttribute('linenumber',tbnum);
+            tablerowsLength++;
+         }
+    </script>
+</body>
+
+</html>

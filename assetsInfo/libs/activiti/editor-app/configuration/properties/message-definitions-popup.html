@@ -1,0 +1,50 @@
+
+<div class="modal" ng-controller="ActivitiMessageDefinitionsPopupCtrl">
+    <div class="modal-dialog modal-wide">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <p style="font-size: 16px;margin: 5px 0;display: inline-block;">{{'PROPERTY.PROPERTY.EDIT.TITLE' | translate:property}}</p>
+                <button style="margin: 5px 0;display: inline-block;" type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
+            </div>
+
+            <div class="modal-body">
+            
+                <div class="row row-no-gutter">
+
+                	<div class="col-xs-8">
+                        <div ng-if="translationsRetrieved" class="kis-listener-grid" ng-grid="gridOptions"></div>
+            	        <div class="pull-right">
+            	            <div class="btn-group">
+            	                <a class="btn btn-icon btn-lg" rel="tooltip" data-title="{{ACTION.ADD | translate}}" data-placement="bottom" data-original-title="" title="" ng-click="addNewMessageDefinition()"><i class="glyphicon glyphicon-plus"></i></a>
+            	                <a class="btn btn-icon btn-lg" rel="tooltip" data-title="{{ACTION.REMOVE | translate}}" data-placement="bottom" data-original-title="" title="" ng-click="removeMessageDefinition()"><i class="glyphicon glyphicon-minus"></i></a>
+            	            </div>
+            	        </div>
+            		</div>
+
+                    <div class="col-xs-4" ng-show="selectedMessages && selectedMessages.length > 0">
+
+                        <div class="form-group">
+                            <label>{{'PROPERTY.MESSAGEDEFINITIONS.ID' | translate}}</label>
+                            <input type="text" class="form-control" ng-model="selectedMessages[0].id">
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{'PROPERTY.MESSAGEDEFINITIONS.NAME' | translate}}</label>
+                            <input type="text" class="form-control" ng-model="selectedMessages[0].name">
+                        </div>
+
+                    </div>
+
+            	</div>
+            	
+            </div>
+
+            <div class="modal-footer">
+                <button ng-click="save()" class="btn btn-primary" translate style="width: 80px;">ACTION.SAVE</button>
+                <button ng-click="cancel()" class="btn btn-primary" translate style="background-color: #949494;width: 80px;">ACTION.CANCEL</button>
+            </div>
+
+        </div>
+    </div>
+</div>

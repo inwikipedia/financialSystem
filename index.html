@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="utf-8" />
+    <title>ADC智能信息化系统</title>
+
+    <!-- Favorites Icon Start -->
+    <link rel="shortcut icon" href="./favicon.ico">
+    <link rel="icon" href="./favicon.ico">
+    <!-- Favorites Icon End -->
+
+    <!-- CSS Links -->
+    <link rel="stylesheet" href="assetsInfo/libs/layui/css/layui.css" />
+    <link rel="stylesheet" href="assetsInfo/css/admin.css" />
+
+    <link rel="stylesheet" href="module/formSelects/formSelects-v4.css" />
+    <link rel="stylesheet" href="module/treeSelect/treeSelect.css">
+
+    <link rel="stylesheet" href="assetsInfo/css/LayValidator.css" />
+    <!-- tableb编辑校验 -->
+
+    <link rel="stylesheet" href="assetsInfo/css/style.css">
+
+    <link rel="stylesheet" href="assetsInfo/css/theme.css" />
+    <!-- 自定义主题，使用主题文件生成器生成 -->
+
+    <!--[if lt IE 9]>
+        <script src="./assetsInfo/libs/html5.min.js"></script>
+        <script src="./assetsInfo/libs/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body >
+    <div class="layui-layout layui-layout-admin" style="visibility: hidden;">
+        <!-- 头部 -->
+
+        <div class="layui-header" p-com="header"></div>
+        <span style="height: 8px;overflow: hidden" class="layui-breadcrumb admin-breadcrumb" lay-separator=">">
+        </span>
+
+
+        <!-- 主体部分 -->
+        <div class="layui-body">正在初始化网站，请稍等...</div>
+
+        <!-- 手机屏幕遮罩层 -->
+        <div class="site-mobile-shade"></div>
+    </div>
+
+    <!-- jQuery 1.x 版本兼容 IE8 -->
+    <script type="text/javascript" src="assetsInfo/libs/jquery-1.12.4.min.js"></script>
+    <!-- Q.js 轻量路由框架 -->
+    <script type="text/javascript" src="assetsInfo/libs/q.js"></script>
+    <!-- jQuery 轻量级 MVVM 框架 -->
+    <script type="text/javascript" src="assetsInfo/libs/pandyle.min.js"></script>
+    <!-- layui 脚本文件 -->
+    <script type="text/javascript" src="assetsInfo/libs/layui/layui.js"></script>
+    <!-- table编辑校验 -->
+    <script type="text/javascript" src="assetsInfo/js/LayValidator.js"></script>
+    <script type="text/javascript" src="assetsInfo/js/LayCalculator.js"></script>
+    <script type="text/javascript" src="./assetsInfo/js/jsencrypt.min.js"></script>
+
+    <script>
+        // UEditor 路径
+        window.UEDITOR_HOME_URL = '/assetsInfo/libs/ueditor_v1.4.3/';
+
+        layui.config({
+            base: 'module/'
+        }).extend({
+            formSelects: 'formSelects/formSelects-v4',
+            treetable: 'treetable-lay/treetable',
+            treeTable: 'treeTable/treeTable',
+            treeSelect: 'treeSelect/treeSelect',
+            xmSelect:'xm-select'
+        }).use(['index'], function() {
+            var index = layui.index,
+                admin = layui.admin,
+                config = layui.config;
+
+            // 入口文件，统一处理 Ajax 请求
+            // 增加 loading
+            // http://api.jquery.com/jquery.ajax/
+            var reqCount = 0,
+                loading = false;
+            $.ajaxSetup({
+                // headers: {
+                //     "Authorization": 'Basic JWTJWTJWTJWTJWTJWTJWTJWTJWTJWTJWTJWT'
+                // },
+                beforeSend: function(jqXHR, settings) {
+                    if (settings.url.indexOf('/api') != -1&&settings.url.indexOf("/ADC_info")==-1) {
+                        reqCount++;
+                        jqXHR.api = true;
+                        settings.url='/ADC_info'+settings.url;
+                    }
+                    if (reqCount > 0 && !loading) {
+                        admin.showLoading();
+                        loading = true;
+                    }
+                    function encryptedData (publicKey, pwd) {
+                        // 私钥 和后端沟通
+                        // 新建JSEncrypt对象
+                        var encryptor = new JSEncrypt()
+                        // 设置公钥
+                        encryptor.setPublicKey(publicKey)
+                        // 加密数据
+                        var decrypt = encryptor.encrypt(pwd.toString())
+                        return decrypt
+                    }
+                    var pubKey="MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKtSP3y2DkyoDQsFGr6sn4saLBFwcijEPWsWQ1Hnz8sIvn7V3TyNrSesf+7nPgnUk9Gt/7aKsXUkY67BzMJ5xkECAwEAAQ==";
+                    var verifyToken = encryptedData(pubKey,new Date().getTime());
+                    jqXHR.setRequestHeader("Verify-Token", verifyToken);
+                },
+                error: function(jqXHR, err) {},
+                complete: function(jqXHR, textStatus) {
+                    if (jqXHR.api) reqCount--;
+
+                    if (reqCount === 0) {
+                        admin.removeLoading();
+                        loading = false;
+                    }
+                    if (jqXHR.status === 401||(jqXHR.responseJSON&&jqXHR.responseJSON.message.indexOf("登录")!=-1)) {
+                        layer.msg('登录状态失效，请重新登录！');
+                        setTimeout(function () {
+                            config.removeAccount();
+                            if (window.top!=null && window.top.document.URL!=document.URL){
+                                window.top.location.replace(window.top.location.origin+'/ADC_info/login.html?redirect_to=' + window.location.hash);
+                            }else{
+                                location.replace('/ADC_info/login.html?redirect_to=' + window.location.hash);
+                            }
+                            // location.replace('/api/login?redirect_to=' + window.location.hash);
+                        },2000);
+                    }
+                }
+            });
+
+            // 初始化
+            index.init(function() {
+                $('.layui-layout-admin').css('visibility', 'visible');
+            });
+            // 重写时间戳转换方法
+            Date.prototype.toLocaleString = function() {
+                return this.getFullYear() + "-" + (this.getMonth() + 1 < 10 ? '0' + (this.getMonth() + 1) : this.getMonth() + 1) + "-" + (this.getDate() < 10 ? '0' + (this.getDate()) : this.getDate()) + " " + (this.getHours() < 10 ? '0' + (this.getHours()) : this.getHours()) + ":" + (this.getMinutes() < 10 ? '0' + (this.getMinutes()) : this.getMinutes()) + ":" + (this.getSeconds() < 10 ? '0' + (this.getSeconds()) : this.getSeconds());
+            };
+
+            // 重写时间戳转换方法
+            Date.prototype.toLocaleDate = function() {
+                return this.getFullYear() + "-" + (this.getMonth() + 1 < 10 ? '0' + (this.getMonth() + 1) : this.getMonth() + 1) + "-" + (this.getDate() < 10 ? '0' + (this.getDate()) : this.getDate());
+            };
+        });
+    </script>
+</body>
+
+</html>

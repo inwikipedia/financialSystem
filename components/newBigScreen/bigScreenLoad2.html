@@ -1,0 +1,527 @@
+<div class="bigScreenLoad2">
+    <div class="screenLeft">
+        <div class="canvasTop">
+            <div class="layui-row noBusiness">
+                <div class="layui-col-md12 paddingCard">
+                    <div class="layui-card-header lc-header cart-title" style="padding: 0 10px 0px 5px;border-bottom: 1px solid #E1E1E1;">
+                        <img src="/assetsInfo/images/bigScreen/shujufenxi.png"/>
+                        &nbsp;区域本月合同统计
+                        <ul id="areaTableTab" class="tableTab">
+                            <!-- <li name="table-left" value="0">本月合同额</li> -->
+                            <li name="table-left" value="1" class="actives">本月开票额</li>
+                            <li name="table-left" value="2">本月进账额</li>
+                        </ul>
+                    </div>
+                    <div class="echartBox">
+                        <div class="mapCanvas canvasBox" id="mapCanvas">
+                        </div>
+                        <div class="barCanvas canvasBox" id="barCanvas">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="canvasBottom">
+            <div class="layui-row noBusiness">
+                <div class="layui-col-md12 paddingCard">
+                    <div class="layui-card-header lc-header cart-title" style="padding: 0 10px 0px 5px;border-bottom: 1px solid #E1E1E1;">
+                        <img src="/assetsInfo/images/bigScreen/shujufenxi2.png"/>
+                        &nbsp;本部年度合同统计
+                        <ul id="partTableTab" class="tableTab">
+                            <li name="table-left" value="0" class="actives">年度合同额</li>
+                            <li name="table-left" value="1">年度开票额</li>
+                            <!--<li name="table-left" value="2">年度进账额</li>-->
+                        </ul>
+                    </div>
+                    <div class="lineBarCanvas2 canvasBox" id="lineBarCanvas2">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="screenRight">
+        <div class="layui-row noBusiness">
+            <div class="layui-col-md12 paddingCard">
+                <div class="layui-card-header lc-header cart-title" style="padding: 0 10px 0px 5px;border-bottom: 1px solid #E1E1E1;">
+                    <img src="/assetsInfo/images/bigScreen/shujufenxi3.png"/>
+                    &nbsp;各部门数据
+                </div>
+                <div class="tableBox">
+                    <table id="departmentTable" lay-filter="departmentTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['element', 'form', 'layer'], function () {
+        var element = layui.element,
+            admin = layui.admin,
+            config = layui.config,
+            layer = layui.layer,
+            table = layui.table,
+            tools = layui.tools;
+        //绘制本部月度图
+        var setLineBarCanvas = function (lineData) {
+            var leftMargin="3%";
+            if(lineData.currentTimeDataList.length==0&&lineData.lastTimeDataList.length==0&&
+                lineData.rateList==0){
+                leftMargin="5%";
+            }
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("lineBarCanvas2"));
+            myChart.resize();
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: '{b}<br />{a0}:{c0}<br />{a1}:{c1}<br />{a2}:{c2}%'
+                },
+                legend: {
+                    data: [String(lineData.currentYear), String(lineData.lastYear), '增长率'],
+                    top:'5%',
+                    icon:"roundRect",
+                    itemWidth:40,
+                    itemHeight:10,
+                    textStyle:{
+                        padding:[3, 0, 0, 0]
+                    },
+                },
+                grid: {
+                    left: leftMargin,
+                    right: '4%',
+                    bottom: '3%',
+                    top:'24%',
+                    containLabel: true
+                },
+                color: ["#479EF8", "#FFCC99", "#10EC00"],
+                xAxis: {
+                    type: 'category',
+                    // boundaryGap: false,
+                    data: lineData.orgNameSet,
+                    axisTick:{
+                        lineStyle:{color:'#e8e8e8'}    // x轴刻度的颜色
+                    },
+                    axisLabel:{color:'#3B4961'},
+                    axisLine: {
+                        lineStyle: {
+                            color: '#e8e8e8',
+                        },
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name:"万元",
+                        nameTextStyle: {
+                            padding: [0, 0, 0, -40],
+                            color:'#3B4961'
+                        },
+                        nameGap:10,
+                        axisTick:{
+                            lineStyle:{color:'#e8e8e8'}    // x轴刻度的颜色
+                        },
+                        axisLabel:{color:'#3B4961'},
+                        axisLine: {
+                            lineStyle: {
+                                color: '#e8e8e8',
+                            },
+                        }
+                    },
+                    {
+                        type: 'value',
+                        nameTextStyle: {
+                            padding: [0, 0, 0, -40]
+                        },
+                        nameGap:10,
+                        axisTick:{
+                            lineStyle:{color:'#e8e8e8'}    // x轴刻度的颜色
+                        },
+                        axisLabel:{
+                            color:'#3B4961',
+                            formatter:'{value}%'
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#e8e8e8',
+                            },
+                        }
+                    }
+                ],
+                series: [
+
+                    {
+                        name: lineData.lastYear,
+                        // name: 2019,
+                        type: 'bar',
+                        barWidth: 20,
+                        yAxisIndex:0,
+                        label: {
+                            show: true,
+                            position: 'top'
+                        },
+                        data: lineData.lastTimeDataList
+                        // data: [0, 13332, 6666, 6666, 0, 0, 0, 0, 0, 0, 0, 0]
+                    },
+                    {
+                        name: lineData.currentYear,
+                        // name: 2020,
+                        type: 'bar',
+                        yAxisIndex:0,
+                        barWidth: 20,
+                        label: {
+                            show: true,
+                            position: 'top'
+                        },
+                        data: lineData.currentTimeDataList
+                        // data: [0, 6666, 6666, 6666, 0, 0, 0, 0, 0, 0, 0, 0]
+                    },
+                    {
+                        name: '增长率',
+                        type: 'line',
+                        yAxisIndex:1,
+                        label: {
+                            show: true,
+                            position: 'top',
+                            formatter:'{c}%'
+                        },
+                        data: lineData.rateList
+                        // data: [0, -50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        //绘制区域柱状图
+        var setBarCanvas = function (lineData) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("barCanvas"));
+            myChart.resize();
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: '{b}<br />{a0}:{c0}<br />{a1}:{c1}<br />{a2}:{c2}%'
+                },
+                legend: {
+                    data: [String(lineData.currentYear), String(lineData.lastYear), '增长率'],
+                    // data: ['2020', '2019', '增长率'],
+                    bottom:'5%',
+                    icon:"roundRect",
+                    itemWidth:40,
+                    itemHeight:10,
+                    textStyle:{
+                        padding:[3, 0, 0, 0]
+                    },
+                },
+                grid: {
+                    left: '3%',
+                    right: '10%',
+                    bottom: '15%',
+                    top:'3%',
+                    containLabel: true
+                },
+                color: ["#479EF8", "#FFCC99", "#10EC00"],
+                yAxis: {
+                    type: 'category',
+                    // boundaryGap: false,
+                    data:lineData.areaSet,
+                    axisTick:{
+                        lineStyle:{color:'#e8e8e8'}    // x轴刻度的颜色
+                    },
+                    axisLabel:{color:'#3B4961'},
+                    axisLine: {
+                        lineStyle: {
+                            color: '#e8e8e8',
+                        },
+                    }
+                },
+                xAxis: [
+                    {
+                        type: 'value',
+                        name:"万元",
+                        nameTextStyle: {
+                            padding: [0, 0, 0, 0],
+                            color:'#3B4961'
+                        },
+                        nameGap:10,
+                        axisTick:{
+                            lineStyle:{color:'#e8e8e8'}    // x轴刻度的颜色
+                        },
+                        axisLabel:{color:'#3B4961'},
+                        axisLine: {
+                            lineStyle: {
+                                color: '#e8e8e8',
+                            },
+                        }
+                    },
+                    {
+                        type: 'value',
+                        nameTextStyle: {
+                            padding: [0, 0, 0, -40]
+                        },
+                        nameGap:10,
+                        axisTick:{
+                            lineStyle:{color:'#e8e8e8'}    // x轴刻度的颜色
+                        },
+                        axisLabel:{
+                            color:'#3B4961',
+                            formatter:'{value}%'
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#e8e8e8',
+                            },
+                        }
+                    }
+                ],
+                series: [
+
+                    {
+                        name: lineData.lastYear,
+                        // name: 2019,
+                        type: 'bar',
+                        xAxisIndex:0,
+                        label: {
+                            show: true,
+                            position: 'right'
+                        },
+                        data: lineData.lastTimeDataList
+                        // data: [3333, 13332, 6666, 6666, 2222, 1111, 2222, 4444]
+                    },
+                    {
+                        name: lineData.currentYear,
+                        // name: 2020,
+                        type: 'bar',
+                        xAxisIndex:0,
+                        label: {
+                            show: true,
+                            position: 'right'
+                        },
+                        data: lineData.currentTimeDataList
+                        // data: [1111, 6666, 6666, 6666, 3333, 4444, 5555, 4444]
+                    },
+                    {
+                        name: '增长率',
+                        type: 'line',
+                        xAxisIndex:1,
+                        label: {
+                            show: true,
+                            position: 'right',
+                            formatter:'{c}%'
+                        },
+                        data: lineData.rateList
+                        // data: [0, 10, 0, 5, 0, 0, 2, 0]
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        //绘制地图
+        var setMapCanvas =function (mapData) {
+            var dataList=mapData.mapData;
+            dataList.push({name:"南海诸岛",value:0});
+            // for(var i =0;i<mapData.currentTimeDataList.length;i++){
+            //
+            // }
+            var myChart = echarts.init(document.getElementById('mapCanvas'));
+            function randomValue() {
+                return Math.round(Math.random()*1000);
+            }
+           var option = {
+                tooltip: {
+                    formatter:function(params,ticket, callback){
+                        return params.name+'<br />'+"单位（万元）"+'：'+params.value
+                    }//数据格式化
+                },
+                // visualMap: {
+                //     min: 0,
+                //     max: 1500,
+                //     left: 'left',
+                //     top: 'bottom',
+                //     text: ['高','低'],//取值范围的文字
+                //     inRange: {
+                //         color: ['#e0ffff', '#006edd']//取值范围的颜色
+                //     },
+                //     show:true//图注
+                // },
+                geo: {
+                    map: 'china',
+                    roam: false,//不开启缩放和平移
+                    zoom:1.23,//视角缩放比例
+                    label: {
+                        normal: {
+                            show: false,
+                            fontSize:'10',
+                            color: 'rgba(0,0,0,0.7)'
+                        }
+                    },
+                    itemStyle: {
+                        normal:{
+                            borderColor: 'rgba(0, 0, 0, 0.2)'
+                        },
+                        emphasis:{
+                            areaColor: '#FFC600',//鼠标选择区域颜色
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            shadowBlur: 20,
+                            borderWidth: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                },
+                series : [
+                    {
+                        type: 'map',
+                        geoIndex: 0,
+                        data:dataList
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        //区域数据获取
+        var getAreaInfo = function (typeData) {
+            var load2 =layer.load(2);
+            $.ajax({
+                url: "/api/dashboard/getMapData/"+typeData,
+                type: 'get',
+                success: function (res) {
+                    layer.close(load2);
+                    if (res.ok) {
+                        setBarCanvas(res.data);
+                        setMapCanvas(res.data);
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.close(load2);
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        //本部数据获取
+        var getPartInfo = function (typeData) {
+            var load2 =layer.load(2);
+            $.ajax({
+                url: "/api/dashboard/getOrgChartDataVO/"+typeData,
+                type: 'get',
+                success: function (res) {
+                    layer.close(load2);
+                    if (res.ok) {
+                        setLineBarCanvas(res.data);
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.close(load2);
+                    layer.msg(err.message, {
+                        icon: 5
+                    });
+                }
+            });
+        };
+        //区域标签点击
+        $("#areaTableTab li").off("click").on('click', function () {
+            $(this).attr("class", "actives");
+            $(this).siblings().attr("class", "");
+            getAreaInfo($(this).attr('value'));
+        });
+        //本部标签点击
+        $("#partTableTab li").off("click").on('click', function () {
+            $(this).attr("class", "actives");
+            $(this).siblings().attr("class", "");
+            getPartInfo($(this).attr('value'));
+        });
+        getPartInfo(0);
+        getAreaInfo(0);
+        var renderTable = function () {
+            table.render({
+                elem: '#departmentTable',
+                id: "departmentTable",
+                height:$(".tableBox").height()-5,
+                url: admin.formatUrl("/api/dashboard/getChartDataList"),
+                parseData: function (res) {
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+                },
+                done: function (res) {
+                    $(".tableBox").find(".bigOrg").parent().addClass("blueColor");
+                },
+                cols: [[
+                    {
+                        field: 'orgName',
+                        title: '部门',
+                        align: 'center',
+                        templet: function (d) {
+                            var text = d.orgName ? d.orgName : "";
+                            return '<div class="'+(d.bigOrg?"bigOrg":"")+' " title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'monthContractAmount',
+                        title: '本月开票额(万元)',
+                        align: 'center',
+                        templet: function (d) {
+                            var styleColor="";
+                            if(d.isBigOrg){
+                                styleColor="style='backgrond-color:#AED6FE;'";
+                            }
+                            var text = (d.monthContractAmount||d.monthContractAmount==0) ? d.monthContractAmount.toFixed(2) : "";
+                            return '<div class="'+(d.bigOrg?"bigOrg":"")+' title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    },
+                    // {
+                    //     field: 'monthIncreaseRate',
+                    //     title: '月增长率',
+                    //     align: 'center',
+                    //     width:65,
+                    //     templet: function (d) {
+                    //         var text = d.monthIncreaseRate ? (d.monthIncreaseRate+"%") : "0%";
+                    //         return '<div class="'+(d.bigOrg?"bigOrg":"")+' title="' + text + '"><span>' + text + '</span></div>'
+                    //     }
+                    // },
+                    {
+                        field: 'allContractAmount',
+                        title: '累计开票额(万元)',
+                        align: 'center',
+                        templet: function (d) {
+                            var text = (d.allContractAmount||d.allContractAmount==0) ? d.allContractAmount.toFixed(2) : "";
+                            return '<div class="'+(d.bigOrg?"bigOrg":"")+' title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'finishedRate',
+                        title: '全年目标完成率',
+                        align: 'center',
+                        templet: function (d) {
+                            var text = (d.finishedRate||d.finishedRate==0) ? (d.finishedRate.toFixed(2)+"%") : "";
+                            return '<div class="'+(d.bigOrg?"bigOrg":"")+' title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }
+                ]],
+                // cellMinWidth: 120,
+                page: false,
+                // limit:99999,
+                // request: {
+                //     page: 'pageNo',
+                //     limitName: 'pageSize'
+                // },
+                where: {
+                    design: 0
+                }
+            });
+        };
+        renderTable();
+    });
+</script>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>请选择</title>
+
+    <link rel="stylesheet" href="../../assetsInfo/libs/layui/css/layui.css" />
+    <link rel="stylesheet" href="../../assetsInfo/css/style.css">
+    <link rel="stylesheet" href="../../assetsInfo/css/theme.css" />
+    <link rel="stylesheet" href="../../assetsInfo/css/task_orgs_select.css">
+
+    <!-- zTree 样式 -->
+    <link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/metroStyle.css">
+</head>
+<style>
+    .companys {
+        padding: 3px 0;
+        cursor: pointer;
+    }
+
+    .selectbj {
+        background-color: #dddddd;
+    }
+
+    .qytitles {
+        width: 100px;
+        text-align: center;
+        height: 35px;
+        line-height: 38px;
+        color: #fff;
+        background-color: #6cb4e2;
+        margin-left: 15px;
+    }
+    .xia{
+        width: 100%;
+        height: 2px;
+        background-color: #6cb4e2;
+    }
+</style>
+
+<body>
+    <div class="layui-fluid layui-tab" lay-filter="person-tab">
+        <div class="layui-row">
+            <div class="qytitles">企业名称</div>
+            <div class="xia"></div>
+        </div>
+        <div class="layui-row person-container">
+            <div class="layui-col-xs12 layui-col-sm12 layui-col-md12 person-container-l">
+                <div class="layui-row">
+                    <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+                        <!-- tab 切换 -->
+                        <div class="layui-tab-content">
+                            <!-- 组织机构 -->
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-form person-search">
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="value" placeholder="请输入企业名称" class="layui-input"
+                                                id="keyword" autocomplete="off">
+                                            <i class="layui-icon layui-icon-search" layui-submit></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="person-select-box">
+                                    <div class="person-select-box-t">
+                                        <ul id='company'>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery 1.x 版本兼容 IE8 -->
+    <script type="text/javascript" src="../../assetsInfo/libs/jquery-1.12.4.min.js"></script>
+    <!-- Q.js 轻量路由框架 -->
+    <script type="text/javascript" src="../../assetsInfo/libs/q.js"></script>
+    <!-- jQuery 轻量级 MVVM 框架 -->
+    <script type="text/javascript" src="../../assetsInfo/libs/pandyle.min.js"></script>
+    <!-- layui 脚本文件 -->
+    <script type="text/javascript" src="../../assetsInfo/libs/layui/layui.js"></script>
+    <!-- zTree js 文件 -->
+    <script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+
+    <script>
+        layui.config({
+            base: '../../module/'
+        }).use(['element', 'index'], function () {
+            var element = layui.element,
+                admin = layui.admin;
+            addTree();
+            //回车搜索
+            $('#keyword').off('keyup').on('keyup', keyDownSearch);
+            function keyDownSearch(e) {
+                var theEvent = e || window.event;
+                var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+                if (code == 13) {
+                    $("ul").find("li").remove()
+                    var _keywords = $('#keyword').val();
+                    addTree(_keywords);
+                    return false;
+                }
+                return true;
+            };
+            $('.layui-icon-search').off('click').on('click', function () {
+                $("ul").find("li").remove()
+                var _keywords = $('#keyword').val();
+                addTree(_keywords);
+            })
+            $(document).on("click", ".companys", function () {
+                var name = $(this).text();
+                $(this).addClass("selectbj").siblings().removeClass("selectbj");
+                for (let i = 0; i < adminData.length; i++) {
+                    if (adminData[i].enterpriseName == name) {
+                        $('#enterpriseName').val(adminData[i].enterpriseName);
+                        $('#enterpriseDomain').val(adminData[i].enterpriseDomain);
+                        $('#enterpriseProvince').val(adminData[i].enterpriseProvince);
+                        $('#enterpriseAddress').val(adminData[i].enterpriseAddress);
+                        parent.getValue(adminData[i]);
+                    }
+                }
+            })
+            function addTree(keyword) {
+                // 初始化组织机构列表
+                admin.req('/api/customerresourcemanage/enterprise/list', {
+                    enterpriseName: keyword
+                }, function (d) {
+                    if (!d.ok) {
+                        return layer.msg('获取组织机构列表失败：' + d.message, {
+                            icon: 5
+                        });
+                    }
+                    var datas = d.data;
+                    adminData = d.data;
+                    if (adminData.length == 0) {
+                        $('#company').append(" <li class='companys' value=''>没有该企业名称</li>");
+                    } else {
+                        for (let i = 0; i < datas.length; i++) {
+                            $('#company').append(" <li class='companys' value=" + datas[i].enterpriseName + ">" + datas[i].enterpriseName + "</li>");
+                        }
+                    }
+                });
+            }
+
+
+        });
+
+    // TODO: 移动端适配
+    </script>
+</body>
+
+</html>

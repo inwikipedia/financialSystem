@@ -1,0 +1,403 @@
+/**
+  *
+  * 初始化样式
+  *
+  */
+/*甘特图样式*/
+body .adc-ganttchart .adc-ganttchart-box .adc-ganttchart-header {
+    overflow: hidden;
+    border-bottom: 1px solid #fff;
+    background: #F5F5F5;
+    margin-left: 177px;
+}
+body .adc-ganttchart table thead th, body .adc-ganttchart table tbody td {
+    padding: 5px 0;
+    height: 43px;
+    border-right: 1px solid #fff;
+    border-bottom: none;
+}
+.adc-ganttchart tbody tr:nth-child(odd){background: #FAFAFA;
+}
+.adc-ganttchart tbody tr:nth-child(even){
+    background: #FCFCFC;
+
+}
+
+ .adc-ganttchart-container{
+    margin-left: 41px !important;
+}
+
+.adc-ganttchart {
+    position: relative;
+    box-sizing: border-box;
+    background: #fff;
+    color: #949494;
+    box-shadow: 0px 2px 13px 0px #e5e5e5;
+    border-radius: 2px;
+    /* 指定最小宽度 */
+    min-width: 640px;
+    min-height: 185px;
+}
+
+.adc-ganttchart * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 14px;
+    font-family: PingFangSC, Arial, "Microsoft YaHei", 黑体, 宋体, sans-serif;
+}
+
+.adc-ganttchart table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.adc-ganttchart table thead th,
+.adc-ganttchart table tbody td {
+    padding: 5px 0;
+    height: 43px;
+    border-right: 1px solid #e5e5e5;
+}
+
+.adc-ganttchart table tbody td {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/**
+ *
+ * 工具栏
+ *
+ */
+.adc-ganttchart .adc-ganttchart-toolbar {
+    /*border-bottom: 1px solid #e5e5e5;*/
+    /*padding: 14.5px 15px;*/
+    /*overflow: hidden;*/
+    position: absolute;
+    width: 42px;
+}
+
+.adc-ganttchart .adc-ganttchart-toolbar .adc-ganttchart-toolbar-view-container {
+    float: right;
+}
+.adc-ganttchart-toolbar-text{
+    float:left;
+    height:60px;
+    line-height:60px;
+    font-size: 18px;
+    color:#333;
+}
+.adc-ganttchart .adc-ganttchart-toolbar .adc-ganttchart-toolbar-view {
+    height: 57px;
+    padding: 4px 8px;
+    color: #353535;
+    /*border: 1px solid #d8d8d8;*/
+    cursor: pointer;
+    transition: .3s all;
+    float: left;
+    line-height: 57px;
+    width: 30px;
+}
+.adc-ganttchart .adc-ganttchart-toolbar .adc-ganttchart-toolbar-view:nth-child(2){
+    background-color: #F5F5F5;
+}
+.adc-ganttchart .adc-ganttchart-toolbar .adc-ganttchart-toolbar-view{
+    background-color: #FAFAFA;
+}
+
+.adc-ganttchart .adc-ganttchart-toolbar .adc-ganttchart-toolbar-view-active,
+.adc-ganttchart .adc-ganttchart-toolbar .adc-ganttchart-toolbar-view:hover {
+    color: #fff;
+    background-color: #2AB4EA !important;
+}
+
+.adc-ganttchart .adc-ganttchart-toolbar .adc-ganttchart-toolbar-legend-container {
+    float: right;
+}
+
+.adc-ganttchart .adc-ganttchart-toolbar .adc-ganttchart-toolbar-legend {
+    height: 30px;
+    margin-left: 15px;
+    padding: 4px 8px;
+    color: #949494;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: .3s all;
+    float: left;
+    line-height: 20px;
+}
+
+.adc-ganttchart .adc-ganttchart-toolbar .adc-ganttchart-toolbar-legend:before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    margin-right: 4px;
+    border-radius: 10px;
+    transition: .3s all;
+}
+
+.adc-ganttchart .adc-ganttchart-toolbar .adc-ganttchart-toolbar-legend-hide {
+    color: #d8d8d8 !important;
+}
+
+.adc-ganttchart .adc-ganttchart-toolbar .adc-ganttchart-toolbar-legend-hide:before {
+    background-color: #d8d8d8 !important;
+}
+
+/**
+ *
+ * 甘特图盒子容器
+ *
+ */
+.adc-ganttchart .adc-ganttchart-box {
+    position: relative;
+    overflow: hidden;
+}
+
+.adc-ganttchart .adc-ganttchart-box .adc-ganttchart-header {
+    overflow: hidden;
+    border-bottom: 1px solid #e5e5e5;
+    margin-left: 177px;
+}
+
+.adc-ganttchart .adc-ganttchart-box .adc-ganttchart-body {
+    position: relative;
+    overflow: auto;
+    z-index: 100;
+    margin-left: 177px;
+}
+
+.adc-ganttchart .adc-ganttchart-box .adc-ganttchart-fixed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 101;
+    background-color: #fff;
+    box-shadow: 0 -1px 8px #e5e5e5;
+}
+
+.adc-ganttchart .adc-ganttchart-box .adc-ganttchart-fixed .adc-ganttchart-header {
+    margin-left: 0 !important;
+}
+
+.adc-ganttchart .adc-ganttchart-box .adc-ganttchart-fixed .adc-ganttchart-body {
+    overflow: hidden;
+    margin-left: 0 !important;
+}
+
+/* 单元格 */
+.adc-ganttchart .adc-ganttchart-box .adc-ganttchart-cell {
+    width: 100px;
+    height: 20px;
+    position: relative;
+    font-weight: normal;
+    display:inline-block;
+}
+
+.adc-ganttchart .adc-ganttchart-box .adc-ganttchart-main .adc-ganttchart-cell {
+    /* 解决 display: inlin-block; 导致容器之间有小间隙的问题 */
+    font-size: 0;
+    margin-top:5px;
+}
+
+.adc-ganttchart .adc-ganttchart-box>.adc-ganttchart-header .adc-ganttchart-cell {
+    text-align: center;
+}
+
+.adc-ganttchart .adc-ganttchart-box .adc-ganttchart-fixed .adc-ganttchart-cell {
+    padding: 0 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.adc-ganttchart .adc-ganttchart-box .adc-ganttchart-fixed .adc-ganttchart-cell img {
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+    vertical-align: bottom;
+    margin-right: 2px;
+}
+
+.adc-ganttchart .adc-ganttchart-box .adc-ganttchart-fixed th .adc-ganttchart-cell {
+    font-size: 16px;
+    color: #181818;
+    text-align: left;
+}
+
+.adc-ganttchart .adc-ganttchart-box .adc-ganttchart-main td {
+    position: relative;
+}
+.adc-ganttchart .adc-ganttchart-box .adc-ganttchart-main  tr{
+    border-bottom:1px solid rgba(233,233,233,1);
+}
+
+.adc-ganttchart .adc-ganttchart-box .adc-ganttchart-main td span {
+    position: absolute;
+    height: 20px;
+    line-height: 20px;
+    word-break: keep-all;
+    z-index: 999;
+    font-size: 12px;
+    color: #f9fcff;
+}
+
+/* 当前日期样式 */
+.adc-ganttchart-default-date {
+    /*color: #575757;*/
+    /*background-color: #f9fcff;*/
+}
+
+/**
+ *
+ * 项目进度展示相关样式
+ *
+ */
+/* 统一类名，所有进度条都要加这个基础类 */
+.adc-ganttchart-project {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    position: relative;
+}
+
+/* 图例样式，以及进度条样式，应该在设置里设置，并进行动态生成，此处暂时为参考 */
+/* DONE: 动态生成 */
+/* .adc-ganttchart-project-style {background-color: transparent;}
+.adc-ganttchart-project-style0,.adc-ganttchart-legend0:before {background-color: rgb(54, 203, 203);opacity: .7964;}
+.adc-ganttchart-project-style1,.adc-ganttchart-legend1:before {background-color: rgb(77, 203, 115);opacity: .7964;}
+.adc-ganttchart-project-style2,.adc-ganttchart-legend2:before {background-color: rgb(250, 211, 55);opacity: .7964;}
+.adc-ganttchart-project-style3,.adc-ganttchart-legend3:before {background-color: rgb(255, 134, 127);opacity: .7964;}
+.adc-ganttchart-project-style4,.adc-ganttchart-legend4:before {background-color: rgb(84, 161, 248);opacity: .7964;} */
+
+/* 项目截止样式，在容器上加类名 */
+.adc-ganttchart-project-end-triangle:after {
+    content: '';
+    width: 0;
+    height: 0;
+    display: block;
+    position: absolute;
+    border-top: 10px solid #fff;
+    border-bottom: 10px solid #fff;
+    border-right-width: 0;
+    border-left: 12px solid transparent;
+    top: 0;
+    right: 0;
+}
+.adc-point{
+     width: 10px;
+     height: 10px;
+     border-radius: 50%;
+     background: rgb(54, 203, 203);
+     float: left;
+     margin-right: 5px;
+     margin-top: 7px;
+}
+
+/* 项目未展示完全样式，在容器上加类名 */
+/* .adc-ganttchart-project-processing:after {
+    content: '';
+    width: 10px;
+    height: 20px;
+    background-color: #fff;
+    display: block;
+    position: absolute;
+    border: none;
+    border-left: 10px solid transparent;
+    border-radius: 100px;
+    top: 0;
+    left: -12px;
+} */
+
+/* 项目开始样式，在容器上加类名 */
+.adc-ganttchart-project-start-triangle:after {
+    content: '';
+    width: 0;
+    height: 0;
+    display: block;
+    position: absolute;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right-width: 0;
+    border-left: 8px solid #fff;
+    top: 0;
+    left: 0;
+}
+
+
+/**
+ *
+ * 加载中样式 
+ *
+ */
+
+.adc-ganttchart-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.adc-ganttchart-loading .loading {
+    width: 120px;
+    height: 120px;
+    background-color: #55b7ff;
+
+    border-radius: 100%;
+    -webkit-animation: scaleout 1.0s infinite ease-in-out;
+    animation: scaleout 1.0s infinite ease-in-out;
+}
+
+@-webkit-keyframes scaleout {
+    0% {
+        -webkit-transform: scale(0.0)
+    }
+
+    100% {
+        -webkit-transform: scale(1.0);
+        opacity: 0;
+    }
+}
+
+@keyframes scaleout {
+    0% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+    }
+
+    100% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+        opacity: 0;
+    }
+}
+
+.adc-ganttchart-loading-lt-ie10 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.2;
+    z-index: 9999;
+}
+
+.adc-ganttchart-loading-lt-ie10 .loading {
+    width: 100%;
+    height: 30px;
+    font-size: 24px;
+    line-height: 30px;
+    text-align: center;
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+}

@@ -1,0 +1,548 @@
+<!--
+File   : form_management.html
+Created: Tuesday October 23rd 2018 4:47:01 pm
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Last Modified: Friday November 30th 2018 1:29:49 pm
+Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+-----
+Description: 表单管理 - 表单管理（新）
+-----
+HISTORY:
+-->
+
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">表单管理</div>
+            <div class="layui-card-body">
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar">
+                        <div class="layui-inline">
+                            <div class="layui-inline search-item">
+                                <i class="layui-icon layui-icon-search"></i>
+                                <input type="text" name="inp_search" id="inp_search" placeholder="输入表单名称" class="layui-input">
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-normal" lay-filter="btn_search_form"
+                                    lay-submit title="查询">查询</button>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_reset_form"
+                                    lay-submit title="重置">重置</button>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-pull-right">
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_add_form"
+                                    lay-submit title="新增表单">
+                                    <i class="layui-icon layui-icon-add-1"></i>新增表单
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table id="tableContent-form" lay-filter="tableContent-form"></table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增和编辑 -->
+    <div class="layui-col-md12 card-show-edit" style="display: none;">
+        <div class="layui-card">
+            <div class="layui-card-header">新增/编辑表单</div>
+            <!-- 卡片右上角关闭按钮 -->
+            <i class="layui-icon layui-icon-close layui-card-close"></i>
+            <div class="layui-card-body">
+                <div class="layui-form">
+                    <input type="text" name="type" style="display: none;">
+                    <input type="text" name="id" style="display: none;">
+                    <input type="text" name="version" style="display: none;">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span style="color: red;">*</span> 表单名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="formName" class="layui-input" lay-verify="required|name">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span style="color: red;">*</span> 表单编号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="formCode" class="layui-input" lay-verify="required|code">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">只能使用英文和数字</div>
+                        </div>
+                    </div>
+                    <!-- UEditor -->
+                    <script id="ADCFormDesign" type="text/plain" style="width: 100%;margin: 20px auto;min-height: 300px;">
+                        努力加载中……
+                    </script>
+                    <div class="layui-form-item" style="text-align: center;">
+                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="btnSave_form">保存</button>
+                        <button class="layui-btn layui-btn-primary" id="btnCancle_form">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="view">查看</a>
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+    <a class="table-control-btn table-control-btn-danger" lay-event="del">删除</a>
+</script>
+
+<script>
+    // DONE: 表单设计器内保存的表格宽度不是自适应的，需要处理一下
+    // Ueditor 编辑器全局变量
+    var ADCFormDesign = null;
+
+    layui.use(['table'], function () {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer;
+        // 渲染表格
+        table.render({
+            elem: '#tableContent-form',
+            id: 'tableContent-form',
+            url: admin.formatUrl('/api/form'),
+            // 格式化后台返回的数据
+            parseData: function (res) {
+                return {
+                    "code": res.respCode, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.list //解析数据列表
+                };
+            },
+            height: 472,
+            cols: [
+                [{
+                    type: 'numbers'
+                }, {
+                    field: 'formName',
+                    title: '表单名称',
+                    templet:function(d) {
+                        var text= d.formName ? d.formName : "";
+                        return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                    }
+                }, {
+                    field: 'formCode',
+                    title: '表单编号',
+                    align: 'center',
+                    width: 200,
+                    templet:function(d) {
+                        var text= d.formCode ? d.formCode : "";
+                        return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                    }
+                }, {
+                    field: 'createTime',
+                    title: '创建时间',
+                    align: 'center',
+                    sort: true,
+                    width: 180,
+                    templet:function(d) {
+                        var text= d.createTime ? d.createTime : "";
+                        return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                    }
+                }, {
+                    field: 'editTime',
+                    title: '保存时间',
+                    align: 'center',
+                    sort: true,
+                    width: 180,
+                    templet:function(d) {
+                        var text= d.editTime ? d.editTime : "";
+                        return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                    }
+                }, {
+                    field: 'createName',
+                    title: '创建人',
+                    align: 'center',
+                    width: 180,
+                    templet:function(d) {
+                        var text= d.createName ? d.createName : "";
+                        return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                    }
+                }, {
+                    field: 'editName',
+                    title: '保存人',
+                    align: 'center',
+                    width: 180,
+                    templet:function(d) {
+                        var text= d.editName ? d.editName : "";
+                        return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                    }
+                }, {
+                    field: 'version',
+                    title: '编辑次数',
+                    width: 100,
+                    align: 'center',
+                    templet:function(d) {
+                        var text= d.version ? d.version : "";
+                        return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                    }
+                }, {
+                    templet: '#control-1',
+                    title: '操作',
+                    align: 'center',
+                    width: 140,
+                    unresize: true
+                }]
+            ],
+            cellMinWidth: 120,
+            page: {
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+            },
+            request: {
+                pageName: 'pageNo',
+                limitName: 'pageSize'
+            },
+            where: {
+                design: 0
+            }
+        });
+        // 侧边栏变化时刷新数据表格
+        // 将 table ID 存入数组
+        layui.admin.addTableCache('tableContent-form');
+
+        // 搜索
+        form.on('submit(btn_search_form)', function (data) {
+            var searchValue = data.field.inp_search;
+            table.reload('tableContent-form', {
+                where: {
+                    formName: searchValue,
+                    reload: new Date().getTime()
+                }
+            });
+        });
+        // 重置
+        form.on('submit(btn_reset_form)', function () {
+            $('#inp_search').val('');
+            table.reload('tableContent-form', {
+                where: {
+                    formName: '',
+                    reload: new Date().getTime()
+                }
+            });
+        });
+
+        // 监听工具条事件
+        // 查看、编辑、删除
+        table.on('tool(tableContent-form)', function (obj) {
+            // 获取点击列的数据
+            var data = obj.data;
+            var layEvent = obj.event;
+            // 判断操作类型
+            if (layEvent === 'del') {
+                // 删除
+                layer.confirm('确定删除表单：' + data.formName + '[' + data.formCode + '] 吗？', {
+                    icon: 3,
+                    title: '提示'
+                }, function () {
+                    admin.req('/api/form/delete/' + data.id, {}, function (data) {
+                        if (data.ok) {
+                            layer.msg('删除表单成功！', {
+                                icon: 1
+                            });
+                            table.reload('tableContent-form', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        } else {
+                            return layer.msg('删除表单失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: 'delete'
+                    });
+                });
+            } else if (layEvent === 'edit') {
+                // 编辑
+                panelControl('edit', data);
+            } else if (layEvent === 'view') {
+                // 查看
+                panelControl('view', data);
+            }
+        });
+        form.on('submit(btn_add_form)', function () {
+            // 新增
+            panelControl('add');
+        });
+
+        // 新增/编辑表单取消按钮
+        $('#btnCancle_form').on('click', function () {
+            panelControl('close');
+        });
+        // 右上角关闭按钮
+        $('.layui-card-close').on('click', function () {
+            panelControl('close');
+        });
+
+        // 表单提交
+        form.on('submit(btnSave_form)', function (data) {
+            // 获取表单数据
+            var d = data.field;
+            var formContent = ADCFormDesignHelper.ParsingForm(ADCFormDesign.getContent());
+            // 判断是编辑还是新增
+            // 设置不同的 HTTP 方法，和提示信息
+            if (d.type === 'add') {
+                var ajaxType = 'POST',
+                    ajaxName = '新增';
+                d.dataSourceId = '';
+                d.delFlag = '0';
+                d.formWrite = '0';
+                d.version = '1';
+            } else if (d.type === 'edit') {
+                var ajaxType = 'PUT',
+                    ajaxName = '编辑';
+                d.version++;
+            }
+            var columnIDArray = [],
+                columnNameArray = [];
+            for (var i = 0; i < formContent.fields.length; i++) {
+                var tmp = formContent.fields[i];
+                columnIDArray.push(tmp.name);
+                columnNameArray.push(tmp.title);
+            }
+            d.columnID = columnIDArray.join(',');
+            d.columnName = columnNameArray.join(',');
+            d.contentHtml = formContent.content;
+            d.editTime = new Date().toLocaleString();
+            d.editName = config.getAccount().usname;
+            delete d.type;
+
+            layer.confirm(d.columnName.split(',').join(' | ') + '<br/>（如果疏漏，请修改后再保存）', {
+                icon: 3,
+                title: '请确认当前已有的控件名称！'
+            }, function (index) {
+                // 发送请求
+                admin.req('/api/form', d, function (data) {
+                    if (data.ok) {
+                        layer.msg(ajaxName + '表单成功！', {
+                            icon: 1
+                        });
+                        panelControl('close');
+                    } else {
+                        return layer.msg(ajaxName + '表单失败：' + data.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: ajaxType
+                });
+                layer.close(index);
+            });
+        });
+
+        // 新增/编辑表单输入框格式验证
+        form.verify({
+            code: [/^[A-Za-z0-9]+$/, '表单编号只能使用英文和数字'],
+            name: function (value) {
+                var flag = value.match(/[\u4e00-\u9fa5]+/g);
+
+                function strlen(str) {
+                    var len = 0;
+                    for (var i = 0; i < str.length; i++) {
+                        var c = str.charCodeAt(i);
+                        //单字节加1 
+                        if ((c >= 0x0001 && c <= 0x007e) || (0xff60 <= c && c <= 0xff9f)) {
+                            len++;
+                        } else {
+                            // UTF-8 编码 一个汉字为 3 个字符
+                            len += 3;
+                        }
+                    }
+                    return len;
+                }
+                if (!flag) {
+                    return '请输入易于辨识的表单名称（必须包含汉字）';
+                } else if (strlen(value) > 32) {
+                    return '表单名称最长为 32 个字符';
+                }
+            }
+        });
+
+        // 面板控制
+        function panelControl(method, options) {
+            if (ADCFormDesign === null) {
+                // 检查 Ueditor 相关文件是否引入
+                // admin.showLoading();
+                var scriptArray = ['./assetsInfo/libs/ueditor_v1.4.3/ueditor.config.js',
+                    './assetsInfo/libs/ueditor_v1.4.3/ueditor.all.min.js',
+                    './assetsInfo/js/ADCFormDesignHelper.js',
+                    './assetsInfo/libs/ueditor_v1.4.3/adcformdesign/adcformdesign.js'
+                ];
+                loadJS(scriptArray[0], function () {
+                    loadJS(scriptArray[1], function () {
+                        loadJS(scriptArray[2], function () {
+                            loadJS(scriptArray[3], function () {
+                                // 必须配置 ADCFormDesign Editor 的名字，否则插件无法使用，且只能有唯一一个
+                                UE.ADCFormDesignEditor = 'ADCFormDesign';
+                                ADCFormDesign = UE.getEditor('ADCFormDesign', {
+                                    adcformdesign: true, // 显示表单设计器按钮
+                                    textarea: 'contentHtml', // 编辑器的表单名称
+                                    serverUrl: admin.formatUrl(
+                                        'api/form'),
+                                    toolbars: [
+                                        ['fullscreen', 'source',
+                                            'undo', 'redo',
+                                            'bold', 'fontfamily',
+                                            'fontsize',
+                                            'indent', 'justifyleft',
+                                            'justifycenter',
+                                            'justifyright',
+                                            'justifyjustify',
+                                            'inserttable',
+                                            'deletetable',
+                                            'insertparagraphbeforetable',
+                                            'insertrow',
+                                            'deleterow',
+                                            'insertcol',
+                                            'deletecol',
+                                            'mergecells',
+                                            'mergeright',
+                                            'mergedown',
+                                            'splittocells',
+                                            'splittorows',
+                                            'splittocols'
+                                        ]
+                                    ],
+                                    wordCount: false,
+                                    elementPathEnabled: false,
+                                    initialFrameHeight: 400,
+                                    autoHeightEnabled: false
+                                });
+                                ADCFormDesign.ready(function () {
+                                    // admin.removeLoading();
+                                    process();
+                                });
+                            });
+                        });
+                    });
+                });
+            } else process();
+
+            function process() {
+                switch (method) {
+                    case 'edit':
+                        // 编辑
+                        // UEditor 添加内容
+                        var oldContent = options && options.contentHtml ? options.contentHtml : '';
+                        ADCFormDesign.setContent(oldContent);
+                        // 切换
+                        options.title = '编辑表单：' + options.formName;
+                        options.type = method;
+                        setFormValue(options);
+                        $('.card-show-list').fadeOut(function () {
+                            $('.card-show-edit').fadeIn();
+                        });
+                        break;
+                    case 'view':
+                        // 查看
+                        // 过滤掉没有内容的
+                        ADCFormDesignHelper.View(options);
+                        break;
+                    case 'add':
+                        // 新增
+                        // 初始化内容为空
+                        ADCFormDesign.setContent('');
+                        // 切换
+                        setFormValue({
+                            title: '新增表单',
+                            type: method
+                        });
+                        $('.card-show-list').fadeOut(function () {
+                            $('.card-show-edit').fadeIn();
+                        });
+                        break;
+                    case 'close':
+                        // 关闭
+                        $('.card-show-edit').fadeOut(function () {
+                            $('.card-show-list').fadeIn();
+                            setFormValue({
+                                title: '新增/编辑表单',
+                                type: ''
+                            });
+                            table.reload('tableContent-form', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        });
+                        break;
+
+                    default:
+                        break;
+                }
+            };
+
+            // 设置表单内容
+            function setFormValue(obj) {
+                var inputs = $('.card-show-edit').find('input'),
+                    title = $('.card-show-edit .layui-card-header'),
+                    formNames = ['formName', 'formCode', 'id', 'type', 'version'];
+
+                obj.title && title.text(obj.title);
+                for (var i = 0; i < formNames.length; i++) {
+                    if (obj[formNames[i]]) {
+                        $('.card-show-edit  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                    } else {
+                        $('.card-show-edit  input[name="' + formNames[i] + '"]').val('');
+                    }
+                }
+            }
+        };
+
+        // 同步阻塞加载 JS 文件
+        function loadJS(url, success) {
+            var domScript = document.createElement('script');
+            domScript.src = url;
+            success = success || function () {};
+            domScript.onload = domScript.onreadystatechange = function () {
+                if (!this.readyState || 'loaded' === this.readyState || 'complete' === this.readyState) {
+                    success();
+                    this.onload = this.onreadystatechange = null;
+                    this.parentNode.removeChild(this);
+                }
+            }
+            document.getElementsByTagName('head')[0].appendChild(domScript);
+        }
+    });
+</script>

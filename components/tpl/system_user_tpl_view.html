@@ -1,0 +1,114 @@
+<!--
+File   : system_user_tpl_view.html
+Created: Tuesday September 25th 2018 2:05:27 pm
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Last Modified: Tuesday September 25th 2018 2:36:06 pm
+Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+-----
+Description: 
+-----
+HISTORY:
+-->
+
+<style>
+    .layui-tpl-container table{
+        table-layout:fixed;
+    }
+    .layui-tpl-container table tr td:nth-of-type(1) {
+        width: 30%;
+        text-align: right;
+        white-space:nowrap;
+    }
+    .layui-tpl-container table tr td:nth-of-type(2){
+        width: 70%;
+        white-space:nowrap;/*文本不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。*/
+        overflow:hidden;/*隐藏多余的内容*/
+        text-overflow:ellipsis;/*显示省略符号来代表被修剪的文本 for IE*/
+        -moz-text-overflow: ellipsis; /* for Firefox,mozilla */
+    }
+</style>
+
+<div class="layui-tpl-container" id="userDetail" style="padding: 10px">
+    <table class="layui-table" style="margin: 0;">
+        <tbody>
+            <tr>
+                <td>用户 ID</td>
+                <td class="tdAll">{{usid}}</td>
+            </tr>
+            <tr>
+                <td>用户姓名</td>
+                <td class="tdAll">{{usname}}</td>
+            </tr>
+            <tr>
+                <td>登录账号</td>
+                <td class="tdAll">{{account}}</td>
+            </tr>
+            <tr>
+                <td>所属角色</td>
+                <td class="tdAll">{{roles}}</td>
+            </tr>
+            <tr>
+                <td>所属组织</td>
+                <td class="tdAll">{{orgs}}</td>
+            </tr>
+            <tr>
+                <td>用户工号</td>
+                <td class="tdAll">{{userCode}}</td>
+            </tr>
+            <tr>
+                <td>办公电话</td>
+                <td class="tdAll">{{officePhone}}</td>
+            </tr>
+            <tr>
+                <td>手机号码</td>
+                <td class="tdAll">{{cellPhoneNumber}}</td>
+            </tr>
+            <tr>
+                <td>职级</td>
+                <td class="tdAll">{{contactAddress}}</td>
+            </tr>
+            <tr>
+                <td>职级权重</td>
+                <td class="tdAll">{{extInfo}}</td>
+            </tr>
+            <tr>
+                <td>家庭住址</td>
+                <td class="tdAll">{{homeAddress}}</td>
+            </tr>
+            <tr>
+                <td>邮政编码</td>
+                <td class="tdAll">{{postalCode}}</td>
+            </tr>
+            <tr>
+                <td>电子邮件</td>
+                <td class="tdAll">{{email}}</td>
+            </tr>
+            <tr>
+                <td>用户状态</td>
+                <td class="tdAll">{{userState}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

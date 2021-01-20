@@ -1,0 +1,400 @@
+<style>
+    .memberListInfo {
+        padding: 20px;
+    }
+
+    .memberListInfo .leftItem, .memberListInfo .rightItem {
+        display: inline-block;
+        width: 49%;
+    }
+
+    .memberListInfo .layui-form-item {
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .memberListInfo .form-input {
+        position: relative;
+        display: inline-block;
+        width: calc(100% - 90px);
+    }
+
+    .memberListInfo label {
+        display: inline-block;
+        width: 80px;
+        text-align: right;
+    }
+
+    label {
+        font-weight: normal;
+    }
+
+    .redSpan {
+        color: red;
+    }
+    .layui-layer-load{
+        background-color: white;
+    }
+    .memberListInfo .layui-disabled, .memberListInfo .layui-disabled:hover {
+        color: rgb(84, 84, 84)!important;
+    }
+</style>
+<link rel="stylesheet" href="../../assetsInfo/libs/layui/css/layui.css"/>
+<link rel="stylesheet" href="../../assetsInfo/css/style.css">
+<link rel="stylesheet" href="../../assetsInfo/css/theme.css"/>
+<div class="memberListInfo layui-form">
+    <div>
+
+    </div>
+    <div class="leftItem">
+        <div class="layui-form-item">
+            <label><span class="redSpan">*</span>排序：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请填写排序" maxlength="2" lay-verify="required|sortNumber" class="layui-input"
+                       name="extInfo1" id="extInfo1">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label><span class="redSpan">*</span>姓名：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请填写姓名" readonly maxlength="50" lay-verify="required" style="cursor: pointer" class="layui-input"
+                       name="memberName" id="memberName">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>性别：</label>
+            <div class="form-input ">
+                <input type="radio" style="cursor: pointer" lay-verify="required" value="1" checked title="男"
+                       class="layui-input" name="memberGender">
+                <input type="radio" style="cursor: pointer" lay-verify="required" value="0" title="女"
+                       class="layui-input" name="memberGender">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>证件号码：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请填写证件号码" maxlength="19" lay-verify="required" class="layui-input"
+                       name="memberCertificates" id="memberCertificates">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>手机：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请填写手机号码" lay-verify="phone" class="layui-input" name="memberPhone"
+                       id="memberPhone">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label><span class="redSpan">*</span>座机：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请填写座机号码" lay-verify="officePhone" maxlength="50" class="layui-input"
+                       name="memberLandline" id="memberLandline">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>电子邮箱：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请填写您的邮箱" lay-verify="email" class="layui-input" name="memberEmail"
+                       id="memberEmail">
+            </div>
+        </div>
+
+    </div>
+    <div class="rightItem" style="vertical-align: top">
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>职称级别：</label>
+            <div class="form-input ">
+                <select lay-verify="required" placeholder="请选择职称级别" lay-filter="memberTitleLevel"
+                        name="memberTitleLevel" id="memberTitleLevel"></select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>学历：</label>
+            <div class="form-input">
+                <select lay-verify="required" placeholder="请选择学历" lay-filter="memberEducation" name="memberEducation"
+                        id="memberEducation"></select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>学位：</label>
+            <div class="form-input ">
+                <select lay-verify="required" placeholder="请选择学位" lay-filter="memberAcademic" name="memberAcademic"
+                        id="memberAcademic"></select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>是否留学：</label>
+            <div class="form-input ">
+                <input type="radio" lay-verify="required" value="1" title="是" class="layui-input" name="memberOverseas">
+                <input type="radio" lay-verify="required" value="0" title="否" checked class="layui-input"
+                       name="memberOverseas">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>主要分工：</label>
+            <div class="form-input ">
+                <input type="text" style="cursor: pointer" placeholder="请填写分工" lay-verify="required" class="layui-input"
+                       name="memberDivision" id="memberDivision" maxlength="80">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>从事专业：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请填写从事的专业" maxlength="50" lay-verify="required" class="layui-input" name="memberMajor"
+                       id="memberMajor">
+            </div>
+        </div>
+        <div class="layui-form-item" style="left: 50%;position: absolute;bottom: 10px; margin-left: -72px">
+            <button class="layui-btn layui-btn-normal" style="display: none" lay-submit lay-filter="btn-member-sure" id="btn-member-sure">确定</button>
+            <button class="layui-btn layui-btn-primary" id="cancle">取消</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../../assetsInfo/libs/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../assetsInfo/libs/layui/layui.js"></script>
+<script>
+
+   var memberListInit = function(memberListData,isEdit){
+       layui.use(['element', 'laypage', 'tree', 'util', 'table', 'form', 'laydate'], function () {
+           var element = layui.element,
+               table = layui.table,
+               tree = layui.tree,
+               form = layui.form,
+               admin = layui.admin,
+               laydate = layui.laydate,
+               layer = layui.layer,
+               config = layui.config,
+               util = layui.util;
+           layui.form.verify({
+               adcformdesign_Time: function (value, item) {
+                   // var endValue = $(item).parent().parent().siblings('.project_input_date').children().children('input').val();
+                   if (dateChange($('#infoStartDate').val()) > dateChange($('#infoEndDate').val())) {
+                       return '开始时间大于结束时间，请重新选择'
+                   }
+               },
+               officePhone: function (value, item) {
+                   if (!(/^\d{8}$/.test(value)) &&
+                       !(/^\d{1,4}-\d{8}$/.test(value)) &&
+                       !(/^\d{1,4}-\d{8}-\d{1,5}$/.test(value)) &&
+                       !(/^\d{8}\/\d{8}$/.test(value))
+                   ) {
+                       return '请输入正确的办公电话，格式如下：<br/>84370000<br/>022-84370000<br/>022-84370000-0000<br/>84370000/84370000';
+                   }
+               },
+               sortNumber: function (value, item) {
+                   if (!(/^[+]{0,1}(\d+)$/.test(value))
+                   ) {
+                       return '请输入非负整数';
+                   }
+               },
+
+           });
+           var editType='post';
+           if (memberListData) {
+               $('#memberName').val(memberListData.memberName);
+               $('#memberName').attr('data-name', memberListData.memberName);
+               $('#memberName').attr('data-id', memberListData.memberNameId);
+               $('input[name=memberOverseas][value=' + memberListData.studyAbroadType + ']').attr('checked', true);
+               $('#memberLandline').val(memberListData.memberTelephone);
+               $('#memberTitleLevel').val(memberListData.jobLevelId);
+               $('#memberMajor').val(memberListData.memberProfession);
+               $('#memberPhone').val(memberListData.memberMobilePhone);
+               $('input[name=memberGender][value=' + memberListData.memberSex + ']').attr('checked', true);
+               $('#memberDivision').val(memberListData.mainTaskDescription);
+               $('#memberCertificates').val(memberListData.memberCard);
+               $('#memberEmail').val(memberListData.memberEmail);
+               $('#extInfo1').val(memberListData.extInfo1);
+               editType='put';
+           }
+           if(isEdit){
+               var elem = '.memberListInfo';
+               var inputElem = $(elem + ' input'),
+                   textareaElem = $(elem + ' textarea'),
+                   selectElem = $(elem + ' select'),
+                   buttonElem = $(elem + ' button');
+               inputElem.attr('disabled', 'disabled');
+               textareaElem.attr('disabled', 'disabled');
+               selectElem.attr('disabled', 'disabled');
+               $('#btn-member-sure').css('display','none');
+           }else{
+               $('#btn-member-sure').css('display','inline-block');
+           }
+           //学历
+           $.ajax({
+               type: "get",
+               url: "/ADC_info/api/sys/dictype/list?dicCode=rs_education",
+               success: function (res) {
+                   var list = res.data;
+                   var con = '';
+                   for (i = 0; i < list.length; i++) {
+                       con += '<option value=' + list[i].dicTypeCode + '>' + list[i].dicTypeName + '</option>'
+                   }
+                   if (memberListData) {
+                       $('select[name=memberEducation]')[0].dataset.name = memberListData.memberEducation;
+                       $('select[name=memberEducation]')[0].dataset.id = memberListData.memberEducationId;
+                   } else if (list.length != 0) {
+                       $('select[name=memberEducation]')[0].dataset.name = list[0].dicTypeName;
+                       $('select[name=memberEducation]')[0].dataset.id = list[0].dicTypeCode;
+                   }
+                   form.on('select(memberEducation)', function (data) {
+                       data.elem.dataset.name = data.elem[data.elem.selectedIndex].innerHTML;
+                       data.elem.dataset.id = data.elem[data.elem.selectedIndex].value;
+                       form.render("select");
+                   });
+                   $('#memberEducation').empty().append(con);
+                   if (memberListData) {
+                       $('#memberEducation').val(memberListData.memberEducationId);
+                   }
+                   form.render("select");
+               }
+           });
+           //职称级别
+           $.ajax({
+               type: "get",
+               url: "/ADC_info/api/sys/dictype/list?dicCode=rs_rank",
+               success: function (res) {
+                   var list = res.data;
+                   var con = '';
+                   for (i = 0; i < list.length; i++) {
+                       con += '<option value=' + list[i].dicTypeCode + '>' + list[i].dicTypeName + '</option>'
+                   }
+                   if (memberListData) {
+                       $('select[name=memberTitleLevel]')[0].dataset.name = memberListData.jobLevel;
+                       $('select[name=memberTitleLevel]')[0].dataset.id = memberListData.jobLevelId;
+                   } else if (list.length != 0) {
+                       $('select[name=memberTitleLevel]')[0].dataset.name = list[0].dicTypeName;
+                       $('select[name=memberTitleLevel]')[0].dataset.id = list[0].dicTypeCode;
+                   }
+                   form.on('select(memberTitleLevel)', function (data) {
+                       data.elem.dataset.name = data.elem[data.elem.selectedIndex].innerHTML;
+                       data.elem.dataset.id = data.elem[data.elem.selectedIndex].value;
+                       form.render("select");
+                   });
+                   $('#memberTitleLevel').empty().append(con);
+                   if (memberListData) {
+                       $('#memberTitleLevel').val(memberListData.jobLevelId);
+                   }
+                   form.render("select");
+               }
+           });
+           //学位
+           $.ajax({
+               type: "get",
+               url: "/ADC_info/api/sys/dictype/list?dicCode=rs_degree",
+               success: function (res) {
+                   var list = res.data;
+                   var con = '';
+                   for (i = 0; i < list.length; i++) {
+                       con += '<option value=' + list[i].dicTypeCode + '>' + list[i].dicTypeName + '</option>'
+                   }
+                   if (memberListData) {
+                       $('select[name=memberAcademic]')[0].dataset.name = memberListData.memberDegree;
+                       $('select[name=memberAcademic]')[0].dataset.id = memberListData.memberDegreeId;
+                   } else if (list.length != 0) {
+                       $('select[name=memberAcademic]')[0].dataset.name = list[0].dicTypeName;
+                       $('select[name=memberAcademic]')[0].dataset.id = list[0].dicTypeCode;
+                   }
+                   form.on('select(memberAcademic)', function (data) {
+                       data.elem.dataset.name = data.elem[data.elem.selectedIndex].innerHTML;
+                       data.elem.dataset.id = data.elem[data.elem.selectedIndex].value;
+                       form.render("select");
+                   });
+                   $('#memberAcademic').empty().append(con);
+                   if (memberListData) {
+                       $('#memberAcademic').val(memberListData.memberDegreeId);
+                   }
+                   form.render("select");
+               }
+           });
+           $('#cancle').on('click', function () {
+               var index = parent.layer.getFrameIndex(window.name);
+               parent.layer.close(index);
+           });
+           $('#memberName').off('click').on('click', function () {
+               var data = {
+                   data: []
+               };
+               if ($('#memberName').attr('data-name')) {
+                   data.data.push({
+                       name: $('#memberName').attr('data-name'),
+                       id: $('#memberName').attr('data-id')
+                   })
+               }
+               layer.open({
+                   type: 2,
+                   id: 'personnelSelect',
+                   title: '请选择',
+                   content: '../../components/tpl/personnel_group_select.html',
+                   area: ['96%', '80%'],
+                   btn: ['确定', '取消'],
+                   yes: function (index, layero) {
+                       var finalData = $('#personnelSelect iframe')[0].contentWindow
+                           .task_personnel_select.finish();
+                       for (var i = 0; i < finalData.length; i++) {
+                           $('#memberName').attr('data-name', finalData[i].name);
+                           $('#memberName').val(finalData[i].name);
+                           $('#memberName').attr('data-id', finalData[i].id);
+                       }
+                       layer.close(index);
+                   },
+                   success: function () {
+                       console.log(parent, 54545454, $('#personnelSelect iframe'))
+                       // 执行 iframe 内的方法
+                       $('#personnelSelect iframe')[0].contentWindow.task_personnel_select
+                           .init(data, 'radio');
+                   },
+                   resize: false
+               });
+           });
+           form.on('submit(btn-member-sure)', function (obj) {
+               var memberObj = obj.field;
+               var memberData = {
+                   "extInfo1": memberObj.extInfo1,
+                   // "id": "string",
+                   "jobLevel": $('#memberTitleLevel').attr('data-name'),
+                   "jobLevelId": $('#memberTitleLevel').attr('data-id'),
+                   "leaderFlag": 0,
+                   "mainTaskDescription": memberObj.memberDivision,
+                   "memberCard": memberObj.memberCertificates,
+                   "memberDegree": $('#memberAcademic').attr('data-name'),
+                   "memberDegreeId": $('#memberAcademic').attr('data-id'),
+                   "memberEducation": $('#memberEducation').attr('data-name'),
+                   "memberEducationId": $('#memberEducation').attr('data-id'),
+                   "memberEmail": memberObj.memberEmail,
+                   "memberMobilePhone": memberObj.memberPhone,
+                   "memberName": $('#memberName').attr('data-name'),
+                   "memberNameId": $('#memberName').attr('data-id'),
+                   "memberProfession": memberObj.memberMajor,
+                   "memberSex": memberObj.memberGender,
+                   "memberTelephone": memberObj.memberLandline,
+                   "researchProjectId": parent.$('#researchProjectId').val(),
+                   "studyAbroadType": memberObj.memberOverseas
+               };
+               if(memberListData){
+                   memberData.id=memberListData.id;
+               }
+               $.ajax({
+                   url: "/ADC_info/api/research/member",
+                   data: JSON.stringify(memberData),
+                   type: editType,
+                   contentType: "application/json",
+                   success: function (res) {
+                       if(res.ok){
+                           var index = parent.layer.getFrameIndex(window.name);
+                           parent.layer.close(index)
+                           parent.$('.member-refresh').click()
+                       }else{
+                           return layer.msg(res.message, {
+                               icon: 5
+                           });
+                       }
+
+                   }
+               })
+           });
+           form.render();
+       });
+   }
+</script>

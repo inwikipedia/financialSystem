@@ -1,0 +1,568 @@
+<!--
+File   : user.html
+Created: Tuesday September 18th 2020 9:15:20 am
+Author : hetengfei
+License: MIT License
+
+Copyright (c) 2020 hetengfei
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Modified By  : hetengfei
+-----
+Description: 数据看板 - 行业会议安排
+-----
+HISTORY:
+-->
+<style>
+    /*layui 插件choosen 冲突 当有两个select 切换页面会渲染出两个，原因未知*/
+    body{
+        overflow-y: hidden;
+    }
+    .exchangeProgramme .layui-table-box{
+        height: 90% !important;
+    }
+    .exchangeProgramme .layui-table-body{
+        height: 93.5% !important;
+    }
+    .exchangeProgramme .layui-form.layui-border-box.layui-table-view{
+        height: 490px !important;
+    }
+</style>
+<div class="layui-row layui-col-space15">
+    <!-- 左侧 -->
+    <div class="layui-col-md12 autoScrollLeft">
+        <div class="layui-card exchangeProgramme">
+            <!-- 卡片容器 -->
+            <div class="layui-card-header">近期交流计划</div>
+            <div class="layui-card-body">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar">
+                        <!-- 右侧 -->
+                        <div class="layui-inline">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:auto">企业:</label>
+                                <div class="layui-inline" style="margin-left:-10px">
+                                    <input type="text" name="epEnterprise" id="epEnterprise" placeholder="输入企业名称" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:auto">日期:</label>
+                                <div class="layui-input-inline" style="margin-left:-10px">
+                                    <input type="text" name="epDate" class="layui-input" id="test1" placeholder="输入日期">
+                                </div>
+                            </div>
+                            <div class="layui-inline" style="margin-right: 0px">
+                                <label class="layui-form-label" style="padding-left: 5px;"><span>交流领域:</span> </label>
+                                <div class="layui-input-inline" style="margin-left:-10px">
+                                    <input type="text" placeholder="输入交流领域" class="layui-input" name="epExchangeDomain" id="epExchangeDomain">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btn_search_user" class="layui-btn layui-btn-sm layui-btn-normal" lay-filter="btn_search_user" lay-submit title="查询"> <i class="layui-icon layui-icon-search"></i>查询</button>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btn_reset_user" class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_reset_user" lay-submit title="重置">重置</button>
+                            </div>
+                        </div>
+                        <!-- 左侧 -->
+                        <div class="layui-inline layui-pull-right">
+                            <div class="layui-inline">
+                                <button id="btn_add_user" class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_add_user" lay-submit title="新增用户">
+                                    <i class="layui-icon layui-icon-add-1"></i>新增
+                                </button>
+                                <div class="layui-inline">
+                                    <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"  lay-submit title="删除" id="btn-del-all">
+                                        <i class="layui-icon layui-icon-delete"></i>删除
+                                    </button>
+                                </div>
+                                <button type="button" class="layui-btn layui-btn-sm layui-import" id="crm-customer-btn-import" title="导入">
+                                    <i class="layui-icon layui-icon-upload-drag"></i>导入
+                                </button>
+                                <button id="btn_download_project" class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_download_project" lay-submit title="下载模板">
+                                    <i class="layui-icon layui-icon-download-circle"></i>下载模板
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 下部表格容器 -->
+                <table id="tableContent-user" lay-filter="tableContent-user"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="btn-edit">编辑</a>
+    <a class="table-control-btn table-control-btn-danger" lay-event="btn-delete">删除</a>
+</script>
+<script src="/assetsInfo/js/tempDown.js"></script>
+<script>
+    // 初始化 layui
+    layui.use(['table', 'formSelects','upload','laydate'], function() {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            formSelects = layui.formSelects,
+            upload = layui.upload,
+            laydate = layui.laydate;
+        //日期控件
+        laydate.render({
+            elem: '#test1',
+            range: '到',
+            format: 'yyyy-MM-dd'
+        });
+        //批量删除
+        $('#btn-del-all').off('click').on('click', function () {
+            var checkStatus = table.checkStatus('tableContent-user');
+            if (checkStatus.data.length == 0) {
+                return layer.msg('请选择至少一条数据！', {
+                    icon: 0
+                });
+            }
+            var delArr = [];
+            for (var i = 0; i < checkStatus.data.length; i++) {
+                delArr.push(checkStatus.data[i].id);
+            }
+            layer.confirm('确定要删除' + checkStatus.data.length + '条数据吗？', {
+                icon: 3,
+                title: '提示'
+            }, function () {
+                var load2 = layer.load(2);
+                $.ajax({
+                    url: "/api/exchangeplan/exchangePlan/logicDelete/" + delArr.join(","),
+                    type: 'delete',
+                    contentType: 'application/json',
+                    success: function (res) {
+                        layer.close(load2);
+                        if (res.ok) {
+                            table.reload('tableContent-user', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                            return layer.msg('删除成功', {
+                                icon: 1
+                            });
+                        } else {
+                            return layer.msg(res.message, {
+                                icon: 5
+                            });
+                        }
+                    },
+                    error: function (err) {
+                        layer.close(load2);
+                        return layer.msg(err.message, {
+                            icon: 5
+                        });
+                    }
+                });
+            });
+        });
+        // 渲染左侧表格
+        var renderTable = function () {
+            var heightTable = $(document).height() - 140;
+            // 渲染表格
+            table.render({
+                elem: '#tableContent-user',
+                id: 'tableContent-user',
+                url: admin.formatUrl('/api/exchangeplan/exchangePlan/page'),
+                // 格式化后台返回的数据
+                parseData: function (res) { //res 即为原始返回的数据
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                height: heightTable,
+                cols: [
+                    [{
+                        type: 'checkbox'
+                    }, {
+                        type: 'numbers',
+                        title: '#'
+                    },{
+                        field: 'epDate',
+                        title: '日期',
+                        templet: function (d) {
+                            let text = d.epDate ?timestampToTime(d.epDate) : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    },{
+                        field: 'epDate',
+                        title: '日期（看板展示）',
+                        templet: function (d) {
+                            let text = d.ext2 ?d.ext2 : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'epForm',
+                        title: '形式',
+                        templet: function (d) {
+                            let text = d.epForm ? d.epForm : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'epEnterprise',
+                        title: '企业',
+                        templet: function (d) {
+                            let text = d.epEnterprise ? d.epEnterprise : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    },
+                        {
+                            field: 'epExchangeDomain',
+                            title: '交流领域',
+                            templet: function (d) {
+                                let text = d.epExchangeDomain ? d.epExchangeDomain : "";
+                                return '<div title="' + text + '"><span>' + text + '</span></div>'
+                            }
+                        }, {
+                        field: 'epLeaderName',
+                        title: '建议领导',
+                        templet: function (d) {
+                            let text = d.epLeaderName ? d.epLeaderName : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'createUserName',
+                        title: '创建人',
+                        templet: function (d) {
+                            let text = d.createUserName ? d.createUserName : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'createTime',
+                        title: '创建时间',
+                        templet: function (d) {
+                            let text = d.createTime ?timestampToTime1(d.createTime) : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        align: 'center',
+                        title: '操作',
+                        width: 120,
+                        toolbar: '#control-1',
+                        unresize: true
+                    }]
+                ],
+                cellMinWidth: 90,
+                page: {
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                },
+                request: {
+                    pageName: 'page',
+                    limitName: 'pageSize'
+                },
+                done: function (res, curr, count) {
+                    if (curr > 1 && res.data.length == 0) {
+                        var pageValue = curr - 1;
+                        table.reload('tableContent-user', {
+                            page: { curr: pageValue },// 修改页码
+                        });
+                    }
+                }
+            });
+        };
+
+        //时间戳转换年月日
+        function timestampToTime(timestamp) {
+            var date = new Date(timestamp);
+            Y = date.getFullYear();
+            M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
+            D = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+            return Y + '-'+ M+ '-' + D;
+
+        }
+        //时间戳转换年月日时分秒
+        function timestampToTime1(timestamp) {
+            var date = new Date(timestamp);
+            Y = date.getFullYear();
+            M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
+            D = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+            h = date.getHours()<10?'0'+date.getHours():date.getHours();
+            mm = date.getMinutes()<10?'0'+date.getMinutes():date.getMinutes();
+            s = date.getSeconds()<10?'0'+date.getSeconds():date.getSeconds();
+            return Y + '-'+ M+ '-' + D+" "+h+':'+mm+':'+s;
+
+        }
+
+        // 初始化，执行一次渲染表格树
+        renderTable();
+        table.on('tool(tableContent-user)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'btn-edit') {
+                popMenu("edit", data);
+            } else if (obj.event === 'btn-delete') {
+                viewDetail(data);
+            }
+        });
+        // DONE: 侧边栏变化时刷新数据表格
+        // 将 table ID 存入数组
+        layui.admin.addTableCache('tableContent-user');
+        // 搜索
+        form.on('submit(btn_search_user)', function(data) {
+            var dateArr = data.field.epDate.split(' 到');
+            if(data.field.epDate===''){
+                var searchValue = {
+                    "epEnterprise": data.field.epEnterprise, // 企业
+                    "epExchangeDomain": data.field.epExchangeDomain, //交流领域
+                    'epDate1': null,
+                    'epDate2': null,
+                }
+            }else{
+                var arr=[dateArr[0],dateArr[1].trim()]
+                var searchValue = {
+                    "epEnterprise": data.field.epEnterprise, // 企业
+                    "epExchangeDomain": data.field.epExchangeDomain, //交流领域
+                    'epDate1':arr[0]+' 00:00:00',
+                    'epDate2':arr[1]+' 23:59:59',
+                }
+            }
+            table.reload('tableContent-user', {
+                page:{
+                    curr: 1
+                },
+                where: searchValue
+            });
+        });
+        // 重置
+        form.on('submit(btn_reset_user)', function () {
+            $('#epEnterprise').val('');
+            $('#test1').val('');
+            $('#epExchangeDomain').val('');
+            table.reload('tableContent-user', {
+                where: {
+                    epEnterprise: '',
+                    epExchangeDomain: '',
+                    epDate1:'',
+                    epDate2:'',
+                    reload: new Date().getTime()
+                }
+            });
+        });
+
+        // 下载模板
+        // $('#btn_download_project').on('click', function () {
+        //     window.open(admin.formatUrl(''))
+        // });
+        // 导入
+        upload.render({
+            elem: '#crm-customer-btn-import',
+            url: '/api/exchangeplan/exchangePlan/excelImportExchangePlan', //上传接口
+            accept: 'file',
+            acceptMime: 'xlsx/xlsm',
+            method: 'POST',
+            before: function (obj) {
+                layer.load(); //上传loading
+            },
+            done: function (res) {
+                layer.closeAll();
+
+                if (res.respCode == 0) {
+                    layer.msg('导入成功！', {
+                        icon: 1
+                    });
+                    table.reload('tableContent-user', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                } else {
+                    return layer.msg('导入失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            },
+            error: function () {
+                //请求异常回调
+                layer.closeAll();
+                return layer.msg('导入出现错误，请重试！', {
+                    icon: 5
+                });
+            }
+        });
+
+
+        // 监听工具条事件
+        // 新增 按钮事件
+        $('#btn_add_user').on('click', function () {
+            popMenu('add');
+        });
+
+        // 弹出框
+        function popMenu(type, data) {
+            // 判断操作事件
+            var width = 600;
+            if (type === 'add') {
+                var title = '新增近期交流计划';
+            } else if (type === 'edit') {
+                var title = '编辑近期交流计划';
+
+            }
+            admin.popupCenter({
+                title: title,
+                width: width,
+                path: 'components/exchangeProgramme/exchangeProgrammetradesCouncil_add_edit.html',
+                finish: function () {
+                    table.reload('tableContent-user', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                },
+                success: function () {
+                    if (type === "edit") {
+                        setFormValue(data);
+                    }
+                    $('#user-area .layui-col-md6').removeClass("layui-col-md6");
+                    $('#user-detial-area').css("height", '200px');
+                    admin.showLoading('.roleName-loading');
+                    admin.showLoading('.orgName-loading');
+                    admin.showLoading('.userState-loading');
+                }
+            });
+            // 表单提交
+            if (type === 'add') {
+                Form_submit(type)
+            } else {
+                Form_submit(type, data.id)
+            }
+        }
+
+        // 设置表单内容
+        function setFormValue(obj) {
+            var inputs = $('.layui-tpl-container').find('input'),
+                // title = $('.layui-tpl-container .layui-card-header'),
+                formNames = ['epForm', 'epExchangeDomain', 'epEnterprise', 'epLeaderName',
+                    'createUserName', 'createTime','ext2'];
+
+            // $('#Date_time').val(timestampToTime(obj.createTime))
+            $('.layui-tpl-container  input[name="epDate"]').val(timestampToTime(obj.epDate));
+            for (var i = 0; i < formNames.length; i++) {
+                if (obj[formNames[i]]) {
+                    obj[formNames[i]] = ADCFormDesignHelper.htmlDecodeByRegExp(obj[formNames[i]]);
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+
+                } else {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val('');
+                }
+            }
+        }
+
+
+        // 表单提交
+        function Form_submit(type, id) {
+            form.on('submit(menuSave_user)', function (list) {
+                // 获取表单数据
+                var d = list.field,
+                    elem = list.elem;
+                // 判断菜单名称、父级菜单 ID 是否填写
+                if (d.epDate === '' || d.epExchangeDomain === '' ||d.epEnterprise === '' || d.epLeaderName === '' || d.epForm === '') {
+                    return layer.msg('请填写必填项！', {
+                        icon: 5
+                    });
+                }
+                // 设置不同的 HTTP 方法，和提示信息
+                if (type === 'add') {
+                    var ajaxType = 'POST',
+                        ajaxName = '新增近期交流计划';
+                    admin.req('/api/exchangeplan/exchangePlan/create', d, function (data) {
+                        if (data.ok) {
+                            layer.msg(ajaxName + '成功！', {
+                                icon: 1
+                            });
+                            admin.finishPopupCenter();
+                        } else {
+                            admin.closePopupCenter();
+                            return layer.msg(ajaxName + '失败：' + data.message, {
+                                icon: 5
+                            });
+                            // admin.finishPopupCenter();
+                        }
+                    }, {
+                        method: ajaxType
+                    });
+                } else if (type === 'edit') {
+                    var ajaxType = 'PUT',
+                        ajaxName = '编辑近期交流计划';
+                    d.id = id;
+                    admin.req('/api/exchangeplan/exchangePlan/update', d, function (data) {
+                        if (data.ok) {
+                            layer.msg(ajaxName + '成功！', {
+                                icon: 1
+                            });
+                            admin.finishPopupCenter();
+                        } else {
+                            admin.closePopupCenter();
+                            return layer.msg(ajaxName + '失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: ajaxType
+                    });
+                }
+
+            });
+        }
+
+        // 删除
+        function viewDetail(data) {
+            layer.confirm('是否删除此条数据？', {
+                icon: 3,
+                title: '提示'
+            }, function () {
+                admin.req('/api/exchangeplan/exchangePlan/delete/' + data.id, {},
+                    function (data) {
+                        if (data.ok) {
+                            layer.msg(`删除近期交流计划成功！`, {
+                                icon: 1
+                            });
+                            table.reload('tableContent-user', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        } else {
+                            return layer.msg(`删除近期交流计划失败：` + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: 'delete'
+                    });
+            });
+        }
+        //模板下载
+        $('#btn_download_project').off("click").on('click', function() {
+            tempDownByDicCode("exchange_plan_template");
+        });
+        // $('#btn_download_project1').on('click', function() {
+        //     window.open(admin.formatUrl(''))
+        // });
+    })
+</script>

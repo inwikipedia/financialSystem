@@ -1,0 +1,140 @@
+<style>
+    #add-prize input{
+        height: 32px;
+    }
+    #add-prize .reduceMarginL{
+        margin-left: 115px;
+    }
+    #add-prize .labelWidth{
+        width: 85px;
+    }
+    #add-prize .layui-form-select dl dd.layui-this{
+        background-color: #229FFF
+    }
+
+</style>
+
+<link rel="stylesheet" href="../../assetsInfo/libs/layui/css/layui.css" />
+<link rel="stylesheet" href="../../assetsInfo/css/style.css">
+
+<div class="layui-tpl-container" style="padding-top: 20px">
+    <div class="layui-form" id="add-prize">
+        <div class="layui-row">
+            <div style="width: 50%;float: left">
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"> 编号</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" name="autoNumber" placeholder="请输入编号" class="layui-input" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">项目名称</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" name="projectName" placeholder="请输入项目名称" class="layui-input" maxlength="50" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">奖项名称</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入奖项名称" class="layui-input" name="prizeName" lay-verify="required" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">获奖等级</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" id="application" placeholder="请输入获奖等级" class="layui-input" name="level" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">获奖时间</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入获奖时间" class="layui-input" name="prizeTime" id="prizeTime" readonly>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 50%;float: left">
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">颁发单位</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入颁发单位" class="layui-input" name="issuedDept" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">获奖人</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入获奖人" class="layui-input" name="belongedUserName" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"><span>部门</span> </label>
+                    <div class="layui-input-block reduceMarginL" style="position: relative">
+                        <input type="text" placeholder="请输入部门" class="layui-input" name="deptName" id="deptName" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"><span>附件</span> </label>
+                    <div class="layui-input-block reduceMarginL" style="position: relative">
+                        <input type="text" style="width:160px;float: left;" id="fileName" class="layui-input" readonly name="fileName">
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" title="下载" id="downFile" style="float: right">下载</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label labelWidth">摘要</label>
+                <div class="layui-input-block reduceMarginL">
+                    <textarea name="prizeAbstract" placeholder="请输入" class="layui-textarea" maxlength="200" readonly></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../../assetsInfo/libs/jquery-1.12.4.min.js"></script>
+<!-- Q.js 轻量路由框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/q.js"></script>
+<!-- jQuery 轻量级 MVVM 框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/pandyle.min.js"></script>
+<!-- layui 脚本文件 -->
+<script type="text/javascript" src="../../assetsInfo/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assetsInfo/js/jsencrypt.min.js"></script>
+<script type="text/javascript" src="../../module/ajaxSet.js"></script>
+<script src="/assetsInfo/js/ADCFormDesignHelper.js"></script>
+<script>
+    layui.use(['form','laydate','upload','util'], function() {
+        var layer = layui.layer;
+        var parent_json = eval('('+parent.json+')');
+        var id = parent_json.id;
+        var fileId;
+        $.ajax({
+            url: "/ADC_info/api/knowledge/prize/"+id,
+            success: function (data) {
+                for(var item in data.data){
+                    if(data.data[item]){
+                        data.data[item] = ADCFormDesignHelper.htmlDecodeByRegExp(data.data[item])
+                    }
+                }
+                var prizeTime = data.data.prizeTime?layui.util.toDateString(data.data.prizeTime,'yyyy-MM-dd'):'';
+                $('input[name=autoNumber]').val(data.data.autoNumber);
+                $('input[name=projectName]').val(data.data.projectName);
+                $('input[name=prizeName]').val(data.data.prizeName);
+                $('input[name=level]').val(data.data.level);
+                $('input[name=prizeTime]').val(prizeTime);
+                $('input[name=issuedDept]').val(data.data.issuedDept);
+                $('input[name=belongedUserName]').val(data.data.belongedUserName);
+                $('textarea[name=prizeAbstract]').val(data.data.prizeAbstract);
+                $('input[name=deptName]').val(data.data.deptName);
+                $('input[id=fileName]').val(data.data.fileName);
+                fileId = data.data.fileId;
+            }
+        })
+        $('#downFile').on('click', function(){
+            if(fileId){
+                window.location.href = "/ADC_info/api/sys/file/"+fileId+"/download"
+            }else{
+                layer.msg('文件不存在')
+            }
+
+        })
+    })
+
+</script>

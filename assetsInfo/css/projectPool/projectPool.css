@@ -1,0 +1,6 @@
+.project-search-input{
+    width: 170px;
+}
+.layui-card-body{
+    height: calc(100vh - 92px);
+}

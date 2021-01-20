@@ -1,0 +1,41 @@
+.main{
+    position: relative;
+}
+.nav{
+    position: relative;
+    z-index: 2;
+    top: 6px;
+    overflow: hidden;
+    background-color: #fff;
+    padding: 4px 18px;
+    margin-bottom: 7px;
+}
+.layui-row {
+    margin: 2.5px 0;
+}
+.setInput{
+    color: #646464;
+    width: 170px;
+    float:left;
+    margin-right:10px
+}
+.setTitle{
+    float: left;
+    height:30px;
+    line-height: 30px;
+}
+.setBtn{
+    height:30px;
+    line-height: 30px;
+    margin-left: 10px;
+}
+.botTable {
+    min-height:400px;
+    padding:10px 20px;
+}
+.bigBtn{
+    width:80px;
+}
+.searchInfo{
+    min-width: 620px;
+}

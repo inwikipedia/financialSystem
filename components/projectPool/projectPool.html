@@ -1,0 +1,57 @@
+<link rel="stylesheet" href="../assetsInfo/css/projectPool/projectPool.css">
+<div class="layui-row layui-col-space15">
+    <!-- 单列普通表格 -->
+    <div class="layui-col-md12">
+        <div class="layui-card p-main">
+            <div class="layui-card-header" style="height: 0px"></div>
+            <!-- 卡片容器 -->
+            <div class="layui-card-body">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class=" table-top-bar">
+                        <div>
+                            <div class="layui-inline layui-form-item" style="width: 100%;border-bottom:1px solid #e5e5e5;margin-bottom: 0px;padding-bottom: 15px">
+
+                                <div class="layui-inline">
+                                    <label class="layui-form-label work-search-label">合同编号</label>
+                                    <input type="text" placeholder="请输入" class="contractNo project-search-input layui-input">
+                                </div>
+
+                                <div class="layui-inline layui-form-item">
+                                    <label class="layui-form-label work-search-label">合同名称</label>
+                                    <input type="text" placeholder="请输入" class="projectName project-search-input layui-input">
+                                </div>
+
+                                <div class="layui-inline layui-form-item">
+                                    <label class="layui-form-label work-search-label">合同金额</label>
+                                    <input type="text" placeholder="请输入" class="contractAmountStr project-search-input layui-input">
+                                </div>
+                                <button class="layui-btn layui-btn-sm layui-btn-danger" style="float: right;margin-left: 10px;"  id="btn-project-reset">
+                                    <img src="../../assetsInfo/images/reset.png" style="position: relative;top: -1px;">
+                                    重置
+                                </button>
+                                <button class="layui-btn layui-btn-sm layui-btn-normal" style="float: right;margin-left: 0px;background-color: #239FFF;color: #fff"  id="btn-project-search">
+                                    <img src="../../assetsInfo/images/chaxun.png" style=" width: 16px">
+                                    查询
+                                </button>
+
+                                <button class="layui-btn layui-btn-sm layui-btn-danger" style="display: none;margin-right: 10px;float: right;margin-left: 0px;background-color: #239FFF;color: #fff"  id="btn-dept">
+                                    变更部门
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="layui-card botTable">
+                <!-- 下部表格容器 -->
+                    <table id="tableContent-project" lay-filter="tableContent-project"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="barTool">
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-claim">认领</button>
+</script>
+<script src="../assetsInfo/js/projectPool/projectPool.js"></script>

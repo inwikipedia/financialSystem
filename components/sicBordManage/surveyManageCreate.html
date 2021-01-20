@@ -1,0 +1,347 @@
+<style>
+    .surveyCreate {
+        padding: 20px;
+        overflow: hidden;
+    }
+
+    .surveyCreate .leftItem, .surveyCreate .rightItem {
+        display: inline-block;
+        width: 49%;
+    }
+
+    .surveyCreate .layui-form-item {
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .surveyCreate .form-input {
+        position: relative;
+        display: inline-block;
+        width: calc(100% - 185px);
+    }
+
+    .surveyCreate label {
+        display: inline-block;
+        width: 170px;
+        text-align: right;
+    }
+
+    label {
+        font-weight: normal;
+    }
+
+    .redSpan {
+        color: red;
+    }
+
+    .layui-layer-load {
+        background-color: white;
+    }
+
+    .surveyCreate .layui-disabled, .surveyCreate .layui-disabled:hover {
+        color: rgb(84, 84, 84) !important;
+    }
+    .surveyCreate .layui-form-select dl {
+        top: 32px;
+        bottom: auto;
+        max-height: 180px;
+    }
+    .surveyCreate .clearClass{
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        font-size: 12px;
+        background-position: 1px -40px;
+        cursor: pointer;
+        display: inline-block;
+        right: 8px;
+        top: 8px;
+    }
+    .dangerLevel .layui-form-select dl {
+        margin-top: -40px;
+    }
+</style>
+
+<div class="surveyCreate layui-form">
+    <div class="leftItem">
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>科研项目ID：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入科研项目ID" lay-verify="required" maxlength="20" class="layui-input"
+                       name="researchProjectId">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label><span class="redSpan">*</span>年份：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请选择年" readonly lay-verify="required" class="year layui-input"
+                       name="year">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label>申报年度：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请选择申报年度" readonly  class="applyYear layui-input"
+                       name="applyYear">
+
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>项目名称：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入项目名称" lay-verify="required" maxlength="80" class="layui-input"
+                       name="projectName">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>项目编号：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入项目编号" lay-verify="required" maxlength="20" class="layui-input"
+                       name="projectNo">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label>财务编号：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入财务编号" maxlength="20" class="layui-input"
+                       name="financeNo">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label><span class="redSpan">*</span>项目级别：</label>
+            <div class="form-input ">
+                <select id="projectLevelDicName" lay-search placeholder="请选择项目级别" lay-verify="required"
+                        lay-filter="projectLevelDicName"
+                        name="projectLevelDicName">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label>项目来源：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入项目来源" maxlength="80" class="layui-input"
+                       name="projectOrigin">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label>牵头单位：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入牵头单位" maxlength="80" class="layui-input"
+                       name="leaderOrgName">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label>负责部门：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请选择负责部门" style="cursor: pointer" readonly class="layui-input"
+                       name="chargeOrgName" id="chargeOrgName">
+                <i class="clearClass layui-layer-ico layui-layer-close layui-layer-close1"></i>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label>立项日期：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请选择立项日期" readonly class="layui-input"
+                       name="projectStartTime" id="projectStartTime">
+            </div>
+        </div>
+        <div class="layui-form-item dangerLevel">
+            <label> <span class="redSpan">*</span> 风险等级：</label>
+            <div class="form-input">
+                <select id="extInfo1" lay-search placeholder="请选风险等级" lay-verify="required"
+                        lay-filter="extInfo1"
+                        name="extInfo1"
+                style="top: auto;">
+                </select>
+            </div>
+        </div>
+        <!--<div class="layui-form-item">-->
+        <!--<label> <span class="redSpan">*</span>金额（元）：</label>-->
+        <!--<div class="form-input ">-->
+        <!--<input type="text" placeholder="请输入金额"  lay-verify="required" maxlength="12" class="layui-input"-->
+        <!--name="amount" >-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item" style="height: 100px">-->
+        <!--<label style="vertical-align: top;">摘要：</label>-->
+        <!--<div class="form-input ">-->
+        <!--<textarea type="text" style="height: 100px" maxlength="200" placeholder="请输入摘要"  class="layui-input introText" name="abstractInfo"></textarea>-->
+        <!--</div>-->
+        <!--</div>-->
+    </div>
+    <div class="rightItem" style="vertical-align: top">
+
+        <div class="layui-form-item">
+            <label><span class="redSpan">*</span>项目状态：</label>
+            <div class="form-input ">
+                <select id="projectStatusDicName" lay-search placeholder="请选择项目状态" lay-verify="required"
+                        lay-filter="projectStatusDicName"
+                        name="projectStatusDicName">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label>结项日期：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请选择结项日期" readonly class="layui-input"
+                       name="projectEndTime" id="projectEndTime">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>项目总经费（万元）：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入项目总经费" lay-verify="required" maxlength="12" class="layui-input amount"
+                       name="allFunds">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>国拨/中心经费（万元）：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入国拨/中心经费" lay-verify="required" maxlength="12" class="layui-input amount"
+                       name="allocateFunds">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> <span class="redSpan">*</span>自筹经费（万元）：</label>
+            <div class="form-input ">
+                <input type="text" placeholder="请输入自筹经费" lay-verify="required" maxlength="12" class="layui-input amount"
+                       name="raiseFunds">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> 课题负责人：</label>
+            <div class="form-input">
+                <input type="text" placeholder="请输入课题负责人" maxlength="80" class="layui-input"
+                       name="projectManagerName">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> 授权责任人：</label>
+            <div class="form-input">
+                <input type="text" placeholder="请输入授权责任人" maxlength="80" class="layui-input"
+                       name="projectResponsibleName">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> 项目联系人：</label>
+            <div class="form-input">
+                <input type="text" placeholder="请输入项目联系人" maxlength="80" class="layui-input"
+                       name="projectContactName">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> 联系方式：</label>
+            <div class="form-input">
+                <input type="text" placeholder="请输入联系方式" maxlength="80" class="layui-input"
+                       name="projectContactPhone">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> 责任专家：</label>
+            <div class="form-input">
+                <input type="text" placeholder="请输入责任专家" maxlength="80" class="layui-input"
+                       name="projectSpecialistName">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label> 项目成员：</label>
+            <div class="form-input">
+                <input type="text" placeholder="请输入项目成员" maxlength="200" class="layui-input"
+                       name="projectMemberNames">
+            </div>
+        </div>
+
+    </div>
+    <div class="layui-form-item" style="text-align: center">
+        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="btn-cost-sure" id="btn-cost-sure">确定</button>
+        <button class="layui-btn layui-btn-primary" id="cancleCost">取消</button>
+    </div>
+    <input type="text" name="sicId" id="sicId" readonly style="display: none">
+    <input type="text" name="sicType" id="sicType" readonly style="display: none">
+</div>
+<script>
+    layui.use('upload', function () {
+        var admin = layui.admin;
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '.year',
+            type:"year"
+        });
+        laydate.render({
+            elem: '.applyYear',
+            type:"year"
+        });
+        laydate.render({
+            elem: '#projectStartTime'
+        });
+        laydate.render({
+            elem: '#projectEndTime'
+        });
+        $('#cancleCost').off('click').on('click', function () {
+            admin.finishPopupCenter(true);
+        });
+        $('.clearClass').off('click').on('click', function () {
+            $("#chargeOrgName").val("");
+            $("#chargeOrgName").attr("data-id","");
+        });
+
+        $('#chargeOrgName').off('click').on('click', function () {
+            layer.open({
+                type: 2,
+                id: 'orgsSelectCost',
+                title: false,
+                moveOut: true,
+                content: 'components/manageYw/caderLayer.html',
+                area: ['50%', '70%'],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var finalData = $('#orgsSelectCost iframe')[0].contentWindow.task_orgs_select.finish();
+                    // 获取到数据，执行回掉函数
+                    if (finalData.id == '' || finalData.name == '') {
+                        return layer.msg('请选择组织机构', {
+                            icon: 0
+                        });
+                    }
+                    $('#chargeOrgName').val(finalData.name);
+                    $('#chargeOrgName').attr('data-id', finalData.id);
+                    layer.close(index);
+                },
+                resize: false
+            });
+        });
+        $('.amount').off("input").on("input", function (e) {
+            clearNoNum(this);
+        });
+
+        function clearNoNum(obj) {
+            if (obj.value.indexOf('.') > -1) { //判断有没有输入小数点
+            } else {
+                var p11 = /[^\d|^\-]/g;
+                var p22 = /(\d{9})\d*$/g;
+                var p44 = /(\d*)\9/g; //删除当我输入第七位的整数时候进行删除
+                obj.value = obj.value.replace(p11, "").replace(p22, "$1").replace(p44, "$1$9");
+            }
+            obj.value = obj.value.replace(/[^\d|^\-|^.]/g, ""); //清除“数字”和“.”以外的字符
+            obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+            obj.value = obj.value.replace(/\-{2,}/g, "-"); //只保留第一个. 清除多余的
+            obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            obj.value = obj.value.replace("-", "$#$").replace(/\-/g, "").replace("$#$", "-");
+            obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/, '$1$2.$3'); //只能输入两个小数
+            obj.value = obj.value.replace(/\^/g, ""); //只能输入两个小数
+            if (obj.value.indexOf("-") < 0 && obj.value.indexOf(".") < 0 && obj.value != "") { //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+                obj.value = parseFloat(obj.value);
+            }
+            if (obj.value.indexOf(".") == 0 && obj.value != "") { //首位输入.的按0处理
+                obj.value = parseFloat(obj.value.length == 1 ? 0 : obj.value);
+            }
+            if (obj.value.indexOf("-") == 0 && obj.value.indexOf(".") == 1 && obj.value != "") {
+                obj.value = obj.value.length == 2 ? 0 : obj.value;
+            }
+            if (obj.value.indexOf("-") > -1 && obj.value.indexOf("-") != 0 && obj.value != "") { //首位输入.的按0处理
+                obj.value = obj.value.replace(/\-/g, "");
+            }
+        }
+    });
+</script>

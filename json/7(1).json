@@ -1,0 +1,57 @@
+{
+    "code": 0,
+    "msg": "",
+    "count": 1000,
+    "data": [{
+            "type": "工信部",
+            "budget2018": 56,
+            "actdo": 37,
+            "rest": 11,
+            "rate": "65%"
+        },
+        {
+            "type": "国拨课题",
+            "budget2018": 793,
+            "actdo": 358,
+            "rest": 235,
+            "rate": "42%"
+        },
+        {
+            "type": "重点课题",
+            "budget2018": 484,
+            "actdo": 211,
+            "rest": 173,
+            "rate": "35%"
+        },
+        {
+            "type": "青年基金课题",
+            "budget2018": 27,
+            "actdo": 4,
+            "rest": 13,
+            "rate": "28%"
+        },
+        {
+            "type": "培育课题",
+            "budget2018": 40,
+            "actdo": 22,
+            "rest": 6,
+            "rate": "60%"
+        },
+        {
+            "type": "自立课题",
+            "budget2018": 1856,
+            "actdo": 964,
+            "rest": 1192,
+            "rate": "34%"
+        },
+        {
+            "type": "总计",
+            "budget2018": 2606,
+            "actdo": 1246,
+            "rest": 1360,
+            "rate": "39%"
+        }
+    ]
+
+
+}

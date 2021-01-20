@@ -1,0 +1,698 @@
+<style>
+    .otherBtn{
+        background-color: white;
+        color: #333;
+        border: 1px solid #229FFF;
+    }
+    .otherBtn:hover{
+        color: #229FFF;
+    }
+    .work-search-input{
+        /*height:20px;*/
+        /*padding:3px 6px;*/
+        float: left;
+        width: 250px;
+    }
+    .work-search-label{
+        width: 70px;
+        padding-left: 0px;
+        padding-right: 2px;
+    }
+    .rili{
+        background:url('../../assetsInfo/images/rili.jpg') no-repeat right center;
+        background-position:95% ;
+        background-size: 25px 21px;
+    }
+    .searchBox{
+        margin-top: 10px;
+        width: 332px;
+    }
+    .selectBox{
+        width: 250px;
+    }
+   .sicLay .layui-form-select dl{
+       top: 33px;
+       max-height:180px;
+    }
+    @media (min-width: 1920px) {
+        .searchBox{
+            width:255px;
+        }
+        .work-search-input , .selectBox{
+            width: 170px;
+        }
+    }
+    .sicLay{
+        overflow: auto;
+    }
+</style>
+<div class="layui-row layui-col-space15 sicLay">
+    <!-- 单列普通表格 -->
+    <div class="layui-col-md12">
+        <div class="layui-card p-main">
+            <div class="layui-card-header" style="height: 0px"></div>
+            <!-- 卡片容器 -->
+            <div class="layui-card-body" style="overflow: hidden">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class=" table-top-bar">
+                        <div>
+                            <div class="layui-inline layui-form-item" style="width: 100%;border-bottom:1px solid #e5e5e5;margin-bottom: 0px;padding-bottom: 15px">
+                                <div class="layui-inline searchBox">
+                                    <label class="layui-form-label work-search-label">项目名称</label>
+                                    <input type="text" placeholder="请输入"  class="projectName work-search-input layui-input">
+                                </div>
+
+                                <div class="layui-inline searchBox">
+                                    <label class="layui-form-label work-search-label">负责人</label>
+                                    <input type="text" placeholder="请输入" class="leaderIdName work-search-input layui-input">
+                                </div>
+
+                                <div class="layui-inline searchBox">
+                                    <label class="layui-form-label work-search-label">主申报部门</label>
+                                    <input type="text" placeholder="请输入" class="deptIdName work-search-input layui-input">
+                                </div>
+                                <div class="layui-inline searchBox">
+                                    <label class="layui-form-label work-search-label">项目类型</label>
+                                    <div class="layui-inline selectBox" style="text-align: center;">
+                                        <select  name="projectType" id='projectType'   lay-filter="projectType" >
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline searchBox">
+                                    <label class="layui-form-label work-search-label">承担方式</label>
+                                    <div class="layui-inline selectBox" style="text-align: center;">
+                                        <select  name="undertaking" id='undertaking'   lay-filter="undertaking" >
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <!--<div class="layui-inline layui-form-item">-->
+                                    <!--<label class="layui-form-label work-search-label">经费结算</label>-->
+                                    <!--<input type="text" placeholder="请输入" name="amount" class=" work-search-input layui-input">-->
+                                <!--</div>-->
+                                <div class="layui-inline searchBox">
+                                    <label class="layui-form-label work-search-label">提交时间</label>
+                                    <input type="text" placeholder="请输入" name="committedTimeArea" id="committedTimeArea" class="rili work-search-input layui-input">
+                                </div>
+                                <div class="layui-inline searchBox" style="width: 220px">
+                                    <button class="layui-btn layui-btn-sm layui-btn-danger" style="float: right;margin-left: 10px;"  id="btn-daily-reset">
+                                        <img src="../../assetsInfo/images/reset.png" style="position: relative;top: -1px;">
+                                        重置
+                                    </button>
+                                    <button class="layui-btn layui-btn-sm layui-btn-normal" style="float: right;margin-left: 0px;background-color: #239FFF;color: #fff"  id="btn-daily-search">
+                                        <img src="../../assetsInfo/images/chaxun.png" style=" width: 16px">
+                                        查询
+                                    </button>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="layui-inline" style="margin-top: 10px">
+                    <button class="layui-btn layui-btn-sm layui-btn-danger"  id="btn-create">
+                        <!--<img src="../../assetsInfo/images/yiyue.png" style="position: relative;top: -1px;">-->
+                        新建简表
+                    </button>
+                    <!--<button class="layui-btn layui-btn-sm layui-btn-danger" id="btn-export">-->
+                    <!--&lt;!&ndash;<img src="../../assetsInfo/images/bohui.png" style="position: relative;top: -1px;">&ndash;&gt;-->
+                    <!--导出-->
+                    <!--</button>-->
+                </div>
+                <div style="text-align: center;font-size: 18px;margin-top: 10px">科研项目简表列表</div>
+                <!-- 下部表格容器 -->
+                <table id="sicMainTable" lay-filter="sicMainTable"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="barTool">
+    {{# if( d.status==0){ }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-edit">编辑</button>
+    <button class="layui-btn layui-btn-normal layui-btn-xs otherBtn" lay-event="btn-submit">提交</button>
+    {{#  } else { }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs " lay-event="btn-look">查看</button>
+    {{#  } }}
+    {{# var User = layui.config.getAccount()}}
+    {{#  if(User.usid==d.extInfo6||User.rolesstr.indexOf("ZVXUGCP56D")!=-1||User.rolesstr.indexOf("YWYC7ME75K")!=-1){ }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs otherBtn" lay-event="btn-del">删除</button>
+    {{#  } }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs otherBtn" lay-event="btn-export">导出</button>
+</script>
+<script>
+    layui.use(['table', 'config'], function () {
+        var config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer,
+            laydate = layui.laydate,
+            form = layui.form,table = layui.table,tools=layui.tools;
+        var account = config.getAccount();
+        var dateChange=function(data){
+            var str = data.replace(/-/g,'/');
+            var date = new Date(str).getTime();
+            return date;
+        };
+        laydate.render({
+            elem: "#committedTimeArea",
+            range:true
+        });
+        //查询
+        //项目名称
+        $.ajax({
+            type: "get",
+            url: "/api/sys/dictype/list?dicCode=sicProType",
+            success: function (res) {
+                var list = res.data;
+                var con = '<option value="" >请选择</option>';
+                for(i=0;i<list.length;i++){
+                    con += '<option value='+list[i].dicTypeCode+'>'+list[i].dicTypeName+'</option>'
+                }
+                form.on('select(projectType)',function (data) {
+                    form.render("select");
+                });
+                $('#projectType').empty().append(con);
+                // $('#projectType').val(data.projectType);
+                form.render("select");
+            }
+        });
+        //承担方式
+        $.ajax({
+            type: "get",
+            url: "/api/sys/dictype/list?dicCode=sicBearWay",
+            success: function (res) {
+                var list = res.data;
+                var con = '<option value="" >请选择</option>';
+                for(i=0;i<list.length;i++){
+                    con += '<option value='+list[i].dicTypeCode+'>'+list[i].dicTypeName+'</option>'
+                }
+                form.on('select(undertaking)',function (data) {
+                    form.render("select");
+                });
+                $('#undertaking').empty().append(con);
+                form.render("select");
+            }
+        });
+        // 渲染表格
+        var renderTable = function (search) {
+            if (!search) {
+                search = {};
+            }
+            // 渲染表格
+            table.render({
+                elem: '#sicMainTable',
+                id: 'sicMainTable',
+                url: admin.formatUrl('api/research/declaration/page'),
+                // 格式化后台返回的数据
+                parseData: function (res) { //res 即为原始返回的数据
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                // height: 472,
+                cols: [
+                    [ {
+                        field: 'projectName',
+                        title: '项目名称',
+                        align: 'center',
+                        templet:function(d) {
+                            var text= d.projectName ? d.projectName : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }, {
+                        field: 'leaderName',
+                        title: '负责人',
+                        align: 'center',
+                        width:80,
+                        templet:function(d) {
+                            var text= d.leaderName ? d.leaderName : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    },  {
+                        field: 'deptName',
+                        title: '主申报部门',
+                        align: 'center',
+                        width:120,
+                        templet:function(d) {
+                            var text= d.deptName ? d.deptName : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    },  {
+                        field: 'projectTypeName',
+                        title: '项目类型',
+                        align: 'center',
+                        templet:function(d) {
+                            var text= d.projectTypeName ? d.projectTypeName : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    },  {
+                        field: 'undertakingName',
+                        title: '承担方式',
+                        align: 'center',
+                        templet:function(d) {
+                            var text= d.undertakingName ? d.undertakingName : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    },  {
+                        field: 'amount',
+                        title: '经费结算',
+                        align: 'center',
+                        sort:true,
+                        templet:function(d) {
+                            var text= d.amount ? d.amount : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    },  {
+                        field: 'createTime',
+                        title: '创建时间',
+                        align: 'center',
+                        width:150,
+                        templet:function(d) {
+                            var text= d.createTime ? tools.getDate(d.createTime, "YYYY-MM-DD HH:mm:ss") : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    },  {
+                        field: 'submissionTime',
+                        title: '提交时间',
+                        align: 'center',
+                        width:150,
+                        templet:function(d) {
+                            var text= d.submissionTime ? tools.getDate(d.submissionTime, "YYYY-MM-DD HH:mm:ss") : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    },{
+                        align: 'left',
+                        title: '操作',
+                        width: 200,
+                        toolbar:'#barTool',
+                        unresize: true
+                    }]
+                ],
+                cellMinWidth: 90,
+                page: {
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                },
+                request: {
+                    pageName: 'pageNo',
+                    limitName: 'pageSize'
+                },
+                where: search
+            });
+        };
+        renderTable();
+        table.on('sort(sicMainTable)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            // console.log(obj.field); //当前排序的字段名
+            // console.log(obj.type); //当前排序类型：desc（降序）、asc（升序）、null（空对象，默认排序）
+            // console.log(this); //当前排序的 th 对象
+            //
+            //尽管我们的 table 自带排序功能，但并没有请求服务端。
+            //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+            table.reload('sicMainTable', { //testTable是表格容器id
+                initSort: obj //记录初始排序，如果不设的话，将无法标记表头的排序状态。 layui 2.1.1 新增参数
+                ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+                    orderBy:obj.type?(obj.field+" - "+obj.type):'' //排序方式
+                }
+            });
+        });
+        $('#btn-daily-search').off('click').on('click',function () {
+            var beginTime = $('#committedTimeArea')[0].value.substring(0,10);
+            var endTime = $('#committedTimeArea')[0].value.substring(13,23);
+           var submissionTimeArea=beginTime?dateChange(beginTime)+' - '+(dateChange(endTime)+86400000):"";
+            var data={
+                projectName:$('.projectName').val(),
+                leaderName:$('.leaderIdName').val(),
+                deptName:$('.deptIdName').val(),
+                projectTypeId:$('#projectType option:selected').val(),
+                undertakingId:$('#undertaking option:selected').val(),
+                submissionTimeArea:submissionTimeArea
+            };
+            renderTable(data);
+        });
+        $('#btn-daily-reset').off('click').on('click',function () {
+            $('.projectName').val('');
+            $('.leaderIdName').val('');
+            $('.deptIdName').val('');
+            $("#projectType option[value='']").eq(0).prop('selected', 'selected');
+            $("#undertaking option[value='']").eq(0).prop('selected', 'selected');
+            form.render('select');
+            $('#committedTimeArea')[0].value='';
+
+            renderTable();
+        });
+        var setSicInfo = function (data,type,msg) {
+            if(data.projectTypeId.indexOf('sm')!=-1){
+                if(!$("#extInfo1").val()){
+                    return layer.msg('请填写具体说明！', {
+                        icon: 5
+                    });
+                }
+                data.extInfo1 =$("#extInfo1").val();
+            }else{
+                data.extInfo1 ="";
+            }
+            if(data.undertakingId.indexOf('bm')!=-1){
+                if(!$("#extInfo2").val()){
+                    return layer.msg('请填写承担方式中的单位或部门！', {
+                        icon: 5
+                    });
+                }
+                data.extInfo2 =$("#extInfo2").val();
+            }else{
+                data.extInfo2 ="";
+            }
+            if(!/(^[0-9]{1,9}$)|(^[0-9]{1,9}[\.]{1}[0-9]{1,6}$)/.test(data.amount)){
+                return layer.msg('经费结算只能输入位数不能超过6位的小数，请重新输入。', {
+                    icon: 5
+                });
+            }
+            data.leaderId=$("#leaderId").attr("data-id");
+            data.deptId=$("#deptId").attr("data-id");
+            data.extInfo5=data.amount;
+            var beginTime = data.timeArea.substring(0,10);
+            var endTime = data.timeArea.substring(13,23);
+            data.beginTime=dateChange(beginTime);
+            data.endTime=dateChange(endTime);
+            $.ajax({
+                url: "/api/research/declaration",
+                type: type,
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (res) {
+                    if (res.ok) {
+                        layer.msg(msg, {
+                            icon: 1
+                        });
+                        admin.finishPopupCenter(true)
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error: function (err) {
+                    layer.msg('获取信息失败！');
+                    console.log(err);
+                }
+            });
+        };
+        table.on('tool(sicMainTable)', function (obj) {
+            var data=obj.data;
+            if(obj.event === 'btn-edit'||obj.event === 'btn-look'){
+                admin.popupCenter({
+                    title: obj.event === 'btn-look'?'查看':'编辑',
+                    area: ['100%', '100%'],
+                    path: 'components/sicManage/sicCreate.html',
+                    finish: function(data) {
+
+                        if(data){
+                            table.reload('sicMainTable', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        }
+                    },
+                    success: function () {
+                        for (var item in data){
+                            if(data[item]){
+                                data[item] = ADCFormDesignHelper.htmlDecodeByRegExp(data[item]);
+                            }
+                        }
+                        $("#projectName").val(data.projectName);
+                        $("#leaderId").val(data.leaderName);
+                        $("#leaderId").attr('data-id',data.leaderId);
+                        $("#leaderId").attr('data-name',data.leaderName);
+                        $("#deptId").val(data.deptName);
+                        $("#deptId").attr('data-name',data.deptName);
+                        $("#deptId").attr('data-id',data.deptId);
+                        $("#timeArea").val(data.timeArea);
+                        $("#amount").val(data.amount);
+                        $("#summaryDoc01").val(data.summaryDoc01);
+                        $("#summaryDoc02").val(data.summaryDoc02);
+                        $("#summaryDoc03").val(data.summaryDoc03);
+                        $("#summaryDoc04").val(data.summaryDoc04);
+                        $("#summaryDoc05").val(data.summaryDoc05);
+                        if(data.undertakingId.indexOf('bm')!=-1){
+                            $(".undertakingId").css("width","220px");
+                            $("#extInfo2").val(data.extInfo2);
+                            $(".extInfo2").css("display","inline-block");
+                        }else{
+                            $(".undertakingId").css("width","450px");
+                            $(".extInfo2").css("display","none");
+                        }
+                        if(data.projectTypeId.indexOf('sm')!=-1){
+                            $(".otheTr").css("display","table-row");
+                            $("#extInfo1").val(data.extInfo1);
+                        }else{
+                            $(".otheTr").css("display","none");
+                        }
+                        //项目名称
+                        $.ajax({
+                            type: "get",
+                            url: "/api/sys/dictype/list?dicCode=sicProType",
+                            success: function (res) {
+                                var list = res.data;
+                                var con = '';
+                                for(i=0;i<list.length;i++){
+                                    con += '<option value='+list[i].dicTypeCode+'>'+list[i].dicTypeName+'</option>'
+                                }
+                                form.on('select(projectTypeId)',function (data) {
+                                    if(data.value.indexOf('sm')!=-1){
+                                        $(".otheTr").css("display","table-row");
+                                    }else{
+                                        $(".otheTr").css("display","none");
+                                    }
+                                    form.render("select");
+                                });
+                                $('#projectTypeId').empty().append(con);
+                                $('#projectTypeId').val(data.projectTypeId);
+                                form.render("select");
+                            }
+                        });
+                        //承担方式
+                        $.ajax({
+                            type: "get",
+                            url: "/api/sys/dictype/list?dicCode=sicBearWay",
+                            success: function (res) {
+                                var list = res.data;
+                                var con = '';
+                                for(i=0;i<list.length;i++){
+                                    con += '<option value='+list[i].dicTypeCode+'>'+list[i].dicTypeName+'</option>'
+                                }
+                                form.on('select(undertakingId)',function (data) {
+                                    if(data.value.indexOf('bm')!=-1){
+                                        $(".undertakingId").css("width","220px");
+                                        $(".extInfo2").css("display","inline-block");
+                                    }else{
+                                        $(".undertakingId").css("width","450px");
+                                        $(".extInfo2").css("display","none");
+                                    }
+                                    form.render("select");
+                                });
+                                $('#undertakingId').empty().append(con);
+                                $('#undertakingId').val(data.undertakingId);
+                                form.render("select");
+                            }
+                        });
+                        form.on('submit(btn-save)', function (objData) {
+                            // 获取表单数据
+                            var d = objData.field;
+                            d.status=0;
+                            d.id=data.id;
+                            setSicInfo(d,'put','保存成功！');
+
+                        });
+                        form.on('submit(btn-submit)', function (objData) {
+                            // 获取表单数据
+                            var d = objData.field;
+                            d.status=1;
+                            d.id=data.id;
+                            var nowTime =new Date().getTime();
+                            d.submissionTime=nowTime;
+                            setSicInfo(d,'put','保存并提交成功！');
+
+                        });
+                        if(obj.event === 'btn-look'){
+                            var elem = '.sicFormBox';
+                            var inputElem = $(elem + ' input'),
+                                textareaElem = $(elem + ' textarea'),
+                                selectElem = $(elem + ' select'),
+                                buttonElem = $(elem + ' button');
+                            inputElem.attr('disabled', 'disabled');
+                            textareaElem.attr('disabled', 'disabled');
+                            selectElem.attr('disabled', 'disabled');
+                            buttonElem.attr('disabled', 'disabled');
+                            //所有文件控件下载按钮移除只读属性
+                            for (var i = 0; i <buttonElem.length ; i++) {
+                                buttonElem.eq(i).css('display','none');
+                                // if(buttonElem.eq(i).html()=='下载'){
+                                //     buttonElem.eq(i).removeAttr("disabled");
+                                // }
+                            }
+                        }
+                    }
+                });
+            }else if(obj.event === "btn-submit"){
+                var nowTime =new Date().getTime();
+                var infoData = {
+                    id:data.id,
+                    status:1,
+                    submissionTime:nowTime
+                };
+                $.ajax({
+                    url: "/api/research/declaration",
+                    type: 'put',
+                    data: JSON.stringify(infoData),
+                    contentType: "application/json",
+                    success: function (res) {
+                        if (res.ok) {
+                            layer.msg('提交成功', {
+                                icon: 1
+                            });
+                            table.reload('sicMainTable', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        } else {
+                            layer.msg(res.message, {
+                                icon: 5
+                            });
+                        }
+                    },
+                    error: function (err) {
+                        layer.msg('获取信息失败！');
+                        console.log(err);
+                    }
+                });
+            }else if(obj.event === 'btn-export'){
+                window.location.href = "/ADC_info/api/research/declaration/downloadDoc/"+data.id;
+            }else if(obj.event === 'btn-del'){
+                layer.confirm('确定删除该数据吗？', {
+                    icon: 3,
+                    title: '提示'
+                }, function() {
+                    $.ajax({
+                        url: "/api/research/declaration/"+data.id,
+                        type: 'delete',
+                        contentType: 'application/json',
+                        success: function (res) {
+                            if (res.ok) {
+                                table.reload('sicMainTable', {
+                                    where: {
+                                        reload: new Date().getTime()
+                                    }
+                                });
+                                return  layer.msg('删除成功', {
+                                    icon: 1
+                                });
+                            }else{
+                                return  layer.msg(res.message, {
+                                    icon: 5
+                                });
+                            }
+                        }
+                    });
+                });
+            }
+        });
+        $('#btn-create').off('click').on('click',function () {
+            admin.popupCenter({
+                title: '新建',
+                area: ['100%', '100%'],
+                path: 'components/sicManage/sicCreate.html',
+                finish: function(data) {
+
+                    if(data){
+                        table.reload('sicMainTable', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    }
+                },
+                success: function () {
+                    var org = account.orgs;
+                    if (org.length > 0) {
+                        $("#deptId")[0].value = org[0].name;
+                        $("#deptId")[0].dataset.name = org[0].name;
+                        $("#deptId")[0].dataset.id = org[0].id;
+                    }
+                    $("#leaderId")[0].value = account.usname;
+                    $("#leaderId")[0].dataset.name = account.usname;
+                    $("#leaderId")[0].dataset.id = account.usid;
+                    //项目名称
+                    $.ajax({
+                        type: "get",
+                        url: "/api/sys/dictype/list?dicCode=sicProType",
+                        success: function (res) {
+                            var list = res.data;
+                            var con = '';
+                            for(i=0;i<list.length;i++){
+                                con += '<option value='+list[i].dicTypeCode+'>'+list[i].dicTypeName+'</option>'
+                            }
+                            form.on('select(projectTypeId)',function (data) {
+                                if(data.value.indexOf('sm')!=-1){
+                                    $(".otheTr").css("display","table-row");
+                                }else{
+                                    $(".otheTr").css("display","none");
+                                }
+                                form.render("select");
+                            });
+                            $('#projectTypeId').empty().append(con);
+                            form.render("select");
+                        }
+                    });
+                    //承担方式
+                    $.ajax({
+                        type: "get",
+                        url: "/api/sys/dictype/list?dicCode=sicBearWay",
+                        success: function (res) {
+                            var list = res.data;
+                            var con = '';
+                            for(i=0;i<list.length;i++){
+                                con += '<option value='+list[i].dicTypeCode+'>'+list[i].dicTypeName+'</option>'
+                            }
+                            form.on('select(undertakingId)',function (data) {
+                                if(data.value.indexOf('bm')!=-1){
+                                    $(".undertakingId").css("width","220px");
+                                    $(".extInfo2").css("display","inline-block");
+                                }else{
+                                    $(".undertakingId").css("width","450px");
+                                    $(".extInfo2").css("display","none");
+                                }
+                                form.render("select");
+                            });
+                            $('#undertakingId').empty().append(con);
+                            form.render("select");
+                        }
+                    });
+                    form.on('submit(btn-save)', function (data) {
+                        // 获取表单数据
+                        var d = data.field;
+                        d.status=0;
+                        setSicInfo(d,'post','保存成功！');
+
+                    });
+                    form.on('submit(btn-submit)', function (data) {
+                        // 获取表单数据
+                        var d = data.field;
+                        d.status=1;
+                        var nowTime =new Date().getTime();
+                        d.submissionTime=nowTime;
+                        setSicInfo(d,'post','保存并提交成功！');
+
+                    });
+                }
+            });
+        });
+    });
+</script>

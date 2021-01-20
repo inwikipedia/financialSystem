@@ -1,0 +1,398 @@
+<!-- zTree 样式 -->
+<link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/metroStyle.css">
+<style>
+    .layui-input-block {
+        padding-right: 0;
+        margin-left: 0;
+    }
+    .layui-input {
+        border-radius: 20px;
+    }
+
+    .layui-form-item {
+        margin-bottom: 0;
+    }
+
+    .staff,
+    .card-show-list {
+        height: 100%;
+    }
+
+    .org-select {
+        height: calc(100% - 2px);
+    }
+
+    .person-select {
+        height: 100%;
+    }
+
+    .layui-card-body {
+        height: calc(100% - 57px);
+    }
+
+    .person-search {
+        width: 22%;
+    }
+
+    .layui-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .person-list {
+        width: 100%;
+        height: 100%;
+    }
+
+    .peoOne {
+        margin-top: 20px;
+    }
+
+    .peoPic img {
+        display: block;
+        width: 64px;
+        height: 64px;
+        border-radius: 100%;
+    }
+
+    .peoInfo {
+        width: 100%;
+        height: 66px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        /*overflow: hidden;*/
+        /*padding-top:6%;*/
+        text-align: center
+    }
+
+    .peoInfo .peoName {
+        display: block;
+        font-size: 16px;
+        color: #000000;
+    }
+
+    .peoInfo .jobTitle {
+        font-size: 12px;
+        color: #666;
+    }
+    .layui-card-header{ padding: 0 10px;}
+    .zzjg{ margin-top: 5px; }
+    .searchInput{
+        width: 81%;
+        border-radius: 20px;
+        /*border: 1px solid #ccc;*/
+        height: 26px;
+        text-indent: 5px;
+        margin: 20px 0 10px 30px;
+    }
+    .layui-input:focus{
+        border: 1px solid #18B1EB!important;
+    }
+    .text{
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        right: 25px;
+        top: 5px;
+    }
+</style>
+
+<div class="layui-row layui-col-space15 staff" >
+    <div class="layui-col-md3 card-show-list" id="left-area">
+        <div class="layui-card org-select">
+            <div class="layui-card-header">
+                组织机构
+                <div class="layui-form" style="display: inline-block;">
+                    <div class="layui-form-item" style="width: 235px; position: relative">
+                        <div class="layui-input-block">
+                            <input type="text" class="searchInput layui-input zzjg" placeholder="请输入姓名" id="key"  onblur="$(this).css('border','1px solid #ccc')">
+                            <img src="../../assetsInfo/images/search.png" alt="" title="搜索" class="text">
+                        </div>
+                    </div>
+                </div>
+                <!--<input type="text" class="searchInput text" placeholder="请输入姓名" id="key" >-->
+                <!--<i class="layui-icon layui-icon-search" lay-submit lay-filter="search"></i>-->
+            </div>
+            <div class="layui-card-body">
+                <ul id="orgTree" class="ztree"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-md9 card-show-list" id="right-area">
+        <div>
+            <!--<div class="layui-card-header">
+                <span id="department"></span>
+                <div class="layui-form person-search">
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="text" name="name"  placeholder="组织机构/人员名称" class="layui-input zzjg">
+                            <i class="layui-icon layui-icon-search" lay-submit lay-filter="search"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+            <div class="layui-card-body">
+                <div class="person-list">
+                    <div class="layui-row">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- zTree js 文件 -->
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+<script>
+    var orgId="";
+    var isOrgId="";
+    var task_personnel_select = {
+        init: function(datas) {
+            // 初始化，传入已选择的数据
+            this.selectedData = datas.data ? datas.data : [];
+        },
+        finish: function() {
+            return this.selectedData;
+        },
+        selectedData: [],
+        // 检查是否有重复的数据
+        // 重复则返回 true
+        checkRepeatData: function(id) {
+            for (var i = 0; i < this.selectedData.length; i++) {
+                if (this.selectedData[i].id === id) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    };
+    $('html,body').animate({scrollTop:0},'slow');
+    var heightTable = $(document).height()-60;
+    $('#left-area').css('height',heightTable);
+    $('#right-area').css('min-height',heightTable-12);
+    $('#right-area').css('background','#fff');
+    layui.use(['element', 'index'], function() {
+        var element = layui.element,
+            $ = layui.jquery,
+            config = layui.config,
+            admin = layui.admin;
+
+        // 初始化组织机构列表
+        var url="/api/budget/project/query/org/adc/newOwn";
+        console.log("I:\\ideaGit\\financialSystem");
+        console.log(config.getAccount())
+        // var url='/api/sys/org/listOrgByOrgName',
+        //刷新树节点 搜索树
+          $('.text').on('click', function() {
+              var _keywords = $('#key').val();
+              addOrgTree(_keywords); //call lazy load
+          })
+
+          $('#key').keyup(function (event) {
+
+            if (event.keyCode === 13) {
+
+                var _keywords = $(this).val();
+                    addOrgTree(_keywords); //call lazy load
+                }
+            });
+        function addOrgTree(keyword) {
+            console.log("staff.html202");
+            admin.req('/api/user/selectAllUserVOByOrgId', {
+                orgId:orgId,
+                usName:keyword
+            }, function(res)
+            {
+                if (!res.ok) {
+                    return layer.msg('获取组织机构用户列表失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+                // $("#department").text(treeNode.name + " " + res.data.count + "人");
+                var userHtml = '',
+                    userData = res.data;
+                for (var i = 0; i < userData.length; i++) {
+                    var tmp = userData[i],
+                        tmpRoles = tmp.contactAddress==null?'暂无职级 ':tmp.contactAddress;//contactAddress 暂时用为职级
+                    // 剔除重复数据
+                    if (task_personnel_select.checkRepeatData(tmp.usid))
+                        continue;
+                    userHtml += '<div class="layui-col-xs2 layui-col-sm3 layui-col-md3 peoOne"><a class = "peoName" href="#!personCalendar?orgId='+(isOrgId?isOrgId:orgId)  +'&usid=' + tmp.usid + '&usname=' + tmp.usname + '">'  +
+                        '               <div class = "layui-row layui-clear" >' +
+                        '                   <div class = "layui-col-md5 layui-col-md-offset1">' +
+                        '                       <div class = "peoPic">' +
+                        '                           <img src = "../assetsInfo/images/tx.png">' +
+                        '                       </div>' +
+                        '                   </div>' +
+                        '                   <div class = "layui-col-md6">' +
+                        '                       <div class = "peoInfo">' +
+                        '                           <span class = "peoName">' + tmp.usname + '</span>' +
+                        '                           <div class = "jobTitle">'+tmpRoles+'</div>' +
+                        '                       </div>' +
+                        '                   </div>' +
+                        '               </div> </a>' +
+                        '           </div>';
+                }
+                $('.person-list > .layui-row').html(userHtml);
+                if (userData.length === 0) {
+                    return layer.msg( '暂无用户', {
+                        icon: 0
+                    });
+                }
+            });
+        }
+
+
+        admin.req(url, {
+            keyword: "",
+        }, function(d) {
+            if (!d.ok) {
+                return layer.msg('获取组织机构列表失败：' + d.message, {
+                    icon: 5
+                });
+            }
+            // 生成 zTree
+            var setting = {
+                data: {
+                    simpleData: {
+                        enable: true,
+                        idKey: "id",
+                        pIdKey: "parentId",
+                        rootPId: '0'
+                    }
+                },
+                view: {
+                    showIcon: false
+                },
+                callback: {
+                    onClick: function(event, treeId, treeNode) {
+
+                        if (treeNode.remarks==-1)
+                        {
+                            return;
+                        }
+                        var id = treeNode.id;
+                        orgId=treeNode.id;
+                        isOrgId="";
+                        // 获取组织机构对应用户
+                        getOrgUser(treeNode,orgId);
+
+                    }
+                }
+            };
+            var zNodes = d.data;
+            sortTree(zNodes)
+            function sortTree(zNodes) {
+                // 菜单排序
+                zNodes.sort(function(ao, bo) {
+                    if (!ao.remarks) ao.remarks = '';
+                    if (!bo.remarks) bo.remarks = '';
+                    var a = ao.remarks.split('-'),
+                        b = bo.remarks.split('-');
+                    if (a.length === b.length) {
+                        if (a.length === 0) {
+                            return 0;
+                        } else if (a.length === 1) {
+                            return a[0] - b[0];
+                        } else {
+                            if (a[0] === b[0]) {
+                                return a[1] - b[1];
+                            } else {
+                                return a[1] - b[1];
+                            }
+                        }
+                    } else {
+                        return a.length - b.length;
+                    }
+                });
+                return zNodes;
+            }
+            for(var i=0;i<zNodes.length;i++){
+                if(zNodes[i].name=="科研"){
+                    zNodes.splice(i,1)
+                }
+            }
+            zTreeObj = $.fn.zTree.init($("#orgTree"), setting, zNodes);
+            var nodeList = zTreeObj.getNodes();　　　　　　 //展开第一个根节点
+            for(var i = 0; i < nodeList.length; i++) { //设置节点展开第二级节点
+                zTreeObj.expandNode(nodeList[i], true, true, true);
+                var nodespan = nodeList[i].children;
+                for(var j = 0; j < nodespan.length; j++) { //设置节点展开第三级节点
+                    zTreeObj.expandNode(nodespan[j], true, true, true);
+                }
+            }
+
+            var  userInfo=config.getAccount();
+            if (userInfo.orgs.length>0)
+            {
+                isOrgId="000000";
+                orgId=userInfo.orgs[0].id;
+                getOrgUser(userInfo.orgs[0]);
+            }
+
+
+            function getOrgUser(treeNode,id)
+            {
+                console.log("staff.html339");
+                admin.req('/api/user/selectAllUserVOByOrgId/',{orgId:id}, function(res)
+                {
+                    if (!res.ok) {
+                        return layer.msg('获取组织机构用户列表失败：' + res.message, {
+                            icon: 5
+                        });
+                    }
+                    $("#department").text(treeNode.name + " " + res.data.count + "人");
+                    var userHtml = '', userData = res.data;
+                    for (var i = 0; i < userData.length; i++) {
+                        var tmp = userData[i],
+                            tmpRoles = tmp.contactAddress==null?'暂无职级 ':tmp.contactAddress;//contactAddress 暂时用为职级
+                        // 剔除重复数据
+                        if (task_personnel_select.checkRepeatData(tmp.usid))
+                            continue;
+                        userHtml += '<div class="layui-col-xs2 layui-col-sm3 layui-col-md3 peoOne"><a class = "peoName" href="#!personCalendar?orgId='+ orgId +'&usid=' + tmp.usid + '&usname=' + tmp.usname + '">'  +
+                            '               <div class = "layui-row layui-clear" >' +
+                            '                   <div class = "layui-col-md5 layui-col-md-offset1">' +
+                            '                       <div class = "peoPic">' +
+                            '                           <img src = "../assetsInfo/images/tx.png">' +
+                            '                       </div>' +
+                            '                   </div>' +
+                            '                   <div class = "layui-col-md6">' +
+                            '                       <div class = "peoInfo">' +
+                            '                           <span class = "peoName">' + tmp.usname + '</span>' +
+                            '                           <div class = "jobTitle">'+tmpRoles+'</div>' +
+                            '                       </div>' +
+                            '                   </div>' +
+                            '               </div> </a>' +
+                            '           </div>';
+                    }
+                    $('.person-list > .layui-row').html(userHtml);
+                    if (userData.length === 0) {
+                        return layer.msg(treeNode.name + ' 无用户', {
+                            icon: 0
+                        });
+                    }
+                });
+            }
+            //触发选中事件
+           // zTreeObj.setting.callback.onClick(null, zTreeObj.setting.treeId, zTreeObj.getNodeByParam("id",zTreeObj.getNodes()[0].id,null));//触发函数
+        });
+    });
+
+
+
+    layui.use('form', function(){
+        var form = layui.form;
+        form.on('submit(search)', function (data) {
+            if(data.field.name){
+                console.log(data.field.name);
+                var treeObj = $.fn.zTree.getZTreeObj($("#orgTree"));
+                oldNodes = treeObj.getNodesByParamFuzzy("name", text, null);
+            }
+        });
+    });
+
+</script>

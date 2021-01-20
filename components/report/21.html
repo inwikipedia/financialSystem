@@ -1,0 +1,310 @@
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<script src="../../assetsInfo/js/FormMerge.js"></script>
+<link rel="stylesheet" href="assetsInfo/css/report.css">
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+    
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+    
+    .titDivbox {
+        width: 90%;
+        margin: auto;
+        position: relative;
+    }
+    
+    .titDiv {
+        width: 100%;
+        font-size: 16px;
+        font-weight: bold;
+        color: #888;
+        position: absolute;
+        top: 25px;
+    }
+    
+    .tit01,
+    .tit02 {
+        width: 50%;
+        float: left;
+        text-align: center;
+    }
+    
+    .chart {
+        height: 360px;
+        width: 96%;
+    }
+    
+    .form-bottom {
+        overflow: auto
+    }
+    
+    .botTable {
+        width: 75%;
+    }
+    
+    .chart {
+        padding-bottom: 10px;
+    }
+    
+    @media screen and (min-width: 1366px) and (max-width: 1920px) {
+        .chart {
+            height: 360px;
+            width: 96%;
+        }
+        .botTable {
+            width: 75%;
+        }
+    }
+    
+    @media screen and (min-width: 1920px) {
+        .chart {
+            height: 370px;
+            width: 96%;
+        }
+        .botTable {
+            width: 75%;
+        }
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span class="layui-card-header-title"><strong>应收账款占比分析
+                    </strong></span>
+                <!-- <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-sm exportbtn">导出PPT</a> -->
+            </div>
+            <div class="layui-row">
+                <div id="upPicL" class="chart"></div>
+            </div>
+            <div class="botTable">
+                <table id="tableContent-form3" lay-filter="tableContent-form3"></table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+</script>
+<script>
+    layui.use(['table'], function() {
+        var table = layui.table,
+            admin = layui.admin,
+            layer = layui.layer;
+
+        //下面表格
+        table.render({
+            elem: '#tableContent-form3',
+            url: '/json/21.json', //数据接口
+            cols: [
+                [ //表头
+                    {
+                        field: 'plate',
+                        title: '时期',
+                        align: 'center',
+                        width: 110
+                    }, {
+                        field: 'year',
+                        title: '跨年应收',
+                        align: 'center'
+
+
+                    }, {
+                        field: 'one',
+                        title: '2019年1月',
+                        align: 'center'
+
+
+                    }, {
+                        field: 'two',
+                        title: '2019年2月',
+                        align: 'center'
+
+                    }, {
+                        field: 'three',
+                        title: '2019年3月',
+                        align: 'center'
+
+
+                    }, {
+                        field: 'four',
+                        title: '应收合计',
+                        align: 'center'
+                    }
+                ]
+
+            ],
+
+        })
+
+        //图表
+
+        admin.req('/json/report.json', {}, function(res) {
+            var depObject = res.credit[0];
+            var xData = [];
+            var tableCol = [];
+
+            for (var key in depObject) {
+                xData.push(depObject[key])
+            }
+
+            var yData1 = [],
+                yData2 = [];
+
+            for (var key in res.credit[1]) {
+                yData1.push(res.credit[1][key])
+
+            }
+
+            for (var key in res.credit[2]) {
+                var value = res.credit[2][key];
+                var rate = value.toString().replace('%', "");
+                yData2.push(rate)
+            }
+            showUpL(xData, yData1, yData2)
+
+        }, {
+            method: 'get'
+        });
+
+
+        var showUpL = function(xData, data1, data2) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("upPicL"));
+            // 图表配置项
+            var option = {
+                title: {
+                    left: 'center',
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    textStyle: {　　
+                        align: 'left'　　　　
+                    },
+                    axisPointer: {
+                        type: 'cross',
+                        crossStyle: {
+                            color: '#999'
+                        }
+                    }
+                },
+                grid: {
+                    left: 40,
+                    right: 33,
+                    bottom: 50
+                },
+                legend: {
+                    data: [{
+                        name: '应收账款',
+                        icon: "roundRect"
+                    }, {
+                        name: '占比',
+                        icon: "roundRect"
+                    }],
+                    left: 'center',
+                    bottom: 'bottom',
+                    padding: [7, 0, 0, 0],
+                    itemWidth: 10,
+                    itemHeight: 10
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: xData,
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+
+                    axisLine: {
+                        lineStyle: {
+                            color: '#949494',
+                        }
+                    }
+                }],
+                yAxis: [{
+                        type: 'value',
+
+                        axisLabel: {
+                            formatter: '{value}'
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#999',
+                            }
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                type: 'dashed',
+                                color: "#E8E8E8"
+                            }
+                        },
+                        scale: true,
+                        splitNumber: 3,
+
+                    }, {
+                        type: 'value',
+                        name: '单位：万元',
+                        axisLabel: {
+                            formatter: '{value}%'
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#949494',
+                            }
+                        },
+                        splitLine: {
+                            show: false
+                        },
+                        splitNumber: 4,
+
+                    },
+
+                ],
+                series: [{
+                        name: '应收账款',
+                        type: 'bar',
+                        barMaxWidth: 30,
+                        data: data1,
+                        color: 'RGBA(124,190,253,0.8)'
+                    }, {
+                        name: '占比',
+                        type: 'line',
+                        color: 'RGBA(255,233, 133,0.8)',
+                        data: data2,
+                        yAxisIndex: 1,
+                        itemStyle: { //设置折线拐点处数值
+                            normal: {
+                                label: {
+                                    show: true,
+                                    color: "#000",
+                                    formatter: '{c}%'
+                                }
+                            }
+                        }
+                    }
+
+                ]
+            };
+            myChart.setOption(option);
+        };
+
+
+        setTimeout(function() {
+            window.onresize = function() {
+                myChart.resize();
+            }
+        }, 200);
+
+    });
+</script>

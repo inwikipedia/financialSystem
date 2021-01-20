@@ -1,0 +1,258 @@
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<style>
+    .layui-card-body {
+        height: 458px;
+        overflow: auto;
+    }
+</style>
+<div class="layui-row layui-col-space15">
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+
+            <div class="layui-card-body">
+                <div class="layui-col-xs12 layui-col-sm12 layui-col-md6">
+                    <div class="layui-form-item" id="business_profit_picture" style="width: 100%;min-height:400px;padding-top: 15px"></div>
+                </div>
+                <div class="layui-col-xs12 layui-col-sm12 layui-col-md6">
+                    <div class="layui-form-item" id="project_profit_picture" style="width: 100%;min-height:400px;padding-top: 15px"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+<script>
+    var businessProfitChart = echarts.init(document.getElementById('business_profit_picture'));
+    var projectProfitChart = echarts.init(document.getElementById('project_profit_picture'));
+    function initBusinessOption(name, data) {
+
+        var chartOption = {
+            title: {
+                text: name,
+                x: 'center'
+            },
+            legend: {
+
+                x: 'center',
+                y: 'bottom',
+                // bottom: ['业务咨询', '综合业务', '软件业务', '数据业务']
+            },
+            tooltip: {
+                padding: 10,
+                backgroundColor: '#222',
+                borderColor: '#777',
+                borderWidth: 1,
+                formatter: function(obj) {
+                    var value = obj.value;
+
+                    return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">'
+
+                    +value[3] + ':</div>' +
+                        '人力投入/天：' + value[0] + '天' + '<br>' +
+                        '合同收入：' + value[1] + '万元' + '<br>' +
+                        '利润：' + value[2] + '万元' + '<br>'
+
+                }
+            },
+            xAxis: {
+                name: '人力投入（人/天）',
+                nameLocation: "center",
+                nameGap: 25,
+                top: 1000,
+                splitLine: {
+                    lineStyle: {
+                        type: 'dashed'
+                    }
+                }
+            },
+            yAxis: {
+                name: '合同收入（万元）',
+                nameLocation: "end",
+                // nameGap: 10,
+                splitLine: {
+                    lineStyle: {
+                        type: 'dashed'
+                    }
+                },
+                // min: 0
+            },
+            series: [{
+                name: '咨询业务',
+                data: data[0],
+                type: 'scatter',
+                symbolSize: function(data) {
+                    return data[2];
+                },
+
+                label: {
+                    emphasis: {
+                        show: true,
+                        position: 'top'
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 10,
+                        shadowColor: '#a9cf91',
+                        shadowOffsetY: 5,
+                        color: '#a9cf91'
+                    }
+                }
+            }, {
+                name: '综合业务',
+                data: data[1],
+                type: 'scatter',
+                symbolSize: function(data) {
+                    return data[2];
+                },
+                label: {
+                    emphasis: {
+                        show: true,
+                        position: 'top'
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 10,
+                        shadowColor: '#7899d5',
+                        shadowOffsetY: 5,
+                        color: '#7899d5'
+                    }
+                }
+            }, {
+                name: '软件业务',
+                data: data[2],
+                type: 'scatter',
+                symbolSize: function(data) {
+                    return data[2];
+                },
+                label: {
+                    emphasis: {
+                        show: true,
+                        position: 'top'
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 10,
+                        shadowColor: '#f5b183',
+                        shadowOffsetY: 5,
+                        color: '#f5b183'
+                    }
+                }
+            },
+                {
+                name: '数据业务',
+                data: data[3],
+                type: 'scatter',
+                symbolSize: function(data) {
+                    return data[2];
+                },
+                label: {
+                    emphasis: {
+                        show: true,
+                        position: 'top'
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 10,
+                        shadowColor: '#ffd966',
+                        shadowOffsetY: 5,
+                        color: '#ffd966'
+                    }
+                }
+            }, ]
+        };
+        return chartOption;
+
+    };
+
+    layui.use(['table'], function() {
+        var admin = layui.admin;
+
+        function getBusinessdata() {
+
+            admin.req('/api/bubble/businessProfit', {}, function(data) {
+                if (data.ok) {
+                    var businessData =     data.data;
+                        // [
+                        // [0, 0, 0, '咨询业务'],
+                        // [0, 0, 0, '综合业务'],
+                        // [0, 0, 0, '软件业务'],
+                        // [0, 0, 0, '数据业务']
+                    // ];
+                    // for (var item of data.data) {
+                    //     for (var i = 0; i < businessData.length; i++) {
+                    //         if (businessData[i][3] == item[0][3]) {
+                    //             for (one of item) {
+                    //                 one[1]=one[1]/10000;
+                    //                 one[2]=one[2]/10000;
+                    //             }
+                    //             businessData[i] = item;
+                    //         }
+                    //     }
+                    // }
+                    var businessProfitChartOption = initBusinessOption('业务利润视图', businessData);
+                    businessProfitChart.setOption(businessProfitChartOption);
+
+
+                } else {
+                    layer.msg('获得业务信息失败：' + data.message, {
+                        icon: 5
+                    });
+
+                }
+            }, {
+                method: 'get'
+            });
+
+            admin.req('/api/bubble/projectProfit', {}, function(data) {
+                if (data.ok) {
+                    var projectData =  data.data;
+                        // [
+                        // [0, 0, 0, '', '咨询业务'],
+                        // [0, 0, 0, '', '综合业务'],
+                        // [0, 0, 0, '', '软件业务'],
+                        // [0, 0, 0, '', '数据业务']
+                    // ];
+                    // for (var item of data.data) {
+                    //     for (var i = 0; i < projectData.length; i++) {
+                    //         if (projectData[i][4] == item[0][4]) {
+                    //             for (one of item) {
+                    //                 one[1]=one[1]/10000;
+                    //                 one[2]=one[2]/10000;
+                    //             }
+                    //             projectData[i] = item;
+                    //         }
+                    //     }
+                    // }
+                    var projectProfitChartOption = initBusinessOption('项目利润视图', projectData);
+                    projectProfitChart.setOption(projectProfitChartOption);
+
+
+                } else {
+                    layer.msg('获得项目信息失败：' + data.message, {
+                        icon: 5
+                    });
+                }
+            }, {
+                method: 'get'
+            });
+
+        }
+
+        getBusinessdata();
+
+        $(window).resize(function() {
+            businessProfitChart.resize();
+            projectProfitChart.resize();
+        });
+
+
+    });
+</script>

@@ -1,0 +1,1472 @@
+<link rel="stylesheet" href="../../assetsInfo/css/revenueBudgetSearch.css">
+<div class="main">
+    <div id="nav" class="nav">
+        <div class="layui-btn-group buttonGroup" style="float: left;margin:1px 8px 0 0">
+            <button class="layui-btn layui-btn-primary layui-btn-sm btn-active" style="border-top-left-radius: 4px;border-bottom-left-radius:4px;" id="budget-btn">
+                <i class="layui-icon">业务</i>
+            </button>
+            <button class="layui-btn layui-btn-primary layui-btn-sm" id="project-btn">
+                <i class="layui-icon">项目</i>
+            </button>
+            <button class="layui-btn layui-btn-primary layui-btn-sm" id="task-btn" style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;">
+                <i class="layui-icon">任务</i>
+            </button>
+        </div>
+    </div>
+    <div id="budget" >
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <div class=" layui-row layui-card layui-form" >
+                    <div class="  layui-col-md8" id="budgetItem" >
+
+                    </div>
+                    <div class="layui-col-md4" >
+                        <div style="margin: 15px 15px 15px 0px">
+                            <button id="searchBudget" style="background-color: rgba(51,166,212,1);color:#fff"  class="layui-btn layui-btn-sm layui-btn-normal bigBtn" lay-submit title="查询">查询</button>
+                            <button  id="resetBudget" style="color:#666" class="layui-btn layui-btn-sm layui-btn-normal bigBtn" lay-submit title="重置">重置</button>
+                        </div>
+                    </div>
+                    <!--<div class="  layui-col-md4" style="min-height:150px;padding: 15px;">-->
+                        <!--<div class="layui-form-item layui-inline" >-->
+                            <!--<span class="setTitle">显示设置：</span>-->
+                            <!--<input name="searchField" type="text" placeholder="" class="layui-input setInput" id="show-input">-->
+                            <!--<button  lay-filter="show-set"  class="layui-btn layui-btn-sm layui-btn-normal setBtn" lay-submit title="设置">设置</button>-->
+                        <!--</div>-->
+                        <!--<div class="layui-form-item">-->
+                            <!--<span class="setTitle">排序设置：</span>-->
+                            <!--<input name="searchField" type="text" placeholder="" class="layui-input setInput" id="sort-input">-->
+                            <!--<button  lay-filter="sort-set"  class="layui-btn layui-btn-sm layui-btn-normal setBtn" lay-submit title="设置">设置</button>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                </div>
+                <!--<div class="layui-row" style="margin:15px 0px;text-align: center;">-->
+                    <!--<button id="searchBudget" style="background-color: #5677fc;color:#fff"  class="layui-btn layui-btn-sm layui-btn-normal bigBtn" lay-submit title="查询">查询</button>-->
+                    <!--<button  id="resetBudget" style="background-color: #d9d9d9;color:black" class="layui-btn layui-btn-sm layui-btn-normal bigBtn" lay-submit title="重置">重置</button>-->
+                <!--</div>-->
+                <div class="layui-card botTable">
+
+                    <table id="tableContent-form1" lay-filter="tableContent-form1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="project" style="display: none" >
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <div class=" layui-row layui-card layui-form" >
+                    <div class="  layui-col-md8" id="projectItem" >
+
+                    </div>
+                    <div class="layui-col-md4" >
+                        <div style="margin: 15px 15px 15px 0px">
+                            <button id="searchProject" style="background-color: rgba(51,166,212,1);color:#fff"  class="layui-btn layui-btn-sm layui-btn-normal bigBtn" lay-submit title="查询">查询</button>
+                            <button  id="resetProject" style="color:#666" class="layui-btn layui-btn-sm layui-btn-normal bigBtn" lay-submit title="重置">重置</button>
+                        </div>
+                    </div>
+                    <!--<div class="  layui-col-md4" style="min-height:150px;padding: 15px;">-->
+                        <!--<div class="layui-form-item layui-inline" >-->
+                            <!--<span class="setTitle">显示设置：</span>-->
+                            <!--<input name="searchField" type="text" placeholder="" class="layui-input setInput" id="show-project">-->
+                            <!--<button  lay-filter="show-set"  class="layui-btn layui-btn-sm layui-btn-normal setBtn" lay-submit title="设置">设置</button>-->
+                        <!--</div>-->
+                        <!--<div class="layui-form-item">-->
+                            <!--<span class="setTitle">排序设置：</span>-->
+                            <!--<input name="searchField" type="text" placeholder="" class="layui-input setInput" id="sort-project">-->
+                            <!--<button  lay-filter="sort-set"  class="layui-btn layui-btn-sm layui-btn-normal setBtn" lay-submit title="设置">设置</button>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                </div>
+                <!--<div class="layui-row" style="margin:15px 0px;text-align: center;">-->
+
+                <!--</div>-->
+                <div class="layui-card botTable">
+
+                    <table id="tableContent-form2" lay-filter="tableContent-form2"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="task"  style="display: none">
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <div class=" layui-row layui-card layui-form" >
+                    <div class="  layui-col-md8" id="taskItem" >
+                    </div>
+                    <div class="layui-col-md4" >
+                        <div style="margin: 15px 15px 15px 0px">
+                            <button id="searchTask" style="background-color: rgba(51,166,212,1);color:#fff"  class="layui-btn layui-btn-sm layui-btn-normal bigBtn" lay-submit title="查询">查询</button>
+                            <button  id="resetTask" style="color:#666" class="layui-btn layui-btn-sm layui-btn-normal bigBtn" lay-submit title="重置">重置</button>
+                        </div>
+                    </div>
+                    <!--<div class="  layui-col-md4" style="min-height:150px;padding: 15px;">-->
+                        <!--<div class="layui-form-item layui-inline" >-->
+                            <!--<span class="setTitle">显示设置：</span>-->
+                            <!--<input name="searchField" type="text" placeholder="" class="layui-input setInput" id="show-task">-->
+                            <!--<button  lay-filter="show-set"  class="layui-btn layui-btn-sm layui-btn-normal setBtn" lay-submit title="设置">设置</button>-->
+                        <!--</div>-->
+                        <!--<div class="layui-form-item">-->
+                            <!--<span class="setTitle">排序设置：</span>-->
+                            <!--<input name="searchField" type="text" placeholder="" class="layui-input setInput" id="sort-task">-->
+                            <!--<button  lay-filter="sort-set"  class="layui-btn layui-btn-sm layui-btn-normal setBtn" lay-submit title="设置">设置</button>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                </div>
+                <!--<div class="layui-row" style="margin:15px 0px;text-align: center;">-->
+
+                <!--</div>-->
+                <div class="layui-card botTable">
+
+                    <table id="tableContent-form3" lay-filter="tableContent-form3"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['table','laydate','tools'], function() {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer,
+            tools = layui.tools,
+            laydate=layui.laydate,
+            thisYear=new Date().getFullYear(),
+            month = new Date().getMonth()+1;
+        // var index = layer.load(2);
+        //判断数组是否存在重复值
+        var isRepeat  =function (){
+            var  arr=[];
+            for (var i = 0; i <searchArr.length ; i++) {
+                if(searchArr[i].value){
+                    arr.push(searchArr[i].value);
+                }
+            }
+            let  hash = {};
+            for(let i in arr) {
+                if(hash[arr[i]]) {
+                    return true;
+                }
+                hash[arr[i]] = true;
+            }
+            return false;
+        };
+        var dateChange=function(data){
+            var str = data.replace(/-/g,'/');
+            var date = new Date(str).getTime();
+            return date;
+        };
+        var dateChange1=function(data){
+            var str = data.replace(/-/g,'/');
+            var date = new Date(str);
+            return date;
+        };
+        //点击组织按钮
+        $('#budget-btn').click(function() {
+            $(this).addClass('btn-active');
+            $(this).siblings().removeClass('btn-active');
+            $("#budgetItem").empty();
+            $('#budget').show();
+            $('#project').hide();
+            $('#task').hide();
+            new budgetFun();
+        });
+        //点击项目按钮
+        $('#project-btn').click(function() {
+            $(this).addClass('btn-active');
+            $(this).siblings().removeClass('btn-active');
+            $("#projectItem").empty();
+            $('#budget').hide();
+            $('#project').show();
+            $('#task').hide();
+            new projectFun();
+
+        });
+        //点击任务按钮
+        $('#task-btn').click(function() {
+            $(this).addClass('btn-active');
+            $(this).siblings().removeClass('btn-active');
+            $("#taskItem").empty();
+            $('#budget').hide();
+            $('#project').hide();
+            $('#task').show();
+            new taskFun();
+        });
+        var budgetFun =function () {
+            // 渲染表格
+            function tableInit(search) {
+                if (!search) {
+                    search = {};
+                }
+                table.render({
+                    elem: '#tableContent-form1',
+                    url: admin.formatUrl('/api/budget/budget/findByPage'), //数据接口
+                    method: 'POST',
+                    contentType: 'application/json',
+                    parseData: function (res) { //res 即为原始返回的数据
+                        for (var i = 0; i <res.data.list.length ; i++) {
+                            res.data.list[i].propertyId= res.data.list[i].propertyId === "cx"? "持续":"新增";
+                            switch ( res.data.list[i].property ){
+                                case "0" :
+                                    res.data.list[i].property = "经营类";
+                                    break;
+                                case "1" :
+                                    res.data.list[i].property = "非经营类";
+                                    break;
+                                case "2" :
+                                    res.data.list[i].property = "科研类";
+                            }
+                            res.data.list[i].cycleBegin=tools.getDate(res.data.list[i].cycleBegin,"YYYY-MM-DD");
+                            res.data.list[i].cycleEnd=tools.getDate(res.data.list[i].cycleEnd,"YYYY-MM-DD");
+                            res.data.list[i].createTime=res.data.list[i].createTime?tools.getDate(res.data.list[i].createTime,"YYYY-MM-DD"):res.data.list[i].createTime;
+                            res.data.list[i].updateTime=res.data.list[i].updateTime?tools.getDate(res.data.list[i].updateTime,"YYYY-MM-DD"):res.data.list[i].updateTime;
+                            res.data.list[i].worktime=res.data.list[i].worktime.toFixed(2);
+                        }
+                        // layer.close(index);
+                        // 返回结果，进行渲染表格
+                        return {
+                            "count": res.data.count,
+                            "code": res.respCode, //解析接口状态
+                            "msg": res.message, //解析提示文本
+                            "data": res.data.list //解析数据列表
+                        };
+                    },
+                    request: {
+                        pageName: 'page',
+                        limitName: 'pageSize'
+                    },
+                    cols: [
+                        [{
+                            title: '业务名称',
+                            field: 'projectName',
+                            align: 'center',
+                            templet: function(d) {
+                                return '<div title="'+d.projectName+'"><span>'+ d.projectName +'</span></div>'
+                            }
+                        }, {
+                            title: '业务属性',
+                            field: 'property',
+                            align: 'center'
+                        }, {
+                            title: '业务经理',
+                            field: 'usname',
+                            align: 'center'
+                        }, {
+                            title: '业务类型',
+                            field: 'propertyId',
+                            align: 'center'
+                        }, {
+                            title: '业务开始日期',
+                            field: 'cycleBegin',
+                            align: 'center'
+                        }, {
+                            title: '业务结束日期',
+                            field: 'cycleEnd',
+                            align: 'center'
+                        },
+                        //     {
+                        //     title: '业务状态',
+                        //     field: 'finishedStatus',
+                        //     align: 'center'
+                        // },
+                            {
+                            title: '业务累计人天投入',
+                            field: 'worktime',
+                            align: 'center'
+                        }, {
+                            title: '创建人',
+                            field: 'createUserName',
+                            align: 'center'
+                        },{
+                            title: '创建时间',
+                            field: 'createTime',
+                            align: 'center'
+                        },
+                        //     {
+                        //     title: '修改时间',
+                        //     field: 'updateTime',
+                        //     align: 'center'
+                        // }
+                        ]
+                    ],
+                    page: true,
+                    limit: 10, //显示的数量
+                    limits:[10,15,20,25,30],
+                    where: search,
+                    done:function(){
+                        $(".botTable").each(function () {
+                            $(this).find('.layui-table-body').find('td').each(function(){
+                                $(this).prop('title',$(this).children()[0].textContent)
+                            })
+                        })
+                    }
+                });
+            }
+
+            tableInit();
+            //查询条件对应的id数字
+            var searchLength=1;
+            //查询条件的个数
+            var searchArr=[{'id':1,'value':''}];
+            laydate.render({
+                elem: '#dateBudget'+searchLength,
+                type: 'date',
+            });
+            var addItem=function () {
+                $('#budgetItem').append('<div class="layui-form-item'+searchLength+' layui-form-item"  style="margin:15px 15px 15px 50px;">\n' +
+                    '                                <div class="layui-inline searchInfo" >\n' +
+                    '                                    <div class="layui-inline " style="float: left;width:160px">\n' +
+                    '                                        <select   name="budget_select'+searchLength+'" id="budget_select'+searchLength+'"  lay-filter="budget_select'+searchLength+'" >\n' +
+                    '                                            <option value=""  selected>请选择</option>\n' +
+                    '                                            <option value="1" data-searchStr="projectNames">业务名称</option>\n' +
+                    '                                            <option value="2" data-searchStr="propertys">业务属性</option>\n' +
+                    '                                            <option value="3" data-searchStr="usnames">业务经理</option>\n' +
+                    '                                            <option value="4" data-searchStr="propertyIds">业务类型</option>\n' +
+                    '                                            <option value="5" data-searchStr="cycleBegins">业务开始日期</option>\n' +
+                    '                                            <option value="6" data-searchStr="cycleEnds">业务结束日期</option>\n' +
+                    // '                                            <option value="7">业务状态</option>\n' +
+                    // '                                            <option value="8">业务累计人天投入</option>\n' +
+                    '                                            <option value="9" data-searchStr="createUserNames">创建人</option>\n' +
+                    '                                            <option value="10" data-searchStr="createTimes">创建时间</option>\n' +
+                    // '                                            <option value="11">修改时间</option>\n' +
+                    '                                        </select>\n' +
+                    '                                    </div>\n' +
+                    '                                    <div class="layui-inline" style="float: left;width:150px">\n' +
+                    '                                        <select   name="budget_Symbol'+searchLength+'" id="budget_Symbol'+searchLength+'"  lay-filter="budget_Symbol'+searchLength+'" >\n' +
+                    '                                            <option value="=">等于</option>\n' +
+                    '                                            <option value="!=">不等于</option>\n' +
+                    '                                            <option value="like">包含</option>\n' +
+                    '                                            <option value="not like">不包含</option>\n' +
+                    '                                        </select>\n' +
+                    '                                    </div>\n' +
+                    '                                    <input name="searchField" type="text" placeholder="单行输入" style="margin-right:10px" class="layui-input setInput" id="search-budget'+searchLength+'">\n' +
+                    '                                    <input autocomplete="off" style="display: none;" type="text" name="dateBudget'+searchLength+'" id="dateBudget'+searchLength+'" placeholder="日期" class="layui-input setInput" >\n' +
+                    '                                   <div class="layui-inline" id="budget_attrShow'+searchLength+'" style="display:none;float: left;width:100px">\n' +
+                    '                                        <select  name="budget_attr'+searchLength+'" id="budget_attr'+searchLength+'"   lay-filter="budget_attr" >\n' +
+                    '                                            <option value="0">经营类</option>\n' +
+                    '                                            <option value="1">非经营类</option>\n' +
+                    '                                            <option value="2">科研类</option>\n' +
+                    '                                        </select>\n' +
+                    '                                    </div>\n'+
+                    '                                   <div class="layui-inline" id="budget_typeShow'+searchLength+'" style="display:none;float: left;width:100px">\n' +
+                    '                                        <select  name="budget_type'+searchLength+'" id="budget_type'+searchLength+'"   lay-filter="budget_type" >\n' +
+                    '                                            <option value="cx">持续</option>\n' +
+                    '                                            <option value="xz">新增</option>\n' +
+                    '                                        </select>\n' +
+                    '                                    </div>\n'+
+                    '                                   <div class="layui-inline" style="float: left;width:100px">\n' +
+                    '                                        <select  name="budget_and'+searchLength+'" id="budget_and'+searchLength+'"   lay-filter="budget_and" >\n' +
+                    '                                            <option value="and">且</option>\n' +
+                    '                                            <option value="or">或</option>\n' +
+                    '                                        </select>\n' +
+                    '                                    </div>\n'+
+                    '                                </div>\n' +
+                    '                                <div class="layui-inline" style="margin-left: 80px;">\n' +
+                    '                                    <button id="budget-add'+searchLength+'" class="layui-btn layui-btn-sm layui-btn-normal " style="background-color: #2696ff;color:#fff" lay-submit >+</button>\n' +
+                    '                                    <button id="budget-del'+searchLength+'" del-index="'+searchLength+'" class="layui-btn layui-btn-sm layui-btn-normal " style="background-color: #2696ff;color:#fff" lay-submit >-</button>\n' +
+                    '                                </div>\n'+
+                    '                        </div>');
+                laydate.render({
+                    elem: '#dateBudget'+searchLength,
+                    type: 'date',
+                });
+                // getSelect(searchLength);
+                form.render();
+            };
+            addItem();
+            //绑定选择条件下垃圾与符号联动事件
+            var bindSelect=function(index){
+                form.on('select(budget_select'+index+')', function(data) {
+                    for (var i = 0; i <searchArr.length ; i++) {
+                        if(index==searchArr[i].id){
+                            searchArr[i].value=data.value;
+                        }
+                    }
+                    // delSelect(index,data.value);
+                    var elem = $('#budget_Symbol'+index);
+                    if(data.value==5||data.value==6||data.value==10||data.value==11){
+                        $('#dateBudget'+index).show();
+                        $('#search-budget'+index).hide();
+                        $('#budget_typeShow'+index).hide();
+                        $('#budget_attrShow'+index).hide();
+                    }else if(data.value==4){
+                        $('#dateBudget'+index).hide();
+                        $('#budget_attrShow'+index).hide();
+                        $('#search-budget'+index).hide();
+                        $('#budget_typeShow'+index).show();
+                    }else if(data.value==2){
+                        $('#dateBudget'+index).hide();
+                        $('#budget_attrShow'+index).show();
+                        $('#search-budget'+index).hide();
+                        $('#budget_typeShow'+index).hide();
+                    }else if (data.value==8){
+                        $('#dateBudget'+index).hide();
+                        $('#budget_attrShow'+index).hide();
+                        $('#search-budget'+index).show();
+                        $('#budget_typeShow'+index).hide();
+                    }else{
+                        $('#dateBudget'+index).hide();
+                        $('#budget_attrShow'+index).hide();
+                        $('#search-budget'+index).show();
+                        $('#budget_typeShow'+index).hide();
+                    }
+                    if(data.value==5||data.value==6||data.value==10||data.value==11||data.value==8){
+                        elem.empty().append('');
+                        elem.append('<option value="=">=</option>\n' +
+                            '                                        <option value="!=">&lt&gt</option>\n' +
+                            '                                        <option value=">=">≥</option>\n' +
+                            '                                        <option value=">">&gt</option>\n'+
+                            '                                        <option value="<=">≤</option>\n'+
+                            '                                        <option value="<">&lt</option>');
+                    }else{
+                        elem.empty().append('');
+                        elem.append('<option value="=">等于</option>\n' +
+                            '                                        <option value="!=">不等于</option>\n' +
+                            '                                        <option value="like">包含</option>\n' +
+                            '                                        <option value="not like">不包含</option>');
+                    }
+                    form.render();
+                });
+            };
+            var bindAdd=function(index){
+                //增加一个查询条件
+                $('#budget-add'+index).off('click').on('click',function () {
+                    searchLength++;
+                    // if(searchArr.length<11){
+                    searchArr.push({'id':searchLength,'value':''});
+                    addItem();
+                    bindSelect(searchLength);
+                    bindAdd(searchLength);
+                    binDel(searchLength);
+                    // }
+
+                });
+            };
+
+            var binDel=function(index){
+                $('#budget-del'+index).off('click').on('click',function () {
+                    var idx=$(this).attr('del-index');
+                    if(searchArr.length>1){
+                        for (var i = 0; i <searchArr.length ; i++) {
+                            if(idx==searchArr[i].id){
+                                searchArr.splice(i,1)
+                            }
+                        }
+                        $(this).parent().parent('.layui-form-item'+idx).remove();
+                    }
+
+                });
+            };
+            bindSelect(searchLength);
+            bindAdd(searchLength);
+            binDel(searchLength);
+
+            //查询
+            $('#searchBudget').off('click').on('click',function() {
+                var obj={
+                    "projectNames": [],
+                    "propertys": [],
+                    "propertyIds": [],
+                    "usnames": [],
+                    "cycleBegins":[],
+                    "cycleEnds":[],
+                    "finishedStatus": [],
+                    "worktimes": [],
+                    "createUserNames": [],
+                    "createTimes": [],
+                    "updateTimes": [],
+                };
+                var allObject=[];
+                for (var i = 0; i <searchArr.length ; i++) {
+                    var searchStr=$("#budget_select"+searchArr[i].id+" option:selected").attr('data-searchstr');
+                    var searchName=$("#budget_select"+searchArr[i].id+" option:selected").val();
+                    var logic=$("#budget_and"+searchArr[i].id+" option:selected").val();
+                    var operator=$("#budget_Symbol"+searchArr[i].id+" option:selected").val();
+                    var valueInput =$("#search-budget"+searchArr[i].id).val();
+                    if(searchName=='4'){
+                        valueInput=$("#budget_type"+searchArr[i].id).val();
+                    }else if(searchName=='2'){
+                        valueInput=$("#budget_attr"+searchArr[i].id).val();
+
+                    }
+                    if(operator=='like'||operator=='not like'){
+                        valueInput='%'+valueInput+'%';
+                    }
+
+                    var valueDate=$("#dateBudget"+searchArr[i].id)[0].value+" 00:00:00";
+                    switch (searchName) {
+                        case '1':
+                            obj.projectNames.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '2':
+                            obj.propertys.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '3':
+                            obj.usnames.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '4':
+                            obj.propertyIds.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '5':
+                            obj.cycleBegins.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueDate ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '6':
+                            obj.cycleEnds.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueDate ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '7':
+                            obj.finishedStatus.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '8':
+                            obj.worktimes.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '9':
+                            obj.createUserNames.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '10':
+                            obj.createTimes.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueDate ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '11':
+                            obj.updateTimes.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueDate ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                }
+                var nameValue=(searchName=='5'||searchName=='6'||searchName=='12'||searchName=='13')?valueDate:valueInput;
+                if(nameValue){
+                    allObject.push(
+                        {
+                            "logic":logic ,
+                            "name": nameValue,
+                            "operator": operator,
+                            "searchField":searchStr
+                        }
+                    );
+                }
+            }
+            if(allObject.length!=0) {
+                obj.allObject=allObject;
+            }
+            tableInit(obj);
+            });
+            var reset =function(index){
+                $("#budget_select"+index+" option[value='']").prop('selected', 'selected');
+                $("#budget_and"+index+" option[value='1']").prop('selected', 'selected');
+                var elem = $('#budget_Symbol'+index);
+                elem.empty().append('');
+                elem.append('<option value="=">等于</option>\n' +
+                    '                                        <option value="!=">不等于</option>\n' +
+                    '                                        <option value="like">包含</option>\n' +
+                    '                                        <option value="not like">不包含</option>');
+                $("#search-budget"+index).val("");
+                $("#search-budget"+index).show();
+                $("#dateBudget"+index).val("");
+                $("#dateBudget"+index).hide();
+                $('#budget_attrShow'+index).hide();
+                $('#budget_typeShow'+index).hide();
+                form.render();
+            };
+            //重置
+            $('#resetBudget').off('click').on('click',function() {
+                tableInit();
+                for (var i = 0; i <searchArr.length ; i++) {
+                    reset(searchArr[i].id);
+                }
+            });
+        }
+        budgetFun();
+
+        var projectFun =function () {
+            // 渲染表格
+            function tableInit(search) {
+                if (!search) {
+                    search = {};
+                }
+                table.render({
+                    elem: '#tableContent-form2',
+                    url: admin.formatUrl('/api/budget/project/findByPage'), //数据接口
+                    method: 'POST',
+                    contentType: 'application/json',
+                    parseData: function (res) { //res 即为原始返回的数据
+                        for (var i = 0; i <res.data.list.length ; i++) {
+                            res.data.list[i].projectBeginTime=tools.getDate(res.data.list[i].projectBeginTime,"YYYY-MM-DD");
+                            res.data.list[i].createTime=tools.getDate(res.data.list[i].createTime,"YYYY-MM-DD");
+                            if(!res.data.list[i].contractAmountStr){
+                                res.data.list[i].contractAmountStr=0;
+                            }
+                        }
+                        // layer.close(index);
+                        // 返回结果，进行渲染表格
+                        return {
+                            "count": res.data.count,
+                            "code": res.respCode, //解析接口状态
+                            "msg": res.message, //解析提示文本
+                            "data": res.data.list //解析数据列表
+                        };
+                    },
+                    request: {
+                        pageName: 'page',
+                        limitName: 'pageSize'
+                    },
+                    cols: [
+                        [{
+                            title: '项目名称',
+                            field: 'name',
+                            align: 'center'
+                        }, {
+                            title: '所属业务',
+                            field: 'budget',
+                            align: 'center'
+                        }, {
+                            title: '负责人',
+                            field: 'projectLeader',
+                            align: 'center'
+                        }, {
+                            title: '项目创建时间',
+                            field: 'projectBeginTime',
+                            align: 'center'
+                        }, {
+                            title: '项目状态',
+                            field: 'finishedStatus',
+                            align: 'center'
+                        }, {
+                            title: '项目累计人天投入',
+                            field: 'contractAmountStr',
+                            align: 'center'
+                        }, {
+                            title: '创建人',
+                            field: 'createUserName',
+                            align: 'center'
+                        }, {
+                            title: '创建时间',
+                            field: 'createTime',
+                            align: 'center'
+                        }]
+                    ],
+                    page: true,
+                    limit: 10, //显示的数量
+                    limits:[10,15,20,25,30],
+                    where: search,
+                    done:function(){
+                        $(".botTable").each(function () {
+                            $(this).find('.layui-table-body').find('td').each(function(){
+                                $(this).prop('title',$(this).children()[0].textContent)
+                            })
+                        })
+                    }
+                });
+            }
+
+            tableInit();
+            //查询条件对应的id数字
+            var searchLength=1;
+            //查询条件的个数
+            var searchArr=[{'id':1,'value':''}];
+            laydate.render({
+                elem: '#dateProject'+searchLength,
+                type: 'date',
+            });
+            var addItem=function () {
+                $('#projectItem').append('<div class="layui-form-item'+searchLength+' layui-form-item"  style="margin:15px 15px 15px 50px;">\n' +
+                    '                                <div class="layui-inline searchInfo" >\n' +
+                    '                                    <div class="layui-inline " style="float: left;width:160px">\n' +
+                    '                                        <select   name="project_select'+searchLength+'" id="project_select'+searchLength+'"  lay-filter="project_select'+searchLength+'" >\n' +
+                    '                                            <option value=""  selected>请选择</option>\n' +
+                    '                                            <option value="1" data-searchstr="projectName">项目名称</option>\n' +
+                    '                                            <option value="2" data-searchstr="budgetBelong">所属业务</option>\n' +
+                    '                                            <option value="3" data-searchstr="projectLeader">负责人</option>\n' +
+                    '                                            <option value="4" data-searchstr="projectCreateDate">项目创建时间</option>\n' +
+                    '                                            <option value="5" data-searchstr="projectStatus">项目状态</option>\n' +
+                    // '                                            <option value="6">项目累计人天投入</option>\n' +
+                    '                                            <option value="7" data-searchstr="createUser">创建人</option>\n' +
+                    '                                            <option value="8" data-searchstr="createDate">创建时间</option>\n' +
+                    '                                        </select>\n' +
+                    '                                    </div>\n' +
+                    '                                    <div class="layui-inline" style="float: left;width:150px">\n' +
+                    '                                        <select   name="project_Symbol'+searchLength+'" id="project_Symbol'+searchLength+'"  lay-filter="project_Symbol'+searchLength+'" >\n' +
+                    '                                            <option value="=">等于</option>\n' +
+                    '                                            <option value="!=">不等于</option>\n' +
+                    '                                            <option value="like">包含</option>\n' +
+                    '                                            <option value="not like">不包含</option>\n' +
+                    '                                        </select>\n' +
+                    '                                    </div>\n' +
+                    '                                    <input name="searchField" type="text" placeholder="单行输入" style="margin-right:10px" class="layui-input setInput" id="search-project'+searchLength+'">\n' +
+                    '                                    <input autocomplete="off" style="display: none;" type="text" name="dateProject'+searchLength+'" id="dateProject'+searchLength+'" placeholder="日期" class="layui-input setInput" >\n' +
+                    '                                   <div class="layui-inline" style="float: left;width:100px">\n' +
+                    '                                        <select  name="project_and'+searchLength+'" id="project_and'+searchLength+'"   lay-filter="project_and" >\n' +
+                    '                                            <option value="and">且</option>\n' +
+                    '                                            <option value="or">或</option>\n' +
+                    '                                        </select>\n' +
+                    '                                    </div>\n'+
+                    '                                </div>\n' +
+                    '                                <div class="layui-inline" style="margin-left: 80px;">\n' +
+                    '                                    <button id="project-add'+searchLength+'" class="layui-btn layui-btn-sm layui-btn-normal " style="background-color: #2696ff;color:#fff" lay-submit >+</button>\n' +
+                    '                                    <button id="project-del'+searchLength+'" del-index="'+searchLength+'" class="layui-btn layui-btn-sm layui-btn-normal " style="background-color: #2696ff;color:#fff" lay-submit >-</button>\n' +
+                    '                                </div>\n'+
+                    '                        </div>');
+                laydate.render({
+                    elem: '#dateProject'+searchLength,
+                    type: 'date',
+                });
+                // getSelect(searchLength);
+                form.render();
+            };
+            addItem();
+            //绑定选择条件下垃圾与符号联动事件
+            var bindSelect=function(index){
+                form.on('select(project_select'+index+')', function(data) {
+                    for (var i = 0; i <searchArr.length ; i++) {
+                        if(index==searchArr[i].id){
+                            searchArr[i].value=data.value;
+                        }
+                    }
+                    // delSelect(index,data.value);
+                    var elem = $('#project_Symbol'+index);
+                    if(data.value==4||data.value==8||data.value==9){
+                        $('#dateProject'+index).show();
+                        $('#search-project'+index).hide();
+                    }else {
+                        $('#dateProject' + index).hide();
+                        $('#search-project' + index).show();
+                    }
+                    if(data.value==4||data.value==8||data.value==9||data.value==6){
+                        elem.empty().append('');
+                        elem.append('<option value="=">=</option>\n' +
+                            '                                        <option value="!=">&lt&gt</option>\n' +
+                            '                                        <option value=">=">≥</option>\n' +
+                            '                                        <option value=">">&gt</option>\n'+
+                            '                                        <option value="<=">≤</option>\n'+
+                            '                                        <option value="<">&lt</option>');
+                    }else{
+                        elem.empty().append('');
+                        elem.append('<option value="=">等于</option>\n' +
+                            '                                        <option value="!=">不等于</option>\n' +
+                            '                                        <option value="like">包含</option>\n' +
+                            '                                        <option value="not like">不包含</option>');
+                    }
+                    form.render();
+                });
+            };
+            var bindAdd=function(index){
+                //增加一个查询条件
+                $('#project-add'+index).off('click').on('click',function () {
+                    searchLength++;
+                    // if(searchArr.length<11){
+                    searchArr.push({'id':searchLength,'value':''});
+                    addItem();
+                    bindSelect(searchLength);
+                    bindAdd(searchLength);
+                    binDel(searchLength);
+                    // }
+
+                });
+            };
+            var binDel=function(index){
+                $('#project-del'+index).off('click').on('click',function () {
+                    var idx=$(this).attr('del-index');
+                    if(searchArr.length>1){
+                        for (var i = 0; i <searchArr.length ; i++) {
+                            if(idx==searchArr[i].id){
+                                searchArr.splice(i,1)
+                            }
+                        }
+                        $(this).parent().parent('.layui-form-item'+idx).remove();
+                    }
+
+                });
+            };
+            bindSelect(searchLength);
+            bindAdd(searchLength);
+            binDel(searchLength);
+
+            //查询
+            $('#searchProject').off('click').on('click',function() {
+                var obj={
+                    "budgetBelong": [],
+                    "createDate": [],
+                    "createUser": [],
+                    "inputPersonDay": [],
+                    "projectCreateDate": [],
+                    "projectLeader": [],
+                    "projectName": [],
+                    "projectStatus": [],
+                    "updateDate": []
+                };
+                var allObject=[];
+                for (var i = 0; i <searchArr.length ; i++) {
+                    var searchStr=$("#project_select"+searchArr[i].id+" option:selected").attr('data-searchstr');
+                    var searchName=$("#project_select"+searchArr[i].id+" option:selected").val();
+                    var logic=$("#project_and"+searchArr[i].id+" option:selected").val();
+                    var operator=$("#project_Symbol"+searchArr[i].id+" option:selected").val();
+                    var valueInput=$("#search-project"+searchArr[i].id).val();
+
+                    var valueDate=dateChange($("#dateProject"+searchArr[i].id)[0].value);
+                    switch (searchName) {
+                        case '1':
+                            obj.projectName.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '2':
+                            obj.budgetBelong.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '3':
+                            obj.projectLeader.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '4':
+                            obj.projectCreateDate.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueDate ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '5':
+                            obj.projectStatus.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '6':
+                            obj.inputPersonDay.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '7':
+                            obj.createUser.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '8':
+                            obj.createDate.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueDate ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                    }
+                    var nameValue=(searchName=='4'||searchName=='8')?valueDate:valueInput;
+                    if(nameValue){
+                        allObject.push(
+                            {
+                                "logic":logic ,
+                                "name":nameValue ,
+                                "operator": operator,
+                                "searchField":searchStr
+                            }
+                        );
+                    }
+                }
+                if(allObject.length!=0){
+                    obj.allObject=allObject;
+                }
+                tableInit(obj);
+            });
+            var reset =function(index){
+                $("#project_select"+index+" option[value='']").prop('selected', 'selected');
+                $("#project_and"+index+" option[value='1']").prop('selected', 'selected');
+                var elem = $('#project_Symbol'+index);
+                elem.empty().append('');
+                elem.append('<option value="=">等于</option>\n' +
+                    '                                        <option value="!=">不等于</option>\n' +
+                    '                                        <option value="like">包含</option>\n' +
+                    '                                        <option value="not like">不包含</option>');
+                $("#search-project"+index).val("");
+                $("#search-project"+index).show();
+                $("#dateProject"+index).val("");
+                $("#dateProject"+index).hide();
+                form.render();
+            };
+            //重置
+            $('#resetProject').off('click').on('click',function() {
+                tableInit();
+                for (var i = 0; i <searchArr.length ; i++) {
+                    reset(searchArr[i].id);
+                }
+            });
+        }
+
+        var taskFun =function () {
+            // 渲染表格
+            function tableInit(search) {
+                if (!search) {
+                    search = {};
+                }
+                table.render({
+                    elem: '#tableContent-form3',
+                    url: admin.formatUrl('/api/budget/task/findByPage'), //数据接口
+                    method: 'POST',
+                    contentType: 'application/json',
+                    parseData: function (res) { //res 即为原始返回的数据
+                        for (var i = 0; i <res.data.list.length ; i++) {
+
+                            res.data.list[i].planStartTime=tools.getDate(res.data.list[i].planStartTime,"YYYY-MM-DD");
+                            res.data.list[i].planTypes=(res.data.list[i].projectId&&!res.data.list[i].budgetId)?'项目任务':'业务任务';
+                            res.data.list[i].planEndTime=tools.getDate(res.data.list[i].planEndTime,"YYYY-MM-DD");
+                            res.data.list[i].createTime=tools.getDate(res.data.list[i].createTime,"YYYY-MM-DD");
+                            res.data.list[i].modifyTime=tools.getDate(res.data.list[i].modifyTime,"YYYY-MM-DD");
+                            res.data.list[i].workTime=res.data.list[i].workTime?res.data.list[i].workTime.toFixed(2):res.data.list[i].workTime;
+                            res.data.list[i].memberNames.join('、');
+                        }
+                        // layer.close(index);
+                        // 返回结果，进行渲染表格
+                        return {
+                            "count": res.data.count,
+                            "code": res.respCode, //解析接口状态
+                            "msg": res.message, //解析提示文本
+                            "data": res.data.list //解析数据列表
+                        };
+                    },
+                    request: {
+                        pageName: 'page',
+                        limitName: 'pageSize'
+                    },
+                    cols: [
+                        [{
+                            title: '任务名称',
+                            field: 'name',
+                            align: 'center'
+                        }, {
+                            title: '优先级',
+                            field: 'priority',
+                            align: 'center'
+                        }, {
+                            title: '任务类型',
+                            field: 'planTypes',
+                            align: 'center'
+                        },
+                            {
+                            title: '任务成员',
+                            field: 'memberNames',
+                            align: 'center'
+                        }, {
+                            title: '任务开始时间',
+                            field: 'planStartTime',
+                            align: 'center'
+                        }, {
+                            title: '任务结束时间',
+                            field: 'planEndTime',
+                            align: 'center'
+                        }, {
+                            title: '任务状态',
+                            field: 'taskStatus',
+                            align: 'center'
+                        }, {
+                            title: '任务所属业务',
+                            field: 'budgetName',
+                            align: 'center'
+                        }, {
+                            title: '任务所属项目',
+                            field: 'projectName',
+                            align: 'center'
+                        }, {
+                            title: '任务累计人天投入',
+                            field: 'workTime',
+                            align: 'center'
+                        }, {
+                            title: '创建人',
+                            field: 'createUserName',
+                            align: 'center'
+                        }, {
+                            title: '创建时间',
+                            field: 'createTime',
+                            align: 'center'
+                        },
+                        //     {
+                        //     title: '修改时间',
+                        //     field: 'modifyTime',
+                        //     align: 'center'
+                        // }
+                        ]
+                    ],
+                    page: true,
+                    limit: 10, //显示的数量
+                    limits:[10,15,20,25,30],
+                    where: search,
+                    done:function(){
+                        $(".botTable").each(function () {
+                            $(this).find('.layui-table-body').find('td').each(function(){
+                                $(this).prop('title',$(this).children()[0].textContent)
+                            })
+                        })
+                    }
+                });
+
+            }
+
+            tableInit();
+
+
+
+
+            //查询条件对应的id数字
+            var searchLength=1;
+            //查询条件的个数
+            var searchArr=[{'id':1,'value':''}];
+            laydate.render({
+                elem: '#dateTask'+searchLength,
+                type: 'date',
+            });
+            var addItem=function () {
+                $('#taskItem').append('<div class="layui-form-item'+searchLength+' layui-form-item"  style="margin:15px 15px 15px 50px;">\n' +
+                    '                                <div class="layui-inline searchInfo" >\n' +
+                    '                                    <div class="layui-inline " style="float: left;width:160px">\n' +
+                    '                                        <select   name="task_select'+searchLength+'" id="task_select'+searchLength+'"  lay-filter="task_select'+searchLength+'" >\n' +
+                    '                                            <option value=""  selected>请选择</option>\n' +
+                    '                                            <option value="1" data-searchstr="names">任务名称</option>\n' +
+                    '                                            <option value="2" data-searchstr="prioritys">优先级</option>\n' +
+                    '                                            <option value="3" data-searchstr="types">任务类型</option>\n' +
+                    '                                           <option value="4" data-searchstr="memberNames">任务成员</option>\n' +
+                    '                                            <option value="5" data-searchstr="planStartTimes">任务开始时间</option>\n' +
+                    '                                            <option value="6" data-searchstr="planEndTimes">任务结束时间</option>\n' +
+                    '                                            <option value="7" data-searchstr="taskStatus">任务状态</option>\n' +
+                    '                                            <option value="8" data-searchstr="budgetNames">任务所属业务</option>\n' +
+                    '                                            <option value="9" data-searchstr="projectNames">任务所属项目</option>\n' +
+                    // '                                            <option value="10" data-searchstr="workTimes">任务累计人天投入</option>\n' +
+                    '                                            <option value="11" data-searchstr="createUserNames">创建人</option>\n' +
+                    '                                            <option value="12" data-searchstr="createTimes">创建时间</option>\n' +
+                    // '                                            <option value="13">修改时间</option>'+
+                    '                                        </select>\n' +
+                    '                                    </div>\n' +
+                    '                                    <div class="layui-inline" style="float: left;width:150px">\n' +
+                    '                                        <select   name="task_Symbol'+searchLength+'" id="task_Symbol'+searchLength+'"  lay-filter="task_Symbol'+searchLength+'" >\n' +
+                    '                                            <option value="=">等于</option>\n' +
+                    '                                            <option value="!=">不等于</option>\n' +
+                    '                                            <option value="like">包含</option>\n' +
+                    '                                            <option value="not like">不包含</option>\n' +
+                    '                                        </select>\n' +
+                    '                                    </div>\n' +
+                    '                                    <input name="searchField" type="text" placeholder="单行输入" style="margin-right:10px" class="layui-input setInput" id="search-task'+searchLength+'">\n' +
+                    '                                    <input autocomplete="off" style="display: none;" type="text" name="dateTask'+searchLength+'" id="dateTask'+searchLength+'" placeholder="日期" class="layui-input setInput" >\n' +
+                    '                                   <div class="layui-inline" id="task_typeShow'+searchLength+'" style="display:none;float: left;width:100px">\n' +
+                    '                                        <select  name="task_type'+searchLength+'" id="task_type'+searchLength+'"   lay-filter="task_type" >\n' +
+                    '                                            <option value="1">项目任务</option>\n' +
+                    '                                            <option value="0">业务任务</option>\n' +
+                    '                                        </select>\n' +
+                    '                                    </div>\n'+
+                    '                                   <div class="layui-inline" id="task_priorityShow'+searchLength+'" style="display:none;float: left;width:100px">\n' +
+                    '                                        <select  name="task_priority'+searchLength+'" id="task_priority'+searchLength+'"   lay-filter="task_priority" >\n' +
+                    '                                            <option value="紧急">紧急</option>\n' +
+                    '                                            <option value="普通">普通</option>\n' +
+                    '                                            <option value="十分紧急">十分紧急</option>\n' +
+                    '                                        </select>\n' +
+                    '                                    </div>\n'+
+                    '                                   <div class="layui-inline" id="task_statusShow'+searchLength+'" style="display:none;float: left;width:100px">\n' +
+                    '                                        <select  name="task_status'+searchLength+'" id="task_status'+searchLength+'"   lay-filter="task_status" >\n' +
+                    '                                            <option value="进行中">进行中</option>\n' +
+                    '                                            <option value="审批中">审批中</option>\n' +
+                    '                                            <option value="未完成">未完成</option>\n' +
+                    '                                            <option value="已完成">已完成</option>\n' +
+                    '                                        </select>\n' +
+                    '                                    </div>\n'+
+                    '                                   <div class="layui-inline" style="float: left;width:100px">\n' +
+                    '                                        <select  name="task_and'+searchLength+'" id="task_and'+searchLength+'"   lay-filter="task_and" >\n' +
+                    '                                            <option value="and">且</option>\n' +
+                    '                                            <option value="or">或</option>\n' +
+                    '                                        </select>\n' +
+                    '                                    </div>\n'+
+                    '                                </div>\n' +
+                    '                                <div class="layui-inline" style="margin-left: 80px;">\n' +
+                    '                                    <button id="task-add'+searchLength+'" class="layui-btn layui-btn-sm layui-btn-normal " style="background-color: #2696ff;color:#fff" lay-submit >+</button>\n' +
+                    '                                    <button id="task-del'+searchLength+'" del-index="'+searchLength+'" class="layui-btn layui-btn-sm layui-btn-normal " style="background-color: #2696ff;color:#fff" lay-submit >-</button>\n' +
+                    '                                </div>\n'+
+                    '                        </div>');
+                laydate.render({
+                    elem: '#dateTask'+searchLength,
+                    type: 'date',
+                });
+                // getSelect(searchLength);
+                form.render();
+            };
+            addItem();
+            //绑定选择条件下垃圾与符号联动事件
+            var bindSelect=function(index){
+                form.on('select(task_select'+index+')', function(data) {
+                    for (var i = 0; i <searchArr.length ; i++) {
+                        if(index==searchArr[i].id){
+                            searchArr[i].value=data.value;
+                        }
+                    }
+                    var elem = $('#task_Symbol'+index);
+                    if(data.value==5||data.value==6||data.value==12||data.value==13){
+                        $('#dateTask'+index).show();
+                        $('#search-task'+index).hide();
+                        $('#task_typeShow'+index).hide();
+                        $('#task_priorityShow'+index).hide();
+                        $('#task_statusShow'+index).hide();
+                    }else if(data.value==3){
+                        $('#task_typeShow'+index).show();
+                        $('#dateTask'+index).hide();
+                        $('#search-task'+index).hide();
+                        $('#task_priorityShow'+index).hide();
+                        $('#task_statusShow'+index).hide();
+                    }else if(data.value==2){
+                        $('#task_priorityShow'+index).show();
+                        $('#task_typeShow'+index).hide();
+                        $('#dateTask'+index).hide();
+                        $('#search-task'+index).hide();
+                        $('#task_statusShow'+index).hide();
+                    }else if(data.value==10){
+                        $('#search-task'+index).show();
+                        $('#dateTask'+index).hide();
+                        $('#task_typeShow'+index).hide();
+                        $('#task_priorityShow'+index).hide();
+                        $('#task_statusShow'+index).hide();
+                    }else if(data.value==7){
+                        $('#task_statusShow'+index).show();
+                        $('#search-task'+index).hide();
+                        $('#dateTask'+index).hide();
+                        $('#task_typeShow'+index).hide();
+                        $('#task_priorityShow'+index).hide();
+                    }else{
+                        $('#search-task'+index).show();
+                        $('#dateTask'+index).hide();
+                        $('#task_typeShow'+index).hide();
+                        $('#task_priorityShow'+index).hide();
+                        $('#task_statusShow'+index).hide();
+                    }
+                    if(data.value==5||data.value==6||data.value==12||data.value==13||data.value==10){
+                        elem.empty().append('');
+                        elem.append('<option value="=">=</option>\n' +
+                            '                                        <option value="!=">&lt&gt</option>\n' +
+                            '                                        <option value=">=">≥</option>\n' +
+                            '                                        <option value=">">&gt</option>\n'+
+                            '                                        <option value="<=">≤</option>\n'+
+                            '                                        <option value="<">&lt</option>');
+                    }else if(data.value==3||data.value==7||data.value==2){
+                        elem.empty().append('');
+                        elem.append('<option value="=">等于</option>\n' +
+                            '                                        <option value="!=">不等于</option>');
+                    }else{
+                        elem.empty().append('');
+                        elem.append('<option value="=">等于</option>\n' +
+                            '                                        <option value="!=">不等于</option>\n' +
+                            '                                        <option value="like">包含</option>\n' +
+                            '                                        <option value="not like">不包含</option>');
+                    }
+                    form.render();
+                });
+            };
+            var bindAdd=function(index){
+                //增加一个查询条件
+                $('#task-add'+index).off('click').on('click',function () {
+                    searchLength++;
+                    // if(searchArr.length<11){
+                    searchArr.push({'id':searchLength,'value':''});
+                    addItem();
+                    bindSelect(searchLength);
+                    bindAdd(searchLength);
+                    binDel(searchLength);
+                    // }
+
+                });
+            };
+            var binDel=function(index){
+                $('#task-del'+index).off('click').on('click',function () {
+                    var idx=$(this).attr('del-index');
+                    if(searchArr.length>1){
+                        for (var i = 0; i <searchArr.length ; i++) {
+                            if(idx==searchArr[i].id){
+                                searchArr.splice(i,1)
+                            }
+                        }
+                        $(this).parent().parent('.layui-form-item'+idx).remove();
+                    }
+
+                });
+            };
+            bindSelect(searchLength);
+            bindAdd(searchLength);
+            binDel(searchLength);
+
+            //查询
+            $('#searchTask').off('click').on('click',function() {
+                var obj={
+                    'names':[],
+                    'prioritys':[],
+                    'types':[],
+                    'memberNames':[],
+                    'planStartTimes':[],
+                    'planEndTimes':[],
+                    'taskStatus':[],
+                    'budgetNames':[],
+                    'projectNames':[],
+                    'workTimes':[],
+                    'createUserNames':[],
+                    'createTimes':[],
+                    'updateTimes':[],
+                };
+                var allObject=[];
+                for (var i = 0; i <searchArr.length ; i++) {
+                    var searchStr=$("#task_select"+searchArr[i].id+" option:selected").attr('data-searchstr');
+                    var searchName=$("#task_select"+searchArr[i].id+" option:selected").val();
+                    var logic=$("#task_and"+searchArr[i].id+" option:selected").val();
+                    var operator=$("#task_Symbol"+searchArr[i].id+" option:selected").val();
+                    var valueInput=$("#search-task"+searchArr[i].id).val();
+                    // var valueInput;
+                    if(searchName=='3'){
+                        valueInput=$("#task_type"+searchArr[i].id).val();
+                    }else if(searchName=='2'){
+                        valueInput=$("#task_priority"+searchArr[i].id).val();
+                    }else if(searchName=='7'){
+                        valueInput=$("#task_status"+searchArr[i].id).val();
+                    }
+                    var valueDate=dateChange($("#dateTask"+searchArr[i].id)[0].value);
+                    switch (searchName) {
+                        case '1':
+                            obj.names.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '2':
+                            obj.prioritys.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '3':
+                            obj.types.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '4':
+                            obj.memberNames.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '5':
+                            obj.planStartTimes.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueDate ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '6':
+                            obj.planEndTimes.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueDate ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '7':
+                            obj.taskStatus.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '8':
+                            obj.budgetNames.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '9':
+                            obj.projectNames.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '10':
+                            obj.workTimes.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '11':
+                            obj.createUserNames.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueInput ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '12':
+                            obj.createTimes.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueDate ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                        case '13':
+                            obj.updateTimes.push(
+                                {
+                                    "logic":logic ,
+                                    "name":valueDate ,
+                                    "operator": operator
+                                }
+                            );
+                            break;
+                    }
+                    var nameValue=(searchName=='5'||searchName=='6'||searchName=='12'||searchName=='13')?valueDate:valueInput;
+                    if(nameValue){
+                        allObject.push(
+                            {
+                                "logic":logic ,
+                                "name": nameValue,
+                                "operator": operator,
+                                "searchField":searchStr
+                            }
+                        );
+                    }
+                }
+                if(allObject.length!=0){
+                    obj.allObject=allObject;
+                }
+                tableInit(obj);
+            });
+            var reset =function(index){
+                $("#task_select"+index+" option[value='']").prop('selected', 'selected');
+                $("#task_and"+index+" option[value='1']").prop('selected', 'selected');
+                var elem = $('#task_Symbol'+index);
+                elem.empty().append('');
+                elem.append('<option value="=">等于</option>\n' +
+                    '                                        <option value="!=">不等于</option>\n' +
+                    '                                        <option value="like">包含</option>\n' +
+                    '                                        <option value="not like">不包含</option>');
+                $("#search-task"+index).val("");
+                $("#search-task"+index).show();
+                $("#dateTask"+index).val("");
+                $("#dateTask"+index).hide();
+                $('#task_typeShow'+index).hide();
+                $('#task_priorityShow'+index).hide();
+                $('#task_statusShow'+index).hide();
+                form.render();
+            };
+            //重置
+            $('#resetTask').off('click').on('click',function() {
+                tableInit();
+                for (var i = 0; i <searchArr.length ; i++) {
+                    reset(searchArr[i].id);
+                }
+            });
+        }
+    });
+</script>

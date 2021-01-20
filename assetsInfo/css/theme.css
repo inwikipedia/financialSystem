@@ -1,0 +1,98 @@
+/** 初始化全局标签 **/
+a{color: #188FFF;}
+a:hover{color: #40A9FF;}
+.backBlue{
+    background: rgba(0,143,195,1) !important;
+    color: #fff !important;
+}
+/* 后台框架大布局 */
+.layui-layout-admin .layui-header{background-color: #37ABFF;}
+
+/* 按钮 */
+.layui-btn-primary:hover{border-color: #55B7FF;color: #55B7FF;}
+.layui-btn-group .layui-btn-primary:hover{color: #229FFF;}
+.layui-btn-primary{border: 1px solid #dcdcdc;color: #646464;}
+.layui-btn-normal{background-color: #229FFF;}
+
+.layui-btn-sm{
+    font-size: 14px;
+    line-height: 26px;
+    height: 28px;
+    background: #fff;
+    color: #000;
+    border: 1px solid #e3e3e3;
+}
+.layui-table-view .layui-table td, .layui-table-view .layui-table th {
+    padding: 1px 0;
+    border-top: none;
+    border-left: none;
+}
+.layui-card-body {
+    position: relative;
+    padding: 4px 15px 9px 15px;
+    line-height: 24px;
+}
+.layui-form-item .layui-inline {
+    margin-bottom: 0;
+}
+/* 表单 */
+.layui-form-select dl dd.layui-this{background-color: #229FFF;}
+.layui-form-checked, .layui-form-checked:hover{border-color: #229FFF;}
+.layui-form-checked span, .layui-form-checked:hover span{background-color: #229FFF;}
+.layui-form-checked i, .layui-form-checked:hover i{color: #229FFF;}
+.layui-form-checkbox[lay-skin="primary"] span{background: none;}
+.layui-form-checkbox[lay-skin="primary"]:hover i{border-color: #229FFF;}
+.layui-form-checked[lay-skin="primary"] i{border-color: #229FFF; background-color: #229FFF;}
+.layui-form-onswitch{border-color: #229FFF; background-color: #229FFF;}
+.layui-form-radioed>i,.layui-form-radio>i:hover{color: #229FFF;}
+
+.layui-input, .layui-select{height: 30px;line-height: 28px;}
+
+/* 分页 */
+.layui-laypage a:hover{color: #55B7FF;}
+.layui-laypage .layui-laypage-curr .layui-laypage-em{background-color: #55B7FF;}
+.layui-laypage select:focus{border-color: #55B7FF !important;}
+
+/* 表格 */
+.layui-table-edit:focus{border-color: #229FFF !important;}
+
+.layui-table tbody tr:hover, .layui-table thead tr, .layui-table-click, .layui-table-header, .layui-table-hover, .layui-table-mend, .layui-table-patch, .layui-table-tool, .layui-table-total, .layui-table-total tr, .layui-table[lay-even] tr:nth-child(even){background-color: #fafafa;}
+
+/* 文件上传 */
+.layui-upload-drag .layui-icon{font-size: 50px; color: #229FFF;}
+.layui-upload-drag[lay-over]{border-color: #229FFF;}
+
+/* 树 */
+.layui-tree li .layui-tree-check:hover{color: #229FFF;}
+
+/* 导航菜单 */
+.layui-nav-tree .layui-nav-itemed:after{background-color: #5FB878;}
+.layui-nav-child dd.layui-this{background-color: #5FB878;}
+.layui-nav .layui-nav-child dd.layui-this a{background-color: #4F556E;}
+.layui-nav-tree .layui-nav-child dd.layui-this a{background-color: #0683DE;}
+.layui-nav-tree .layui-nav-bar{background-color: transparent;}
+.layui-bg-blue .layui-nav-bar,
+.layui-bg-blue .layui-this:after,
+.layui-bg-blue .layui-nav-itemed:after{background-color: #93D1FF;}
+.layui-bg-blue .layui-nav-child dd.layui-this{background-color: #1E9FFF;}
+.layui-nav-tree.layui-bg-blue .layui-nav-title a,
+.layui-nav-tree.layui-bg-blue .layui-nav-title a:hover, 
+.layui-bg-blue .layui-nav-itemed>a{background-color: #007DDB !important;}
+
+/* 面包屑 */
+.layui-breadcrumb a:hover{color: #229FFF !important;}
+
+/* tab */
+.layui-tab-brief > .layui-tab-title .layui-this{color: #229FFF;}
+.layui-tab-card > .layui-tab-more .layui-this{color: #229FFF;}
+
+/* 时间线 */
+.layui-timeline-axis{color: #229FFF;}
+
+/* 滑块 */
+.layui-slider-input-btn i:hover{color: #55B7FF;}
+
+/* 窗口下部的按钮居中 */
+.layui-layer-btn {
+    text-align: center!important;
+}

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>查看流程</title>
+    <style>
+        .infoMain {
+            padding: 50px 0px 0px 7%;
+            white-space: nowrap;
+            position: relative;
+            top:10%;
+        }
+
+        .info-text {
+            font-size: 14px;
+        }
+
+        .infoImg {
+            height: 42px;
+        }
+
+        .infoBox {
+            display: inline-block;
+            position: relative;
+            width: 160px;
+        }
+
+        .infoBox .iconImg {
+            position: absolute;
+            left: 45px;
+            top: 24px;
+        }
+
+        .infoBox .info-line {
+            width: calc(100% - 74px);
+            display: inline-block;
+            height: 2px;
+            background-color: #b7b7b7;
+            position: absolute;
+            top: 21px;
+        }
+
+        .infoBlock {
+            display: block;
+            /*margin-bottom: 5px;*/
+            position: relative;
+            width: 220px;
+            margin-top: -4px;
+        }
+
+        .infoBlock .iconImg {
+            position: absolute;
+            right: 12px;
+            top: 24px;
+
+        }
+
+        .infoBlock .info-line {
+            vertical-align: top;
+            width: calc(50% - 40px);
+            display: inline-block;
+            height: 2px;
+            background-color: #b7b7b7;
+        }
+
+        .infoBlock .line-col {
+            height: 78px;
+            background-color: #b7b7b7;
+            width: 2px;
+            display: inline-block;
+        }
+
+        .infoBlock .imgBox {
+            display: inline-block;
+            position: relative;
+            top: -42px;
+            width: 76px;
+            text-align: center;
+        }
+
+        .info-lastBlock .imgBox {
+            top: -21px;
+        }
+
+        .info-lastBlock .info-line {
+            width: calc(50% - 38px);
+        }
+
+        .noFirst {
+            position: relative;
+            left: -26px;
+        }
+        .info-content{
+            display: inline-block;
+            vertical-align: middle;
+            font-size:0;
+            margin-left: -4px;
+        }
+        .endBox{
+            background-color: #b7b7b7;
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            line-height: 42px;
+            text-align: center;
+        }
+        .endBlock{
+            height: 62px;
+            vertical-align: text-bottom;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="infoMain" id="infoMain">
+    <!--<div class="infoBox">-->
+        <!--<div style="display: inline-block;text-align: center;width: 70px">-->
+            <!--<img class="infoImg" src="/assetsInfo/images/tx2.png">-->
+            <!--<div class="info-text">哈哈哈哈哈</div>-->
+            <!--<img class="iconImg" src="/assetsInfo/images/red.png">-->
+        <!--</div>-->
+        <!--<div class="info-line"></div>-->
+    <!--</div>-->
+
+    <!--<div class="info-content">-->
+        <!--<div class=" infoBlock">-->
+            <!--<div class="line-col "></div>-->
+            <!--<div class="info-line"></div>-->
+            <!--<div class="imgBox">-->
+                <!--<img class="infoImg" src="/assetsInfo/images/tx2.png">-->
+                <!--<div class="info-text">哈哈哈哈哈</div>-->
+                <!--<img class="iconImg" src="/assetsInfo/images/red.png">-->
+            <!--</div>-->
+            <!--<div class="info-line"></div>-->
+            <!--<div class="line-col"></div>-->
+        <!--</div>-->
+        <!--<div class=" infoBlock">-->
+            <!--<div class="line-col "></div>-->
+            <!--<div class="info-line"></div>-->
+            <!--<div class="imgBox">-->
+                <!--<img class="infoImg" src="/assetsInfo/images/tx2.png">-->
+                <!--<div class="info-text">哈哈哈哈哈</div>-->
+                <!--<img class="iconImg" src="/assetsInfo/images/red.png">-->
+            <!--</div>-->
+            <!--<div class="info-line"></div>-->
+            <!--<div class="line-col"></div>-->
+        <!--</div>-->
+        <!--<div class=" infoBlock">-->
+            <!--<div class="line-col "></div>-->
+            <!--<div class="info-line"></div>-->
+            <!--<div class="imgBox">-->
+                <!--<img class="infoImg" src="/assetsInfo/images/tx2.png">-->
+                <!--<div class="info-text">哈哈哈哈哈</div>-->
+                <!--<img class="iconImg" src="/assetsInfo/images/red.png">-->
+            <!--</div>-->
+            <!--<div class="info-line"></div>-->
+            <!--<div class="line-col"></div>-->
+        <!--</div>-->
+        <!--<div class=" infoBlock">-->
+            <!--<div class="line-col "></div>-->
+            <!--<div class="info-line"></div>-->
+            <!--<div class="imgBox">-->
+                <!--<img class="infoImg" src="/assetsInfo/images/tx2.png">-->
+                <!--<div class="info-text">哈哈哈哈哈</div>-->
+                <!--<img class="iconImg" src="/assetsInfo/images/red.png">-->
+            <!--</div>-->
+            <!--<div class="info-line"></div>-->
+            <!--<div class="line-col"></div>-->
+        <!--</div>-->
+        <!--<div class=" infoBlock info-lastBlock">-->
+            <!--<div class="info-line "></div>-->
+            <!--<div class="imgBox">-->
+                <!--<img class="infoImg" src="/assetsInfo/images/tx2.png">-->
+                <!--<div class="info-text">哈哈哈哈哈</div>-->
+                <!--<img class="iconImg" src="/assetsInfo/images/red.png">-->
+            <!--</div>-->
+            <!--<div class="info-line "></div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="infoBox" style="height: 57px;left: -26px;">-->
+        <!--<div class="info-line" style="width: 100%"></div>-->
+    <!--</div>-->
+    <!--<div class="noFirst info-content" >-->
+        <!--<div class=" infoBlock">-->
+            <!--<div class="line-col "></div>-->
+            <!--<div class="info-line"></div>-->
+            <!--<div class="imgBox">-->
+                <!--<img class="infoImg" src="/assetsInfo/images/tx2.png">-->
+                <!--<div class="info-text">哈哈哈哈哈</div>-->
+                <!--<img class="iconImg" src="/assetsInfo/images/red.png">-->
+            <!--</div>-->
+            <!--<div class="info-line"></div>-->
+            <!--<div class="line-col"></div>-->
+        <!--</div>-->
+        <!--<div class=" infoBlock">-->
+            <!--<div class="line-col "></div>-->
+            <!--<div class="info-line"></div>-->
+            <!--<div class="imgBox">-->
+                <!--<img class="infoImg" src="/assetsInfo/images/tx2.png">-->
+                <!--<div class="info-text">哈哈哈哈哈</div>-->
+                <!--<img class="iconImg" src="/assetsInfo/images/red.png">-->
+            <!--</div>-->
+            <!--<div class="info-line"></div>-->
+            <!--<div class="line-col"></div>-->
+        <!--</div>-->
+        <!--<div class=" infoBlock">-->
+            <!--<div class="line-col "></div>-->
+            <!--<div class="info-line"></div>-->
+            <!--<div class="imgBox">-->
+                <!--<img class="infoImg" src="/assetsInfo/images/tx2.png">-->
+                <!--<div class="info-text">哈哈哈哈哈</div>-->
+                <!--<img class="iconImg" src="/assetsInfo/images/red.png">-->
+            <!--</div>-->
+            <!--<div class="info-line"></div>-->
+            <!--<div class="line-col"></div>-->
+        <!--</div>-->
+        <!--<div class=" infoBlock">-->
+            <!--<div class="line-col "></div>-->
+            <!--<div class="info-line"></div>-->
+            <!--<div class="imgBox">-->
+                <!--<img class="infoImg" src="/assetsInfo/images/tx2.png">-->
+                <!--<div class="info-text">哈哈哈哈哈</div>-->
+                <!--<img class="iconImg" src="/assetsInfo/images/red.png">-->
+            <!--</div>-->
+            <!--<div class="info-line"></div>-->
+            <!--<div class="line-col"></div>-->
+        <!--</div>-->
+        <!--<div class=" infoBlock info-lastBlock">-->
+            <!--<div class="info-line "></div>-->
+            <!--<div class="imgBox">-->
+                <!--<img class="infoImg" src="/assetsInfo/images/tx2.png">-->
+                <!--<div class="info-text">哈哈哈哈哈</div>-->
+                <!--<img class="iconImg" src="/assetsInfo/images/red.png">-->
+            <!--</div>-->
+            <!--<div class="info-line "></div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="infoBox" style="height: 57px;left: -56px;">-->
+        <!--<div class="info-line" style="width: 100%"></div>-->
+    <!--</div>-->
+    <!--<div class="infoBox endBlock" style="left: -56px;">-->
+        <!--<div style="display: inline-block ">-->
+            <!--<div class="endBox"  >END</div>-->
+        <!--</div>-->
+    <!--</div>-->
+</div>
+</body>
+<script>
+
+</script>
+</html>

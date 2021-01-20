@@ -1,0 +1,454 @@
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+
+    .btn-width {
+        width: 100px;
+    }
+    body{
+        overflow-y: hidden;
+    }
+    .automobile .layui-table-box{
+        height: 90% !important;
+    }
+    .automobile .layui-table-body{
+        height: 93.5% !important;
+    }
+    .automobile .layui-form.layui-border-box.layui-table-view{
+        height: 490px !important;
+    }
+</style>
+
+<div class="layui-row layui-col-space15 automobile">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">车企月度销量</div>
+            <div class="layui-card-body">
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar">
+                        <div class="layui-inline">
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"
+                                    lay-filter="btn_add_form" lay-submit title="新建" id="btn-create">
+                                    <i class="layui-icon layui-icon-add-1"></i>
+                                    新建
+                                </button>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"
+                                    lay-filter="btn_add_form" lay-submit title="删除" id="checkData">
+                                    <i class="layui-icon layui-icon-delete"></i>
+                                    删除
+                                </button>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"
+                                    lay-filter="btn_add_form" lay-submit title="删除全部" id="deleteAll">
+                                    <i class="layui-icon layui-icon-delete"></i>
+                                    删除全部
+                                </button>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"
+                                    lay-filter="btn_download_project" lay-submit title="下载模板" id="btn_download_project">
+                                    <i class="layui-icon layui-icon-download-circle"></i>下载模板
+                                </button>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"
+                                    id="crm-customer-btn-import" lay-submit title="导入">
+                                    <i class="layui-icon layui-icon-upload-drag"></i>导入
+                                </button>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"
+                                    lay-filter="btn_add_form" lay-submit title="导出" id="btn_download_out">
+                                    <i class="layui-icon layui-icon-download-circle"></i>
+                                    导出
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table id="tableContent-form" lay-filter="tableContent-form"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+    <a class="table-control-btn table-control-btn-danger" lay-event="del">删除</a>
+</script>
+<script src="/assetsInfo/js/tempDown.js"></script>
+<script>
+    // DONE: 表单设计器内保存的表格宽度不是自适应的，需要处理一下
+    // Ueditor 编辑器全局变量
+    var ADCFormDesign = null;
+
+    layui.use(['table', 'upload'], function () {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer;
+        upload = layui.upload,
+            // 修改新增传递的参数
+            construction = {},
+            editId = '';
+        var heightTable = $(document).height()-140;
+        // 渲染表格
+        table.render({
+            elem: '#tableContent-form',
+            id: 'tableContent-form',
+            url: admin.formatUrl('/api/carsales/carSales/page'),
+            parseData: function (res) {
+                return {
+                    "code": res.respCode, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.list //解析数据列表
+                };
+            },
+            height: heightTable,
+            cols: [
+                [{
+                    type: 'checkbox'
+                },
+                {
+                    type: 'numbers', title: '#'
+                },
+                {
+                    field: 'enterpriseName',
+                    title: '企业名称',
+                    align: 'center',
+                    templet: function (d) {
+                        var text = d.enterpriseName ? d.enterpriseName : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                },
+                {
+                    field: 'monthSales',
+                    title: '月度销量',
+                    align: 'center',
+                    templet: function (d) {
+                        var text = d.monthSales ? d.monthSales : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                    field: 'growthRate',
+                    title: '增长率',
+                    align: 'center',
+                    templet: function (d) {
+                        var text = d.growthRate ? d.growthRate : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                    field: 'updateTime',
+                    title: '更新日期',
+                    align: 'center',
+                    templet: function (d) {
+                        var text = timestampToTime(d.updateTime)
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                    field: 'createUserName',
+                    title: '更新人',
+                    align: 'center',
+                    templet: function (d) {
+                        var text = d.createUserName ? d.createUserName : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                    templet: '#control-1',
+                    title: '操作',
+                    align: 'center',
+                    unresize: true
+                }]
+            ],
+            cellMinWidth: 120,
+            page: {
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+            },
+            request: {
+                page: 'pageNo',
+                limitName: 'pageSize'
+            },
+            where: {
+                design: 0
+            },
+            done: function (res, curr, count) {
+                if (curr > 1 && res.data.length == 0) {
+                    var pageValue = curr - 1;
+                    table.reload('tableContent-form', {
+                        page: { curr: pageValue },// 修改页码
+                    });
+                }
+            }
+        });
+        // 删除数据
+        $('#checkData').click(() => {
+            var checkStatus = layui.table.checkStatus('tableContent-form').data;
+            var delids = '';
+            if (checkStatus.length == 0 || checkStatus == []) {
+                layer.msg('请先选取删除数据');
+            } else {
+                for (let i = 0; i < checkStatus.length; i++) {
+                    if (checkStatus.length > 1) {
+                        delids += checkStatus[i].id + ',';
+                    } else {
+                        delids = checkStatus[i].id;
+                    }
+                }
+                checkDelets(delids, '您确定要删除选中的数据吗？')
+            }
+        })
+        $('#deleteAll').click(() => {
+            layer.confirm('您确定要清空数据吗?', {
+                icon: 3,
+                title: '提示'
+            }, function () {
+                admin.req('/api/carsales/carSales/deleteAll', {}, function (data) {
+                    if (data.ok) {
+                        layer.msg('清空成功！', {
+                            icon: 1
+                        });
+                        table.reload('tableContent-form', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    } else {
+                        return layer.msg('清空失败：' + data.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: 'delete'
+                });
+                form.render()
+            });
+        })
+        function checkDelets(delids, delTitle) {
+            layer.confirm(delTitle, {
+                icon: 3,
+                title: '提示'
+            }, function () {
+                admin.req('/api/carsales/carSales/batchDelete/' + delids, {}, function (data) {
+                    if (data.ok) {
+                        layer.msg('删除成功！', {
+                            icon: 1
+                        });
+                        table.reload('tableContent-form', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    } else {
+                        return layer.msg('删除失败：' + data.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: 'delete'
+                });
+                form.render()
+            });
+        }
+        // 将 table ID 存入数组
+        layui.admin.addTableCache('tableContent-form');
+        // 新建
+        $('#btn-create').off('click').on('click', function () {
+            popMenu('add', {})
+        });
+        // 导入
+        upload.render({
+            elem: '#crm-customer-btn-import',
+            url: '/api/carsales/carSales/excelImportCarSales', //上传接口
+            accept: 'file',
+            acceptMime: 'xlsx/xlsm',
+            before: function (obj) {
+                layer.load(); //上传loading
+            },
+            done: function (res) {
+                layer.closeAll();
+
+                if (res.respCode == 0) {
+                    layer.msg('导入成功！', {
+                        icon: 1
+                    });
+                    table.reload('tableContent-form', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                } else {
+                    return layer.msg('导入失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            },
+            error: function () {
+                //请求异常回调
+                layer.closeAll();
+                return layer.msg('导入出现错误，请重试！', {
+                    icon: 5
+                });
+            }
+        });
+        // 导出 下载模板
+        $('#btn_download_project').off("click").on('click', function () {
+            // window.open(admin.formatUrl('/api/carsales/carSales/excelExportCarSales'))
+            // console.log('模板下载')
+            tempDownByDicCode("car_sales_template");
+        });
+        $('#btn_download_out').on('click', function () {
+            window.open(admin.formatUrl('/ADC_info/api/carsales/carSales/excelExportCarSales'))
+        });
+        // 监听工具条事件 查看、编辑、删除
+        table.on('tool(tableContent-form)', function (obj) {
+            // 获取点击列的数据
+            var data = obj.data;
+            var layEvent = obj.event;
+            // 判断操作类型
+            if (layEvent === 'edit') {
+                popMenu("edit", data);
+            } else {
+                var delId = data.id;
+                checkDelets(delId, '您确定要删除这条数据吗？')
+            }
+        });
+        // 编辑弹框
+        function popMenu(type, data) {
+            var width = 700;
+            if (type === 'add') {
+                var title = '新增车企月度销量';
+                data = {};
+            } else if (type === 'edit') {
+                var title = '编辑车企月度销量：'
+            }
+            data.type = type;
+            editId = data.id;
+            admin.popupCenter({
+                title: title,
+                width: width,
+                path: 'components/automobile/automobileAdd.html',
+                finish: function () {
+                    table.reload('tableContent-form', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                },
+                success: function () {
+                    setFormValue(data);
+                    $('#user-area .layui-col-md6').removeClass("layui-col-md6");
+                    $('#user-detial-area').css("height", '220px');
+                    admin.showLoading('.roleName-loading');
+                    admin.showLoading('.orgName-loading');
+                    admin.showLoading('.userState-loading');
+                    form.render()
+                }
+            });
+        }
+        // 设置表单内容
+        function setFormValue(obj) {
+            var inputs = $('.layui-tpl-container').find('input'),
+                title = $('.layui-tpl-container .layui-card-header'),
+                formNames = ['enterpriseName', 'monthSales', 'growthRate', 'enterpriseId', 'type'];
+
+            obj.title && title.text(obj.title);
+            for (var i = 0; i < formNames.length; i++) {
+                if (obj[formNames[i]]) {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                } else {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val('');
+                }
+            }
+        }
+        // 表单提交
+        form.on('submit(menuSave_user)', function (data) {
+            // 获取表单数据
+            var d = data.field,
+                elem = data.elem;
+            // 判断是编辑还是新增
+            var ajaxName = '';
+            var urlType = '';
+            var api = '';
+            if (d.type === 'add') {
+                ajaxName = '新增车企月度销量';
+                urlType = 'POST';
+                api = '/api/carsales/carSales/create';
+            } else if (d.type === 'edit') {
+                ajaxName = '编辑车企月度销量';
+                urlType = 'PUT';
+                construction.id = editId;
+                api = '/api/carsales/carSales/update';
+            }
+            var ouputTarget = d.growthRate;
+            var len = ouputTarget.split('.');
+            if (len.length == 1) {
+                ouputTarget = ouputTarget + '.00';
+            } else {
+                if (len[1].length == 1) {
+                    ouputTarget = len[0] + '.' + len[1] + '0';
+                } else if (len[1].length == 0) {
+                    ouputTarget = len[0] + '.00';
+                } else {
+                    ouputTarget = len[0] + '.' + len[1]
+                }
+            }
+            // var account = JSON.parse(layui.data(config.tableName).account).usid;
+            construction.growthRate = ouputTarget;
+            construction.enterpriseName = d.enterpriseName;
+            construction.enterpriseId = d.enterpriseId;
+            construction.monthSales = d.monthSales;
+            // 发送请求
+            admin.req(api, construction, function (data) {
+                if (data.ok) {
+                    layer.msg(ajaxName + '成功！', {
+                        icon: 1
+                    });
+                    admin.finishPopupCenter();
+                } else {
+                    admin.closePopupCenter();
+                    return layer.msg(ajaxName + '失败：' + data.message, {
+                        icon: 5
+                    });
+                    admin.finishPopupCenter();
+                }
+            }, {
+                method: urlType
+            });
+
+        });
+        //时间戳转换年月日
+        function timestampToTime(timestamp) {
+            var date = new Date(timestamp);
+            Y = date.getFullYear() + '-';
+            M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+            D = (date.getDate() + 1 < 10 ? '0' + date.getDate() : date.getDate());
+            return Y + M + D;
+
+        }
+        // 同步阻塞加载 JS 文件
+        function loadJS(url, success) {
+            var domScript = document.createElement('script');
+            domScript.src = url;
+            success = success || function () { };
+            domScript.onload = domScript.onreadystatechange = function () {
+                if (!this.readyState || 'loaded' === this.readyState || 'complete' === this.readyState) {
+                    success();
+                    this.onload = this.onreadystatechange = null;
+                    this.parentNode.removeChild(this);
+                }
+            }
+            document.getElementsByTagName('head')[0].appendChild(domScript);
+        }
+    });
+</script>

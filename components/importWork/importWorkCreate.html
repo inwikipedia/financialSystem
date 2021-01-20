@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" http-equiv="Content-Type" content="text/html">
+    <title>上传文件</title>
+    <style>
+        .layui-tpl-container .p-form,
+        .layui-layout-body .layui-layer-page .layui-layer-content {
+            overflow: visible !important;
+        }
+        .briefing-btn{
+            height: 28px;
+            line-height: 28px;
+        }
+        .upload-label{
+            display: inline-block;
+            width: 60px;
+            text-align: left;
+        }
+        .upload-box{
+            display: inline-block;
+            width: calc(100% - 70px);
+        }
+        .briefingForm .layui-btn:not(.layui-btn-lg):not(.layui-btn-sm):not(.layui-btn-xs){
+            height: 30px;
+            line-height: 30px;
+        }
+        .briefingForm .briefingBtn{
+            width: 50px;
+            height: 24px !important;
+            color: white;
+            line-height: 24px !important;
+            padding: 0px !important;
+            margin-left: 5px !important;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layui-form-item briefingForm" style="text-align: center;padding: 60px 110px 0px">
+    <div class="layui-form" style="margin-bottom: 60px">
+        <!--<div class="layui-form-item">-->
+            <!--<div>-->
+                <!--<div class="upload-label">-->
+                    <!--<span style="color:red;">*</span><label > 日期：</label>-->
+                <!--</div>-->
+                <!--<input type="text" autocomplete="off" placeholder="请选择日期"  class="layui-input upload-box" id="briefingName"  lay-verify="required">-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="layui-form-item">
+            <div>
+                <div class="upload-label">
+                    <span style="color:red;">*</span><label> 附件：</label>
+                </div>
+                <div class="upload-box" style="text-align: left;">
+                    <input disabled type="text" placeholder="请上传文件" style="display: inline-block;width: calc(100% - 177px)" class="layui-input" id="fileBriefing"  lay-verify="required">
+                    <input style="display: none" id="upFileData" type="file">
+                    <button class="layui-btn briefingBtn layui-btn-normal" style="background-color: #87C459;" id="choiceFile">选择</button>
+                    <button class="layui-btn briefingBtn layui-btn-normal" style="background-color: #FD6567;" id="delFile">删除</button>
+                    <button class="layui-btn briefingBtn layui-btn-normal" style="background-color: #2293F9;" id="uploadFile">上传</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="layui-btn briefing-btn layui-btn-primary" id="saveBriefing" lay-submit lay-filter="saveBriefing">确定</button>
+    <button class="layui-btn briefing-btn layui-btn-primary" id="cancelBriefing">取消</button>
+</div>
+
+<input type="text" readonly id="queryFlag" style="display: none" >
+</body>
+
+</html>
+
+
+<script>
+    layui.use('upload', function() {
+        var upload = layui.upload;
+        var admin = layui.admin;
+        var form =layui.form;
+        var config =layui.config;
+        var laydate =layui.laydate;
+        var account = config.getAccount();
+        // laydate.render({
+        //     elem: "#briefingName",
+        //     range:true
+        // });
+        var dateChange=function(data){
+            var str = data.replace(/-/g,'/');
+            var date = new Date(str).getTime();
+            return date;
+        };
+        //获取uuid文件名称（去掉扩展名）
+        function getFileName(data) {
+
+            var str =data.substring(0,data.indexOf("."));
+            str= str.replace(/（/g, "(");
+            str= str.replace(/）/g, ")");
+            return str;
+        }
+        // 选择文件
+        $('#choiceFile').off('click').on('click',function () {
+            console.log($('#upFileData'));
+            $('#upFileData').click();
+        });
+        var changeFile=function(){
+            $('#upFileData').off('change').on('change',function () {
+                if(this.files[0]){
+                    $('#fileBriefing').val(getFileName(this.files[0].name));
+                    $('#fileBriefing').attr("title",getFileName(this.files[0].name));
+                    $('#fileBriefing').attr("data-name",this.files[0].name);
+                }else{
+                    $('#fileBriefing').val('');
+                    $('#fileBriefing').attr("title",'');
+                    $('#fileBriefing').attr("data-name",'');
+                }
+                $('#fileBriefing').attr('data-fileId','');
+                $('#fileBriefing').attr('data-fileType','');
+            });
+        };
+        changeFile();
+        // $('#briefingName').off('change').on('change',function () {
+        //     $('#briefingName').attr('title',this.value);
+        // });
+        // $('#fileBriefing').off('change').on('change',function () {
+        //     $('#fileBriefing').attr('title',this.value);
+        // });
+        //删除
+        $('#delFile').off('click').on('click',function () {
+            //防止上传相同文件时不会触发change事件，清空file的文件和值
+            var obj = document.getElementById('upFileData') ;
+            obj.outerHTML=obj.outerHTML;
+            $('#upFileData').val('');
+            changeFile();
+            if(!$('#fileBriefing').val()){
+                return  layer.msg('请选择文件', {
+                    icon: 5,
+                    time:1000
+                });
+            }
+            $('#fileBriefing').attr('data-fileId','');
+            $('#fileBriefing').attr('data-fileType','');
+            $('#fileBriefing').attr('data-name','');
+            $('#fileBriefing').attr('title','');
+            $('#fileBriefing').val('');
+        });
+        //上传
+        $('#uploadFile').off('click').on('click',function () {
+            var fileBriefingName = $('#fileBriefing').val();
+            var fileBriefingType = $('#fileBriefing').attr("data-name");
+            var fileDatta=$('#upFileData')[0].files[0];
+            if(!fileBriefingName||!fileDatta){
+                return  layer.msg('请选择文件', {
+                    icon: 5,
+                    time:1000
+                });
+            }
+            if(!/\(\d{1,2}月\d{1,2}日-\d{1,2}月\d{1,2}日\)$/.test(fileBriefingName)){
+                return  layer.msg('上传的文件名格式为：XXXX(X月X日-X月X日)', {
+                    icon: 5,
+                });
+            }
+            var fileBriefing =  $('#fileBriefing').attr('data-fileId');
+            var exts='xlsx|xls';
+            if(!RegExp("\\w\\.("+exts+")$","i").test(escape(fileBriefingType.toLowerCase()))){
+                return  layer.msg('只可上传excel文件', {
+                    icon: 5,
+                });
+            }
+            var formData = new FormData();
+            formData.append("file",$('#upFileData')[0].files[0]);
+            var index = layer.load(2);
+            $.ajax({
+                url:'/api/sys/file/upload', /*接口域名地址*/
+                type:'post',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success:function(res){
+                    layer.close(index);
+                    if(res.respCode === '0'){
+                        $('#fileBriefing').attr('data-fileId',res.data.fileId);
+                        $('#fileBriefing').attr('data-fileType',res.data.fileType);
+                        // $('#delFile').css('display','inline-block');
+                        layer.msg('上传成功！', {
+                            icon: 1
+                        });
+                    }else{
+                        layer.msg('上传失败！', {
+                            icon: 5
+                        });
+                    }
+                },
+                error:function (err) {
+                    layer.close(index);
+                    layer.msg('上传失败！', {
+                        icon: 5
+                    });
+                }
+            });
+        });
+        //取消
+        $('#cancelBriefing').off('click').on('click',function () {
+            admin.finishPopupCenter()
+        });
+        var setName= function(personnelData){
+            // var briefingName =  $('#briefingName').val();
+            var fileBriefing =  $('#fileBriefing').attr('data-fileId');
+            var fileBriefingType =  $('#fileBriefing').attr('data-fileType');
+            var fileBriefingVal =  $('#fileBriefing').val();
+            // if(!briefingName){
+            //     return  layer.msg('请选择日期', {
+            //         icon: 5,
+            //         time:1000
+            //     });
+            // }
+            if(!fileBriefing){
+                return  layer.msg('请上传文件', {
+                    icon: 5,
+                    time:1000
+                });
+            }
+            var obj ={
+                name:fileBriefingVal,
+                fileId:fileBriefing,
+                createUserId:account.usid,
+                extInfo1:fileBriefingType
+            };
+            // var beginTime = briefingName.substring(0,10);
+            // var endTime = briefingName.substring(13,23);
+            // obj.beginTime=dateChange(beginTime);
+            // obj.endTime=dateChange(endTime);
+            $.ajax({
+                url: "/api/smallprogram/scheduleImportant",
+                type: 'post',
+                data:JSON.stringify(obj),
+                contentType: 'application/json',
+                success: function (res) {
+                    if (res.ok) {
+                        layer.msg('新建成功！', {
+                            icon: 1
+                        });
+                        admin.finishPopupCenter(true)
+
+                    }else{
+                        return  layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                }
+            });
+        }
+        //保存
+        $('#saveBriefing').off('click').on('click',function () {
+            setName();
+        });
+
+
+    });
+</script>

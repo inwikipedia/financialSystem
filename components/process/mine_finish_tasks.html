@@ -1,0 +1,329 @@
+<!--
+File   : mine_finish_tasks.html
+Created: Wednesday September 26th 2018 11:24:19 am
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Last Modified: Friday November 9th 2018 11:47:23 pm
+Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+-----
+Description: 我的流程 - 已办任务
+-----
+HISTORY:
+-->
+<style>
+    body {
+        overflow-y: hidden;
+    }
+    .gettask :hover {
+        color: #3076ff;
+    }
+    #searchTab .search-item input {
+        padding-left: 10px;
+    }
+</style>
+<link rel="stylesheet" href="../../assetsInfo/css/pending_tasks.css">
+
+<div class="layui-row layui-col-space15">
+    <!-- 单列普通表格 -->
+    <div class="layui-col-md12">
+        <div class="layui-card p-main">
+            <!-- 卡片容器 -->
+            <div class="layui-card-body">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar" style="margin-bottom: 12px" id="searchTab">
+                        <!-- 左侧 -->
+                        <div class="layui-inline" style="margin-right: 0px">
+                            <div class="layui-inline search-item">
+                                <label class="layui-form-label work-search-label">事项名称：</label>
+                                <input type="text" name="name" id="name" placeholder="输入事项名称"
+                                       class="layui-input">
+                            </div>
+                            <div class="layui-inline search-item">
+                                <label class="layui-form-label work-search-label" style="width: 90px;">事项发起人：</label>
+                                <input type="text" name="initiatorName" id="initiatorName" placeholder="输入事项发起人"
+                                       class="layui-input">
+                            </div>
+                            <div class="layui-inline search-item">
+                                <label class="layui-form-label work-search-label">发起时间：</label>
+                                <div class="layui-inline">
+                                    <input type="text" class="layui-input" name="searchTime" id="searchTime"
+                                           placeholder="开始到结束"
+                                           style="padding: 0 30px;text-align: center;width: 232px;">
+                                </div>
+                            </div>
+                            <div class="layui-inline" >
+                                <button id="btn_search" class="layui-btn layui-btn-sm layui-btn-normal"
+                                        lay-filter="btn_search" lay-submit title="搜索">搜索</button>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btn_reset" class="layui-btn layui-btn-sm layui-btn-primary"
+                                        lay-filter="btn_reset" lay-submit title="重置">重置</button>
+                            </div>
+                        </div>
+                        <!-- 右侧 -->
+                        <div class="layui-inline" style=" float: right; margin-right: 0;">
+                            <button id="edit-menu" type="button" class="layui-btn layui-btn-sm layui-import">
+                                <i class="layui-icon layui-icon-list" title="查看任务"></i>查看任务
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- 下部表格容器 -->
+                <table id="tableContent-historyTasks" lay-filter="tableContent-historyTasks"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="gettask" title="查看任务">查看任务</a>
+</script>
+<script src="../../assetsInfo/js/WorkFlowFunction.js"></script>
+
+<script>
+    // 初始化 layui
+    layui.use(['table'], function () {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            laydate = layui.laydate,
+            admin = layui.admin,
+            account = config.getAccount();
+        // 初始化日期组件
+        laydate.render({
+            elem: '#searchTime',
+            range: '到',
+            format: 'yyyy-MM-dd'
+        });
+        // 渲染左侧表格
+        var renderTable = function () {
+            let heightTable = $(document).height() - 140;
+            // 渲染表格
+            table.render({
+                elem: '#tableContent-historyTasks',
+                id: 'tableContent-historyTasks',
+                method: 'post',
+                contentType: 'application/json',
+                url: admin.formatUrl("/api/activiti-task/historyV2"),
+                // 格式化后台返回的数据
+                parseData: function (res) { //res 即为原始返回的数据
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                height: heightTable,
+                cols: [
+                    [{
+                        type: 'radio'
+                    },
+                    {
+                        field: 'name',
+                        title: '事项名称',
+                        event: 'gettask',
+                        templet: function (d) {
+                            let text = getProcessTitleText(d);
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'assigneeName',
+                        title: '事项发起人',
+                        width:  '10%',
+                        event: 'gettask',
+                        templet: function (d) {
+                            let text = d.initiatorName ?
+                                d.initiatorName : "无发起人";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'finishTimeStr',
+                        title: '事项发起时间',
+                        width:  '15%',
+                        event: 'gettask',
+                        templet: function (d) {
+                            let text = d.processStartTimeStr ? d.processStartTimeStr : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'finishTimeStr',
+                        title: '事项完成时间',
+                        width:  '15%',
+                        event: 'gettask',
+                        templet: function (d) {
+                            let text = d.finishTimeStr ? d.finishTimeStr : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'assigneeName',
+                        title: '当前受理人',
+                        width:  '10%',
+                        templet: function (d) {
+                            let text = d.processEndTime ?
+                                "已结束" : (d.currentUsers ?
+                                    d.currentUsers : "受理人缺失");
+                            let color= d.processEndTime ? '#00d84c': '#5b9bd5';
+                            return '<div class="gettask" title="' + text + '" lay-event="gettask" style="color:' + color + '">'
+                                + '<span>' + text + '</span>'
+                                + '</div>'
+                        }
+                    }
+                    ]
+                ],
+                cellMinWidth: 120,
+                page: {
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                },
+                limit: 20, //显示的数量
+                limits: [10, 20, 30],
+                request: {
+                    pageName: 'pageNo',
+                    limitName: 'pageSize'
+                },
+                where:{
+                    "assignee": account.usid
+                }
+            });
+        };
+
+        // 初始化，执行一次渲染表格
+        renderTable();
+        // DONE: 侧边栏变化时刷新数据表格
+        // 将 table ID 存入数组
+        layui.admin.addTableCache('tableContent-historyTasks');
+
+        // 搜索
+        form.on('submit(btn_search)', function (data) {
+            var dateArr = data.field.searchTime.split('到')
+            console.log(data, 'data')
+            searchValue = {
+                assignee: account.usid,
+                "name": data.field.name, // 事项名称
+                "initiatorName": data.field.initiatorName, //事项发起人
+                'timeEnd': new Date(dateArr[1]).getTime() + 24 * 60 * 60 * 1000 - 1,
+                'timeBegin': new Date(dateArr[0]).getTime(),
+                /* "querys": [{
+                    "between": {
+                       "end": {
+                            'timeEnd': new Date(dateArr[1]).getTime() + 24 * 60 * 60 * 1000 - 1
+                        }, //结束时间
+                        "start": {
+                            'timeBegin': new Date(dateArr[0]).getTime()
+                        }, //开始时间
+                    },
+                    "like": {
+                        "name": data.field.name, // 事项名称
+                        "initiatorName": data.field.initiatorName, //事项发起人
+                    }
+                }] */
+            }
+            table.reload('tableContent-historyTasks', {
+                page: {
+                    curr: 1
+                },
+                where: searchValue
+            });
+        });
+        // 重置
+        form.on('submit(btn_reset)', function () {
+            $('#name').val('');
+            $('#initiatorName').val('');
+            $('#searchTime').val('');
+            searchValue = {
+                assignee: account.usid,
+                "name": '', // 事项名称
+                "initiatorName": '', //事项发起人
+                'timeEnd': '',
+                'timeBegin': ''
+                /* "querys": [{
+                    "between": {
+                        "end": {
+                            'timeEnd': ''
+                        }, //结束时间
+                        "start": {
+                            'timeBegin': ''
+                        }, //开始时间
+                    },
+                    "like": {
+                        "name": '', // 事项名称
+                        "initiatorName": '', //事项发起人
+                    }
+                }] */
+            }
+            table.reload('tableContent-historyTasks', {
+                page: {
+                    curr: 1
+                },
+                where: searchValue
+            });
+        });
+
+        // 监听表格工具条事件
+        table.on('tool(tableContent-historyTasks)', function (obj) {
+            // 获取点击列的数据
+            var data = obj.data;
+            var layEvent = obj.event;
+            // 判断操作类型
+            if (layEvent === 'gettask') {
+                // 查看任务
+                // console.log(data)
+                admin.popupCenter({
+                    title: '查看任务：' + data.name,
+                    path: 'components/tpl/process_history_tpl_view.html',
+                    area: ['100%', '100%'],
+                    resize: false,
+                    finish: function () { },
+                    success: function () {
+                        process_history_tpl_view(data);
+                    }
+                });
+            }
+        });
+        //        查看任务
+        $('#edit-menu').off("click").on('click', function () {
+            var checkStatus = table.checkStatus('tableContent-historyTasks');
+            if (checkStatus.data.length != 1) {
+                return layer.msg('请选择1个要查看的任务', {
+                    icon: 0
+                });
+            }
+            var data = checkStatus.data[0];
+            admin.popupCenter({
+                title: '查看任务：' + data.name,
+                path: 'components/tpl/process_history_tpl_view.html',
+                area: ['100%', '100%'],
+                resize: false,
+                finish: function () { },
+                success: function () {
+                    process_history_tpl_view(data);
+                }
+            });
+        });
+    });
+</script>

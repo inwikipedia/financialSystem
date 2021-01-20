@@ -1,0 +1,2524 @@
+<style xmlns="http://www.w3.org/1999/html">
+    body .layui-layout-admin .layui-body .layui-tab .layui-tab-title {
+        z-index: 0;
+    }
+    ::-webkit-scrollbar {
+        /*display: none;*/
+    }
+    /* <!--日历样式-->*/
+    body .fc-row.fc-rigid .fc-content-skeleton {
+        margin-top: 0px;
+    }
+
+    body .fc-day-number {
+        font-size: 14px;
+        height: 20px;
+    }
+
+    .fc-basic-view .fc-body .fc-row {
+        min-height: 3em !important;
+    }
+
+    body .layui-layout-admin .layui-body .layui-tab .layui-tab-title {
+        width: calc(100% - 113px);
+        float: right;
+        /* margin-left: 138px; */
+        height: 40px;
+        position: absolute;
+        left: 113px;
+        top: 1px;
+        margin-top: 3px;
+    }
+
+    .layui-layout-admin .layui-body .layui-tab .layui-tab-title li {
+        width: 20%;
+        padding: 0;
+        text-align: center;
+    }
+
+    .fc-toolbar .fc-center {
+        padding-right: 0;
+    }
+
+    .wz_title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        line-height: 11px;
+        height: 9px;
+    }
+
+    html, body {
+        height: 100%;
+    }
+
+    body .fc-toolbar h2 {
+        margin: 0;
+        font-size: 15px;
+        color: #999;
+    }
+
+    body .fc .fc-toolbar {
+        margin: 0 0 2.5px 0;
+        text-align: left;
+        height: 26px;
+    }
+
+    .fc table {
+        font-size: 12px;
+    }
+
+    .layui-layout layui-layout-admin {
+        height: 100%;
+    }
+
+    .layui-layout-admin .layui-body {
+        height: 100%;
+    }
+
+    .main {
+        height: 100% !important;
+    }
+
+    .top {
+        height: 70% !important;
+    }
+
+    .top .layui-col-md4 {
+        height: 100%;
+    }
+
+    /* .top .layui-card { */
+    /*border: 1px solid red;*/
+    /*height: 330px;*/
+    /* } */
+
+    .bottom {
+        height: 30% !important;
+    }
+
+    .bottom-area .layui-table-body {
+        overflow: hidden !important;
+    }
+
+    .layui-table-body .layui-none {
+        line-height: 3px !important;
+    }
+
+    .fc-day-cnDate, .fc-day-cnTerm {
+        display: none;
+    }
+
+    .layui-tab-title {
+        height: auto;
+    }
+
+    .layui-layout-admin .layui-body .layui-tab .layui-tab-content {
+        overflow: auto;
+        top: 25px;
+    }
+
+    .layui-layout-admin .layui-body .layui-tab .layui-tab-title {
+        box-shadow: none;
+        height: auto;
+        margin-top: 10px;
+    }
+
+    .layui-layout-admin .layui-body .layui-tab .layui-tab-title li.layui-this:after {
+        border: none;
+    }
+
+    .layui-tab-title .layui-this:after {
+        border: none;
+    }
+
+    .layui-tab-item table {
+        width: 100%;
+        text-align: center;
+        background-color: #FCFCFC;
+        font-size: 12px;
+        font-family: PingFang SC;
+        color: #4D4D4D;
+    }
+
+    .layui-tab-item table tr {
+        line-height: 30px;
+        height: 30px;
+    }
+
+    .layui-tab-item table tr td {
+        overflow: hidden;
+        width: 33%;
+        max-width: 33%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .layui-tab-item table tr td:first-child {
+        text-align: left;
+    }
+    .layui-tab-item table tr td {
+        /*padding-left: 10px;*/
+    }
+
+    body .task-container-l table tr td {
+        overflow: hidden;
+        width: 23%;
+        max-width: 33%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .layui-tab-item table thead {
+        background-color: #EBEBEB !important;
+        color: #333333;
+    }
+
+    .number {
+        position: absolute;
+        top: 0%;
+        left: 55%;
+        color: #fff;
+        font-size: 19px;
+        font-family: PingFang SC;
+        line-height: 29px;
+    }
+
+    .number2 {
+        position: absolute;
+        top: 0%;
+        left: 45%;
+        color: #fff;
+        font-family: PingFang SC;
+        line-height: 38px;
+        font-size: 19px;
+        width: 48px;
+        text-align: center;
+    }
+
+    .word {
+        position: absolute;
+        top: 31%;
+        left: 43%;
+        font-family: PingFang SC;
+        font-size: 12px;
+        color: #fff;
+        width: 48px;
+        text-align: center;
+    }
+
+    .word2 {
+        position: absolute;
+        top: 33%;
+        left: 45%;
+        font-family: PingFang SC;
+        font-size: 12px;
+        color: #fff;
+        line-height: 45px;
+    }
+
+    .grey {
+        color: #808080;
+    }
+
+    /*add by xuelei 业务工作，处理事项调整 begin*/
+    .layui-layout-admin .layui-body .layui-tab .layui-tab-title {
+        width: 100%;
+        padding: 0 16px 0 16px;
+    }
+
+    .layui-layout-admin .layui-body .layui-tab .layui-tab-title > li {
+        max-width: none;
+    }
+
+    .main .layui-card .layui-card-header {
+        margin: 0 15px;
+        border-bottom: 2px solid #f6f6f6;
+    }
+
+    #modelL ul {
+        padding: 0 23px;
+    }
+
+    .icon2 {
+        position: absolute;
+        top: 16%;
+        left: 14%;
+        background: url(./assetsInfo/images/firstpage/xiangmuicon.png) no-repeat;
+        background-size: 100% 100%;
+        width: 30px;
+        height: 30px;
+    }
+
+    .icon3 {
+        position: absolute;
+        top: 16%;
+        left: 14%;
+        background: url(./assetsInfo/images/firstpage/yewuicon1.png) no-repeat;
+        background-size: 100% 100%;
+        width: 30px;
+        height: 30px;
+    }
+
+    .icon {
+        position: absolute;
+        top: 16%;
+        left: 14%;
+    }
+
+    .thingIcon {
+        width: 40px;
+        height: 41px;
+        position: absolute;
+        top: 18%;
+        left: 11%;
+    }
+
+    /*甘特图样式*/
+    body .adc-ganttchart .adc-ganttchart-box .adc-ganttchart-header {
+        overflow: hidden;
+        border-bottom: 1px solid #fff;
+        background: #F5F5F5;
+        margin-left: 177px;
+    }
+
+    body .adc-ganttchart table thead th, body .adc-ganttchart table tbody td {
+        padding: 5px 0;
+        height: 43px;
+        border-right: 1px solid #fff;
+        border-bottom: none;
+    }
+
+    .adc-ganttchart tbody tr:nth-child(odd) {
+        background: #FAFAFA;
+    }
+
+    .adc-ganttchart tbody tr:nth-child(even) {
+        background: #FCFCFC;
+
+    }
+
+    .break-tabel {
+        word-break: break-all;
+    }
+
+    .my-font {
+        font-size: 12px !important;
+        font-family: PingFang SC;
+        color: #4D4D4D !important;
+    }
+
+    #GantChart .adc-ganttchart-toolbar-text {
+        color: #181818;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .gz-table table tr:nth-child(odd) {
+        background-color: #F5F5F5;
+    }
+
+    .gz-table table tr:nth-child(even) {
+        background-color: #FAFAFA;
+    }
+
+    .gz-table thead tr {
+        background-color: #EBEBEB !important;
+    }
+
+    /*  */
+    .layui-col-space15 > * {
+        padding: 5px;
+    }
+
+    .fc .fc-toolbar > * > * {
+        margin-left: 1px !important;
+    }
+
+    /*面包屑*/
+    .layui-layout-admin .admin-breadcrumb {
+        transition: all .3s;
+        padding-left: 14px;
+        font-size: 14px;
+        color: #FFFFFF;
+        /*height: 38px;*/
+        display: inline-block;
+        line-height: 38px;
+        opacity: 0;
+        height: 0;
+        /*display: none;*/
+    }
+
+    .layui-layout-admin .admin-breadcrumb a {
+        display: none;
+    }
+
+    .layui-layout-admin .layui-body {
+        margin-top: -10px;
+        padding-bottom: 1px;
+    }
+
+    /*统计工时*/
+    #personWorkTimeStatic, #projectStatic {
+        width: 100%;
+        height: 255px;
+        /*border:1px solid red;*/
+    }
+
+    .buttonGroup button {
+        padding: 0 5px;
+    }
+
+    .buttonGroup i {
+        font-size: 14px !important;
+    }
+
+    /*处理事项*/
+    .handleThing {
+        height: 24px;
+    }
+
+    .handleThing li {
+        border: 1px solid #E5E5E5;
+        padding: 0 7px !important;
+        height: 22px !important;
+        line-height: 24px !important;
+        border-radius: 0;
+        margin: 0 !important;
+        width: auto !important;
+        font-size: 13px;
+    }
+
+    .handleThing li:first-child {
+        border-radius: 4px 0 0 4px;
+    }
+
+    .handleThing li:last-child {
+        border-radius: 0 4px 4px 0;
+    }
+
+    .handleThing .layui-this {
+        border: 1px solid #10ADE8 !important;
+        color: #10ADE8;
+    }
+
+    .task-left {
+        float: left;
+        width: 150px;
+        text-align: center;
+    }
+
+    .task-left h2 {
+        font-size: 14px;
+        /* color: #232323; */
+        font-weight: 600;
+        line-height: 30px;
+        background: #ddd;
+    }
+
+    .task-left div:nth-child(even) {
+        background-color: #FCFCFC;
+
+    }
+
+    .task-left div:nth-child(odd) {
+        background-color: #f5f5f5;
+    }
+
+    .task-right {
+        float: left;
+        width: calc(100% - 158px);
+        padding-left: 8px;
+    }
+
+    .task-block {
+        padding: 5px 4px;
+        line-height: 30px;
+    }
+
+    .task-right-right:after, .task-block:after {
+        display: block;
+        clear: both;
+        content: "";
+        visibility: hidden;
+        height: 0
+    }
+
+    .top p {
+        width: 50%;
+        float: left;
+        text-align: center;
+        background-color: #f5f5f5;
+        color: #888888;
+    }
+
+    .top .layui-tab-content p {
+        width: 100%;
+    }
+
+    #task {
+        background: #f5f5f5;
+        height: 200px;
+        cursor: default;
+        font-size: 12px;
+
+    }
+
+    #one, #two, #three, #four {
+        width: calc(50% - 24px);
+        float: left;
+        padding: 5px 3px 2px 3px;
+        overflow: auto;
+        cursor: default;
+        height: calc(50vh - 245px);
+        border-bottom: 1px solid #eee;
+        border-right: 1px solid #eee;
+        font-size: 12px;
+        display: inline-block;
+        min-height: 125px;
+    }
+
+    #one div {
+        line-height: 21px;
+        background: #FFF1F0;
+        border: 1px solid #fda3a0;
+        color: #F6646E;
+        margin: 2px;
+        padding: 0 5px;
+        display: inline-block;
+    }
+
+    #two div {
+        line-height: 21px;
+        background: #FFF7E7;
+        border: 1px solid #FED495;
+        color: #FAA151;
+        margin: 3px;
+        padding: 0 5px;
+        display: inline-block;
+
+    }
+
+    #three div {
+        line-height: 21px;
+        background: #F9F0FF;
+        border: 1px solid #D2AFF5;
+        color: #874DDE;
+        margin: 3px;
+        padding: 0 5px;
+        display: inline-block;
+
+    }
+
+    #four div {
+        line-height: 21px;
+        background: #E7FFFB;
+        border: 1px solid #BAF1EB;
+        color: #23C7C5;
+        margin: 3px;
+        padding: 0 5px;
+        display: inline-block;
+
+    }
+
+    .task-right-left {
+        float: left;
+        /*height: 200px;*/
+    }
+
+    .task-right-left p {
+        /*height: 144px;*/
+        width: 26px;
+        float: none;
+        padding: 3px;
+        line-height: 38px;
+        background: none;
+        border: 1px solid #eee;
+        height: calc(50vh - 245px);
+        min-height: 125px;
+        color: #B2B2B2;
+    }
+    .dayStyle{
+        width: 41.5%;
+        height: 347px;
+        padding-right: 0;
+    }
+    .taskCardCont{
+        height: 302px !important;
+    }
+    #allWorkCostTime{
+        background:rgba(238,238,238,1);
+    }
+    .FillWorkBox{
+        float: left;
+        width: 54px;
+        text-align: center;
+
+    }
+    .allFillWorkBox{
+        float: left;
+        /*padding:0px 10px 0px 10px;*/
+        width: 54px;
+        text-align: center;
+    }
+    .approveFillWorkCostTime{
+        color: #008FC3;
+        font-weight:bold;
+    }
+    .allFillWorkCostTime{
+        font-weight:bold;
+    }
+    .dayHeight .wz_title{
+        height:30px;
+    }
+    .dayHeight .fc-widget-content .fc-content-skeleton tr:first-child .fc-event-container a{
+        margin-top: 5px;
+    }
+    .c3 {
+        color: #333;
+    }
+    .b-b {
+        border: 1px solid #1D8AFF !important;
+        color: #1D8AFF !important;
+        background: #fff !important;
+    }
+    .mt12 {
+        margin-top: 12px;
+    }
+    .briefingBtn{
+        width: 50px;
+        height: 24px !important;
+        color: white;
+        line-height: 24px !important;
+        padding: 0px !important;
+        margin-left: 5px !important;
+    }
+
+    ::-webkit-input-placeholder {
+        color: #d4dce7!important;
+    }
+    #tableBar{
+        display:none;
+    }
+    .tableNone{
+        display: none;
+        text-align: center;
+    }
+    /*兼容自适应高度问题*/
+    @media screen and (max-width: 1366px) {
+        .task-right-left p{
+            min-height: 104px;
+            line-height: 30px;
+        }
+        #one, #two, #three, #four{
+            min-height: 104px;
+        }
+        #personWorkTimeStatic,#projectStatic{
+            height:215px;
+        }
+        .dayStyle{
+            height:312px;
+        }
+        .taskCardCont{
+            height: 267px !important;
+        }
+        .dayTable .fc-agendaWeek-view .fc-widget-content .fc-scroller.fc-time-grid-container,
+        .dayTable .fc-month-view .fc-widget-content .fc-scroller.fc-day-grid-container{
+            height: 229px !important;
+        }
+        .dayTable .fc-month-view .fc-widget-content .fc-scroller.fc-day-grid-container .fc-day-grid .fc-row{
+            height: 46px !important;
+        }
+        .layui-tab-item table tr{
+            height:29px;
+            line-height: 29px;
+        }
+        .task-block{
+            line-height: 29px;
+        }
+        .dayHeight .wz_title{
+            height:23px;
+        }
+        .FillWorkBox{
+            width: 36px;
+            /*padding: 0px 4px 0px 8px;*/
+        }
+        .allFillWorkBox{
+            /*padding: 0px;*/
+            width: 36px;
+
+        }
+    }
+    /*add by xuelei 业务工作，处理事项调整 end*/
+</style>
+<link rel="stylesheet" href="./assetsInfo/css/dragula.css">
+<link rel="stylesheet" href="./assetsInfo/css/duty.css">
+<link rel='stylesheet' href='./assetsInfo/libs/fullcalendar/fullcalendar.css'/>
+<link rel="stylesheet" href="./assetsInfo/css/dashboard.css">
+<link rel="stylesheet" href="./assetsInfo/css/pending_tasks.css">
+<!-- zTree 样式 -->
+<link rel="stylesheet" href="./assetsInfo/libs/zTree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="./assetsInfo/libs/adcganttchart/jquery.fn.adcganttchart.css">
+<script src='../assetsInfo/libs/fullcalendar/moment.min.js'></script>
+<script src="../../assetsInfo/libs/adcganttchart/jquery.fn.adcganttchart.js"></script>
+<script src='../assetsInfo/libs/fullcalendar/fullcalendar.js'></script>
+<script src="../assetsInfo/libs/fullcalendar/lunar.js"></script>
+<script src="../assetsInfo/libs/fullcalendar/zh-cn.js"></script>
+<script src="../assetsInfo/libs/echarts.js"></script>
+<script src="../assetsInfo/js/dragula.js"></script>
+<script src="../assetsInfo/libs/addtable/addtable.js"></script>
+<!-- zTree js 文件 -->
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+<div class="main">
+    <div class="layui-row">
+        <!--<div class="layui-col-xs6">-->
+        <div class="layui-row layui-col-space15 top dayTable">
+            <div class="layui-col-md6 dayHeight dayStyle" >
+                <div class="layui-card">
+                    <div class="layui-card-body" style="overflow: inherit;">
+                        <div class="layui-row tasks-info-container" id="modelR">
+
+                            <div id="main" class="layui-col-md12"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md6 last dayHeightCopy gz-table" style="width: 58.5%">
+                <div class="layui-card layui-col-md12">
+                    <div class="layui-card-header lc-header" style="margin-left: 0px;margin-right:0">
+                        <img src="./assetsInfo/images/firstpage/clsx.png" style="margin-bottom: 4px;margin-right: 5px">数据统计
+                        <div class="layui-btn-group buttonGroup" style="float: right;font-weight: 500;"
+                             id="departmentBtn">
+                            <button class="layui-btn layui-btn-primary layui-btn-sm"
+                                    style="border-top-left-radius: 4px;border-bottom-left-radius:4px;" id="person">
+                                <i class="layui-icon">个人</i>
+                            </button>
+                            <button class="layui-btn layui-btn-primary layui-btn-sm" id="grup">
+                                <i class="layui-icon">项目组</i>
+                            </button>
+                            <button class="layui-btn layui-btn-primary layui-btn-sm" id="department">
+                                <i class="layui-icon">部门</i>
+                            </button>
+                            <button class="layui-btn layui-btn-primary layui-btn-sm"
+                                    style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;" id="learder">
+                                <i class="layui-icon">本部</i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="taskCardCont layui-card-body tasks-track-container layui-col-md12 " >
+                        <div class="layui-tab" lay-filter="matter">
+                            <div class="layui-row">
+                                <div class="layui-col-md6">
+                                    <span>工时统计（人天）</span>
+                                    <div class="layui-btn-group buttonGroup" style="float: right;" id="dataStatic">
+                                        <button class="layui-btn layui-btn-primary layui-btn-sm "
+                                                style="border-top-left-radius: 4px;border-bottom-left-radius:4px;"
+                                                id="week">
+                                            <i class="layui-icon">周</i>
+                                        </button>
+                                        <button class="layui-btn layui-btn-primary layui-btn-sm" id="month">
+                                            <i class="layui-icon">月</i>
+                                        </button>
+                                        <button class="layui-btn layui-btn-primary layui-btn-sm" id="season">
+                                            <i class="layui-icon">季</i>
+                                        </button>
+                                        <button class="layui-btn layui-btn-primary layui-btn-sm btn-active"
+                                                style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;"
+                                                id="year">
+                                            <i class="layui-icon">年</i>
+                                        </button>
+                                    </div>
+                                    <div id="personWorkTimeStatic"></div>
+                                    <div class="personWorkTimeStatic-line"></div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div style="margin:0 0 10px; text-align: center">
+                                        <div class="layui-btn-group buttonGroup" id="dealAndIncome">
+                                            <button class="layui-btn layui-btn-primary layui-btn-sm "
+                                                    style="border-top-left-radius: 4px;border-bottom-left-radius:4px;">
+                                                <i class="layui-icon">支出</i>
+                                            </button>
+                                            <button class="layui-btn layui-btn-primary layui-btn-sm btn-active"
+                                                    style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;">
+                                                <i class="layui-icon">创收</i>
+                                            </button>
+                                        </div>
+                                        <!--<a href="#" style="float: right;color: #818181">更多&nbsp;<i class="layui-icon layui-icon-right"></i></a>-->
+                                    </div>
+
+                                    <div id="projectStatic"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md6 last dayHeightCopy gz-table height-bottom-block"
+                 style="width: 41.5%;padding-top: 0; padding-right: 0">
+                <div class="layui-card layui-col-md12">
+                    <div class="layui-card-body tasks-track-container layui-col-md12 height-bottom-block">
+                        <div class="layui-tab" lay-filter="matter">
+                            <div class="layui-card-header lc-header" style="margin-left: -12px;height: 28px;
+    line-height: 27px;">
+                                <img src="./assetsInfo/images/firstpage/clsx.png"
+                                     style="margin-bottom: 4px;margin-right: 5px">协同工作
+                                <div class="layui-card-header-right-btn">
+                                    <!--<a href="#!ADC_process_mine_my_tasks_html">更多&nbsp;<i
+                                            class="layui-icon layui-icon-right"></i></a>-->
+                                </div>
+                            </div>
+                            <div class="layui-tab">
+                                <ul class="layui-tab-title layui-col-md12 handleThing"
+                                    style="margin-top: 3px;text-align: right;height: 29px">
+                                    <li class="layui-this " style="position: relative">
+                                        <span class="">待办</span>
+                                        <span class="" id="runtimeCount">0</span>
+                                    </li>
+                                    <li class="" style="position: relative">
+                                        <span class=" ">已办</span>
+                                        <span class=" " id="historyCount"></span>
+                                    </li>
+                                    <li class="" style="position: relative">
+                                        <span class=" ">已发</span>
+                                        <span class=" " id="trackListCount">0</span>
+                                    </li>
+                                    <li class="" id="myTaskLi" style="position: relative">
+                                        <span class="">我的业务</span>
+                                        <span class="" id="tableBudgetCount">0</span>
+                                    </li>
+                                    <li class="" style="position: relative" id="myItemLi">
+                                        <span class="">我的项目</span>
+                                        <span class="" id="itemCount">0</span>
+                                    </li>
+                                </ul>
+                                <div class="layui-tab-content layui-col-md12" style="overflow: hidden">
+                                    <div class="layui-tab-item .layui-col-md12 layui-show">
+                                        <a href="#!ADC_process_mine_pending_tasks_html">
+                                            <table id="runtime" style="vertical-align: center;table-layout:fixed" >
+                                            </table>
+                                        </a>
+                                    </div>
+                                    <div class="layui-tab-item layui-col-md12">
+                                        <a href="#!ADC_process_mine_finish_tasks_html">
+                                            <table id="history" style="vertical-align: center;table-layout:fixed"></table>
+                                        </a>
+                                    </div>
+                                    <div class="layui-tab-item layui-col-md12">
+                                        <a href="#!ADC_process_mine_my_tasks_html">
+                                            <table id="trackList" style="vertical-align: center;table-layout:fixed"></table>
+                                        </a>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <a href="#!ADC_externalForm_revenueBudget_html">
+                                            <table id="tableBudget" style="vertical-align: center;table-layout:fixed"></table>
+                                        </a>
+                                    </div>
+                                    <div class="layui-tab-item layui-col-md12">
+                                        <a href="#!ADC_externalForm_revenueBudget_html">
+                                            <table id="myItem" style="vertical-align: center;table-layout:fixed"></table>
+                                        </a>
+                                    </div>
+
+                                </div>
+                                <div class="layui-tab-item layui-col-md12"
+                                     style="margin-bottom: 0px;float: right;text-align: right;margin-right: 5px;font-size: 12px;color:#55B7FF">
+                                    <a id="myItemMore" href="#!ADC_process_mine_pending_tasks_html">更多 >></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md6 center dayHeightCopy gz-table height-bottom-block" style="width:58.5%;padding-top: 0">
+                <div class="layui-card layui-col-md12" style="height: calc(100% + 5px)">
+                    <div class="layui-card-header lc-header" style="margin-left: 0px;"><img
+                            src="./assetsInfo/images/firstpage/tongzhi.png" style="margin-bottom: 4px;margin-right: 5px">通知公告
+                    </div>
+                    <div class="layui-card-body" id="notice" >
+                        <!-- 数据表格顶部控制栏 -->
+                        <div class="layui-form" id="tableBar">
+                            <div class="layui-form-item table-top-bar">
+                                <!-- 左侧 -->
+                                <div class="layui-inline">
+                                    <div class="layui-inline">
+                                        <button id="btn_notice_add" class="layui-btn layui-btn-xs layui-btn-normal b-b-b" lay-filter="btn_notice_add"
+                                                lay-submit title="新建">新建</button>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <button id="btn_notice_edit" class="layui-btn layui-btn-xs layui-btn-primary b-b" lay-filter="btn_notice_edit"
+                                                lay-submit title="编辑">
+                                            编辑
+                                        </button>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <button id="btn_notice_del" class="layui-btn layui-btn-xs layui-btn-primary b-b" lay-filter="btn_notice_del"
+                                                lay-submit title="删除">删除</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 下部表格容器 -->
+                        <div class="tableShow">
+                            <table id="table-bulletin" class="c3" lay-filter="table-bulletin"></table>
+                        </div>
+                        <div class="tableNone">
+                            <div style="background-color: #f5f5f5;color: #888888;">暂无数据</div>
+                            <img  src="../assetsInfo/images/back.png" alt="">
+                        </div>
+                    </div>
+                    <!--当前任务-->
+                    <!--<div class="task-block">-->
+                        <!--<div class="task-left">-->
+                            <!--<h2>当前任务</h2>-->
+                            <!--<div id="task">-->
+
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="task-right">-->
+                            <!--<div class="top">-->
+                                <!--<p>紧急 </p>-->
+                                <!--<p>不紧急</p>-->
+                            <!--</div>-->
+                            <!--<div class="task-right-left">-->
+                                <!--<p> 重要</p>-->
+                                <!--<p>不重要</p>-->
+                            <!--</div>-->
+                            <!--<div class="task-right-right">-->
+                                <!--<div id="one">-->
+
+                                <!--</div>-->
+                                <!--<div id="two">-->
+
+                                <!--</div>-->
+                                <!--<div id="three">-->
+
+                                <!--</div>-->
+                                <!--<div id="four">-->
+
+                                <!--</div>-->
+                            <!--</div>-->
+
+                        <!--</div>-->
+
+
+                    <!--</div>-->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!--</div>-->
+</div>
+
+</div>
+
+<script src="../../assetsInfo/js/WorkFlowFunction.js"></script>
+<script src="../../assetsInfo/js/noticeMessage.js"></script>
+
+<script>
+
+    layui.use(['admin', 'index', 'laydate', 'table', 'element','upload','formSelects',"xmSelect"], function () {
+        var element = layui.element,
+            table = layui.table,
+            laydate = layui.laydate,
+            admin = layui.admin,
+            config = layui.config,
+            xmSelect = layui.xmSelect,
+            tools = layui.tools,
+            layer = layui.layer,
+            formSelects = layui.formSelects,
+            upload = layui.upload,
+            form = layui.form,
+            tableHeight = 280,
+            taskTrack = [],
+            account = config.getAccount(),
+            //存usid
+            personId = config.getAccount().usid,
+            weekTime = "year",
+            role = "",//角色
+            moneyType = 0;//创收支出传参
+        var thisYear=new Date().getFullYear();
+        var maxYear = thisYear+"-12-31";
+        var minYear = thisYear+"-1-1";
+        var size =10, dayHeight='50px',moreCount=4,contentHeight=298,limtItem=5;
+        //判断窗口分辨率
+        $(document).ready(function() {
+            if(screen.width==1920){
+                dayHeight='50px';
+                size=10;
+                moreCount=4;
+                contentHeight=298;
+                limtItem=5;
+            }if(screen.width<=1366){
+                dayHeight='45px';
+                size=8;
+                moreCount=3;
+                contentHeight=263;
+                limtItem=5;
+            }
+        });
+//        判断权限
+        var roleName = [];
+        for (var i = 0; i < account.roles.length; i++) {
+            roleName.push(account.roles[i].name);
+        }
+        if (roleName.indexOf("组长") > -1) {
+            role = "grup";
+            moneyType = 1;
+            $("#grup").addClass('btn-active')
+            $("#department").attr("disabled", "disabled").addClass('btn-disabled')
+            $("#learder").attr("disabled", "disabled").addClass('btn-disabled')
+        } else if (roleName.indexOf("部长") > -1) {
+            role = "department";
+            moneyType = 2;
+            $("#department").addClass('btn-active')
+            $("#department").siblings().attr("disabled", "disabled").addClass('btn-disabled')
+            $("#department").siblings().addClass('fc-state-disabled')
+        } else if (roleName.indexOf("本部长") > -1||roleName.indexOf("主任") > -1) {
+            role = "learder";
+            moneyType = 3;
+            $("#learder").addClass('btn-active')
+            $("#learder").siblings().attr("disabled", "disabled").addClass('btn-disabled')
+        } else {
+            role = "person"
+            moneyType = 0;
+            $("#person").addClass('btn-active')
+            $("#person").siblings().attr("disabled", "disabled").addClass('btn-disabled')
+        }
+
+//切换支出创收
+        $('#dealAndIncome button').click(function () {
+            $(this).addClass('btn-active');
+            $(this).siblings().removeClass('btn-active')
+            if ($(this).text().trim() == "创收") {
+                projectStatic(incomeName, incomeValue)
+            } else {
+                projectStatic(dealName, dealValue)
+            }
+        })
+
+//切换年月
+        $('#dataStatic button').click(function () {
+            weekTime = this.id;
+            $(this).addClass('btn-active');
+            $(this).siblings().removeClass('btn-active')
+            workkTimeStatistics(weekTime, role)
+        })
+
+//        切换个人 项目组 部长 本部
+        $('#departmentBtn button').click(function () {
+            role = this.id;
+            $(this).addClass('btn-active');
+            $(this).siblings().removeClass('btn-active')
+            workkTimeStatistics(weekTime, role);
+            if (role == "grup") {
+                moneyType = 1;
+            } else if (role == "department") {
+                moneyType = 2;
+            } else if (role == "learder") {
+                moneyType = 3;
+            } else {
+                moneyType = 0;
+            }
+            money(moneyType)
+        })
+        workkTimeStatistics("year", role)
+
+//        工时统计
+        function workkTimeStatistics(time, man) {
+//            判断权限
+            switch (man) {
+                case "person":
+                    var url = "/api/budget/queryWorkTime/getWorkTimeByPerson";
+                    break;
+                case "grup":
+                    var url = "/api/statistics/businessWorktime/getWorkTimeByHQ";
+                    break;
+                case "department":
+                    var url = "/api/statistics/businessWorktime/getWorkTimeByHQ";
+                    break;
+                case "learder":
+                    var url = "/api/statistics/businessWorktime/getWorkTimeByHQ";
+                    break;
+            }
+
+            //已办事项
+            $.ajax({
+                url: url + "/" + time,
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        var data = [];
+                        var obj = res.data[0];
+                        if (obj&&Object.getOwnPropertyNames(obj).length>0) {
+                            for (i in obj) {
+                                var item = {};
+                                item.value = obj[i].toFixed(2);
+                                item.name = i;
+                                data.push(item)
+                            }
+                        } else {
+                            data = [{value: 0, name: "暂无数据"}]
+                        }
+                        personWorkTimeStatic(data);
+                    }
+                }
+            });
+
+
+
+        }
+
+        money(moneyType);
+
+//        支出
+        function money(moneyType) {
+            var thisYear = new Date().getFullYear();
+            $.ajax({
+                url: "/api/business/tableReport/topTen?year=" + thisYear,
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        var deal = res.data.deal;
+                        var income = res.data.income;
+                        dealName = [];
+                        dealValue = [];
+                        incomeName = [];
+                        incomeValue = [];
+                        for (let i = 0; i < deal.length; i++) {
+                            dealName.push(deal[i].name);
+                            dealValue.push(deal[i].amount);
+                        }
+                        for (let i = 0; i < income.length; i++) {
+                            incomeName.push(income[i].name);
+                            incomeValue.push(income[i].amount);
+                        }
+                        dealName.reverse();
+                        dealValue.reverse();
+                        incomeName.reverse();
+                        incomeValue.reverse();
+                        // projectStatic(dealName, dealValue)
+                        projectStatic(incomeName, incomeValue)
+
+                    }
+                }
+            });
+        }
+        localStorage.setItem('usid', config.getAccount().usid);
+        var projectId = config.getAccount().usid;
+        //add by xuelei 添加日期2019-2-21 begin
+        //监听tab改变，用于tab样式的改变(业务工作)
+        element.on('tab(busin)', function (data) {
+            console.log(data);
+            $('.center #modelL  ul li').removeClass("bg-img1").removeClass("bg-img2");
+            if (data.index == 0) {
+                $('.center #modelL  ul li:first-child').addClass("bg-img1");
+                $('.center #modelL  ul li:last-child').addClass("bg-img2");
+                $(".center #modelL  ul li:first-child span").removeClass("grey");
+                $(".center #modelL  ul li:last-child span").addClass("grey");
+                $("#myTaskLi p").addClass("icon");
+                $("#myTaskLi p").removeClass("icon3");
+                $("#myItemLi p").addClass("icon");
+                $("#myItemLi p").removeClass("icon2");
+                // $('.center #modelL  ul li:last-child span').removeClass("grey");
+            }
+            if (data.index == 1) {
+                $('.center #modelL  ul li:first-child').addClass("bg-img2");
+                $('.center #modelL  ul li:last-child').addClass("bg-img1");
+                $(".center #modelL  ul li:last-child span").removeClass("grey");
+                $(".center #modelL  ul li:first-child span").addClass("grey");
+                $(".center #modelL  ul li:last-child p").addClass("icon2");
+                $("#myItemLi p").removeClass("icon");
+                $("#myItemLi p").addClass("icon2");
+                $("#myTaskLi p").removeClass("icon");
+                $("#myTaskLi p").addClass("icon3");
+            }
+        });
+        //监听tab改变，用于tab样式的改变(处理事项)
+        element.on('tab(matter)', function (data) {
+            console.log(data);
+            $('.last #modelL  ul li').removeClass("bg-img3").removeClass("bg-img4").removeClass("bg-img5");
+            if (data.index == 0) {
+                $('.last #modelL ul li:first-child').addClass("bg-img3");
+                $('.last #modelL ul li:first-child+li').addClass("bg-img4");
+                $('.last #modelL  ul li:last-child').addClass("bg-img5");
+                $('.last #modelL ul li:first-child span').removeClass("grey");
+                $('.last #modelL ul li:first-child+li span').addClass("grey");
+                $('.last #modelL ul li:last-child span').addClass("grey");
+                $('.last #modelL ul li:first-child img').attr('src', './assetsInfo/images/firstpage/daibanicon1.png');
+                $('.last #modelL ul li:first-child+li img').attr('src', './assetsInfo/images/firstpage/yibanicon.png')
+                $('.last #modelL ul li:last-child img').attr('src', './assetsInfo/images/firstpage/yifaicon.png');
+                $('#myItemMore').attr('href', '#!ADC_process_mine_pending_tasks_html');
+            }
+            if (data.index == 1) {
+                console.log(4232);
+                $('.last #modelL ul li:first-child').addClass("bg-img4");
+                $('.last #modelL ul li:first-child+li').addClass("bg-img3");
+                $('.last #modelL  ul li:last-child').addClass("bg-img5");
+                $('.last #modelL ul li:first-child span').addClass("grey");
+                $('.last #modelL ul li:first-child+li span').removeClass("grey");
+                $('.last #modelL ul li:last-child span').addClass("grey");
+                $('.last #modelL ul li:first-child+li img').attr('src', './assetsInfo/images/firstpage/yibanicon1.png');
+                $('.last #modelL ul li:first-child img').attr('src', './assetsInfo/images/firstpage/daibanicon.png');
+                $('.last #modelL ul li:last-child img').attr('src', './assetsInfo/images/firstpage/yifaicon.png');
+                $('#myItemMore').attr('href', '#!ADC_process_mine_finish_tasks_html');
+            }
+            if (data.index == 2) {
+                $('.last #modelL ul li:first-child').addClass("bg-img5");
+                $('.last #modelL ul li:first-child+li').addClass("bg-img4");
+                $('.last #modelL  ul li:last-child').addClass("bg-img3");
+                $('.last #modelL  ul li:last-child span').removeClass("grey");
+                $('.last #modelL ul li:first-child span').addClass("grey");
+                $('.last #modelL ul li:first-child+li span').addClass("grey");
+                $('.last #modelL ul li:first-child+li img').attr('src', './assetsInfo/images/firstpage/yibanicon.png');
+                $('.last #modelL ul li:last-child img').attr('src', './assetsInfo/images/firstpage/yifaicon1.png')
+                $('.last #modelL ul li:first-child img').attr('src', './assetsInfo/images/firstpage/daibanicon.png');
+                $('#myItemMore').attr('href', '#!ADC_process_mine_my_tasks_html');
+            }
+        });
+        //add by xuelei 添加日期2019-2-21 end
+        // projectId = admin.GetRequest().id;
+        // console.log(personId);
+        var tableProject = function () {
+
+            //我的业务
+            var indata = {
+                assignee: projectId,
+                page: 1,
+                pageSize: size
+            };
+            $.ajax({
+                url: "/api/budget/budget/myBudget",
+//                url: "/api/budget/budget/myBudget",
+                data: JSON.stringify(indata),
+                type: 'post',
+                contentType: "application/json",
+                success: function (res) {
+                    if (res.ok) {
+                        let data = res.data.list.splice(0, 10);
+                        let con;
+                        if (data.length === 0) {
+                              con = '<p>暂无我的业务</p><div style="text-align: center;background-color: #fff"><img src="./assetsInfo/images/back.png" alt=""></div>'
+                        } else {
+                              con = "                                        <thead>\n" +
+                                "                                        <tr>\n" +
+                                "                                            <th>业务名称</th>\n" +
+                                "                                            <th>责任部门</th>\n" +
+                                "                                            <th>业务经理</th>\n" +
+                                "                                        </tr>\n" +
+                                "                                        </thead>\n";
+                            for (var i of data) {
+                                con += "                                        <tr>" +
+                                    "                                            <td title='"+i.projectName+"'>" + i.projectName + "</td>" +
+                                    "                                            <td title='"+(i.deptName?i.deptName:'')+"'>" + (i.deptName?i.deptName:'') + "</td>" +
+                                    "                                            <td title='"+i.usname+"'>" + i.usname + "</td></tr>";
+                            }
+                        }
+
+                        $('#tableBudget').html(con);
+                        $('#tableBudgetCount').html(res.data.count);
+
+                    }
+                }
+            });
+            //我的项目
+            $.ajax({
+                url: "/api/budget/project/myProject",
+                data: {
+                    page: 1,
+                    size: size
+                },
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        let data = res.data.dataList;
+                        let con;
+                        if (data.length === 0) {
+                              con = '<p>暂无我的项目</p><div style="text-align: center;background-color: #fff"><img src="./assetsInfo/images/back.png" alt=""></div>'
+                        } else {
+                              con = "                                        <thead>\n" +
+                                "                                        <tr>\n" +
+                                "                                            <th>项目名称</th>\n" +
+                                "                                            <th>所属业务</th>\n" +
+                                "                                            <th>业务类型</th>\n" +
+                                "                                        </tr>\n" +
+                                "                                        </thead>\n";
+                            for (var i of data) {
+                                var budget = i.budget
+                                if (budget == null) {
+                                    budget = "暂无"
+                                } else {
+                                    // budget = budget.substring(0, 15)
+                                }
+                                con += "                                        <tr>" +
+                                    "                                            <td title='"+i.name+"'>" + i.name + "</td>" +
+                                    "                                            <td title='"+budget+"'>" + budget + "</td>" +
+                                    "                                            <td title='"+i.business+"'>" + i.business + "</td></tr>";
+                            }
+                        }
+                        $('#myItem').html(con);
+                        $('#itemCount').html(res.data.count);
+
+                    }
+                }
+            });
+
+            //待办事项
+            $.ajax({
+                url: "/api/activiti-task/runtime-with-candidate",
+                data: {
+                    pageNo: 1,
+                    pageSize: size,
+                    assignee: account.usid
+                },
+                type: 'get',
+                success: function (res) {
+
+                    if (res.ok) {
+                         let data = res.data.list;
+                        let con;
+                        if (data.length === 0) {
+                              con = '<p >暂无待办事项</p><div style="text-align: center;background-color: #fff">\n' +
+                                '                     <img src="./assetsInfo/images/back.png" alt="">\n' +
+                                '                                        </div>';
+                        } else {
+                              con = "                                        <thead>\n" +
+                                "                                        <tr>\n" +
+                                "                                            <th>事项名称</th>\n" +
+                                "                                            <th>事项发起人</th>\n" +
+                                "                                            <th>事项接收时间</th>\n" +
+                                "                                        </tr>\n" +
+                                "                                        </thead>\n";
+                            let ind = 0;
+                            for (var i of data) {
+                                text = getProcessTitleText(i);
+                                con += "      <tr class='tasks-track my-font' index=" + ind + ">" +
+                                    "         <td title=" + text + ">" + text + "</td>" +
+                                    "         <td>" + i.initiatorName + "</td>" +
+                                    "         <td>" + i.createTimeStr.substring(0, 16) + "</td></tr>";
+                                ind++;
+                            }
+                        }
+
+                        $('#runtime').html(con);
+                        $('#runtimeCount').html(res.data.count);
+                        $('.tasks-track').off('click').on('click', function () {
+                            let index = $(this).attr('index');
+                            admin.popupCenter({
+                                title: '处理事项：' + data[index].name,
+                                path: 'components/tpl/process_pending_tpl_handle.html',
+                                area: ['100%', '100%'],
+                                maxmin: false,
+                                resize: false,
+                                finish: function () {
+                                    // taskTrackInit();
+                                    tableProject();
+                                    taskInfoInit();
+                                    if($("#tableContent-pendingTask").length!=0){
+                                        table.reload("tableContent-pendingTask");
+                                    }
+                                },
+                                success: function () {
+                                    process_pending_tpl_handle(data[index]);
+                                }
+                            });
+
+                        });
+                    }
+                }
+            });
+            //已办事项
+            $.ajax({
+                url: "/api/activiti-task/history",
+                data: {
+                    pageNo: 1,
+                    pageSize: size,
+                    assignee: account.usid
+                },
+                type: 'get',
+                success: function (res) {
+                    if (res.ok) {
+                        var data = res.data.list;
+                        let con;
+                        if (data.length === 0) {
+                            con = '<p >暂无已办事项</p><div style="text-align: center;background-color: #fff">\n' +
+                                '                                            <img src="./assetsInfo/images/back.png" alt="">\n' +
+                                '                                        </div>';
+                        } else {
+                            con = "                                        <thead>\n" +
+                                "                                        <tr>\n" +
+                                "                                            <th>事项名称</th>\n" +
+                                "                                            <th>当前受理人</th>\n" +
+                                "                                            <th>处理时间</th>\n" +
+                                "                                        </tr>\n" +
+                                "                                        </thead>\n";
+                            for (var i of data) {
+                                let text = getProcessTitleText(i);
+                                let currentUsers=i.processEndTime?'已结束':(
+                                    i.currentUsers?i.currentUsers:'无受理人');
+
+                                con += "<tr>" +
+                                    "<td title="+text+">" + text + "</td>" +
+                                    "<td>" + currentUsers + "</td>" +
+                                    "<td>" + i.createTimeStr.substring(0, 16) + "</td></tr>";
+                            }
+                        }
+
+                        $('#history').html(con);
+                        $('#historyCount').html(res.data.count);
+                    }
+                }
+            });
+            //已发事项
+            $.ajax({
+                url: "/api/activiti/repository/processInstances/track-list",
+                type: 'POST',
+                contentType: 'application/json; charset=UTF-8',
+                dataType: 'JSON',
+                data: JSON.stringify({
+                    pageNo: '1',
+                    pageSize: size,
+                    initiatorId: account.usid,
+                    existFinished: '1',
+                    /* 排除日报审批流程 */
+                    processDefinitionKeyNotInList: ['p478e4b877d504d39a392ba9317bd35e8']
+                }),
+                success: function (res) {
+                    if (res.ok) {
+                        let data = res.data.list;
+                        let con;
+                        if (data.length === 0) {
+                             con = '<p >暂无已发事项</p><div style="text-align: center;background-color: #fff">\n' +
+                                '                                            <img src="./assetsInfo/images/back.png" alt="">\n' +
+                                '                                        </div>';
+                        } else {
+                             con = "                                        <thead>\n" +
+                                "                                        <tr>\n" +
+                                "                                            <th>事项名称</th>\n" +
+                                "                                            <th>当前受理人</th>\n" +
+                                "                                            <th>创建时间</th>\n" +
+                                "                                        </tr>\n" +
+                                "                                        </thead>\n";
+                            for (var i of data) {
+                                let text = getProcessTitleText(i);
+                                let currentUsers = i.endTime ? '已结束' : (
+                                    i.currentUsers ? i.currentUsers : '无受理人');
+                                con += " <tr>" +
+                                    "   <td title="+text+">" + text + "</td>" +
+                                    "   <td>" + currentUsers + "</td>" +
+                                    "   <td>" + i.startTimeStr.substring(0, 16) + "</td></tr>";
+                            }
+                        }
+
+                        $('#trackList').html(con);
+                        $('#trackListCount').html(res.data.count);
+
+                    }
+                }
+            });
+
+        };
+        tableProject();
+
+        // 个人工时统计
+
+        function personWorkTimeStatic(data) {
+            var myChart = echarts.init(document.getElementById('personWorkTimeStatic'));
+            var option = {
+                title: {
+                    show: true,
+                    // text: e,
+                    x: 'center',
+                    y: 'center',
+                    textStyle: {
+                        fontSize: '12',
+                        color: '#3BA0FF',
+                        fontWeight: 'normal'
+                    }
+                },
+                tooltip: { //提示框组件
+                    trigger: 'item', //触发类型(饼状图片就是用这个)
+                    formatter: "{b} : {c}({d}%)" //提示框浮层内容格式器
+                },
+                grid: {
+//                    left: '3px',
+                    right: '0',
+                    bottom: '100%',
+                    containLabel: true
+                },
+                color: ['#3BA0FF', '#36CBCB', '#4ECB74', '#FAD337'],  //手动设置每个图例的颜色
+                legend: {  //图例组件
+                    icon: 'circle',
+                    //right:100,  //图例组件离右边的距离
+                    // orient : 'vertical',  //布局  纵向布局 图例标记居文字的左边 vertical则反之
+                    // width:80,      //图行例组件的宽度,默认自适应
+                    x: 'center',   //图例显示在右边
+                    y: 'bottom',   //图例在垂直方向上面显示居中
+                    itemWidth: 10,  //图例标记的图形宽度
+                    itemGap: 10,
+//                    width:"300px",
+                    type: 'scroll',
+                    // itemHeight:20, //图例标记的图形高度
+
+                    // data:['正常','一般','提示','较急'],
+
+                },
+                series: [ //系列列表
+                    {
+                        name: '',  //系列名称
+                        type: 'pie',   //类型 pie表示饼图
+                        center: ['50%', '52%'], //设置饼的原心坐标 不设置就会默认在中心的位置
+                        radius: ['10%', '40%'],  //饼图的半径,第一项是内半径,第二项是外半径,内半径为0就是真的饼,不是环形
+                        itemStyle: {  //图形样式
+                            normal: { //normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式，比如在鼠标悬浮或者图例联动高亮时。
+                                label: {  //饼图图形上的文本标签
+                                    show: true,  //平常显示
+                                    formatter: "{blue|{c}} ({d}%) \n{b}",//提示框浮层内容格式器
+                                    textStyle: {    //图例文字的样式
+                                        color: '#BABABA',  //文字颜色
+                                        fontSize: 12    //文字大小
+                                    },
+                                    rich: {
+                                        gray: {
+                                            color: 'BABABA'
+                                        },
+                                        blue: {
+                                            color: '#3BA0FF',
+                                            fontSize: 14,
+                                            fontWeight: 'bold'
+                                        }
+                                    }
+                                },
+                                labelLine: {     //标签的视觉引导线样式
+                                    show: true,  //平常显示
+                                    lineStyle: {
+                                        color: "#BABABA"  // 改变标示线的颜色
+                                    },
+
+                                    length: 10,
+                                    textStyle: {    //图例文字的样式
+                                        color: '#e9e9e9',  //文字颜色
+                                        fontSize: 12    //文字大小
+                                    }
+                                },
+                                borderWidth: 2,
+                                borderColor: '#fff',
+                            },
+                            emphasis: {   //normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式，比如在鼠标悬浮或者图例联动高亮时。
+                                label: {  //饼图图形上的文本标签
+                                    show: true,
+                                    position: 'center',
+                                    textStyle: {
+                                        fontSize: '14',
+                                        fontWeight: 'bold'
+                                    }
+                                }
+                            }
+                        },
+                        data: data
+                    }
+                ]
+            };
+            myChart.setOption(option)
+        };
+
+        function projectStatic(name, value) {
+            var myChart = echarts.init(document.getElementById('projectStatic'));
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                grid: {
+                    top: '1px',
+                    left: '3%',
+                    right: '40',
+                    bottom: '5%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                    name:"万元",
+                    boundaryGap: [0, 0.01],
+                    nameTextStyle:{
+                        color: '#3B4961'
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {     //网格线
+                        show: false
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            type: 'solid',
+                            color: '#E8E8E8',//左边线的颜色
+                            width: '1'//坐标线的宽度
+                        }
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#3B4961',//坐标值得具体的颜色
+                        },
+                        formatter: '{value}'
+                    },
+                },
+                yAxis: {
+                    type: 'category',
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'dashed',
+                            color: "#E8E8E8"
+                        }
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#3B4961',//坐标值得具体的颜色
+                        },
+                        formatter: function (params) {   //标签输出形式 ---请开始你的表演
+                            var index = 10;
+                            var newstr = '';
+                            for (var i = 0; i < params.length; i += index) {
+                                var tmp = params.substring(i, i + index);
+                                newstr += tmp;
+                            }
+                            if (newstr.length > 10)
+                                return newstr.substring(0, 10) + '...';
+                            else
+                                return newstr;
+                        },
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            type: 'solid',
+                            color: '#E8E8E8',//左边线的颜色
+                            width: '1'//坐标线的宽度
+                        }
+                    }
+                    ,
+                    data: name
+                },
+                series: [
+                    {
+                        type: 'bar',
+                        splitLine: {
+                            show: false
+                        },
+                        barWidth: 13,//柱图宽度
+                        color: '#479EF8',
+                        data: value
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        init();
+
+        var workTimeMap=[];
+        // 部分
+        function init() {
+
+            $('#main').fullCalendar({
+                customButtons: {
+//                    myCustomButton: {
+//                       text: '添加事件',
+//                        click: function () {
+//                            $("#endTimeBlock").addClass("layui-hide");
+//                            var curDate = new Date().Format('yyyy-MM-dd');
+//                             create(curDate)
+//                        }
+//                    },
+                },
+                // 日历头部
+                header: {
+                    center: 'title',
+                    right: 'prev, next,today',
+                    left: 'myCustomButton'
+                },
+                aspectRatio: 1,
+                contentHeight: contentHeight,
+                height: 310,
+                showNonCurrentDates: true,
+                fixedWeekCount: false,
+                eventLimit: true,
+                defaultView: "basicWeek",
+                views: {
+                    basicWeek: {
+                        eventLimit: limtItem // adjust to 6 only for timeGridWeek/timeGridDay
+                    }
+                },
+                eventLimitText: function (data) {
+                    return "还有" + data + "项..."
+                },
+                eventAfterRender: function (event, element, view) {
+                    var $this = $(element);
+                    //通过 操作 $this 可以从新定义dom
+                    // 通过 wz_title wz_name 自定义css样式  例如：
+                    $this.html("<div title='"+event.title+"' id='" + event.obj.id + "' class=\"wz_title break-tabel\" + >" +
+                        event.title + "</div>");
+
+
+                },
+                eventOrder: "description",
+                // 日历日程活动事件
+                events: function (start, end, timezone, callback) {
+                    // 获得当前日历月份
+                    var date = this.getDate().format('YYYY-MM');
+                    // 获得后台数据
+                    admin.req("/api/budget/staffCalendar/newQuery", {
+                        "createUserId": personId,
+                        "scheduleBeginDate": start.format("YYYY-MM-DD"),
+                        "scheduleEndDate": end.format("YYYY-MM-DD")
+                    }, function (json) {
+                        var events = [];
+                        workTimeMap=json.data.workTimeMap;
+                        //判断什么时候加更多
+                        var moreTitle;
+                        $.each(json.data.resultList, function (i, c) {
+                            // var time = "";
+                            // var classStyleName = "";
+                            // if (c.timeSlot == "上午") {
+                            //     time = " 12:00:00"
+                            //     classStyleName = "week-morning";
+                            //     moreTitle=moreCount;
+                            // } else if (c.timeSlot == "下午") {
+                            //     time = " 16:00:00";
+                            //     classStyleName = "week-afternoon";
+                            //     moreTitle=moreCount;
+                            //     //                            填写数据
+                            // } else {
+                            //
+                            //     time = " 20:00:00";
+                            //     classStyleName = "week-night";
+                            //     moreTitle=moreCount-2;
+                            // }
+//                            结束这个for循环再添加空的数据
+//                            var End=false;
+                            //                            填写数据
+                            var color;
+                            if(c.approveState==0||c.approveState==3||c.approveState==4||c.approveState==5){
+                                color='#eeeeee';
+                            }else if(c.approveState==1){
+                                color='#dee9fb';
+                            }else if(c.approveState==2){
+                                color='#fffbbb';
+                            }else if(c.approveState==6){
+                                color='#ffc9c9'
+                            }
+                            // && i < moreTitle
+                            for (var i = 0; i < c.parentNames.length ; i++) {
+                                events.push({
+                                    title: c.parentNames[i],
+                                    start: c.start, // will be parsed
+                                    color: color,
+                                    // className: classStyleName + i,
+                                    obj: c
+                                });
+                            }
+                            // if(c.parentNames.length>moreTitle){
+                            //     events.push({
+                            //         title: '更多',
+                            //         start: c.start + time, // will be parsed
+                            //         color: 'rgba(190, 211, 247, 0.5)',
+                            //         className: classStyleName + moreTitle,
+                            //         obj: c
+                            //     });
+                            // }
+
+                        });
+                        callback2 = callback;
+                        // 回调函数
+                        callback(events);
+                        // $('.wz_title').each(function () {
+                        //     $(this).attr('title', $(this).html());
+                        // })
+                    }, {
+                        method: "post"
+                    });
+
+                },
+                eventAfterAllRender: function (view) {
+                    if(view.type=='basicWeek'){
+                        if($('#allWorkCostTime').length==0){
+                            $('.fc-bg>table>tbody').append('<tr id="allWorkCostTime" style="height:50px;color: #666666">' +
+                                '</tr>');
+                            for (var i = 0; i <workTimeMap.length ; i++) {
+                                var color;
+                                if(workTimeMap[i]&&workTimeMap[i].approveFillWorkCostTime<8){
+                                    color='#FFB400';
+                                }else{
+                                    color='#008FC3';
+                                }
+                                $('.fc-bg>table>tbody>tr').eq(1).append('<td>' +
+                                    '<div class="FillWorkBox"><div class="approveFillWorkCostTime" style="color:'+color+'">'+(workTimeMap[i]?workTimeMap[i].approveFillWorkCostTime+"h":"--")+'</div><div class="textNow">有效</div></div>' +
+                                    '<div class="allFillWorkBox"><div class="allFillWorkCostTime">'+(workTimeMap[i]?workTimeMap[i].allFillWorkCostTime+"h":"--")+'</div><div class="textAll">累计</div></div>' +
+                                    '</td>');
+                            }
+                        }else {
+                            for (var i = 0; i <workTimeMap.length ; i++) {
+                                var color;
+                                if(workTimeMap[i]&&workTimeMap[i].approveFillWorkCostTime<8){
+                                    color='#FFB400';
+                                }else{
+                                    color='#008FC3';
+                                }
+                                $('#allWorkCostTime>td').eq(i).children('.FillWorkBox').children('.approveFillWorkCostTime').html((workTimeMap[i]?workTimeMap[i].approveFillWorkCostTime+"h":"--")).css('color',color);
+                                $('#allWorkCostTime>td').eq(i).children('.allFillWorkBox').children('.allFillWorkCostTime').html((workTimeMap[i]?workTimeMap[i].allFillWorkCostTime+"h":"--"));
+                            }
+                        }
+
+                    }
+                    // $(".fc-agendaWeek-view  .fc-row.fc-week.fc-widget-content").hide();
+                    // $("hr.fc-divider").hide();
+                    // $('.fc-slats>table>tbody tr').css("height", dayHeight)
+                    // $('.fc-slats>table>tbody>tr:first-child>td>span').html("上");
+                    // $('.fc-slats>table>tbody>tr:nth-child(2)>td>span').html("午");
+                    // $('.fc-slats>table>tbody>tr:nth-child(3)>td>span').html("下");
+                    // $('.fc-slats>table>tbody>tr:nth-child(4)>td>span').html("午");
+                    // $('.fc-slats>table>tbody>tr:nth-child(5)>td>span').html("晚<br>上");
+//                    $(".fc-event-container .week-morning").each(function (item) {
+//                        console.log(item,$(this))
+//                    })
+
+                    $(window).resize();
+
+                },
+                // 日历框点击事件
+                dayClick: function (date, jsEvent, view) {
+                    var curDate = new Date(date);
+                    if($('.fc-state-active').text()=="周"){
+                        curDate.setHours(curDate.getHours() - 10);
+                    }
+                    curDate = curDate.Format('yyyy-MM-dd');
+                    console.log(curDate)
+                    create(curDate)
+                },
+                // 日程事件点击事件
+                eventClick: function (calEvent, jsEvent, view) {
+                    // 获得日历当天日期
+                    var curDate = new Date().Format('yyyy-MM-dd');
+                    // 获取点击日程日期
+                    var selectDate = calEvent.start.format('YYYY-MM-DD');
+                    // 弹窗按钮
+                    var btn = null;
+                    // 日程简报弹层查看
+                    popMenu('edit', calEvent.obj);
+                }
+            });
+            //在添加事件按钮前加入+图标
+            $(".fc .fc-toolbar .fc-myCustomButton-button").prepend("<i class=\"layui-icon layui-icon-add-1\"></i>");
+            //$("#GantChart .adc-ganttchart-toolbar-text").prepend("<img src=\"../assetsInfo/images/firstpage/clsx.png\" style=\"margin-bottom: 4px;margin-right: 5px\">");
+
+        }
+
+        Date.prototype.Format = function (fmt) { //author: meizz
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "H+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+
+        function create(curDate) {
+//            if(personId==config.getAccount().usid)
+//            {
+//             admin.req('/api/budget/task/tree', {
+//                 userId: personId
+//             }, function (d) {
+//                 var judge = false;
+//                 for (var i = 0; i < d.data.length; i++) {
+//                     if (d.data[i].type == 4 || d.data[i].type == 3) {
+//                         judge = true;
+//                         break;
+//                     }
+//                 }
+//                 if (judge) {
+//                     popMenu('add', {}, curDate);
+//                 }
+//                 else {
+//                     layer.msg('暂无任务，请前往项目管理创建', {
+//                         time: 3000,
+//                         icon: 5
+//                     });
+//                 }
+//             });
+//            }
+            admin.req('/api/budget/task/haveTask', {
+            }, function (d) {
+                console.log(d);
+                var judge = false;
+                if (d.data == true) {
+                    judge = true;
+                }
+                if (judge) {
+                    popMenu('add', {}, curDate);
+                }
+                else {
+                    layer.msg('暂无任务，请前往项目管理创建', {
+                        time: 3000,
+                        icon: 5
+                    });
+                }
+            });
+        }
+
+//        日报弹出框
+        function popMenu(handleType, data, date) {
+            var params = {};
+            var title = "日报添加";
+            if (handleType == 'add') {
+                params.dailyCreateTime = date;
+            }
+            $('#dailyCreateTime').attr('disabled', 'disabled');
+            if (handleType === 'edit') {
+                title = '日报编辑';
+                data.dailyCreateTime = data.start;
+                params = data;
+
+            }
+            if(params.approveState==1||params.approveState==2){
+                title = '日报查看';
+            }
+            params.handleType = handleType;
+            localStorage.usid = personId;
+            admin.popupCenter({
+                title: title,
+                width: 950,
+                path: 'components/tpl/daily_save_form.html',
+                finish: function () {
+                    $('#main').fullCalendar('refetchEvents');
+                    workkTimeStatistics("year", role);
+                },
+                success: function () {
+                    setFormValueDay(params);
+                    form.render();
+                },
+                end: function () {
+                    $('#main').fullCalendar('refetchEvents');
+                    workkTimeStatistics("year", role);
+                },
+            });
+
+        };
+
+//日报弹出框表单事件
+        function setFormValueDay(obj) {
+            if(!obj.workCostTime&&obj.handleType=='edit'){
+                $('#oldWork').css('display','black');
+                $('#dailyInfoList').css('display','none');
+                $('#center-area').hide();
+
+                //出差
+                if (obj.dailyType==1)
+                {
+                    //$('#center-area').show();
+                    obj.customerInfo=[obj.customer,obj.dept,obj.contacts];
+
+                }
+                obj.taskChecked=obj.taskIdArray;
+                var elemArray=  $('#dailytype-form input:radio');
+                $.each(elemArray,function(index,elem){
+                    if (elem.value==obj.dailyType)
+                    {
+                        $(elem).prop('checked','checked');
+                    }
+
+                });
+                var custArray=  $('#time_form input:radio');
+                $.each(custArray,function(index,value){
+                    if (value.value==obj.timeSlot)
+                    {
+                        $(value).prop('checked','checked');
+                    }
+                });
+                var con= obj.workDescription?obj.workDescription:"" ;
+                $('.workDescription_new').val(con);
+            }else if(obj.workCostTime||obj.handleType=='add'){
+                $('#oldWork').css('display','none');
+                $('#dailyInfoList').css('display','black');
+                if(obj.id){
+                    var setDailyFun = function () {
+                        $('.noDaily').css('display', 'none');
+                        var isShareHtml ="";
+                        if((obj.approveState==1||obj.approveState==2||obj.approveState==6||
+                                ((obj.approveState==3||obj.approveState==5||obj.approveState==4)&&obj.dailyParentCreateUserId))
+                            &&(obj.dailyParentCreateUserId||obj.childrenDailyCreateUserNames)){
+                            var strH = '提示：此条日报由'+obj.dailyParentCreateUserName+'共享';
+                            if(!obj.dailyParentCreateUserId){
+                                strH = '提示：此条日报共享至'+obj.childrenDailyCreateUserNames.join("、");
+                                if(obj.childrenDailyCreateUserNames.length==0){
+                                    strH="";
+                                }
+                            }
+                            isShareHtml='<div class="layui-form-item dailySelectMember" style="color:#FF9999">\n' +
+                                strH+
+                                '    </div>';
+                        }
+                        obj.workDescription = ADCFormDesignHelper.htmlDecodeByRegExp(obj.workDescription);
+                        $('#dailyInfoList').append('<div class="dailyBox layui-form-item"  dailyParentId="'+obj.dailyParentId+'"  dailyParentCreateUserId="'+obj.dailyParentCreateUserId+'" dailyParentCreateUserName="'+obj.dailyParentCreateUserName+'" childTaskFlag="'+(obj.childTaskFlag?4:3)+'" id="'+obj.taskIdArray[0]+'">\n' +
+                            '                        <span  class="workName" data-id="'+obj.id+'" data-approveState="'+obj.approveState+'" data-budgetId="'+(obj.budgetId?obj.budgetId:"")+'" data-projectId="'+(obj.projectId?obj.projectId:"")+'" id="'+obj.approveUserId+'"  title="'+obj.taskName+'" >'+obj.taskName+'</span>\n' +
+                            '                        <input autocomplete="off"  type="text" name="dailyTime"\n' +
+                            '                             id="dailyTime'+obj.taskIdArray[0]+'" value="'+obj.dailyCreateTime+'"  placeholder="日期" class="layui-input rili dailyTime" readonly lay-verify="required">\n' +
+                            '                        <input type="text" class="workTime" onkeyup="replaceit(this)" value="'+obj.workCostTime+'" lay-verify="required|numberInt"  />\n' +
+                            '<span>小时</span>\n' +
+                            '                        <textarea maxlength="200" name="workDescription" type="text"  rows="8"\n' +
+                            '                                  placeholder="请输入任务描述,字数控制在200字以内"\n' +
+                            '                                  class="layui-textarea workDescription_new workInfo"\n' +
+                            '                        >'+obj.workDescription+'</textarea>'+
+                            '<div class="layui-form-item " style="height: 36px;margin-top: 10px;margin-bottom:0px;position: relative">\n' +
+                            '                    <label style="width:35px;padding:5px 0" class="layui-form-label labelWidth"><span>成果:</span> </label>\n' +
+                            '                    <div class="layui-input-block reduceMarginL" style="position: relative">\n' +
+                            '                        <input style="background: #F6F8FE" type="text" placeholder="请上传附件" name="'+ obj.taskResultFileId +'" id="fileName_'+ obj.taskIdArray[0] +'" class="layui-input" readonly>\n' +
+                            '                    </div>\n' +
+                            '                    <div class="layui-inline " style="position:absolute;right:0;top: 1px;margin-right:0px">\n' +
+                            '                        <button style="background: #229FFF;color:#fff;border:none" class="layui-btn layui-btn-sm layui-btn-normal" title="上传" id="chooseFile_'+ obj.taskIdArray[0] +'">上传</button>\n' +
+                            '                        <button style="background: #87C459;color:#fff;border:none;margin-left: 3px;display: none" class="layui-btn layui-btn-sm layui-btn-normal" title="下载" id="download_'+ obj.taskIdArray[0] +'" >下载</button>\n' +
+                            '                        <button style="background: #FC6664;color:#fff;border:none;margin-left: 3px" class="layui-btn layui-btn-sm layui-btn-normal" title="删除" id="delFile_'+ obj.taskIdArray[0] +'" >删除</button>\n' +
+                            '                        <button class="layui-btn layui-btn-sm layui-btn-normal" title="上传" id="upload_'+ obj.taskIdArray[0] +'" style="display: none">上传</button>\n' +
+                            '                    </div>\n' +
+                            '                </div>'+
+                            memberHtml+isShareHtml+
+                            '                    </div>');
+                        giveBind(obj.taskIdArray[0]);
+                        if(obj.taskResultFileId){
+                            $('#chooseFile_'+obj.taskIdArray[0]).css("display","none");
+                            $('#download_'+obj.taskIdArray[0]).css("display","inline-block");
+                        }
+                        $('#fileName_' + obj.taskIdArray[0]).val(obj.resultFileName ? obj.resultFileName:'')
+                        laydate.render({
+                            elem: '#dailyTime'+obj.taskIdArray[0]+'',
+                            type: 'date',
+                            min:minYear,
+                            max:maxYear
+                        });
+                    };
+                    var memberHtml="";
+                    if((obj.approveState==4||obj.approveState==5||obj.approveState==3)&&!obj.dailyParentCreateUserId&&obj.childTaskFlag!=null){
+                        memberHtml='<div class="layui-form-item dailySelectMember">\n' +
+                            '        <label class="layui-form-label" >协作人<img src="/assetsInfo/images/wenhao.png"  class="menW'+obj.taskIdArray[0]+' wenhao" />：</label>\n' +
+                            '        <div class="layui-input-block" >\n' +
+                            '            <div name="dailyMemberIds'+obj.taskIdArray[0]+'" id="dailyMemberIds'+obj.taskIdArray[0]+'">\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '</div>';
+
+                        var loadD2 =layer.load(2);
+                        var urlDaily ="/api/budget/task/query/";
+                        if(obj.childTaskFlag){
+                            urlDaily="/api/budget/childrentask/query/";
+                        }
+                        $.ajax({
+                            url: urlDaily+obj.taskIdArray[0],
+                            type: 'get',
+                            // data: JSON.stringify(optionNum),
+                            // contentType: 'application/json',
+                            success: function (res) {
+                                layer.close(loadD2);
+                                if (res.ok) {
+                                    var arr =res.data.mapsList;
+                                    var arr1 =res.data.userIdDeptNameMapList?res.data.userIdDeptNameMapList:[];
+                                    var formSelectArr=[];
+                                    for (var i = 0; i < arr.length; i++) {
+                                        var title="";
+                                        for(var j =0;j<arr1.length;j++){
+                                            if(arr1[j].id==arr[i].id){
+                                                title=arr1[j].name;
+                                            }
+                                        }
+                                        if(arr[i].id!=config.getAccount().usid){
+                                            formSelectArr.push({
+                                                name: arr[i].name,
+                                                value: arr[i].id,
+                                                title:title
+                                            });
+                                        }
+                                    }
+                                    setDailyFun();
+                                    var memberIds_blong_xmSelect = xmSelect.render({
+                                        el: '#dailyMemberIds'+obj.taskIdArray[0],
+                                        filterable: true,
+                                        on: function(data){
+
+                                        },
+                                        theme: {
+                                            color: '#0081ff',
+                                        },
+                                        autoRow: true,
+                                        direction: 'down',
+                                        searchTips: '输入你要找的人',
+                                        toolbar: {
+                                            show: true,
+                                        },
+                                        initValue:obj.childrenDailyCreateUserIds,
+                                        data: formSelectArr,
+                                        show:function(){
+
+                                        },
+                                        template: function(name, value, selected, disabled){
+                                            return "<span title="+name.item.title+">"+name.item.name+"</span>";        //返回一个html结构, 用于显示选项
+
+                                        },
+                                    });
+                                    var menIndex;
+                                    $(".menW"+obj.taskIdArray[0]).off('mouseleave').on('mouseleave',function () {
+                                        layer.close(menIndex);
+                                    }).off('mouseenter').on('mouseenter',function () {
+                                        menIndex=layer.tips("<span style='color:#333333;'>选择协作人后，此条日报将同时进入协作人的日程管理中，并计入其工时。</span>", '.menW'+obj.taskIdArray[0], {
+                                            tips: [1, '#fff'],
+                                        });
+                                    });
+                                } else {
+                                    return layui.layer.msg(res.message, {
+                                        icon: 5
+                                    });
+                                }
+                            },
+                            error: function (err) {
+                                layer.close(loadD2);
+                                return layui.layer.msg(err.message, {
+                                    icon: 5
+                                });
+                            }
+                        });
+                    }else{
+                        setDailyFun();
+                    }
+                }
+            }
+            obj.taskChecked = obj.taskIdArray;
+            if(obj.approveState==1||obj.approveState==2){
+                $('#btn-sumbit-save').attr("disabled", 'disabled');
+                $('#btn-sumbit-save').removeClass("layui-btn-normal");
+                $('#btn-sumbit-save').addClass("layui-btn layui-btn-disabled");
+                $('#btn-daily-save').attr("disabled", 'disabled');
+                $('#btn-daily-save').removeClass("layui-btn-normal");
+                $('#btn-daily-save').addClass("layui-btn layui-btn-disabled");
+                $('#chooseFile_'+obj.taskIdArray[0]).css("display","none");
+                $('#delFile_'+obj.taskIdArray[0]).css("display","none");
+                $('#delFile_'+obj.taskIdArray[0]).parent().css("right","55px");
+                $('#fileName_' + obj.taskIdArray[0]).attr("placeholder","");
+            }
+            form.render();
+
+            var title = $('.layui-tpl-container .layui-card-header');
+            var formNames = ['id', 'workDescription', 'handleType','customerInfo','taskChecked','dailyCreateTime','usid','approveState','workCostTime'];
+            obj.title && title.text(obj.title);
+            for (var i = 0; i < formNames.length; i++) {
+                if (obj[formNames[i]]) {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                } else {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val('');
+                }
+            }
+
+        }
+
+
+        var file = '';
+        function giveBind(id){
+
+            var files
+            // 清空文件队列
+            function clearFile(){
+                for (var x in files) {
+                    delete files[x];
+                }
+            }
+            var index;
+            $('#delFile_'+id).off('click').on('click',function () {
+                console.log(111)
+                if(!$('#fileName_'+id).val()){
+                    return layer.msg('请先上传文件', {
+                        icon: 5
+                    });
+                }else{
+                    $('#fileName_'+id).val('')
+                    $('#fileName_'+id).prop('name','')
+                    $('#chooseFile_'+id).css("display","inline-block");
+                    $('#download_'+id).css("display","none");
+                }
+            });
+            $('#download_'+id).off('click').on('click',function () {
+                if($('#fileName_'+id).val()){
+                    window.open("/ADC_info/api/sys/file/"+$('#fileName_'+id).prop('name')+"/download")
+                }else{
+                    return layer.msg('文件损坏请联系管理员', {
+                        icon: 5
+                    });
+                }
+            })
+
+            // 上传
+            var uploadRender = upload.render({
+                elem: '#chooseFile_'+id,
+                url: '/api/sys/file/upload',
+                field: 'file',
+                accept: 'file',// 所有文件
+                auto: false,// 自动上传
+                exts:'pdf|doc|docx|xlsx|xls|zip|rar|jpg|jpeg|png|gif|ppt|pptx',// 允许上传的文件后缀
+                bindAction: '#upload_'+id,
+                choose:function(obj){
+                    console.log("上传")
+                    uploadRender.config.elem.next()[0].value = '';// 防止choose方法只触发一次
+                    files = obj.pushFile();// 文件队列
+                    clearFile();
+                    obj.preview(function(index, file, result){// file:准备上传的文件对象
+                        files = obj.pushFile();
+                        $('#fileName_'+id).val(file.name);
+                        $('#upload_'+id).click()
+                    });
+                },
+                before:function () {
+                    if($('#fileName_'+id).val()){
+                        index = layer.load(2);
+                    }else {
+                        return layer.msg('请先选择文件', {
+                            icon: 5
+                        });
+                    }
+                },
+                done: function(res,indexs) {// 上传完毕回调
+                    layer.close(index);
+                    if (res.ok) {
+                        layer.msg('文件上传成功！', {
+                            icon: 1
+                        });
+                        file = res.data.fileId;
+                        $('#fileName_'+id).prop('name',res.data.fileId)
+                        $('#chooseFile_'+id).css("display","none");
+                        $('#download_'+id).css("display","inline-block");
+                        //删除附件
+                        $('#delFile_'+id).off('click').on('click',function () {
+                            if($('#fileName_'+id).val()){
+                                $.ajax({
+                                    url: "/api/knowledge/paper/deleteFile/"+file,
+                                    type: 'delete',
+                                    success: function (data) {
+                                        if (data.ok) {
+                                            delete files[indexs];
+                                            $('#fileName_'+id).val('');
+                                            $('#fileName_'+id).prop('name',"");
+                                            file = '';
+                                            $('#chooseFile_'+id).css("display","inline-block");
+                                            $('#download_'+id).css("display","none");
+                                        } else {
+                                            return layer.msg(data.reason, {
+                                                icon: 5
+                                            });
+                                        }
+                                    }
+                                })
+                            }else {
+                                return layer.msg('请先上传文件', {
+                                    icon: 5
+                                });
+                            }
+                            $('#download_'+id).off('click').on('click',function () {
+                                if($('#fileName_'+id).val()){
+                                    window.open("/ADC_info/api/sys/file/"+file+"/download")
+                                }else{
+                                    return layer.msg('文件损坏请联系管理员', {
+                                        icon: 5
+                                    });
+                                }
+                            })
+                        })
+                    } else {
+                        layer.msg('文件上传失败：' + res.message, {
+                            icon: 5
+                        });
+                    }
+                }
+            });
+
+        }
+
+
+
+
+        //监听单元格单击事件
+        table.on('tool(tableProject)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'view') {
+
+                window.location.href = "#!projectDetail?id=" + data.id + "&name=" + data.name;
+
+            }
+        });
+
+        // DONE: 侧边栏变化时刷新数据表格
+        // 将 table ID 存入数组
+        layui.admin.addTableCache('tableTodolist');
+
+        // 日程事件
+        laydate.render({
+            elem: '#dateViewer',
+            position: 'static',
+            // 不显示底部栏
+            showBottom: false,
+            theme: 'grid',
+            // 事件
+            mark: {
+                '2018-9-3': ''
+            },
+            done: function (value, date, endDate) {
+                // console.log(value); //得到日期生成的值，如：2017-08-18
+                // console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+                // console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+                // 通过检测当前日期是否有事件来进行下一步处理
+            }
+        });
+
+        // 获取我的日程
+        var dailyInfoInit = function () {
+            admin.req('/api/Daily/task/listsize', {
+                assignee: account.usid
+            }, function (res) {
+                if (res.ok) {
+                    var elem = $('.tasks-info-container strong'),
+                        arr = [];
+                    arr.push(res.data);
+                    for (var i = 0; i < elem.length; i++) {
+                        elem[i].innerText = arr[i];
+                    }
+                } else {
+                    // taskInfoInit();
+                }
+            });
+        };
+        dailyInfoInit();
+        $('.tasks-info-refresh').on('click', function () {
+            dailyInfoInit();
+        });
+
+        //获取待办已办事项
+        var taskInfoInit = function () {
+            admin.req('/api/activiti-task/task/listsize', {
+                assignee: account.usid
+            }, function (res) {
+                if (res.ok) {
+                    var elem = $('.tasks-info-container .strong'),
+                        arr = [];
+                    arr.push(res.data.toDoListSize);
+                    arr.push(res.data.doedListSize);
+                    for (var i = 0; i < elem.length; i++) {
+                        elem[i].innerText = arr[i];
+                    }
+                } else {
+                    // taskInfoInit();
+                }
+            });
+
+
+        };
+        // taskInfoInit();
+
+
+//        // 获取跟踪事项
+//        var taskTrackInit = function () {
+//            admin.req('/api/activiti-task/runtime', {
+//                pageNo: 1,
+//                pageSize: 5,
+//                assignee: account.usid
+//            }, function (res) {
+//                if (res.ok) {
+//                    taskTrack = res.data.list;
+//                    var tmp = res.data.list,
+//                        tmpHtml = '';
+//                    for (var i = 0; i < tmp.length; i++) {
+//                        var tmpData = tmp[i],
+//                            tmpDataName = tmpData.name,
+//                            index = tmpDataName.lastIndexOf("\-"),
+//                            tmpDataName = tmpDataName.substring(index + 1, tmpDataName.length),
+//                            processInstanceName = tmpData.processInstanceName ? tmpData.processInstanceName : '暂无事项名称',
+//                            tmpDataCurrentUsers = tmpData.assigneeName ? tmpData.assigneeName :
+//                                '当前无处理人',
+//                            tmpDataStartTimeStr = tmpData.createTimeStr ? tmpData.createTimeStr.split(
+//                                ' ')[
+//                                0].split('-').join('/') : '无时间';
+//                        tmpHtml +=
+//                            '<div class="tasks-track" index="' + i + '">' +
+//                            '<p><span style="text-align: center;background-color: #13c1bf;color: #fff;font-size: 12px;border-radius: 4px;margin: 1px; height: 25px;line-height: 25px">' + tmpDataName + '</span></p>' +
+//                            '<p><span>' + processInstanceName +
+//                            '</span></p>' +
+//                            ' <span>' + tmpDataStartTimeStr + '</span>' +
+//                            '</div>';
+//                    }
+//                    if (tmpHtml === '') tmpHtml =
+//                        // '<div style="text-align: center;color: #999;">当前无跟踪事项</div>'+
+//                        '<img src="../assetsInfo/images/box.jpg" style=" width: 350px; margin-top: -62px; margin-left: 12%; ">';
+//                    // $('.tasks-track-container').html(tmpHtml);
+//
+//                    $('.tasks-track').on('click', function () {
+//                        var index = $(this).attr('index');
+//                        var data = taskTrack[index];
+//                        admin.popupCenter({
+//                            title: '处理事项：' + data.name,
+//                            path: 'components/tpl/process_pending_tpl_handle.html',
+//                            area: ['100%', '100%'],
+//                            maxmin: false,
+//                            resize: false,
+//                            finish: function () {
+//                                taskTrackInit();
+//                                tableProject();
+//                                taskInfoInit();
+//                            },
+//                            success: function () {
+//                                process_pending_tpl_handle(data);
+//                            }
+//                        });
+//
+//                    });
+//                } else {
+//                    layer.msg('获取跟踪事项失败：' + res.message, {
+//                        icon: 5
+//                    });
+//                }
+//            }, {
+//                async: false
+//            });
+//            //后台要求，执行完一个接口再执行下一个，不然可能有点问题
+//            taskInfoInit()
+//        };
+//        taskTrackInit();
+
+
+//        获取日历高度
+//        console.log( $('.dayHeight').height()-18)
+//            $('#modelRight').css('height',$('.dayHeight').height()-87);
+
+    });
+
+    function $$(id) {
+        return document.getElementById(id);
+    }
+
+    dragula([$$('task'), $$('one'), $$('two'), $$('three'), $$('four')], {
+//        removeOnSpill: true,
+//        copy: function (el, source) {
+//            console.log(source)
+//            return source === document.getElementById("task")
+//        },
+//        accepts: function (el, target) {
+//            return target !== document.getElementById('task')
+//        }
+    })
+    //        开始拖拽
+        .on('drag', function (el, container) {
+            console.log(1)
+            transmit = false;
+//            el.className = el.className.replace('ex-moved', '');
+        })
+        //        放下
+        .on('drop', function (el, container) {
+            console.log(2)
+            var option = JSON.parse(el.id);
+            switch (container.id) {
+                case "one":
+                    option.priority = 1;
+                    break;
+                case "two":
+                    option.priority = 2;
+                    break;
+                case "three":
+                    option.priority = 3;
+                    break;
+                case "four":
+                    option.priority = 4;
+                    break;
+                default:
+                    option.priority = 0
+            }
+            $.ajax({
+                url: "/api/TaskPriority",
+                type: 'put',
+                dataType: "json",
+                data: JSON.stringify(option),
+                contentType: "application/json",
+                success: function (res) {
+                }
+            });
+//            el.className += ' ex-moved';
+        })
+        //    暂时不用 不要删除
+        .on('over ', function (el, container) {
+            console.log(3)
+//            container.className += ' ex-over';
+        })
+        .on('out', function (el, container) {
+            console.log(4)
+            console.log(container)
+//            container.className = container.className.replace('ex-over', '');
+        });
+
+    //    任务优先级
+    $(function () {
+        ajaxTask()
+    })
+
+    function ajaxTask() {
+        $.ajax({
+            url: "/api/TaskPriority/list ",
+            type: 'get',
+            contentType: "application/json",
+            success: function (res) {
+                if (res.ok) {
+                    var data = res.data[0];
+//                  全局变量
+//                  quadrantData(data[0],'#task')
+                    for (var i in data) {
+                        console.log(i)
+                        switch (i) {
+                            case "0":
+                                quadrantData(data[0], '#task');
+                                break;
+                            case "1":
+                                quadrantData(data[1], '#one');
+                                break;
+                            case "2":
+                                quadrantData(data[2], '#two');
+                                break;
+                            case "3":
+                                quadrantData(data[3], '#three');
+                                break;
+                            case "4":
+                                quadrantData(data[4], '#four');
+                                break;
+                            default:
+                                console.log("没有")
+                        }
+                    }
+
+                }
+            }
+        });
+    }
+
+    function quadrantData(taskData, id) {
+        var con = ""
+        for (var i = 0; i < taskData.length; i++) {
+            con += "<div id='" + JSON.stringify(taskData[i]) + "'>" + taskData[i].name + "</div>"
+        }
+        $(id).html("");
+        $(id).html(con);
+    }
+</script>

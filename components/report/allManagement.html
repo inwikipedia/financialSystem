@@ -1,0 +1,258 @@
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<link rel="stylesheet" href="assetsInfo/css/report.css">
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+
+    .titDivbox {
+        width: 90%;
+        margin: auto;
+        position: relative;
+    }
+
+    .titDiv {
+        width: 100%;
+        font-size: 16px;
+        font-weight: bold;
+        color: #888;
+        position: absolute;
+        top: 25px;
+    }
+
+    .tit01,
+    .tit02 {
+        width: 50%;
+        float: left;
+        text-align: center;
+    }
+
+    .botTable {
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+
+    .manageChart {
+        height: 480px;
+        width: 96%;
+    }
+
+    @media screen and (min-width: 1366px) and (max-width: 1920px) {
+        .manageChart {
+            height: 400px;
+            width: 96%;
+        }
+    }
+
+    @media screen and (min-width: 1920px) {
+        .manageChart {
+            height: 480px;
+            width: 96%;
+        }
+    }
+    @media screen and (max-width: 1366px) {
+        .manageChart{
+            height:400px;
+        }
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span class="layui-card-header-title"><strong>整体经营情况</strong></span>
+                <!-- <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-sm exportbtn">导出PPT</a> -->
+            </div>
+
+            <div class="layui-row">
+                <div id="manageChart" class="manageChart"></div>
+            </div>
+
+            <div class="botTable">
+
+                <table id="tableContent-form" lay-filter="tableContent-form"></table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+
+<script>
+    layui.use(['table'], function() {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer,
+            thisYear=new Date().getFullYear(),
+            month = new Date().getMonth()+1;
+        var index = layer.load(2);
+        // 渲染表格
+        table.render({
+            elem: '#tableContent-form',
+            url: admin.formatUrl('/api/business/tableReport/getSameMonthTermData?thisYear='+thisYear+'&lastYear='+(thisYear-1)+'&startMonth=1&endMonth='+month), //数据接口
+            method: 'GET',
+            parseData: function (res) { //res 即为原始返回的数据
+                layer.close(index);
+                //echart数据处理
+                var yData = ['合同额', '开票额', '进账额'];
+                var yData1 = [],
+                    yData2 = [];
+                yData1.push(res.data.thisYearMap.contractSum);
+                yData1.push(res.data.thisYearMap.invoiceAmount);
+                yData1.push(res.data.thisYearMap.contributionAmount);
+                yData2.push(res.data.lastYearMap.contractSum);
+                yData2.push(res.data.lastYearMap.invoiceAmount);
+                yData2.push(res.data.lastYearMap.contributionAmount);
+                chartInit(yData, yData1, yData2);
+                //表格数据处理
+                res.data.thisYearMap.year=thisYear;
+                res.data.lastYearMap.year=(thisYear-1);
+                res.data.annualRatioMap.year='同比增长';
+                for (var key in res.data.annualRatioMap) {
+                    if(typeof res.data.annualRatioMap[key]=='number'){
+                        res.data.annualRatioMap[key] = (res.data.annualRatioMap[key]*100).toFixed(2)+'%';
+                    }
+                }
+                var arr=[];
+                arr.push(res.data.lastYearMap);
+                arr.push(res.data.thisYearMap);
+                arr.push(res.data.annualRatioMap);
+
+                // 返回结果，进行渲染表格
+                return {
+                    "code": res.respCode, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "data": arr //解析数据列表
+                };
+            },
+            cols: [
+                [{
+                    title: '年份',
+                    field: 'year',
+                    align: 'center'
+                },{
+                    title: '合同额',
+                    field: 'contractSum',
+                    align: 'center'
+                }, {
+                    title: '开票额',
+                    field: 'invoiceAmount',
+                    align: 'center'
+                }, {
+                    title: '进账额',
+                    field: 'contributionAmount',
+                    align: 'center'
+                }]
+            ],
+
+
+        });
+        var myChart = echarts.init(document.getElementById("manageChart"));
+        var chartInit = function(yData, data1, data2) {
+            // 图表初始化
+            // 图表配置项
+            var option = {
+                title: {
+                    left: 'center',
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    textStyle: {
+                        align: 'left'
+                    },
+
+                    axisPointer: {
+                        type: 'cross',
+                        crossStyle: {
+                            color: '#999'
+                        }
+                    },
+                },
+                grid: {
+                    left: 45,
+                    right: 50,
+                    bottom:70,
+                    top:20
+                },
+                legend: {
+                    data: [{
+                        name:thisYear+'年1-'+month+'月',
+                        icon: "roundRect"
+                    }, {
+                        name:(thisYear-1)+'年1-'+month+'月' ,
+                        icon: "roundRect"
+                    }],
+                    left: 'center',
+                    bottom: 'bottom',
+                    padding: [7, 0, 0, 0],
+                    itemWidth: 10,
+                    itemHeight: 10
+                },
+                yAxis: [{
+                    type: 'category',
+                    data: yData,
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#949494',
+                        }
+                    },
+                }],
+                xAxis: [{
+                    type: 'value',
+
+                    min: 0,
+                    axisLabel: {
+                        formatter: '{value}'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#949494',
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    }
+                }
+                ],
+                series: [{
+                    name:(thisYear-1)+'年1-'+month+'月',
+                    type: 'bar',
+                    barMaxWidth: 30,
+                    data: data2,
+                    color: 'RGBA(124,190,253,0.8)',
+                }, {
+                    name: thisYear+'年1-'+month+'月',
+                    type: 'bar',
+                    barMaxWidth: 30,
+
+                    color: 'RGBA(255,233, 133,0.8)',
+                    data: data1
+                }
+
+                ]
+            };
+            myChart.setOption(option);
+        };
+        setTimeout(function() {
+            window.onresize = function() {
+                myChart.resize();
+                //myChartLine.resize();
+                //GantChart.resize();
+                // myChartPie.resize();
+            }
+        }, 200);
+    });
+</script>

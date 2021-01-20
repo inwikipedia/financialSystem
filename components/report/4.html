@@ -1,0 +1,289 @@
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<link rel="stylesheet" href="assetsInfo/css/report.css">
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+    
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+    
+    .titDivbox {
+        width: 90%;
+        margin: auto;
+        position: relative;
+    }
+    
+    .titDiv {
+        width: 100%;
+        font-size: 16px;
+        font-weight: bold;
+        color: #888;
+        position: absolute;
+        top: 25px;
+    }
+    
+    .tit01,
+    .tit02 {
+        width: 50%;
+        float: left;
+        text-align: center;
+    }
+    
+    .botTable {
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+    
+    .chart {
+        height: 360px;
+        width: 96%;
+    }
+    
+    @media screen and (min-width: 1366px) and (max-width: 1920px) {
+        .chart {
+            height: 360px;
+            width: 96%;
+        }
+    }
+    
+    @media screen and (min-width: 1920px) {
+        .chart {
+            height: 370px;
+            width: 96%;
+        }
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span class="layui-card-header-title"><strong>支出合同执行情况—部门</strong></span>
+                <!-- <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-sm exportbtn">导出PPT</a> -->
+            </div>
+
+            <div class="layui-row">
+                <div id="upPicL" class="chart"></div>
+            </div>
+
+            <div class="botTable">
+                <table id="tableContent-form" lay-filter="tableContent-form"></table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+</script>
+<script>
+    layui.use(['table'], function() {
+        var table = layui.table,
+            admin = layui.admin,
+            layer = layui.layer;
+
+        // 渲染表格
+        function rendrTable(data, cols) {
+            table.render({
+                elem: '#tableContent-form',
+                id: 'tableContent-form',
+                data: data,
+                cols: cols,
+                cellMinWidth: 120,
+            });
+        };
+
+        layui.admin.addTableCache('tableContent-form');
+
+        admin.req('/json/report.json', {}, function(res) {
+            var depObject = res.expenditure[0];
+            var xData = [];
+            var tableCol = [];
+            for (var key in depObject) {
+                xData.push(depObject[key])
+            }
+            //动态创建表格列
+            for (var i in xData) {
+                var one = {
+                    title: xData[i],
+                    field: 'data' + (i - 0 + 1),
+                    width: "120",
+                    align: 'center'
+                }
+                tableCol.push(one);
+            }
+            tableCol[0].width = '200',
+                res.expenditure.shift();
+            var cols = [tableCol]
+            rendrTable(res.expenditure, cols);
+            var yData1 = [],
+                yData2 = [],
+                yData3 = [];
+            for (var key in res.expenditure[0]) {
+                yData1.push(res.expenditure[0][key])
+
+            }
+            for (var key in res.expenditure[1]) {
+                yData2.push(res.expenditure[1][key])
+
+            }
+            for (var key in res.expenditure[3]) {
+                var value = res.expenditure[3][key];
+                var rate = value.toString().replace('%', "");
+                yData3.push(rate)
+            }
+            showUpL(xData.slice(1, xData.length), yData1.slice(1, yData1.length), yData2.slice(1, yData2.length), yData3.slice(1, yData3.length))
+
+        }, {
+            method: 'get'
+        });
+
+
+        var showUpL = function(xData, data1, data2, data3) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("upPicL"));
+            // 图表配置项
+            var option = {
+                title: {
+                    left: 'center',
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    textStyle: {　　
+                        align: 'left'　　　　
+                    },
+                    axisPointer: {
+                        type: 'cross',
+                        crossStyle: {
+                            color: '#999'
+                        }
+                    }
+                },
+                grid: {
+                    left: 45,
+                    right: 40,
+                    bottom: 80,
+                },
+                legend: {
+                    data: [{
+                        name: '2019年支出合同',
+                        icon: "roundRect"
+                    }, {
+                        name: '2019年已执行',
+                        icon: "roundRect"
+                    }, {
+                        name: '执行率',
+                        itemWidth: '15'
+                    }],
+                    left: 'center',
+                    bottom: 'bottom',
+                    padding: [7, 0, 0, 0],
+                    itemWidth: 10,
+                    itemHeight: 10
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: xData,
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    axisLabel: {
+                        rotate: 45,
+
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#949494',
+                        }
+                    }
+                }],
+                yAxis: [{
+                        type: 'value',
+                        name: '金额',
+                        min: 0,
+                        axisLabel: {
+                            formatter: '{value}'
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#949494',
+                            }
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                type: 'dashed',
+                                color: "#E8E8E8"
+                            }
+                        },
+                    }, {
+                        type: 'value',
+                        min: 0,
+                        axisLabel: {
+                            formatter: '{value}%'
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#949494',
+                            }
+                        },
+                        splitLine: {
+                            show: false
+                        },
+
+
+                    }
+
+                ],
+                series: [{
+                        name: '2019年支出合同',
+                        type: 'bar',
+                        barMaxWidth: 30,
+                        data: data1,
+                        color: 'RGBA(124,190,253,0.8)',
+                    }, {
+                        name: '2019年已执行',
+                        type: 'bar',
+                        color: 'RGBA(255,233, 133,0.8)',
+                        data: data2
+                    }, {
+                        name: '执行率',
+                        type: 'line',
+                        barMaxWidth: 30,
+
+                        color: 'RGB(51,204,0)',
+                        yAxisIndex: 1,
+                        data: data3,
+                        itemStyle: { //设置折线拐点处数值
+                            normal: {
+                                label: {
+                                    show: true,
+                                    formatter: '{c}%'
+                                }
+                            }
+                        }
+                    },
+
+                ]
+            };
+            myChart.setOption(option);
+        };
+        setTimeout(function() {
+            window.onresize = function() {
+                myChart.resize();
+                //myChartLine.resize();
+                //GantChart.resize();
+                // myChartPie.resize();
+            }
+        }, 200);
+
+
+    });
+</script>

@@ -1,0 +1,1343 @@
+<!--
+File   : task_personnel_select.html
+Created: Thursday September 27th 2018 4:10:07 pm
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Last Modified: Sunday September 30th 2018 11:57:45 am
+Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+-----
+Description: 人员选择，弹出框插件，请使用 iframe 弹出；
+调用方法请查看 process_pending_tpl_handle.html 中的 taskControl.personnelSelect(data, callback) 方法
+-----
+HISTORY:
+2018-09-28	yuchunyu97	初始化结构
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>请选择组织机构</title>
+
+    <link rel="stylesheet" href="../../assetsInfo/libs/layui/css/layui.css" />
+    <link rel="stylesheet" href="../../assetsInfo/css/style.css">
+    <link rel="stylesheet" href="../../assetsInfo/css/theme.css" />
+    <link rel="stylesheet" href="../../module/formSelects/formSelects-v4.css" />
+    <link rel="stylesheet" href="../../assetsInfo/css/task_personnel_select.css">
+
+    <!-- zTree 样式 -->
+    <link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/metroStyle.css">
+</head>
+<style>
+    .person-select-box-b,.person-select-box-t{
+        height: 100%!important;
+    }
+    .layui-fluid .layui-tab-content .select-member{
+        height: 35%;
+        border:1px solid rgba(238,238,238,1);
+        /*border-top:none;*/
+    }
+    .layui-fluid .layui-tab-content .select-member .memberBox{
+        height: calc(100% - 46px);
+        margin: 10px 10px 0 10px;
+    }
+    .layui-fluid .layui-tab-content .select-member .memberUl {
+        width: 100%;
+        height: 90%;
+        float: left;
+        overflow: auto;
+    }
+    .layui-fluid .layui-tab-content .select-member .memberBtn{
+        width: 30%;
+        height: 100%;
+        float: left;
+    }
+    .layui-fluid .select-user .layui-tab-content  .xm-cz {
+        display: inline-block;
+        color:#999;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    .layui-fluid .select-user .layui-tab-content .select-member .xm-cz{
+        float: right;
+    }
+    .layui-fluid .select-user .layui-tab-content  .xm-cz:hover {
+        color: #00ACFF;
+    }
+    .layui-fluid .select-user .layui-tab-content  .xm-cz i {
+        margin-right: 10px;
+    }
+    .layui-fluid .layui-tab-content .select-member .memberUl .memberLi{
+        width: auto;
+        height: auto;
+        padding: 0px;
+    }
+    .layui-fluid .layui-tab-content .select-member .memberUl .memberLi .memberName{
+        border:1px solid rgba(238,244,253,1);
+        background:rgba(238,244,253,1);
+        color:#666666;
+        position: relative;
+        padding: 2px 5px;
+        border-radius: 2px;
+        display: inline-block;
+        line-height: 18px;
+        height: 18px;
+        margin: 2px 5px 2px 0;
+        cursor: initial;
+        user-select: none;
+        font-size: 14px;
+        padding-right: 25px;
+        -webkit-user-select: none;
+        /*box-sizing: border-box;*/
+    }
+    .layui-fluid .layui-tab-content .select-member .memberUl .memberLi .memberName:hover{
+        color:#499BF0;
+        background:rgba(238,244,253,1);
+        /*border:1px solid rgba(165,200,237,1);*/
+    }
+    .layui-fluid .layui-tab-content .select-member .memberUl .memberLi .memberIcon{
+        position: absolute;
+        right: 2px;
+        top: 3px;
+        cursor: pointer;
+    }
+    .member-tab{
+        display: inline-block;
+        width: calc(50% - 15px);
+        border:1px solid rgba(238,238,238,1);
+        height: 40px;
+        text-align: center;
+        line-height: 40px;
+        box-sizing: border-box;
+        float: left;
+        cursor: pointer;
+        color: #666666;
+    }
+    .member-active{
+        background-color: rgba(24,177,235,0.2);
+    }
+    .member-box-btn{
+        color:#333333;
+        padding-left: 10px;
+        border:1px solid rgba(238,238,238,1);
+        height: 34px;
+        line-height: 34px;
+        border-left: none;
+        border-top:none ;
+    }
+    .layui-fluid .person-select-box .person-select-box-t{
+        border: 1px solid rgba(238,238,238,1);
+    }
+    .member-top-title{
+        color:#333333;
+        padding-left: 10px;
+        height: 34px;
+        line-height: 34px;
+        border:1px solid rgba(238,238,238,1);
+        border-radius:2px;
+        border-top:none ;
+        border-left:none ;
+    }
+    .layui-fluid .person-select-box{
+        height: 93%;
+    }
+    .group-item .layui-form-checkbox[lay-skin=primary] i{
+        width: 12px;
+        height: 12px;
+    }
+    .group-user-font{
+        font-size:14px;
+        font-family:SourceHanSansCN-Medium;
+        font-weight:500;
+        color:rgba(51,51,51,1);
+        height: 25px;
+        cursor: default;
+    }
+    .group-position{
+        font-size:12px;
+        height: 25px;
+        font-family:SourceHanSansCN-Medium;
+        font-weight:500;
+        color:rgba(102,102,102,1);
+        cursor: default;
+
+        max-width: 60px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+    .group-box{
+        /*text-align: center;*/
+        white-space: nowrap;
+    }
+   .group-item  .personList li{
+       height: 85px;
+    }
+    .group-item .layui-form-radio{
+        padding-right: 0px;
+    }
+    @media screen and (max-width: 1366px) {
+        .group-item .personList li{
+            width: 20%
+        }
+    }
+    #spanClick{
+        moz-user-select: -moz-none;
+        -moz-user-select: none;
+        -o-user-select:none;
+        -khtml-user-select:none;
+        -webkit-user-select:none;
+        -ms-user-select:none;
+        user-select:none;
+        position: relative;
+        left: -5px;
+        cursor: pointer;
+    }
+   /*.group-item .person-select-box .person-select-box-t, .person-select-box .person-select-box-b{*/
+        /*overflow: visible;*/
+       /*border: none;*/
+    /*}*/
+</style>
+<body>
+
+<div class="layui-fluid group-item layui-form" style="border: none;height: 98%" >
+    <!--<div class="layui-row person-header">-->
+    <!--<ul class="layui-tab-title">-->
+    <!--<li class="layui-this">组织机构</li>-->
+    <!--&lt;!&ndash;<li>用户角色</li>&ndash;&gt;-->
+    <!--</ul>-->
+    <!--</div>-->
+    <div class="layui-tab layui-tab-card select-user" lay-filter="person-tab" style="height: 100%;margin: 0;border: none;box-shadow:none;" >
+        <!--<ul class="layui-tab-title" style="padding-left: 0px">-->
+            <!--<li class="layui-this">部门</li>-->
+            <!--<li >组</li>-->
+        <!--</ul>-->
+        <div class="layui-tab-content" style="height: calc(100% - 44px );padding:10px 0 0 0" >
+            <div class="layui-tab-item layui-show layui-row person-container">
+                <div class="layui-col-xs12 layui-col-sm12 layui-col-md3 person-container-l leftTree" style="border: none">
+                    <div id="tabChange"  style="padding:0px 15px;width: 100%">
+                        <div  class="member-tab member-active" style="border-right:none " >部门</div>
+                        <div  class="member-tab" style="border-left: none">组</div>
+                    </div>
+                    <div class="layui-row">
+                        <div style="width: 100%">
+                            <!--width: calc(100% - 15px);overflow: auto;border-bottom: 1px solid rgba(238,238,238,1);-->
+                            <!-- tab 切换 -->
+                            <div class="layui-tab-content" >
+                                <!-- 组织机构 -->
+                                <div class="layui-tab-item layui-show">
+                                    <div class="layui-form person-search">
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-inline">
+                                                <input type="text" name="value" placeholder="请输入人员名称" class="layui-input" id="searchName">
+                                                <i class="layui-icon layui-icon-search" layui-submit></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="person-select-box">
+                                        <div class="person-select-box-t">
+                                            <ul id="select-org" class="ztree"></ul>
+                                        </div>
+                                        <!--<div class="person-select-box-b">-->
+                                        <!--<table class="layui-table" lay-even lay-skin="nob">-->
+                                        <!--<colgroup>-->
+                                        <!--<col width="50%">-->
+                                        <!--<col width="50%">-->
+                                        <!--</colgroup>-->
+                                        <!--<tbody id="select-box-org">-->
+                                        <!--&lt;!&ndash; <tr><td>超级管理员</td><td>中国汽车技术研究中心有限公司</td></tr> &ndash;&gt;-->
+                                        <!--</tbody>-->
+                                        <!--</table>-->
+                                        <!--</div>-->
+                                    </div>
+                                </div>
+                                <!-- 用户角色 -->
+                                <!--<div class="layui-tab-item">-->
+                                <!--<div class="layui-form person-search">-->
+                                <!--<div class="layui-form-item">-->
+                                <!--<div class="layui-input-inline">-->
+                                <!--<input type="text" name="value" placeholder="请输入用户角色/人员名称" class="layui-input">-->
+                                <!--<i class="layui-icon layui-icon-search" layui-submit></i>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="person-select-box">-->
+                                <!--<div class="person-select-box-t">-->
+                                <!--<ul id="select-role" class="ztree"></ul>-->
+                                <!--</div>-->
+                                <!--<div class="person-select-box-b">-->
+                                <!--<table class="layui-table" lay-even lay-skin="nob">-->
+                                <!--<colgroup>-->
+                                <!--<col width="50%">-->
+                                <!--<col width="50%">-->
+                                <!--</colgroup>-->
+                                <!--<tbody id="select-box-role">-->
+                                <!--&lt;!&ndash; <tr><td>超级管理员</td><td>中国汽车技术研究中心有限公司</td></tr> &ndash;&gt;-->
+                                <!--</tbody>-->
+                                <!--</table>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                            </div>
+                        </div>
+                        <!--<div class="layui-col-xs2 layui-col-sm2 layui-col-md1">-->
+                            <!--&lt;!&ndash;<div class="person-selected-direction">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<i class="layui-icon layui-icon-left"></i>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<i class="layui-icon layui-icon-right"></i>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--</div>-->
+                    </div>
+                </div>
+                <div style="height: 60%;border:1px solid rgba(238,238,238,1);" class="layui-col-xs12 layui-col-sm12 layui-col-md9 person-container-l personList layui-row"  >
+                    <div class="member-top-title">
+                        全部人员
+                        <label class="xm-cz" id="allChose" title="全选" style="margin-left: 30px;color:#333333">
+                            <input value="全选按钮" lay-skin="primary" disabled type="checkbox" id="allMember" lay-filter="allMember">
+                        </label>
+                        <span  id="spanClick">全选</span>
+                    </div>
+                    <ul id="select-box-org" style="overflow: auto;height: calc(100% - 45px);padding-top: 10px;">
+                        <!--<li class="layui-col-md2">-->
+                            <!--<div class="group-box">-->
+                                <!--<div class="layui-form-item" style="display: inline-block">-->
+                                    <!--<input type="checkbox" lay-skin="primary" name="张琳娜" value="张琳娜"/>-->
+                                    <!--<img src="../../assetsInfo/images/tx2.png" alt="" width="50">-->
+                                <!--</div>-->
+                                <!--<div style="display: inline-block;vertical-align: middle">-->
+                                    <!--<div class="group-user-font">张晓程</div> <div class="group-position">(经理)</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                        <!--</li>-->
+                        <!--<li class="layui-col-md2">-->
+                            <!--<div class="group-box">-->
+                                <!--<div class="layui-form-item" style="display: inline-block">-->
+                                    <!--<input type="checkbox" lay-skin="primary" name="张琳娜" value="张琳娜"/>-->
+                                    <!--<img src="../../assetsInfo/images/tx2.png" alt="" width="50">-->
+                                <!--</div>-->
+                                <!--<div style="display: inline-block;vertical-align: middle">-->
+                                    <!--<div class="group-user-font">张晓程</div> <div class="group-position">(经理)</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                        <!--</li>-->
+                    </ul>
+                </div>
+                <div  style="height: 5%;text-align: center;overflow: hidden;" class="layui-col-xs12 layui-col-sm12 layui-col-md9 person-container-l personList layui-row">
+                    <img src="/assetsInfo/images/xiangxiajiantou.png" >
+                </div>
+                <div class="layui-col-xs12 layui-col-sm12 layui-col-md9 person-container-l personList layui-row select-member" id="select-member" >
+                    <div class="member-box-btn">
+                        已选人员
+                        <div class="xm-cz" id="cleanChose" title="清空" style="margin-right: 30px"><img src="/assetsInfo/images/yijianqingkong.png" alt=""><span>清空</span></div>
+                        <div class="xm-cz" id="saveGroup" title="保存为组" style="margin-right: 30px"><img src="/assetsInfo/images/zudui.png" alt=""><span >保存为组</span></div>
+                    </div>
+                    <div class="layui-row memberBox" >
+                        <ul class="memberUl" >
+                            <!--<li class="memberLi">-->
+                                <!--<span class="memberName" >-->
+                                    <!--张公告-->
+                                    <!--<span class="memberIcon">x</span>-->
+                                <!--</span>-->
+
+                            <!--</li>-->
+                        </ul>
+                    </div>
+                </div>
+                <!--<div style="height: 50%" class="layui-form">-->
+                <!--<div class="layui-form-item projectMemberIds_checkBox">-->
+                <!--<select name="projectMemberIds_check" xm-select="projectMemberIds_check"-->
+                <!--xm-select-skin="normal" xm-select-direction="down" lay-verify="required">-->
+                <!--<option value="">项目组成员</option>-->
+                <!--</select>-->
+                <!--</div>-->
+                <!--</div>-->
+
+                <!-- <div class="layui-col-xs12 layui-col-sm12 layui-col-md4 person-container-l">
+                     <div class="layui-row">
+                         <div class="layui-col-xs10 layui-col-sm10 layui-col-md11">
+                             &lt;!&ndash; tab 切换 &ndash;&gt;
+                             <div class="layui-tab-content">
+                                 &lt;!&ndash; 组织机构 &ndash;&gt;
+                                 <div class="layui-tab-item layui-show">
+
+                                     <div class="person-select-box" style="height: 100%!important;">
+                                         &lt;!&ndash;<div class="person-select-box-t">&ndash;&gt;
+                                             &lt;!&ndash;<ul id="select-org" class="ztree"></ul>&ndash;&gt;
+                                         &lt;!&ndash;</div>&ndash;&gt;
+                                         <div class="person-select-box-b">
+                                             <table class="layui-table" lay-even lay-skin="nob">
+                                                 <colgroup>
+                                                     <col width="50%">
+                                                     <col width="50%">
+                                                 </colgroup>
+                                                 <tbody id="select-box-org">
+                                                 &lt;!&ndash; <tr><td>超级管理员</td><td>中国汽车技术研究中心有限公司</td></tr> &ndash;&gt;
+                                                 </tbody>
+                                             </table>
+                                         </div>
+                                     </div>
+                                 </div>
+
+                             </div>
+                         </div>
+                         <div class="layui-col-xs2 layui-col-sm2 layui-col-md1">
+                             <div class="person-selected-direction">
+                                 <i class="layui-icon layui-icon-right"></i>
+                                 <i class="layui-icon layui-icon-left"></i>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="layui-col-xs12 layui-col-sm12 layui-col-md4 person-container-r">
+                     <div class="layui-row">
+                         <div class="layui-col-xs10 layui-col-sm10 layui-col-md11 person-selected-container">
+                             <div class="person-selected">
+                                 <table class="layui-table" lay-even lay-skin="nob">
+                                     <colgroup>
+                                         <col width="100%">
+                                     </colgroup>
+                                     <tbody id="selectd-box-selected">
+                                         &lt;!&ndash; <tr><td>超级管理员</td><td>中国汽车技术研究中心有限公司</td></tr> &ndash;&gt;
+                                     </tbody>
+                                 </table>
+                             </div>
+                         </div>
+                         <div class="layui-col-xs2 layui-col-sm2 layui-col-md1">
+                             &lt;!&ndash;<div class="person-selected-direction">&ndash;&gt;
+                                 &lt;!&ndash;<i class="layui-icon layui-icon-up"></i>&ndash;&gt;
+                                 &lt;!&ndash;<i class="layui-icon layui-icon-down"></i>&ndash;&gt;
+                             &lt;!&ndash;</div>&ndash;&gt;
+                         </div>
+                     </div>
+                 </div>-->
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- jQuery 1.x 版本兼容 IE8 -->
+<script type="text/javascript" src="../../assetsInfo/libs/jquery-1.12.4.min.js"></script>
+<!-- Q.js 轻量路由框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/q.js"></script>
+<!-- jQuery 轻量级 MVVM 框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/pandyle.min.js"></script>
+<!-- layui 脚本文件 -->
+<script type="text/javascript" src="../../assetsInfo/libs/layui/layui.js"></script>
+<!-- zTree js 文件 -->
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+
+<script>
+
+    //        选择对象
+    CheckboxArr=[];
+    //        选择id为了避免重复
+    CheckboxArrId=[];
+    //当前选择框的类型  单选|多选
+    var userType='checkbox';
+    $('#saveGroup').off('click').on('click',function () {
+        if(CheckboxArrId.length==0){
+            return layer.msg('请先添加组员', {
+                icon: 5
+            });
+        }
+        layer.open({
+            type: 1,
+            title: '保存为组',
+            content: '<div id="searchDate" class="layui-form" lay-filter="searchDate"; style="padding: 20px" >\n' +
+                '                    <div class="layui-form-item">\n' +
+                '                        <div class="">\n' +
+                ' <label>组名称</label>' +
+                '                         <input type="text" style="display: inline-block;width: 80%;" placeholder="请输入您的组名称" class="layui-input" id="groupName"  lay-verify="required">\n' +
+                '                        </div>\n' +
+                '                    </div>\n' +
+                '                    <div class="layui-form-item" style="position: relative">\n' +
+                '<div style="display: inline-block;width: 42px;height:19px">' +
+                ' <label style="white-space: pre;position: absolute;top:0px;">组    员</label>' +
+                '</div>'+
+                '                        <div style="display: inline-block;width: 80%">\n' +
+                '                            <div  style="display: inline-block;width: 100%;height: 88px;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 3;overflow: hidden;white-space: normal;word-break: break-all;"  class="layui-input" id="memberList" ></div>\n' +
+                '                        </div>\n' +
+                '                    </div>\n' +
+                '                </div>',
+            area: ['350px', '300px;'],
+            btn: ['确定', '取消'],
+            yes: function(index, layero) {
+                if(!$('#groupName').val()){
+                    return layer.msg('请填写组名称', {
+                        icon: 5
+                    });
+                }
+                var data={
+                    groupName:$('#groupName').val(),
+                    userIds:CheckboxArrId
+                };
+                layui.admin.req('/api/group/userCustom/addGroupAndUsers',data , function(data) {
+                    if (data.ok) {
+                        layer.msg('保存成功！', {
+                            icon: 1
+                        });
+
+                    } else {
+
+                    }
+                }, {
+                    method: 'POST'
+                });
+                layer.close(index);
+            },
+            success: function() {
+                $('#memberList').html($('.memberUl')[0].title);
+                $('#memberList').attr('title',$('.memberUl')[0].title);
+            },
+            resize: false
+        });
+    });
+    var setUlTitle=function () {
+        var title='';
+        for (var i = 0; i <CheckboxArr.length ; i++) {
+            if(i!=CheckboxArr.length-1){
+                title+=CheckboxArr[i].name+',';
+            }else{
+                title+=CheckboxArr[i].name;
+            }
+        }
+        $('.memberUl').attr('title',title);
+        layui.form.render();
+    };
+    var setCloseClick=function () {
+        $('.memberUl').off('click').on('click','.memberIcon',function () {
+            var id=$(this).parent().parent('.memberLi')[0].id;
+            for (var k = 0; k <CheckboxArr.length ; k++) {
+                if(CheckboxArr[k].id==id){
+                    if($('input:checkbox[value="'+id+'"]').length!=0){
+                        $('input:checkbox[value="'+id+'"]').click();
+                    }else{
+                        var h = CheckboxArrId.indexOf(id);
+                        if(userType=='radio'){
+                            if($('input:radio[value="'+id+'"]').length!=0){
+                                $('input:radio[value="'+id+'"]')[0].checked=false;
+                                layui.form.render();
+                            }
+                            CheckboxArrId=''
+                        }else{
+                            CheckboxArrId.splice(h,1);
+                        }
+                        CheckboxArr.splice(h,1);
+                        $('.memberUl .memberLi[id="'+id+'"]').remove();
+                    }
+                }
+            }
+            layui.form.render();
+            setUlTitle();
+        });
+        $('.memberUl').off('mouseenter').on('mouseenter','.memberLi',function () {
+            $(this).children('.memberName').children('.memberIcon').attr('src','/assetsInfo/images/quxiao.png');
+        }).off('mouseleave').on('mouseleave','.memberLi',function () {
+            $(this).children('.memberName').children('.memberIcon').attr('src','/assetsInfo/images/quxiao1.png');
+        });
+    };
+    var setCheckClick=function (userData) {
+        layui.use(['element', 'index'], function() {
+            $('input:checkbox').click(function () {
+                var i = CheckboxArrId.indexOf(this.value);
+                // console.log(this.value)
+                if(this.value!='全选按钮'){
+                    if(i>=0){
+//                                        存在
+                        CheckboxArr.splice(i,1);
+                        CheckboxArrId.splice(i,1);
+                        $('.memberUl .memberLi').eq(i).remove();
+                        setUlTitle();
+                    }else {
+                        CheckboxArrId.push(this.value);
+                        CheckboxArr.push(
+                            {name:this.getAttribute('usname'),
+                                id:this.value,
+                                remark:this.getAttribute('remark')}
+                        );
+                        var title='';
+                        for (var j = 0; j <CheckboxArr.length ; j++) {
+
+                            if(j!=CheckboxArr.length-1){
+                                title+=CheckboxArr[j].name+',';
+                            }else{
+                                title+=CheckboxArr[j].name;
+                            }
+                        }
+                        var liHtml='<li class="memberLi" id="'+this.value+'"><span class="memberName">'+this.getAttribute('usname')+'<img class="memberIcon" src="/assetsInfo/images/quxiao1.png" ></span></li>';
+                        $('.memberUl').append(liHtml);
+                        $('.memberUl').attr('title',title);
+
+                    }
+                    var allLength=0;
+                    for (var k = 0; k < userData.length; k++) {
+                        if(CheckboxArrId.indexOf(userData[k].usid)>=0){
+                            allLength++;
+                        }
+                    }
+                    if(allLength==userData.length){
+                        $('#allMember')[0].checked=true;
+                    }else{
+                        $('#allMember')[0].checked=false;
+                    }
+                }
+
+                layui.form.render();
+            });
+            layui.form.on('checkbox()', function (data) {
+                var i = CheckboxArrId.indexOf(data.elem.value);
+                if(data.elem.value!='全选按钮'){
+                    if(i>=0){
+//                                        存在
+                        CheckboxArr.splice(i,1);
+                        CheckboxArrId.splice(i,1);
+                        $('.memberUl .memberLi').eq(i).remove();
+                        setUlTitle();
+                    }else {
+                        CheckboxArrId.push(data.elem.value);
+                        CheckboxArr.push(
+                            {name:this.getAttribute('usname'),
+                                id:data.elem.value,
+                                remark:this.getAttribute('remark')}
+                        );
+                        var title='';
+                        for (var j = 0; j <CheckboxArr.length ; j++) {
+
+                            if(j!=CheckboxArr.length-1){
+                                title+=CheckboxArr[j].name+',';
+                            }else{
+                                title+=CheckboxArr[j].name;
+                            }
+                        }
+                        // <span  class="memberIcon layui-layer-setwin"><a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"></a></span>
+                        var liHtml='<li class="memberLi" id="'+data.elem.value+'"><span class="memberName">'+this.getAttribute('usname')+'<img class="memberIcon" src="/assetsInfo/images/quxiao1.png" ></span></li>';
+                        $('.memberUl').append(liHtml);
+                        $('.memberUl').attr('title',title);
+
+                    }
+                    var allLength=0;
+                    for (var k = 0; k < userData.length; k++) {
+                        if(CheckboxArrId.indexOf(userData[k].usid)>=0){
+                            allLength++;
+                        }
+                    }
+                    if(allLength==userData.length){
+                        $('#allMember')[0].checked=true;
+                    }else{
+                        $('#allMember')[0].checked=false;
+                    }
+                }else{
+                    $('#allMember').click();
+                }
+
+                layui.form.render();
+
+            });
+            $('input:radio').click(function () {
+                CheckboxArrId=[this.value];
+                CheckboxArr=[
+                    {name:this.getAttribute('usname'),
+                        id:this.value,
+                        remark:this.getAttribute('remark')}
+                ];
+                var liHtml='<li class="memberLi" id="'+this.value+'"><span class="memberName">'+this.getAttribute('usname')+'<img class="memberIcon" src="/assetsInfo/images/quxiao1.png" ></span></li>';
+                $('.memberUl').empty().append(liHtml);
+                $('.memberUl').attr('title',this.getAttribute('usname'));
+            });
+            layui.form.on('radio()', function (data) {
+                var a = data.elem.value;
+
+                CheckboxArrId=[data.elem.value];
+                CheckboxArr=[
+                    {name:this.getAttribute('usname'),
+                        id:this.value,
+                        remark:this.getAttribute('remark')}
+                ];
+                var liHtml='<li class="memberLi" id="'+data.elem.value+'"><span class="memberName">'+this.getAttribute('usname')+'<span  class="memberIcon layui-layer-setwin"><a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"></a></span></span></li>';
+                $('.memberUl').empty().append(liHtml);
+                $('.memberUl').attr('title',this.getAttribute('usname'));
+            });
+        });
+
+    };
+    var setAllClick=function (data) {
+        var allLength=0;
+        for (var k = 0; k < data.length; k++) {
+                if(CheckboxArrId.indexOf(data[k].usid)>=0){
+                    allLength++;
+                }
+        }
+        if(allLength==data.length){
+            $('#allMember')[0].checked=true;
+        }else{
+            $('#allMember')[0].checked=false;
+        }
+        // $('#allMember').off('click').on('click',function (event) {
+            layui.form.on('checkbox(allMember)', function (obj) {
+                if(data&&data.length!=0){
+                    var check=obj.elem.checked;
+                    if(!check){
+                        var liHtml='';
+                        var title='';
+
+                        for (var i = 0; i < data.length; i++) {
+                            var tmp = data[i];
+                            // 剔除重复数据
+                            if (task_personnel_select.checkRepeatCheck(tmp.usid))
+                                continue;
+                            CheckboxArrId.push(tmp.usid);
+                            var contactAddress = tmp.contactAddress;
+                            if (contactAddress === null) {
+                                contactAddress = '';
+                            }
+                            CheckboxArr.push(
+                                {name:tmp.usname,
+                                    id:tmp.usid,
+                                    remark:contactAddress}
+                            );
+                            $('input:' + userType + '[value="' + tmp.usid+ '"]')[0].checked = true;
+                            liHtml+='<li class="memberLi" id="'+tmp.usid+'"><span class="memberName">'+tmp.usname+'<img class="memberIcon" src="/assetsInfo/images/quxiao1.png" ></span></li>';
+                        }
+                        $('.memberUl').append(liHtml);
+                    }else{
+                        for (var i = 0; i < data.length; i++) {
+                            var tmp = data[i];
+                            var j = CheckboxArrId.indexOf(tmp.usid);
+                            $('input:' + userType + '[value="' +tmp.usid + '"]')[0].checked = false;
+                            CheckboxArr.splice(j,1);
+                            CheckboxArrId.splice(j,1);
+                            $('.memberUl .memberLi').eq(j).remove();
+                        }
+                    }
+                    setUlTitle();
+
+                }
+            });
+        $("#spanClick").off('click').on('click',function () {
+            if(data&&data.length!=0){
+                var check=$('#allMember')[0].checked;
+                if(!check){
+                    var liHtml='';
+                    var title='';
+
+                    for (var i = 0; i < data.length; i++) {
+                        var tmp = data[i];
+                        // 剔除重复数据
+                        if (task_personnel_select.checkRepeatCheck(tmp.usid))
+                            continue;
+                        CheckboxArrId.push(tmp.usid);
+                        var contactAddress = tmp.contactAddress;
+                        if (contactAddress === null) {
+                            contactAddress = '';
+                        }
+                        CheckboxArr.push(
+                            {name:tmp.usname,
+                                id:tmp.usid,
+                                remark:contactAddress}
+                        );
+                        $('input:' + userType + '[value="' + tmp.usid+ '"]')[0].checked = true;
+                        liHtml+='<li class="memberLi" id="'+tmp.usid+'"><span class="memberName">'+tmp.usname+'<img class="memberIcon" src="/assetsInfo/images/quxiao1.png" ></span></li>';
+                    }
+                    $('.memberUl').append(liHtml);
+                }else{
+                    for (var i = 0; i < data.length; i++) {
+                        var tmp = data[i];
+                        var j = CheckboxArrId.indexOf(tmp.usid);
+                        $('input:' + userType + '[value="' +tmp.usid + '"]')[0].checked = false;
+                        CheckboxArr.splice(j,1);
+                        CheckboxArrId.splice(j,1);
+                        $('.memberUl .memberLi').eq(j).remove();
+                    }
+                }
+                setUlTitle();
+            }
+            $("#allMember").click();
+        });
+        // });
+    };
+    // setAllClick();
+    var task_personnel_select = {
+        init: function(datas,gType) {
+            var this_data= datas.data;
+            CheckboxArr = this_data ? this_data : [];
+            if(this_data.length > 0){
+                for(var i=0; i<this_data.length;i++){
+                    CheckboxArrId.push(this_data[i].id)
+                }
+            }
+            var title='',liHtml='';
+            for (var j = 0; j <CheckboxArr.length ; j++) {
+                if(j!=CheckboxArr.length-1){
+                    title+=CheckboxArr[j].name+',';
+                }else{
+                    title+=CheckboxArr[j].name;
+                }
+                liHtml+='<li class="memberLi" id="'+CheckboxArr[j].id+'"><span class="memberName">'+CheckboxArr[j].name+'<img class="memberIcon" src="/assetsInfo/images/quxiao1.png" ></span></li>';
+            }
+            if(gType){
+                userType=gType;
+            }
+            $('.memberUl').append(liHtml);
+            $('.memberUl').attr('title',title);
+            setCheckClick();
+            setCloseClick();
+
+            if(userType=='radio'){
+                $("#allChose").css('display','none');
+                $("#spanClick").css('display','none');
+            }else{
+                $("#allChose").css('display','inline-block');
+                $("#spanClick").css('display','inline-block');
+            }
+            $('#cleanChose').off('click').on('click',function () {
+                for (var x = 0; x <CheckboxArr.length ; x++) {
+                        if($('input:'+userType+'[value="'+CheckboxArr[x].id+'"]').length!=0) {
+                            $('input:' + userType + '[value="' + CheckboxArr[x].id + '"]')[0].checked = false;
+                        }
+
+                }
+                CheckboxArr=[];
+                CheckboxArrId=[];
+                $('.memberUl').empty();
+                $('.memberUl').attr('title','');
+                $('#allMember')[0].checked=false;
+                layui.form.render();
+            });
+            // CheckboxArrId
+//                 // var  groupCheckbox=$("input[name='check']");
+//                 // for(var i=0;i<groupCheckbox.length;i++){
+//                 //    if(groupCheckbox[i].checked){
+//                 //        var val=groupCheckbox[i].value
+//                 //        alert(val)
+//                 //    }
+//                 // }
+//                     // 初始化，传入已选择的数据
+//                 this.selectedData = datas.data ? datas.data : [];
+//                 // for (var i=0;i<this.selectedData.length;i++)
+//                 // {
+//                 //     this.selectedData[i].remark=this.selectedData[i].remark?this.selectedData[i].remark:"";
+//                 // }
+//                 var userHtml = '',
+//                         userData = datas.data;
+//                     for (var i = 0; i < userData.length; i++) {
+//                         var tmp = userData[i],
+//                             tmpRoles = [];
+//                         // 剔除重复数据
+//                         if (task_personnel_select.checkRepeatData(tmp.usid))
+//                             continue;
+//                         // for (var j = 0; j < tmp.roles.length; j++) {
+//                         //     tmpRoles.push(tmp.roles[j].name);
+//                         // }
+//                 userHtml +='<li class="layui-col-md2">\n' +
+//                                         '                        <p><img src="../../assetsInfo/images/tx.png" alt="" width="50"></p>\n' +
+//                                         '                        <p>\n' +
+//                                         '                          <input type="checkbox" name="check" value="' + tmp.id + '"usname="'+ tmp.name  +'"/> <span>' + tmp.name + '</span> <span>('+tmpRoles.join("，") +')</span>\n' +
+//                                         '                        </p>\n' +
+//                                         '                    </li>'
+//                         // userHtml +=
+//                         //     '<tr data-id="' + tmp.usid + '" data-remark="' + tmpRoles.join('，') + '" data-name="' +
+//                         //     tmp.usname + '"><td>' +
+//                         //     tmp.usname + '</td><td>' + tmpRoles.join('，') +
+//                         //     '</td></tr>';
+//                     }
+//                 $('#select-box-org').html(userHtml);
+////                s.each(function(i) {
+////// alert(i);
+////                    $(this).click(function () {
+////                        if (this.checked == true) {
+////                            alert(this.value);
+////                        }
+////                    });
+////                }
+
+        },
+        finish: function() {
+            this.selectedData=CheckboxArr;
+//                var  groupCheckbox=$("input[name='check']");
+//                for(var i=0;i<groupCheckbox.length;i++){
+//                    console.log(groupCheckbox[i]);
+//                    if(groupCheckbox[i].checked){
+//                        // var val={name:groupCheckbox[i].usName,
+//                        // id:groupCheckbox[i].value};
+//                        this.selectedData.push({name:groupCheckbox[i].getAttribute('usname'),
+//                        id:groupCheckbox[i].value,
+//                        remark:groupCheckbox[i].getAttribute('remark')})
+//                    }
+//                }
+
+            return this.selectedData;
+        },
+        /*
+         * 数据格式为：
+         * {
+         *     id: 'ZDTNTHTKVS',
+         *     name: 'XXX'
+         * }
+         */
+        selectedData: [],
+        // 检查是否有重复的数据
+        // 重复则返回 true
+        checkRepeatData: function(id) {
+            for (var i = 0; i < this.selectedData.length; i++) {
+                if (this.selectedData[i].id === id) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        checkRepeatCheck:function(id){
+            for (var i = 0; i < CheckboxArr.length; i++) {
+                if (CheckboxArr[i].id === id) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        // 增加数据
+        addData: function(data) {
+            this.selectedData.push(data);
+        },
+        // 移除数据
+        removeData: function(data) {
+            console.log(data)
+            for (var i = 0; i < this, this.selectedData.length; i++) {
+                if (this.selectedData[i].id === data.id) {
+                    this.selectedData.splice(i, 1);
+                    break;
+                }
+            }
+        }
+    };
+    layui.config({
+        base: '../../module/'
+    }).use(['element', 'index'], function() {
+        var element = layui.element,
+            $ = layui.jquery,
+            form=layui.form,
+            formSelects = layui.formSelects,
+            admin = layui.admin;
+        //切换组和部门
+        $("#tabChange").off('click').on('click','.member-tab',function () {
+            $(this).addClass('member-active');
+            $(this).siblings().removeClass('member-active');
+            if($(this).index()==1){
+                getGroupTree();
+            }else{
+                getTree();
+            }
+        });
+        function searchPerson(){
+            admin.req("/api/sys/user",{
+                pageNo:"1",
+                pageSize:"500",
+                usName:$("#searchName").val()
+            },function (res) {
+                if (!res.ok) {
+                    return layer.msg('获取组织机构用户列表失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+
+                var userHtml = '',
+                    userData = res.data.list;
+                if(res.data.list&&res.data.list.length!=0){
+                    $('#allMember').removeAttr('disabled');
+                }else{
+                    $('#allMember').attr('disabled','disabled');
+                }
+                setAllClick(userData);
+                for (var i = 0; i < userData.length; i++) {
+                    var tmp = userData[i],
+                        tmpRoles = [];
+                    // 剔除重复数据
+                    if (task_personnel_select.checkRepeatData(tmp.usid))
+                        continue;
+                    for (var j = 0; j < tmp.roles.length; j++) {
+                        tmpRoles.push(tmp.roles[j].name);
+                    }
+                    var contactAddress = tmp.contactAddress;
+                    if (contactAddress === null) {
+                        contactAddress = '';
+                    }
+                    //选中回显
+                    if(CheckboxArrId.indexOf(tmp.usid)>-1 ){
+                        var check =' checked ';
+                    }   else {
+                        var check=""
+                    }
+                    userHtml+='<li class="layui-col-md2">\n' +
+                        '                            <div class="group-box">\n' +
+                        '                                <div class="layui-form-item" style="display: inline-block;margin-left: 20px">\n' +
+                        '                                    <input type="'+userType+'" name="renyuan" '+check+' lay-skin="primary" value="'+tmp.usid+'"remark="'+ contactAddress +'" usname="'+ tmp.usname + '"/>\n' +
+                        '                                    <img src="../../assetsInfo/images/tx2.png" alt="" width="50">\n' +
+                        '                                </div>\n' +
+                        '                                <div style="display: inline-block;vertical-align: middle;margin-left: 5px;">\n' +
+                        '                                    <div class="group-user-font">' + tmp.usname + '</div> <div class="group-position" title="'+contactAddress+'">'+ contactAddress +'</div>\n' +
+                        '                                </div>\n' +
+                        '                            </div>\n' +
+                        '\n' +
+                        '                        </li>';
+                }
+                $('#select-box-org').html(userHtml);
+                layui.form.render();
+                $("#select-box-org li").off('click').on("click",function(event){
+                    var str=$(event.target).attr('class')?$(event.target).attr('class'):'';
+                    if(str.indexOf('layui-icon')==-1&&$(event.target).attr('name')!='renyuan'){
+                        $(this).children(".group-box").children('.layui-form-item').children('input').click();
+                        layui.form.render();
+                    }
+                });
+                setCheckClick(userData);
+                setCloseClick();
+                if (userData.length === 0) {
+                    return layer.msg(' 无用户', {
+                        icon: 0
+                    });
+                }
+            })
+        }
+        $('body').on('keyup',function(e){
+            if( e.keyCode==13)
+            {
+                searchPerson()
+            }
+        })
+        $('.layui-icon-search').on('click', function(){
+            searchPerson()
+        });
+        //我这里是监控空格和回车键
+        var getGroupTree=function () {
+            var url='/api/group/customGroup/getLoginUserGroup';
+            admin.req(url ,{
+                orgName: ''
+            }, function(d) {
+                if (!d.ok) {
+                    return layer.msg('获取组织机构列表失败：' + d.message, {
+                        icon: 5
+                    });
+                }
+                // 生成 zTree
+                var setting = {
+                    data: {
+                        simpleData: {
+                            enable: true,
+                            idKey: "groupId",
+                            pIdKey: "parentId",
+                            rootPId: '0',
+                        },
+                        key: {
+                            name: 'groupName'
+                        }
+                    },
+                    view: {
+                        showIcon: false
+                    },
+                    callback: {
+                        onClick: function(event, treeId, treeNode) {
+                            var id = treeNode.id;
+                            // 获取组织机构对应用户
+                            admin.req('/api/group/userCustom/getUserByGroupId', {
+                                groupId: id
+                            }, function(res) {
+                                if (!res.ok) {
+                                    return layer.msg('获取组织机构用户列表失败：' + res.message, {
+                                        icon: 5
+                                    });
+                                }
+
+                                var userHtml = '',
+                                    userData = res.data.userEOList,
+                                    names =[];
+                                if(res.data.userEOList&&res.data.userEOList.length!=0){
+                                    $('#allMember').removeAttr('disabled');
+                                }else{
+                                    $('#allMember').attr('disabled','disabled');
+                                }
+                                setAllClick(userData);
+                                for (var i = 0; i < userData.length; i++) {
+                                    var tmp = userData[i];
+                                    names.push(tmp.usname);
+                                    // 剔除重复数据
+                                    if (task_personnel_select.checkRepeatData(tmp.usid))
+                                        continue;
+                                    //职级为空的情况
+                                    var contactAddress = tmp.contactAddress;
+                                    if (contactAddress === null) {
+                                        contactAddress = '';
+                                    }
+                                    //选中回显
+                                    if(CheckboxArrId.indexOf(tmp.usid)>-1 ){
+                                        var check =' checked ';
+                                    }   else {
+                                        var check=""
+                                    }
+                                    userHtml+='<li class="layui-col-md2">\n' +
+                                        '                            <div class="group-box">\n' +
+                                        '                                <div class="layui-form-item" style="display: inline-block;">\n' +
+                                        '                                    <input '+check+' name="renyuan" type="'+userType+'" lay-skin="primary" value="'+tmp.usid+'"remark="'+ contactAddress +'" usname="'+ tmp.usname + '"/>\n' +
+                                        '                                    <img src="../../assetsInfo/images/tx2.png" alt="" width="50" style="margin-left:-10px">\n' +
+                                        '                                </div>\n' +
+                                        '                                <div style="display: inline-block;vertical-align: middle; margin-left: 5px;">\n' +
+                                        '                                    <div class="group-user-font">' + tmp.usname + '</div> <div class="group-position" title="'+contactAddress+'">'+ contactAddress +'</div>\n' +
+                                        '                                </div>\n' +
+                                        '                            </div>\n' +
+                                        '\n' +
+                                        '                        </li>';
+                                }
+                                $('#select-box-org').html(userHtml);
+                                layui.form.render();
+                                $("#select-box-org li").off('click').on("click",function(event){
+                                    var str=$(event.target).attr('class')?$(event.target).attr('class'):'';
+                                    if(str.indexOf('layui-icon')==-1&&$(event.target).attr('name')!='renyuan'){
+                                        $(this).children(".group-box").children('.layui-form-item').children('input').click();
+                                        layui.form.render();
+                                    }
+                                });
+                                setCheckClick(userData);
+                                setCloseClick();
+                                if (userData.length === 0) {
+                                    return layer.msg('无用户', {
+                                        icon: 0
+                                    });
+                                }
+                            });
+                        }
+                    }
+                };
+
+                var zNodes = d.data;
+                zTreeObj = $.fn.zTree.init($("#select-org"), setting, zNodes);
+                var nodeList = zTreeObj.getNodes();　　 //展开第一个根节点
+                // for(var i = 0; i < nodeList.length; i++) { //设置节点展开第二级节点
+                //     zTreeObj.expandNode(nodeList[i], true, true, true);
+                //     var nodespan = nodeList[i].children;
+                //     for(var j = 0; j < nodespan.length; j++) { //设置节点展开第三级节点
+                //         zTreeObj.expandNode(nodespan[j], true, true, true);
+                //     }
+                // }
+            });
+        }
+        // 初始化组织机构列表
+        var getTree=function (url) {
+            if(!url){
+                url="/api/budget/project/query/org/adc";
+            }
+            // var url='/api/sys/org/listOrgByOrgName',
+            admin.req(url ,{
+                orgName: ''
+            }, function(d) {
+                if (!d.ok) {
+                    return layer.msg('获取组织机构列表失败：' + d.message, {
+                        icon: 5
+                    });
+                }
+                // 生成 zTree
+                var setting = {
+                    data: {
+                        simpleData: {
+                            enable: true,
+                            idKey: "id",
+                            pIdKey: "parentId",
+                            rootPId: '0'
+                        }
+                    },
+                    view: {
+                        showIcon: false
+                    },
+                    callback: {
+                        onClick: function(event, treeId, treeNode) {
+                            var id = treeNode.id;
+                            // 获取组织机构对应用户
+                            admin.req('/api/user/selectUserEO', {
+                                orgId: id
+                            }, function(res) {
+                                if (!res.ok) {
+                                    return layer.msg('获取组织机构用户列表失败：' + res.message, {
+                                        icon: 5
+                                    });
+                                }
+
+                                var userHtml = '',
+                                    userData = res.data.list,
+                                    names =[];
+                                if(res.data.list&&res.data.list.length!=0){
+                                    $('#allMember').removeAttr('disabled');
+                                }else{
+                                    $('#allMember').attr('disabled','disabled');
+                                }
+                                setAllClick(userData);
+                                for (var i = 0; i < userData.length; i++) {
+                                    var tmp = userData[i],
+                                        tmpRoles = [];
+                                    names.push(tmp.usname);
+                                    // 剔除重复数据
+                                    if (task_personnel_select.checkRepeatData(tmp.usid))
+                                        continue;
+                                    for (var j = 0; j < tmp.roles.length; j++) {
+                                        tmpRoles.push(tmp.roles[j].name);
+                                    }
+                                    //职级为空的情况
+                                    var contactAddress = tmp.contactAddress;
+                                    if (contactAddress === null) {
+                                        contactAddress = '';
+                                    }
+                                    //选中回显
+                                    if(CheckboxArrId.indexOf(tmp.usid)>-1 ){
+                                        var check =' checked ';
+                                    }   else {
+                                        var check=""
+                                    }
+                                    userHtml+='<li class="layui-col-md2">\n' +
+                                        '                            <div class="group-box">\n' +
+                                        '                                <div class="layui-form-item" style="display: inline-block;">\n' +
+                                        '                                    <input '+check+' name="renyuan" type="'+userType+'" lay-skin="primary" value="'+tmp.usid+'"remark="'+ contactAddress +'" usname="'+ tmp.usname + '"/>\n' +
+                                        '                                    <img src="../../assetsInfo/images/tx2.png" alt="" width="50" style="margin-left:-10px">\n' +
+                                        '                                </div>\n' +
+                                        '                                <div style="display: inline-block;vertical-align: middle">\n' +
+                                        '                                    <div class="group-user-font">' + tmp.usname + '</div> <div class="group-position" title="'+contactAddress+'">'+ contactAddress +'</div>\n' +
+                                        '                                </div>\n' +
+                                        '                            </div>\n' +
+                                        '\n' +
+                                        '                        </li>';
+                                }
+                                $('#select-box-org').html(userHtml);
+                                layui.form.render();
+                                setCheckClick(userData);
+                                $("#select-box-org li").off('click').on("click",function(event){
+                                    var str=$(event.target).attr('class')?$(event.target).attr('class'):'';
+                                    if(str.indexOf('layui-icon')==-1&&$(event.target).attr('name')!='renyuan'){
+                                        $(this).children(".group-box").children('.layui-form-item').children('input').click();
+                                        layui.form.render();
+                                    }
+                                });
+                                setCloseClick();
+                                if (userData.length === 0) {
+                                    return layer.msg(treeNode.name + ' 无用户', {
+                                        icon: 0
+                                    });
+                                }
+                            });
+                        }
+                    }
+                };
+
+                var zNodes = d.data;
+                zTreeObj = $.fn.zTree.init($("#select-org"), setting, zNodes);
+                var nodeList = zTreeObj.getNodes();　　 //展开第一个根节点
+                for(var i = 0; i < nodeList.length; i++) { //设置节点展开第二级节点
+                    zTreeObj.expandNode(nodeList[i], true, true, true);
+                    var nodespan = nodeList[i].children;
+                    for(var j = 0; j < nodespan.length; j++) { //设置节点展开第三级节点
+                        zTreeObj.expandNode(nodespan[j], true, true, true);
+                    }
+                }
+            });
+        }
+        getTree();
+        // 初始化已选框列表
+        (function() {
+            var selectedDatas = task_personnel_select.selectedData,
+                selectedHtml = '';
+            console.log(selectedDatas)
+            for (var i = 0; i < selectedDatas.length; i++) {
+                var tmp = selectedDatas[i];
+                selectedHtml += '<tr data-id="' + tmp.id + '" " data-remark="' + tmp.remark + '" data-name="' + tmp.name + '" style="width: 33%!important;display: inline-block;text-align: center">' +
+                    '<td>' + tmp.name + '</td>' +
+                    '</tr>';
+            }
+            $('#selectd-box-selected').append(selectedHtml);
+        })();
+
+        // 待选框点击事件 事件代理
+        // $('.person-select-box-b').on('click', function(e) {
+        //     var elem = $(e.target);
+        //     if (elem[0].nodeName.toLowerCase() !== 'td') return;
+        //     var targetElem = $(e.target).parent();
+        //     if (targetElem.hasClass('person-selected-tobe')) {
+        //         targetElem.removeClass('person-selected-tobe');
+        //     } else {
+        //         targetElem.addClass('person-selected-tobe');
+        //     }
+        // });
+        // 已选框点击事件 事件代理
+        // $('#selectd-box-selected').on('click', function(e) {
+        //     var elem = $(e.target);
+        //     if (elem[0].nodeName.toLowerCase() !== 'td') return;
+        //     var targetElem = $(e.target).parent();
+
+        //     if (targetElem.hasClass('person-selected-del')) {
+        //         targetElem.removeClass('person-selected-del');
+        //     } else {
+        //         targetElem.addClass('person-selected-del');
+        //     }
+        // });
+
+        // 方向选择按钮事件
+        // 向右选中
+        // $('.layui-icon-right').on('click', function() {
+        //     var selectedElems = $('.person-selected-tobe'),
+        //         selectedDatas = [];
+        //     for (var i = 0; i < selectedElems.length; i++) {
+        //         var tmpElem = $(selectedElems[i]);
+        //         selectedDatas.push(tmpElem.data());
+        //         tmpElem.remove();
+        //     }
+
+        //     var selectedHtml = '';
+        //     for (var i = 0; i < selectedDatas.length; i++) {
+        //         var tmp = selectedDatas[i];
+        //         task_personnel_select.addData(tmp);
+        //         selectedHtml += '<tr data-id="' + tmp.id + '" " data-remark="' + tmp.remark + '" data-name="' + tmp.name + '" style="width: 33%!important;display: inline-block;text-align: center">' +
+        //             '<td>' + tmp.name + '</td>' +
+        //             '</tr>';
+        //     }
+        //     $('#selectd-box-selected').append(selectedHtml);
+        // });
+        // 向左删除
+        // $('.layui-icon-left').on('click', function() {
+        //     var selectedElems = $('.person-selected-del');
+        //     var  selectedHtml='';
+        //     for (var i = 0; i < selectedElems.length; i++) {
+        //         var tmpElem = $(selectedElems[i]);
+        //         var tmp=tmpElem.data();
+        //         task_personnel_select.removeData(tmpElem.data());
+        //         selectedHtml += '<tr " data-remark="' + tmp.remark + '" data-id="' + tmp.id + '" data-name="' + tmp.name + '">' +
+        //             '<td>' + tmp.name + '</td>' + '<td>' + tmp.remark + '</td>' +
+        //             '</tr>';
+        //         tmpElem.remove();
+        //     }
+        //     $('#select-box-org').append(selectedHtml);
+
+        // });
+    });
+
+    // TODO: 移动端适配
+</script>
+</body>
+
+</html>

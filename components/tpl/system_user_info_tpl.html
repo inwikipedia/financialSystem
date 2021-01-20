@@ -1,0 +1,226 @@
+<!--
+File   : system_user_info_tpl.html
+Created: Tuesday October 16th 2018 3:46:59 pm
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Last Modified: Tuesday October 23rd 2018 9:52:17 am
+Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+-----
+Description: 用户信息查看框
+-----
+HISTORY:
+-->
+
+<style>
+    .system-user-info-tpl {
+        overflow: hidden;
+    }
+
+    .system-user-info-tpl,
+    .system-user-info-tpl>.layui-row,
+    .info-container {
+        height: 100%;
+    }
+
+    .info-container {
+        padding: 20px;
+        box-sizing: border-box;
+        overflow: auto;
+        visibility: hidden;
+    }
+
+    .system-user-info-tpl .avatar-container {
+        background-color: #fafafa;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .system-user-info-tpl .avatar img {
+        width: 100px;
+        height: 100px;
+        margin: 20px auto;
+        display: block;
+        border-radius: 100px;
+        border: 2px solid #fff;
+    }
+
+    .system-user-info-tpl h1 {
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 10px;
+    }
+
+    .system-user-info-tpl .user-info-item {
+        margin-bottom: 10px;
+    }
+
+    .system-user-info-tpl .user-info-item strong {
+        font-size: 14px;
+        font-weight: 400;
+        color: #333;
+        display: inline-block;
+        width: 120px;
+        text-align: right;
+    }
+
+    .system-user-info-tpl .user-info-item span {
+        font-size: 14px;
+        font-weight: 400;
+        color: #333;
+        word-break: break-all;
+    }
+
+    @media screen and (max-width: 992px) {
+
+        .system-user-info-tpl,
+        .system-user-info-tpl>.layui-row,
+        .info-container {
+            height: auto;
+        }
+
+        .system-user-info-tpl .user-info-item strong {
+            width: 80px;
+        }
+    }
+</style>
+
+<div class="layui-container-fuild system-user-info-tpl">
+    <div class="layui-row">
+        <div class="layui-col-md3 avatar-container">
+            <div class="avatar">
+                <div style="margin: 20px auto;width: 100px;height: 100px;line-height: 96px;">
+                    <div class="avatar-text"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md9 info-container">
+            <div class="layui-row">
+                <div class="layui-col-md12">
+                    <h1>{{usname}}</h1>
+                    <div class="user-info-item">
+                        <strong>所属角色：</strong>
+                        <span>{{rolesstr}}</span>
+                    </div>
+                    <div class="user-info-item">
+                        <strong>所属组织：</strong>
+                        <span>{{orgsstr}}</span>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="layui-row">
+                <div class="layui-col-md12">
+                    <h1>基本信息</h1>
+                    <div class="user-info-item">
+                        <strong>用户工号：</strong>
+                        <span>{{userCode}}</span>
+                    </div>
+                    <div class="user-info-item">
+                        <strong>办公电话：</strong>
+                        <span>{{officePhone}}</span>
+                    </div>
+                    <div class="user-info-item">
+                        <strong>手机号码：</strong>
+                        <span>{{cellPhoneNumber}}</span>
+                    </div>
+                    <div class="user-info-item">
+                        <strong>职级:</strong>
+                        <span>{{contactAddress}}</span>
+                    </div>
+                    
+                    <div class="user-info-item">
+                        <strong>家庭住址：</strong>
+                        <span>{{homeAddress}}</span>
+                    </div>
+                    <div class="user-info-item">
+                        <strong>邮政编码：</strong>
+                        <span>{{postalCode}}</span>
+                    </div>
+                    <div class="user-info-item">
+                        <strong>电子邮件：</strong>
+                        <span>{{email}}</span>
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var system_user_info_tpl = function (data) {
+        layui.use([], function () {
+            var config = layui.config,
+                element = layui.element,
+                admin = layui.admin;
+
+
+            admin.req('/api/sys/user/' + data.assignee, {}, function (res) {
+                var data = res.data;
+                $('.info-container').vm({
+                    usname: data.usname ? data.usname : '暂无',
+                    rolesstr: (function () {
+                        var tmp = [];
+                        for (var i = 0; i < data.roles.length; i++) {
+                            tmp.push(data.roles[i].name);
+                        }
+                        return tmp.join('，');
+                    })(),
+                    orgsstr: (function () {
+                        var tmp = [];
+                        for (var i = 0; i < data.orgs.length; i++) {
+                            tmp.push(data.orgs[i].name);
+                        }
+                        return tmp.join('，');
+                    })(),
+                    userCode: data.userCode ? data.userCode : '暂无',
+                    officePhone: data.officePhone ? data.officePhone : '暂无',
+                    cellPhoneNumber: data.cellPhoneNumber ? data.cellPhoneNumber : '暂无',
+                    homeAddress: data.homeAddress ? data.homeAddress : '暂无',
+                    postalCode: data.postalCode ? data.postalCode : '暂无',
+                    email: data.email ? data.email : '暂无',
+                    contactAddress: data.contactAddress ? data.contactAddress : '暂无'
+                });
+
+                // 设置头像
+                ;
+                (function () {
+                    if (data.avatar) {
+                        $('.system-user-info-tpl .avatar').empty();
+                        var image = $('<img/>');
+                        var imageSrc = data.avatar.indexOf('/') < 0 ? '/api/sys/file/' + data.avatar + '/download' : data.avatar;
+                        image.attr('src', imageSrc);
+                        $('.system-user-info-tpl .avatar').html(image);
+                    } else {
+                        $('.system-user-info-tpl .avatar .avatar-text').text(data.usname.charAt(
+                            0));
+                    }
+                })();
+
+                $('.info-container').css('visibility', 'visible');
+            });
+        });
+    }
+</script>

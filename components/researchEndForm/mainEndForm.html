@@ -1,0 +1,2531 @@
+<style>
+    .information,.memberInfo,.introduction,.assessment,.schedule,.programme,.equipment,.communicate,.meeting,.power,.material,.machining,.source,.expenditure,.affair,.purchase{
+        display: none;
+    }
+    .mainForm .layui-radio-disbaled>i{
+        /*color: #229FFF !important;*/
+    }
+    .mainForm .layui-disabled, .mainForm .layui-disabled:hover {
+        color: rgb(84, 84, 84)!important;
+    }
+    #form-tree{
+        float:left;
+        width: 16%;
+        height: 97%;
+        padding-top: 10px;
+        border:1px solid #F5F5F5;
+        overflow: auto;
+        margin:10px 10px 0 10px;
+    }
+    .layui-layer-load{
+        background-color: white;
+    }
+    .formRight{
+        float:left;
+        width: 80%;
+        margin:10px 10px 0 0px;
+        /*height:calc(100vh - 150px);*/
+        height: 490px;
+    }
+    /*#paper-box .layui-form{*/
+    /*height: calc(100vh - 170px)*/
+    /*}*/
+    .right{
+        position: absolute;
+        top: 50%;
+        left: 21%
+    }
+    #form-tree li a cite{
+        font-size: 14px;
+        color: #666;
+        font-weight: 400;
+        /*width: 140px;*/
+        display: inline-block;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    #form-tree li ul{
+        margin-left: 22px;
+    }
+    #form-tree ul{
+        margin-bottom: 0;
+    }
+    #form-tree .layui-tree-branch{
+        display: none;
+    }
+    #form-tree li .layui-tree-spread{
+        display: none;
+    }
+    #form-tree .layui-tree-leaf{
+        display: none;
+    }
+    #form-tree li a{
+        color: #666;
+    }
+    #form-tree>li{
+        margin:  0 0 10px 10px;
+        position: relative;
+    }
+    #form-tree>li:first-child{
+        margin-top:  10px;
+    }
+    #form-tree li ul li:first-child{
+        margin: 10px 0 0 0px;
+    }
+    #form-tree li ul li{
+        margin:  10px 0 0 0px;
+    }
+    .formRight .header{
+        background:rgba(248,248,248,1);
+        padding: 0px 10px 0px 20px;
+        height:43px;
+    }
+    .formRight .header span{
+        width:84px;
+        height:14px;
+        font-size:14px;
+        font-family:Source Han Sans CN;
+        font-weight:400;
+        color:rgba(51,51,51,1);
+        line-height:43px;
+    }
+    .saveBtn{
+        width:68px;
+        height:28px;
+        border:1px solid rgba(0,140,255,1);
+        border-radius:2px;
+        color: #008CFF !important;
+        float: right;
+        margin-top: 7px;
+    }
+    .information,.memberInfo{
+        border:1px solid rgba(245,245,245,1);
+    }
+    .redSpan{
+        color: red;
+    }
+    .blueCycle{
+        width:4px !important;
+        height:4px !important;
+        background-color:rgba(0,140,255,1);
+        border-radius:50%;
+        display: inline-block;
+        position: relative;
+        top:-2px;
+    }
+    .titleInfo{
+        padding: 10px 20px 0px 20px;
+    }
+    label{
+        font-weight: normal;
+    }
+    .information .content{
+        padding: 20px 70px;
+    }
+    .information .leftItem,.information .rightItem{
+        width: calc(49% - 30px);
+        display: inline-block;
+    }
+    .information .rightItem{
+        margin-left: 70px;
+    }
+    .information .layui-form-item ,.memberInfo .layui-form-item ,.assessment .layui-form-item{
+        height: 30px;
+        line-height: 30px;
+    }
+    .information .form-input,.memberInfo .form-input, .assessment .form-input{
+        position: relative;
+        display: inline-block;
+        width: calc(100% - 90px);
+    }
+    .information label,.memberInfo label{
+        width: 80px;
+        text-align: right;
+        display: inline-block;
+    }
+    .memberInfo label{
+        text-align: left;
+    }
+    .memberInfo .content{
+        padding: 20px 20px 0px 20px;
+    }
+    .memberInfo .rightItem,.memberInfo .centerItem{
+        margin-left: 20px;
+    }
+    .memberInfo .rightItem,.memberInfo .centerItem,.memberInfo .leftItem{
+        width: calc(33% - 15px);
+        display: inline-block;
+    }
+    .memberBox{
+        padding: 0px 20px 0px 20px;
+    }
+    .introduction .content,.assessment .content,.programme .content{
+        padding: 20px;
+    }
+
+    .introduction .introText ,.assessment .introText,.expenditure .introText{
+        height: 100px;
+    }
+    .assessment .leftItem,.assessment .rightItem{
+        width: calc(50% - 2px);
+        display: inline-block;
+    }
+    .assessment label{
+        width: 190px;
+        display: inline-block;
+    }
+    .assessment .form-input{
+        width: calc(100% - 220px);
+    }
+    .costBox{
+        padding: 20px;
+    }
+    .briefing-btn{
+        height: 28px;
+        line-height: 28px;
+    }
+    .upload-label{
+        /*display: inline-block;*/
+        /*width: 80px;*/
+        text-align: left;
+        margin-bottom: 5px;
+    }
+    .upload-box{
+        display: inline-block;
+        width: calc(100% - 90px);
+    }
+
+    .briefingBtn{
+        width: 50px;
+        height: 24px !important;
+        color: white !important;
+        line-height: 24px !important;
+        padding: 0px !important;
+        /*margin-left: 5px !important;*/
+    }
+    .layui-table ,.source th{
+        text-align: center;
+    }
+    .source .layui-form-item,.expenditure .layui-form-item{
+        margin-bottom: 0px;
+    }
+    .textPadding{
+        padding-bottom: 10px;
+    }
+    .addBtn{
+        height: 24px;
+        line-height: 24px;
+        margin-top: 0;
+        padding: 0px;
+        width: 80px;
+    }
+    .blueBtn{
+        background-color: #2293F9;
+        width: 70px!important;
+        height: 34px!important;
+        line-height: 34px!important;
+    }
+    .whiteBtn{
+        width: 70px!important;
+        height: 34px!important;
+        line-height: 34px!important;
+        background-color: #fff;
+        color:#666!important;
+        border:1px solid rgba(220,220,220,1);
+    }
+    .redChange{
+        color:red;
+    }
+    .redSelect input{
+        color:red;
+    }
+    .redRadio div{
+        color:red;
+    }
+    .upload-text{
+        font-weight: bold;
+    }
+    .introduction textarea::-webkit-input-placeholder {
+        color: #d4dce7!important;
+        /* placeholder字体大小  */
+        font-size: 12px;
+        /* placeholder位置  */
+        text-align: left;
+        line-height:28px;
+    }
+</style>
+<body>
+<div class="mainForm">
+    <div id="form-tree" class="formTree" ></div>
+    <div class="formRight">
+        <!--基本信息-->
+        <div class="information layui-form">
+            <div class="header">
+                <span>合同基本信息</span>
+                <!--<button class="layui-btn layui-btn-sm saveBtn layui-btn-danger" lay-submit lay-filter="btn-info-save"  id="btn-info-save">-->
+                <!--<img src="../../assetsInfo/images/baocun.png" style="position: relative;top: -1px;">-->
+                <!--保存-->
+                <!--</button>-->
+            </div>
+            <div class="content ">
+                <div class="leftItem">
+                    <div class="layui-form-item">
+                        <label >合同编号：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写合同编号" readonly maxlength="50" autocomplete="off" class="layui-input" name="infoContractNum" id="infoContractNum" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label > <span class="redSpan">*</span>所属部门：</label>
+                        <div class="form-input">
+                            <input type="text" style="cursor: pointer" lay-verify="required" disabled placeholder="请选择部门" class="layui-input" name="infoOwnDepartment" id="infoOwnDepartment" readonly>
+                            <img class="infoOwnDepartment" src="/assetsInfo/images/bumen.png" alt="" style="position:absolute; right:4px;top:6px">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label > <span class="redSpan">*</span>合同名称：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写合同名称" readonly autocomplete="off" lay-verify="required" maxlength="50" class="layui-input" name="infoContractName" id="infoContractName" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label > 合作部门：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写合作部门" readonly autocomplete="off" maxlength="50" class="layui-input" name="infoDepartment" id="infoDepartment" >
+                        </div>
+                    </div>
+                </div>
+                <div class="rightItem">
+                    <div class="layui-form-item">
+                        <label > <span class="redSpan">*</span>起始日期：</label>
+                        <div class="form-input ">
+                            <input type="text" style="cursor: pointer" placeholder="请选择起始日期" readonly disabled autocomplete="off" lay-verify="required|adcformdesign_Time"  class="layui-input" name="infoStartDate" id="infoStartDate" >
+                            <img src="/assetsInfo/images/riliform.png" style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label ><span class="redSpan">*</span>结束日期：</label>
+                        <div class="form-input ">
+                            <input type="text" style="cursor: pointer" placeholder="请选择结束日期" readonly disabled autocomplete="off" lay-verify="required" class="layui-input" name="infoEndDate" id="infoEndDate" >
+                            <img src="/assetsInfo/images/riliform.png" style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label > <span class="redSpan">*</span>所属平台：</label>
+                        <div class="form-input ">
+                            <select lay-verify="required" placeholder="请选择平台" disabled lay-filter="infoPlatform" name="infoPlatform" id="infoPlatform"></select>
+                            <!--<input type="text" placeholder="请选择平台" lay-verify="required" class="layui-input" name="infoPlatform" id="infoPlatform" >-->
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label > <span class="redSpan">*</span>合同类别：</label>
+                        <div class="form-input ">
+                            <select lay-verify="required" placeholder="请选择合同类别" disabled readonly lay-filter="infoCategory" name="infoCategory" id="infoCategory"></select>
+                            <!--<input type="text" placeholder="请选择合同类别" lay-verify="required" class="layui-input" name="infoCategory" id="infoCategory" >-->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div style="width: 160px;margin: 10px auto 10px;">
+                <button class="layui-btn briefingBtn blueBtn layui-btn-normal" lay-submit lay-filter="btn-info-save" id="btn-info-save">保存</button>
+                <!--<button class="layui-btn briefingBtn blueBtn layui-btn-normal" lay-submit lay-filter="btn-info-next" id="btn-info-next">下一步</button>-->
+                <button class="layui-btn briefingBtn whiteBtn btn-form-cancle layui-btn-normal"  >取消</button>
+            </div>
+        </div>
+        <!--成员信息-->
+        <div class="memberInfo layui-form">
+            <div class="header">
+                <span>成员信息</span>
+                <!--<button class="layui-btn layui-btn-sm saveBtn layui-btn-danger" lay-submit lay-filter="btn-member-save"  id="btn-member-save">-->
+                <!--<img src="../../assetsInfo/images/baocun.png" style="position: relative;top: -1px;">-->
+                <!--保存-->
+                <!--</button>-->
+            </div>
+            <div class="titleInfo">
+                <span class="blueCycle"></span>
+                <span>负责人信息</span>
+            </div>
+            <div class="content ">
+                <div class="leftItem">
+                    <div class="layui-form-item">
+                        <label ><span class="redSpan">*</span>姓名：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写姓名" readonly disabled maxlength="50" lay-verify="required" style="cursor: pointer" class="layui-input" name="memberName" id="memberName" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label > <span class="redSpan">*</span>学历：</label>
+                        <div class="form-input">
+                            <select lay-verify="required" placeholder="请选择学历" disabled lay-filter="memberEducation" name="memberEducation" id="memberEducation"></select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label > <span class="redSpan">*</span>是否留学：</label>
+                        <div class="form-input ">
+                            <input type="radio"  lay-verify="required"  value="1" disabled title="是"   class="layui-input" name="memberOverseas"  >
+                            <input type="radio"  lay-verify="required"  value="0" disabled title="否" checked class="layui-input" name="memberOverseas"  >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label><span class="redSpan">*</span>座机：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写座机号码" readonly autocomplete="off" lay-verify="officePhone" maxlength="50" class="layui-input" name="memberLandline" id="memberLandline" >
+                        </div>
+                    </div>
+                </div>
+                <div class="centerItem">
+                    <div class="layui-form-item">
+                        <label > <span class="redSpan">*</span>职称级别：</label>
+                        <div class="form-input ">
+                            <select lay-verify="required" placeholder="请选择职称级别" disabled lay-filter="memberTitleLevel" name="memberTitleLevel" id="memberTitleLevel"></select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label > <span class="redSpan">*</span>学位：</label>
+                        <div class="form-input ">
+                            <select lay-verify="required" placeholder="请选择学位" disabled lay-filter="memberAcademic" name="memberAcademic" id="memberAcademic"></select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label > <span class="redSpan">*</span>从事专业：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写从事的专业" readonly autocomplete="off" lay-verify="required" maxlength="50" class="layui-input" name="memberMajor" id="memberMajor" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label > <span class="redSpan">*</span>手机：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写手机号码" readonly autocomplete="off" lay-verify="phone" class="layui-input" name="memberPhone" id="memberPhone" >
+                        </div>
+                    </div>
+                </div>
+                <div class="rightItem">
+                    <div class="layui-form-item">
+                        <label > <span class="redSpan">*</span>性别：</label>
+                        <div class="form-input ">
+                            <input type="radio" style="cursor: pointer"  lay-verify="required" disabled value="1" checked title="男" class="layui-input" name="memberGender" >
+                            <input type="radio" style="cursor: pointer"  lay-verify="required" disabled value="0" title="女" class="layui-input" name="memberGender" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label > <span class="redSpan">*</span>主要分工：</label>
+                        <div class="form-input ">
+                            <input type="text" style="cursor: pointer" placeholder="请填写分工"  readonly autocomplete="off" lay-verify="required" maxlength="80" class="layui-input" name="memberDivision" id="memberDivision" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label > <span class="redSpan">*</span>证件号码：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写证件号码" readonly autocomplete="off" lay-verify="required" class="layui-input" maxlength="19"  name="memberCertificates" id="memberCertificates" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label > <span class="redSpan">*</span>电子邮箱：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写您的邮箱" readonly autocomplete="off" lay-verify="email" class="layui-input" name="memberEmail" id="memberEmail" >
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="titleInfo" style="padding-top:0px;padding-bottom: 15px">
+                <span class="blueCycle"></span>
+                <span>成员信息</span>
+                <!--<button class="layui-btn layui-btn-sm saveBtn layui-btn-danger" style="margin-top: 0px"  lay-filter="btn-member-save"  id="btn-member-add">-->
+                    <!--<img src="../../assetsInfo/images/shangchuan.png" style="position: relative;top: -1px;">-->
+                    <!--添加-->
+                <!--</button>-->
+            </div>
+            <div class="memberBox">
+                <div class="member-refresh" style="display: none;"  title="刷新" ></div>
+                <div id="memberTable" lay-filter="memberTable"></div>
+            </div>
+            <div style="width: 160px;margin: 10px auto 10px;">
+                <button class="layui-btn briefingBtn blueBtn layui-btn-normal" lay-submit lay-filter="btn-member-save" id="btn-member-save">保存</button>
+                <!--<button class="layui-btn briefingBtn blueBtn layui-btn-normal" lay-submit lay-filter="btn-member-next"  id="btn-member-next">下一步</button>-->
+                <button class="layui-btn briefingBtn whiteBtn btn-form-cancle layui-btn-normal"  >取消</button>
+            </div>
+        </div>
+        <!-- 项目简介-->
+        <div class="introduction layui-form">
+            <div class="header">
+                <span>项目简介</span>
+                <!--<button class="layui-btn layui-btn-sm saveBtn layui-btn-danger" lay-submit lay-filter="btn-intro-save"  id="btn-intro-save">-->
+                <!--<img src="../../assetsInfo/images/baocun.png" style="position: relative;top: -1px;">-->
+                <!--保存-->
+                <!--</button>-->
+            </div>
+            <div class="content">
+                <div class="layui-form-item introductionTrue" >
+                    <div class="textPadding">
+                        <span class="blueCycle"></span>
+                        <span>总体目标（合同规定）：</span>
+                    </div>
+                    <div class="form-input ">
+                        <textarea type="text" style="background-color: #eeeeee" placeholder="请填写，字数限制在200字以内。" readonly maxlength="200" lay-verify="required"  class="layui-input introText" name="introTarget" id="introTarget" ></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item introductionTrue" >
+                    <div class="textPadding">
+                        <span class="blueCycle"></span>
+                        <span>总体目标（实际完成）：</span>
+                    </div>
+                    <div class="form-input ">
+                        <textarea type="text" placeholder="请填写，字数限制在200字以内。"  maxlength="200" lay-verify="required"  class="layui-input introText" name="introTargetNew" id="introTargetNew" ></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item introductionTrue">
+                    <div class="textPadding">
+                        <span class="blueCycle"></span>
+                        <span>主要研发内容（合同规定）：</span>
+                    </div>
+                    <div class="form-input ">
+                        <textarea type="text" style="background-color: #eeeeee" placeholder="请填写，字数限制在200字以内。" readonly maxlength="200" lay-verify="required"  class="layui-input introText" name="introContent" id="introContent" ></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item introductionTrue">
+                    <div class="textPadding">
+                        <span class="blueCycle"></span>
+                        <span>主要研发内容（实际完成）：</span>
+                    </div>
+                    <div class="form-input ">
+                        <textarea type="text" placeholder="请填写，字数限制在200字以内。"  maxlength="200" lay-verify="required"  class="layui-input introText" name="introContentNew" id="introContentNew" ></textarea>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 160px;margin: 10px auto 10px;">
+                <button class="layui-btn briefingBtn blueBtn layui-btn-normal" lay-submit lay-filter="btn-intro-save" id="btn-intro-save">保存</button>
+                <!--<button class="layui-btn briefingBtn blueBtn layui-btn-normal" lay-submit lay-filter="btn-intro-next"  id="btn-intro-next">下一步</button>-->
+                <button class="layui-btn briefingBtn whiteBtn btn-form-cancle layui-btn-normal"  >取消</button>
+            </div>
+        </div>
+        <!--考核指标-->
+        <div class="assessment layui-form">
+            <div class="header">
+                <span>考核指标</span>
+                <!--<button class="layui-btn layui-btn-sm saveBtn layui-btn-danger" lay-submit lay-filter="btn-assess-save"  id="btn-assess-save">-->
+                <!--<img src="../../assetsInfo/images/baocun.png" style="position: relative;top: -1px;">-->
+                <!--保存-->
+                <!--</button>-->
+            </div>
+            <div class="content" style="padding-bottom: 0px">
+                <div class="leftItem">
+                    <div class="textPadding">
+                        <span class="blueCycle"></span>
+                        <span>指标类别</span>
+                    </div>
+                    <div class="layui-form-item">
+                        <label ><span class="redSpan">*</span>发明专利数：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写发明专利数" style="background-color: #eeeeee"  maxlength="2" readonly onkeyup="replaceNonNegative(this)" lay-verify="required|number"  class="layui-input" name="numInventionPatents" id="numInventionPatents" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label ><span class="redSpan">*</span>实用新型数：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写实用新型数" style="background-color: #eeeeee"  maxlength="2" readonly onkeyup="replaceNonNegative(this)" lay-verify="required|number"  class="layui-input" name="numUtilityModels" id="numUtilityModels" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label ><span class="redSpan">*</span>外观专利数：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写外观专利数" style="background-color: #eeeeee"  maxlength="2" readonly onkeyup="replaceNonNegative(this)" lay-verify="required|number"  class="layui-input" name="numAppearancePatents" id="numAppearancePatents" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label ><span class="redSpan">*</span>目标刊物中国内外核心论文：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写目标刊物中国内外核心论文" style="background-color: #eeeeee" maxlength="2" readonly onkeyup="replaceNonNegative(this)" lay-verify="required|number" class="layui-input" name="numCorePapers" id="numCorePapers" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label ><span class="redSpan">*</span>软件著作权：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写软件著作权" style="background-color: #eeeeee" maxlength="2" readonly onkeyup="replaceNonNegative(this)" lay-verify="required|number" class="layui-input" name="numCopyright" id="numCopyright" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label ><span class="redSpan">*</span>其他论文：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写其他论文" style="background-color: #eeeeee" maxlength="2" readonly onkeyup="replaceNonNegative(this)" lay-verify="required|number" class="layui-input" name="numOtherPapers" id="numOtherPapers" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label style="vertical-align: top;">其他：</label>
+                        <div class="form-input ">
+                            <textarea type="text"  maxlength="100" readonly style="background-color: #eeeeee" class="layui-input introText" name="other" id="other" ></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="rightItem">
+                    <div class="layui-form-item">
+                        <label ><span class="redSpan">*</span>发明专利数：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写发明专利数"  maxlength="2"  onkeyup="replaceNonNegative(this)" lay-verify="required|number"  class="layui-input" name="numInventionPatentsNew" id="numInventionPatentsNew" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label ><span class="redSpan">*</span>实用新型数：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写实用新型数"  maxlength="2"  onkeyup="replaceNonNegative(this)" lay-verify="required|number"  class="layui-input" name="numUtilityModelsNew" id="numUtilityModelsNew" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label ><span class="redSpan">*</span>外观专利数：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写外观专利数"  maxlength="2"  onkeyup="replaceNonNegative(this)" lay-verify="required|number"  class="layui-input" name="numAppearancePatentsNew" id="numAppearancePatentsNew" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label ><span class="redSpan">*</span>目标刊物中国内外核心论文：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写目标刊物中国内外核心论文"  maxlength="2"  onkeyup="replaceNonNegative(this)" lay-verify="required|number" class="layui-input" name="numCorePapersNew" id="numCorePapersNew" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label ><span class="redSpan">*</span>软件著作权：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写软件著作权"  maxlength="2"  onkeyup="replaceNonNegative(this)" lay-verify="required|number" class="layui-input" name="numCopyrightNew" id="numCopyrightNew" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label ><span class="redSpan">*</span>其他论文：</label>
+                        <div class="form-input ">
+                            <input type="text" placeholder="请填写其他论文"  maxlength="2"  onkeyup="replaceNonNegative(this)" lay-verify="required|number" class="layui-input" name="numOtherPapersNew" id="numOtherPapersNew" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label style="vertical-align: top;">其他：</label>
+                        <div class="form-input ">
+                            <textarea type="text"  maxlength="100"   class="layui-input introText" name="otherNew" id="otherNew" ></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="layui-form-item" style="height: auto">-->
+                <!--<div>-->
+                <!--<label ><span class="redSpan"></span>其他：</label>-->
+                <!--</div>-->
+                <!--<div class="form-input" style="width: calc(100% - 28px)">-->
+                <!--<textarea type="text"  maxlength="100" readonly  class="layui-input introText" name="other" id="other" ></textarea>-->
+                <!--</div>-->
+                <!--</div>-->
+            </div>
+            <!--<div class="header">-->
+            <!--<span>交付物的技术指标</span>-->
+            <!--<button class="layui-btn layui-btn-sm saveBtn layui-btn-danger" lay-filter="btn-assess-add"  id="btn-assess-add">-->
+            <!--<img src="../../assetsInfo/images/shangchuan.png" style="position: relative;top: -1px;">-->
+            <!--添加-->
+            <!--</button>-->
+            <!--</div>-->
+
+            <div class="costBox" style="padding-top: 0px">
+                <div class="textPadding">
+                    <span class="blueCycle"></span>
+                    <span>交付物的技术指标（合同规定）</span>
+                    <!--<button class="layui-btn layui-btn-sm saveBtn addBtn layui-btn-danger" lay-filter="btn-assess-add"  id="btn-assess-add">-->
+                        <!--<img src="../../assetsInfo/images/shangchuan.png" style="position: relative;top: -1px;">添加数据</button>-->
+                </div>
+                <div id="assessrTable" lay-filter="assessrTable"></div>
+            </div>
+            <div class="costBox" style="padding-top: 0px">
+                <div class="textPadding">
+                    <span class="blueCycle"></span>
+                    <span>交付物的技术指标（实际完成）</span>
+                    <button class="layui-btn layui-btn-sm saveBtn addBtn layui-btn-danger" lay-filter="btn-assess-add"  id="btn-assess-add">
+                        <img src="../../assetsInfo/images/shangchuan.png" style="position: relative;top: -1px;">添加数据</button>
+                </div>
+                <div id="assessrTableNew" lay-filter="assessrTableNew"></div>
+            </div>
+            <div style="width: 240px;margin: 10px auto 10px;">
+                <button class="layui-btn briefingBtn blueBtn layui-btn-normal" lay-submit lay-filter="btn-assess-save" id="btn-assess-save">保存</button>
+                <!--<button class="layui-btn briefingBtn blueBtn layui-btn-normal" lay-submit lay-filter="btn-assess-next"  id="btn-assess-next">下一步</button>-->
+                <button class="layui-btn briefingBtn whiteBtn btn-form-cancle layui-btn-normal"  >取消</button>
+            </div>
+        </div>
+        <!--工作进度安排-->
+        <div class="schedule layui-form">
+            <div class="header">
+                <span>工作进度安排</span>
+                <!--<button class="layui-btn layui-btn-sm saveBtn layui-btn-danger" lay-submit lay-filter="btn-schedule-add"  id="btn-schedule-add">-->
+                <!--<img src="../../assets/images/shangchuan.png" style="position: relative;top: -1px;">-->
+                <!--添加-->
+                <!--</button>-->
+            </div>
+            <div class="costBox">
+                <div class="textPadding">
+                    <span class="blueCycle"></span>
+                    <span>合同规定</span>
+                </div>
+                <div id="scheduleTable" lay-filter="scheduleTable"></div>
+            </div>
+            <div class="costBox">
+                <div class="textPadding">
+                    <span class="blueCycle"></span>
+                    <span>实际完成</span>
+                </div>
+                <div id="scheduleTableNew" lay-filter="scheduleTableNew"></div>
+            </div>
+            <div style="width: 100px;margin: 10px auto 10px;">
+                <!--<button class="layui-btn briefingBtn blueBtn layui-btn-normal" lay-submit lay-filter="btn-schedule-save" id="btn-schedule-save">保存</button>-->
+                <!--<button class="layui-btn briefingBtn blueBtn layui-btn-normal" lay-submit lay-filter="btn-schedule-next" id="btn-schedule-next">下一步</button>-->
+                <!--<button class="layui-btn briefingBtn whiteBtn btn-form-cancle layui-btn-normal">取消</button>-->
+            </div>
+        </div>
+        <!-- 资金支出 -->
+        <div class="expenditure layui-form">
+            <div class="header">
+                <span>经费结算 （单位：万元）</span>
+                <!--<button class="layui-btn layui-btn-sm saveBtn layui-btn-danger" lay-submit lay-filter="btn-intro-save"  id="btn-expenditure-save">-->
+                <!--<img src="../../assets/images/baocun.png" style="position: relative;top: -1px;">-->
+                <!--保存-->
+                <!--</button>-->
+            </div>
+            <div class="costBox" style="padding-top: 10px">
+                <div class="textPadding">
+                    <span class="blueCycle"></span>
+                    <span>中心拨款部分的经费决算</span>
+                </div>
+                <table id="expenditureTable" lay-fliter="expenditureTable" class="layui-table">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+                <!--<div class="layui-form-item">-->
+                <!--<div style="margin-bottom: 10px">-->
+                <!--<label >特别说明:</label>-->
+                <!--</div>-->
+                <!--<div class="form-input ">-->
+                <!--<textarea type="text"  maxlength="200"   class="layui-input introText" name="specialNote" id="specialNote" ></textarea>-->
+                <!--</div>-->
+                <!--</div>-->
+            </div>
+            <div style="width: 240px;margin: 10px auto 10px;">
+                <button class="layui-btn briefingBtn blueBtn layui-btn-normal" lay-submit lay-filter="btn-expenditure-save" id="btn-expenditure-save">保存</button>
+                <!--<button class="layui-btn briefingBtn blueBtn layui-btn-normal" lay-submit lay-filter="btn-expenditure-next" id="btn-expenditure-next">下一步</button>-->
+                <button class="layui-btn briefingBtn whiteBtn btn-form-cancle layui-btn-normal">取消</button>
+            </div>
+        </div>
+        <!-- 变更说明 -->
+        <div class="programme layui-form">
+            <div class="header">
+                <span class="programmeTitle">结题研究实施报告</span>
+            </div>
+            <div class="content" style="padding-bottom: 0px">
+                <div class="programmeBox" style="margin-bottom: 10px">
+                    <div >
+                        <label style="font-weight: bold" >说明：</label>
+                    </div>
+                    <div style="padding-left: 30px">1.结题研究实施报告正文是项目实施方案的重要组成部分，将作为项目实施方案评审的重要参考依据，要求项目联系人按照模版详细填写。</div>
+                </div>
+                <div class="programmeBox" style="margin-bottom: 10px">
+                    <div>
+                        <label style="font-weight: bold">1.下载结题研究实施报告模版</label>
+                        <button class="layui-btn  layui-btn-normal" style="background-color: #87C459;" id="downFile">结题研究实施报告</button>
+                    </div>
+                </div>
+                <div class="upload-box" style="text-align: left;">
+                    <label class="programmeText" style="color:#333333;font-weight: bold">2.上传结题研究实施报告正文</label>
+                    <input disabled type="text" placeholder="请上传文件" style="width:300px;margin-bottom: 19px;display: inline-block;" class="layui-input" id="fileBriefing"  >
+                    <input style="display: none" id="upFileData" type="file">
+                    <button class="layui-btn briefingBtn layui-btn-normal" style="background-color: #87C459;margin-left: 10px;" id="choiceFile">选择</button>
+                    <button class="layui-btn briefingBtn layui-btn-normal" style="background-color: #FD6567;" id="delFile">删除</button>
+                    <button class="layui-btn briefingBtn layui-btn-normal" style="background-color: #2293F9;" id="uploadFile">上传</button>
+                    <button class="layui-btn briefingBtn layui-btn-normal" style="background-color: #2293F9;display: none;margin-left:0px" id="downLoadFile">下载</button>
+                </div>
+                <div class="programmeBox" style="margin-bottom: 10px">
+                    <div>
+                        <label style="font-weight: bold">3.结题研究实施报告</label>
+                        <span class="upload-text" >未上传</span>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 540px;margin: 0 auto;">
+
+            </div>
+            <div class="sumbitBox" style="width: 250px;margin: 80px auto 0;">
+                <button class="layui-btn briefingBtn blueBtn layui-btn-normal" lay-submit lay-filter="btn-programme-save" id="btn-programme-save">保存</button>
+                <button class="layui-btn briefingBtn blueBtn layui-btn-normal"  id="btn-sumbit-all">提交</button>
+                <button class="layui-btn briefingBtn whiteBtn layui-btn-normal"  id="btn-cancal-all">取消</button>
+            </div>
+        </div>
+        <!--项目ID-->
+        <input type="text" readonly id="researchProjectId" style="display: none" >
+        <input type="text" readonly id="researchProjectPropertyId" style="display: none" >
+        <!--流程唯一绑定key-->
+        <input type="text" readonly id="procBusinessKey" style="display: none" >
+        <!--是否可编辑-->
+        <input type="text" readonly id="isEdit" style="display: none" >
+    </div>
+</div>
+</body>
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+<script type="text/html" id="memberTool">
+    {{# if($('#isEdit').val()!=1&&$('#isEdit').val()!=2) { }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-member-edit">编辑</button>
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-member-del">删除</button>
+    {{# } }}
+</script>
+<script type="text/html" id="assessTool">
+    {{# if($('#isEdit').val()!=1&&$('#isEdit').val()!=2) { }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-member-edit">编辑</button>
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-member-del">删除</button>
+    {{# } }}
+</script>
+<script type="text/html" id="leadTool">
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-member-look">查看</button>
+</script>
+<script>
+    var reg = new RegExp(/^\d+((\.\d+)?)$/);
+    var setTitle = function (self) {
+        $(self).attr("title",$(self).val());
+    };
+    var mainFormBlur =function(obj){
+        var id=  $(obj).attr('data-id');
+        var parentId1 = $(obj).attr('data-parentid1');
+        var type = $(obj).attr('data-type');
+        var parentId2 = $(obj).attr('data-parentid2');
+        var value1 = $("."+id+"1").val();
+        var value2 = $("."+id+"2").val();
+        var value3 = $("."+id+"3").val();
+
+        var sum1 =(value1&&!isNaN(value1)?parseFloat(value1):0)+(value3&&!isNaN(value3)?parseFloat(value3):0)+(value2&&!isNaN(value2)?parseFloat(value2):0);
+        var sum2=0;
+        for (var i = 0; i <$("."+parentId2).length ; i++) {
+            sum2+=($("."+parentId2).eq(i).val()&&!isNaN($("."+parentId2).eq(i).val())?parseFloat($("."+parentId2).eq(i).val()):0)
+        }
+        $("."+parentId1+"").html(sum2.toFixed(4));
+        $("."+id+"0").html(sum1.toFixed(4));
+        var sum3=0;
+        var sum4=0;
+        var sum5=0;
+        var sum6=0;
+        var sum =0;
+        for (var f = 0; f <$('.type8').length ; f++) {
+            sum+=($(".type8").eq(f).html()&&!isNaN($(".type8").eq(f).html())?parseFloat($(".type8").eq(f).html()):0)
+        }
+        $('.type5').html(sum.toFixed(4));
+        for (var j = 0; j <$(".type1").length ; j++) {
+            var value = $(".type1").eq(j).children('.form-input').length==0?$(".type1").eq(j).val():$(".type1").eq(j).html();
+            if($(".type1").eq(j).html()){
+                value=$(".type1").eq(j).html();
+            }else if($(".type1").eq(j).val()){
+                value=$(".type1").eq(j).val();
+            }
+            sum3+=(value&&!isNaN(value)?parseFloat(value):0)
+        }
+        for (var x = 0; x <$(".type2").length ; x++) {
+            var value = $(".type2").eq(x).children('.form-input').length==0?$(".type2").eq(x).val():$(".type2").eq(x).html();
+            if($(".type2").eq(x).html()){
+                value=$(".type2").eq(x).html();
+            }else if($(".type2").eq(x).val()){
+                value=$(".type2").eq(x).val();
+            }
+            sum4+=(value&&!isNaN(value)?parseFloat(value):0);
+        }
+        for (var z = 0; z <$(".type3").length ; z++) {
+            var value = $(".type3").eq(z).children('.form-input').length==0?$(".type3").eq(z).val():$(".type3").eq(z).html();
+            if($(".type3").eq(z).html()){
+                value=$(".type3").eq(z).html();
+            }else if($(".type3").eq(z).val()){
+                value=$(".type3").eq(z).val();
+            }
+            sum5+=(value&&!isNaN(value)?parseFloat(value):0)
+        }
+        for (var q = 0; q <$(".type4").length ; q++) {
+            var value = $(".type4").eq(q).children('.form-input').length==0?$(".type4").eq(q).val():$(".type4").eq(q).html();
+            if($(".type4").eq(q).html()){
+                value=$(".type4").eq(q).html();
+            }else if($(".type4").eq(q).val()){
+                value=$(".type4").eq(q).val();
+            }
+            sum6+=(value&&!isNaN(value)?parseFloat(value):0)
+        }
+        $('.sum2').html(sum4.toFixed(4));
+        $('.sum3').html(sum5.toFixed(4));
+        $('.sum4').html(sum6.toFixed(4));
+
+        console.log(sum3,sum);
+        $('.sum1').html((sum3-sum).toFixed(4));
+
+    };
+    var dateChange=function(data){
+        var str = data.replace(/-/g,'/');
+        var date = new Date(str).getTime();
+        return date;
+    };
+    layui.form.verify({
+        adcformdesign_Time: function (value, item) {
+            // var endValue = $(item).parent().parent().siblings('.project_input_date').children().children('input').val();
+            if (dateChange($('#infoStartDate').val()) > dateChange($('#infoEndDate').val())) {
+                return '开始时间大于结束时间，请重新选择'
+            }
+        },
+        officePhone: function(value, item) {
+            if (!(/^\d{8}$/.test(value)) &&
+                !(/^\d{1,4}-\d{8}$/.test(value)) &&
+                !(/^\d{1,4}-\d{8}-\d{1,5}$/.test(value)) &&
+                !(/^\d{8}\/\d{8}$/.test(value))
+            ) {
+                return '请输入正确的办公电话，格式如下：<br/>84370000<br/>022-84370000<br/>022-84370000-0000<br/>84370000/84370000';
+            }
+        },
+        numberOrNull:function (value) {
+            var reg = new RegExp(/^\d+((\.\d+)?)$/);
+            if(value&&!reg.test(value)){
+                return '请输入数字';
+            }
+        }
+    });
+    layui.use(['element','laypage','tree','util','table','form','laydate'], function () {
+        var element = layui.element,
+            table = layui.table,
+            tree = layui.tree,
+            form = layui.form,
+            admin = layui.admin,
+            laydate = layui.laydate,
+            config = layui.config,
+            layer = layui.layer,
+            tools =layui.tools,
+            util = layui.util;
+        var account = config.getAccount();
+        var newData = [];
+        var indexType = 1;
+        $('#btn-sumbit-all').off('click').on('click',function () {
+            if(!$('#fileBriefing').attr('data-id')){
+                return  layer.msg('请先保存结题研究实施报告', {
+                    icon: 5,
+                    time:2000
+                });
+            }
+            var makeupoliet = {
+                processDefinitionKey:'p9d12f5b27f9a482c8772de52d2825334',
+                message: '发起人',
+                businessKey:$("#researchProjectId").val()+':'+$("#procBusinessKey").val()
+            };
+            layer.confirm('确认要启动该流程？', {
+                icon: 3,
+                title: '提示'
+            }, function () {
+                admin.req('/api/research/endBase/check/'+$("#procBusinessKey").val(),{}, function (res) {
+                    if (res.ok) {
+                        admin.req('/api/activiti/repository/startProcess', makeupoliet, function (res) {
+                            if (res.ok) {
+                                layer.msg('启动流程成功！', {
+                                    icon: 1
+                                });
+                                var timeClear = setTimeout(function () {
+                                    admin.finishPopupCenter();
+                                    layer.closeAll();
+                                    clearTimeout(timeClear);
+                                },500)
+                            } else {
+                                layer.msg('启动流程失败！' + res.message, {
+                                    icon: 5
+                                });
+                            }
+                        }, {
+                            method: 'post'
+                        });
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: 'get'
+                });
+
+            });
+        });
+        $('#btn-cancal-all').off('click').on('click',function () {
+            layer.closeAll();
+        });
+        $('.btn-form-cancle').off('click').on('click',function (){
+            layer.closeAll();
+        });
+        $.ajax({
+            type: "get",
+            url: "/api/research/menu?topNodeId=RSEID01",
+            success: function (res) {
+                if (res != null) {
+                    var childrenData = [];
+                    var data = res.data.data;
+                    // if( $('#isEdit').val()==2){
+                    //     data.splice(res.data.data.length-2,2)
+                    // }
+                    for (var i = 0; i < data.length; i++) {
+                        data[i].indexType = i;
+                        if (data[i].level == 2) {
+                            newData.push(data[i])
+                        } else if (data[i].level == 3) {
+                            childrenData.push(data[i])
+                        }
+                    }
+                    for (var j = 0; j < newData.length; j++) {
+                        newData[j].children = [];
+                        for (var i = 0; i < childrenData.length; i++) {
+                            if (childrenData[i].parentId == newData[j].id) {
+                                newData[j].children.push(childrenData[i])
+                            }
+                        }
+                    }
+                    layui.tree({
+                        elem: '#form-tree', // 指定元素
+                        showLine: 'false',
+                        nodes: newData,
+                        click: function(item){ // 点击节点回调
+                            if(!$('#researchProjectId').val()) {
+                                $('#form-tree li a cite').css('color', '#666');
+                                $('#form-tree li a cite').first().css('color', '#18B1EB');
+                                return  layer.msg('请填写基本信息', {
+                                    icon: 5,
+                                    time:1000
+                                });
+                            }
+                            if(item.remarks){
+                                eval(item.remarks);
+                            }
+                            indexType = item.indexType;
+                            console.log(indexType,'左侧节点的索引值');
+                        }
+                    });
+                    // 默认选中第一个树节点
+                    $('#form-tree li a cite').first().css('color', '#18B1EB');
+                    $('#form-tree li ul').addClass('layui-show');
+                    // $('#searchName').attr('name', newData[0].id);
+                    // $('#searchPatent').attr('name', newData[0].id);
+                    // 左侧树样式
+                    $('#form-tree li a cite').off('click').on('click', function(){
+                        $('#form-tree li a cite').css('color', '#666')
+                        $(this).css('color', '#18B1EB')
+                    });
+                    $('#form-tree li>a').off('dblclick')
+                    $('#form-tree li').find('.layui-tree-spread').parent().prepend('<img class="treeImg" style="display:none;position: absolute;right: 15px;top: 2px;" src="../../assetsInfo/images/icon/shouqi.png"/><img class="treeImg" style="position: absolute;right: 15px;top: 2px;" src="../../assetsInfo/images/icon/zhankai1.png"/>');
+                    $('#form-tree li').find('img').css('cursor', 'pointer');
+                    for (var x = 0; x < data.length; x++) {
+                        if(data[x].level == 2){
+                            $('#form-tree li').eq(x-1).prepend('<img style="position: relative;top:-1px;cursor: default" src="../../assetsInfo/images/icon/'+data[x].icon+'.png"/>');
+                        }
+                    }
+                    // $('#form-tree li').find('.layui-tree-spread').parent().prepend('<img src="../../assetsInfo/images/icon/xinxi.png"/>');
+                    // $('#form-tree li').find('.layui-tree-leaf').parent().parent().prepend('<img src="../../assetsInfo/images/icon/zhankai.png"/>')
+                    $('#form-tree li ul li ul li').find('.layui-tree-leaf').parent().parent().find('img').css('visibility', 'hidden');
+
+                    /* $('#deliverable-tree li').find('.layui-tree-spread').parent().children('a').on('click', function(){
+                     $(this).parent().find('img').toggle();
+                     $(this).parent().find('ul').toggleClass('layui-show')
+                     })*/
+                    $('#form-tree li').find('.layui-tree-spread').parent().children('img.treeImg').off('click').on('click', function(){
+                        $(this).parent().find('img.treeImg').toggle();
+                        $(this).parent().find('ul').toggleClass('layui-show')
+                    });
+                    information();
+                    // programme();
+                    // memberInfo();
+                    // introduction();
+                    // assessment();
+                    // schedule();
+                    // equipment();
+                    // material();
+                    // machining();
+                    // power();
+                    // meeting();
+                    // communicate();
+                    // affair();
+                    // purchase();
+                    // source();
+                    // expenditure();
+                    form.render();
+                }
+            }
+        });
+        /**
+         * 功能:基本信息
+         * 时间:2019/8/26
+         * 作者:lijiacheng
+         * @param
+         */
+        var information = function () {
+            $('.information').css('display','block');
+            $('.information').siblings().css('display','none');
+            // +$('#researchProjectId').val()
+            var editType='post';
+            $.ajax({
+                type: "get",
+                url: "/api/research/info?researchProjectId="+$('#researchProjectId').val(),
+                success: function (data) {
+                    laydate.render({
+                        elem: '#infoStartDate'
+                    });
+                    laydate.render({
+                        elem: '#infoEndDate'
+                    });
+                    $.ajax({
+                        type: "get",
+                        url: "/api/sys/dictype/list?dicCode=rs_contract_type",
+                        success: function (res) {
+                            var list = res.data;
+                            var con = '';
+                            for(i=0;i<list.length;i++){
+                                con += '<option value='+list[i].dicTypeCode+'>'+list[i].dicTypeName+'</option>'
+                            }
+                            if(data.data.length!=0){
+                                $('select[name=infoCategory]')[0].dataset.name=data.data[0].researchProjectTypeName;
+                                $('select[name=infoCategory]')[0].dataset.id=data.data[0].researchProjectTypeId;
+                            }else if(list.length!=0){
+                                $('select[name=infoCategory]')[0].dataset.name=list[0].dicTypeName;
+                                $('select[name=infoCategory]')[0].dataset.id=list[0].dicTypeCode;
+                            }
+                            form.on('select(infoCategory)',function (data) {
+                                data.elem.dataset.name=data.elem[data.elem.selectedIndex].innerHTML;
+                                data.elem.dataset.id=data.elem[data.elem.selectedIndex].value;
+                                form.render("select");
+                            });
+                            $('#infoCategory').empty().append(con);
+                            if(data.data.length!=0){
+                                $('#infoCategory').val(data.data[0].researchProjectTypeId);
+                            }
+                            form.render("select");
+
+                        }
+                    });
+                    $.ajax({
+                        type: "get",
+                        url: "/api/sys/dictype/list?dicCode=rs_platform",
+                        success: function (res) {
+                            var list = res.data;
+                            var con = '';
+                            for(i=0;i<list.length;i++){
+                                con += '<option value='+list[i].dicTypeCode+'>'+list[i].dicTypeName+'</option>'
+                            }
+                            if(data.data.length!=0){
+                                $('select[name=infoPlatform]')[0].dataset.name=data.data[0].ownPlatformName;
+                                $('select[name=infoPlatform]')[0].dataset.id=data.data[0].ownPlatformId;
+                            }else if(list.length!=0){
+                                $('select[name=infoPlatform]')[0].dataset.name=list[0].dicTypeName;
+                                $('select[name=infoPlatform]')[0].dataset.id=list[0].dicTypeCode;
+                            }
+                            form.on('select(infoPlatform)',function (data) {
+                                data.elem.dataset.name=data.elem[data.elem.selectedIndex].innerHTML;
+                                data.elem.dataset.id=data.elem[data.elem.selectedIndex].value;
+                                form.render("select");
+                            });
+                            $('#infoPlatform').empty().append(con);
+                            if(data.data.length!=0){
+                                $('#infoPlatform').val(data.data[0].ownPlatformId);
+                            }
+                            form.render("select");
+                        }
+                    });
+                    if(data.data.length!=0){
+                        var researchProjectBeginTime= tools.getDate(data.data[0].researchProjectBeginTime,"YYYY-MM-DD")
+                        var researchProjectEndTime= tools.getDate(data.data[0].researchProjectEndTime,"YYYY-MM-DD")
+                        $('#infoStartDate').val(researchProjectBeginTime);
+                        $('#infoEndDate').val(researchProjectEndTime);
+                        $('#infoContractName').val(data.data[0].researchProjectName);
+                        $('#infoContractNum').val(data.data[0].extInfo2);
+                        $('#infoDepartment').val(data.data[0].cooperationDepartmentName);
+                        $('#infoOwnDepartment').val(data.data[0].ownDepartmentName);
+                        $('#infoOwnDepartment').attr('data-id',data.data[0].ownDepartmentId);
+                        editType='put';
+                    }else{
+                        editType='post';
+                    }
+                    var submitFun = function(obj,type){
+                        //extInfo1 创建人ID  extInfo3 当前年份 extInfo2合同编号
+                        var infoData = {
+                            "cooperationDepartmentName": obj.field.infoDepartment,
+                            "ownDepartmentId":$('#infoOwnDepartment').attr('data-id'),
+                            "ownDepartmentName": obj.field.infoOwnDepartment,
+                            "ownPlatformId": $('#infoPlatform').attr('data-id'),
+                            "ownPlatformName": $('#infoPlatform').attr('data-name'),
+                            "researchProjectBeginTime":obj.field.infoStartDate,
+                            "researchProjectEndTime": obj.field.infoEndDate,
+                            "researchProjectTypeId": $('#infoCategory').attr('data-id'),
+                            "researchProjectTypeName":$('#infoCategory').attr('data-name'),
+                            'researchProjectName':obj.field.infoContractName,
+                            'extInfo2':obj.field.infoContractNum,
+                            'extInfo1':account.usid,
+                            'extInfo3':new Date().getFullYear(),
+                            "researchProjectPropertyId":$('#researchProjectPropertyId').val()
+                        };
+                        if(data.data.length != 0){
+                            infoData.researchProjectId = data.data[0].researchProjectId;
+                        }
+                        $.ajax({
+                            url: "/api/research/info",
+                            data: JSON.stringify(infoData),
+                            type: editType,
+                            contentType: "application/json",
+                            success: function (res) {
+                                if(res.ok){
+                                    $('#researchProjectId').val(res.data.researchProjectId);
+                                    if(type){
+                                        layer.msg('保存成功！', {
+                                            icon: 1
+                                        });
+                                        information();
+                                    }else{
+                                        // 跳转到下一项
+                                        $('#form-tree li a cite').eq(indexType).click();
+                                    }
+                                }else{
+                                    layer.msg(res.message, {
+                                        icon: 5
+                                    });
+                                }
+                            }
+                        })
+                    };
+                    form.on('submit(btn-info-save)', function (obj) {
+                        submitFun(obj,true)
+                    });
+                    form.on('submit(btn-info-next)', function (obj) {
+                        submitFun(obj);
+                    });
+                    $('#infoOwnDepartment').off('click').on('click',function () {
+                        layer.open({
+                            type: 2,
+                            id: 'orgsSelect',
+                            title: false,
+                            moveOut: true,
+                            content: 'components/tpl/dept_select.html',
+                            area: ['50%', '70%'],
+                            btn: ['确定', '取消'],
+                            yes: function (index, layero) {
+                                var finalData = $('#orgsSelect iframe')[0].contentWindow.task_orgs_select.finish();
+                                // 获取到数据，执行回掉函数
+                                if (finalData.id == '' || finalData.name == '') {
+                                    return layer.msg('请选择组织机构', {
+                                        icon: 0
+                                    });
+                                }
+                                $('#infoOwnDepartment').val(finalData.name);
+                                $('#infoOwnDepartment').attr('data-id',finalData.id);
+                                layer.close(index);
+                            },
+                            resize: false
+                        });
+                    });
+                }
+            })
+        };
+        /**
+         * 功能:成员信息
+         * 时间:2019/8/26
+         * 作者:lijiacheng
+         * @param
+         */
+        var memberInfo = function () {
+            $('.memberInfo').css('display','block');
+            $('.memberInfo').siblings().css('display','none');
+            var editType = 'post';
+            $.ajax({
+                type: "get",
+                url: "/api/research/member/page?orderBy=LEADER_FLAG_ DESC , EXT_INFO_1_&researchProjectId="+$('#researchProjectId').val(),
+                success: function (response) {
+                    //学历
+                    $.ajax({
+                        type: "get",
+                        url: "/api/sys/dictype/list?dicCode=rs_education",
+                        success: function (res) {
+                            var list = res.data;
+                            var con = '';
+                            for(i=0;i<list.length;i++){
+                                con += '<option value='+list[i].dicTypeCode+'>'+list[i].dicTypeName+'</option>'
+                            }
+                            if(response.data.list.length!=0){
+                                $('select[name=memberEducation]')[0].dataset.name=response.data.list[0].memberEducation;
+                                $('select[name=memberEducation]')[0].dataset.id=response.data.list[0].memberEducationId;
+                            } else if(list.length!=0){
+                                $('select[name=memberEducation]')[0].dataset.name=list[0].dicTypeName;
+                                $('select[name=memberEducation]')[0].dataset.id=list[0].dicTypeCode;
+                            }
+                            form.on('select(memberEducation)',function (data) {
+                                data.elem.dataset.name=data.elem[data.elem.selectedIndex].innerHTML;
+                                data.elem.dataset.id=data.elem[data.elem.selectedIndex].value;
+                                form.render("select");
+                            });
+                            $('#memberEducation').empty().append(con);
+                            if(response.data.list.length!=0){
+                                $('#memberEducation').val(data.memberEducationId);
+                            }
+                            form.render("select");
+                        }
+                    });
+                    //职称级别
+                    $.ajax({
+                        type: "get",
+                        url: "/api/sys/dictype/list?dicCode=rs_rank",
+                        success: function (res) {
+                            var list = res.data;
+                            var con = '';
+                            for(i=0;i<list.length;i++){
+                                con += '<option value='+list[i].dicTypeCode+'>'+list[i].dicTypeName+'</option>'
+                            }
+                            if(response.data.list.length!=0){
+                                $('select[name=memberTitleLevel]')[0].dataset.name=response.data.list[0].jobLevel;
+                                $('select[name=memberTitleLevel]')[0].dataset.id=response.data.list[0].jobLevelId;
+                            } else if(list.length!=0){
+                                $('select[name=memberTitleLevel]')[0].dataset.name=list[0].dicTypeName;
+                                $('select[name=memberTitleLevel]')[0].dataset.id=list[0].dicTypeCode;
+                            }
+                            form.on('select(memberTitleLevel)',function (data) {
+                                data.elem.dataset.name=data.elem[data.elem.selectedIndex].innerHTML;
+                                data.elem.dataset.id=data.elem[data.elem.selectedIndex].value;
+                                form.render("select");
+                            });
+                            $('#memberTitleLevel').empty().append(con);
+                            if(response.data.list.length!=0){
+                                $('#memberTitleLevel').val(data.jobLevelId);
+                            }
+                            form.render("select");
+                        }
+                    });
+                    //学位
+                    $.ajax({
+                        type: "get",
+                        url: "/api/sys/dictype/list?dicCode=rs_degree",
+                        success: function (res) {
+                            var list = res.data;
+                            var con = '';
+                            for(i=0;i<list.length;i++){
+                                con += '<option value='+list[i].dicTypeCode+'>'+list[i].dicTypeName+'</option>'
+                            }
+                            if(response.data.list.length!=0){
+                                $('select[name=memberAcademic]')[0].dataset.name=response.data.list[0].memberDegree;
+                                $('select[name=memberAcademic]')[0].dataset.id=response.data.list[0].memberDegreeId;
+                            } else if(list.length!=0){
+                                $('select[name=memberAcademic]')[0].dataset.name=list[0].dicTypeName;
+                                $('select[name=memberAcademic]')[0].dataset.id=list[0].dicTypeCode;
+                            }
+                            form.on('select(memberAcademic)',function (data) {
+                                data.elem.dataset.name=data.elem[data.elem.selectedIndex].innerHTML;
+                                data.elem.dataset.id=data.elem[data.elem.selectedIndex].value;
+                                form.render("select");
+                            });
+
+                            $('#memberAcademic').empty().append(con);
+                            if(response.data.list.length!=0){
+                                $('#memberAcademic').val(data.memberDegreeId);
+                            }
+                            form.render("select");
+                        }
+                    });
+                    $('#memberName').off('click').on('click',function () {
+                        var data={
+                            data:[]
+                        };
+                        if($('#memberName').attr('data-name')){
+                            data.data.push({
+                                name:$('#memberName').attr('data-name'),
+                                id:$('#memberName').attr('data-id')
+                            })
+                        }
+                        layer.open({
+                            type: 2,
+                            id: 'personnelSelect',
+                            title: '请选择',
+                            content: 'components/tpl/personnel_group_select.html',
+                            area: ['100%', '100%'],
+                            btn: ['确定', '取消'],
+                            yes: function (index, layero) {
+                                var finalData = $('#personnelSelect iframe')[0].contentWindow
+                                    .task_personnel_select.finish();
+                                for (var i = 0; i < finalData.length; i++) {
+                                    $('#memberName').attr('data-name',finalData[i].name);
+                                    $('#memberName').val(finalData[i].name);
+                                    $('#memberName').attr('data-id',finalData[i].id);
+                                }
+                                layer.close(index);
+                            },
+                            success: function () {
+                                // 执行 iframe 内的方法
+                                $('#personnelSelect iframe')[0].contentWindow.task_personnel_select
+                                    .init(data,'radio');
+                            },
+                            resize: false
+                        });
+                    });
+                    table.render({
+                        elem: '#memberTable',
+                        url: admin.formatUrl('/api/research/member/page?orderBy=LEADER_FLAG_ DESC , EXT_INFO_1_&researchProjectId='+$('#researchProjectId').val()), //数据接口
+                        method: 'GET',
+                        id: 'memberTable',
+                        // 格式化后台返回的数据
+                        parseData: function (res) { //res 即为原始返回的数据
+                            // 返回结果，进行渲染表格
+                            return {
+                                "code": res.respCode, //解析接口状态
+                                "count": res.data.count,
+                                "msg": res.message, //解析提示文本
+                                "data": res.data.list //解析数据列表
+                            };
+                        },
+                        request: {
+                            pageName: 'page',
+                            limitName: 'pageSize'
+                        },
+                        page:true,
+                        cols: [
+                            [ {
+                                type: 'numbers',
+                                title: '序号',
+                                fixed: 'left',
+                                width:80
+                            },{
+                                title: '排序',
+                                field: 'extInfo1',
+                                align: 'center'
+                            }, {
+                                title: '姓名',
+                                field: 'memberName',
+                                align: 'center'
+                            }, {
+                                title: '性别',
+                                field: 'memberSex',
+                                align: 'center',
+                                templet: function(d) {
+                                    return '<div ><span>'+ (d.memberSex ==1?'男':'女')+'</span></div>';
+                                }
+                            }, {
+                                title: '学历',
+                                field: 'memberEducation',
+                                align: 'center',
+                            }, {
+                                title: '职称',
+                                field: 'jobLevel',
+                                align: 'center'
+                            }, {
+                                title: '主要分工',
+                                field: 'mainTaskDescription',
+                                align: 'center'
+                            }, {
+                                title: '学位',
+                                field: 'memberDegree',
+                                align: 'center'
+                            }, {
+                                title: '电子邮箱',
+                                field: 'memberEmail',
+                                align: 'center'
+                            },{
+                                title: '操作',
+                                align: 'center',
+                                toolbar:'#leadTool'
+                            }]
+                        ],
+                    });
+                    table.on('tool(memberTable)', function (obj) {
+                        // 获取点击列的数据
+                        var data = obj.data;
+                        var layEvent = obj.event;
+                        if(layEvent=='btn-member-edit'){
+                            layer.open({
+                                type: 2,
+                                id: 'memberList',
+                                title: '项目组成员信息',
+                                moveOut: true,
+                                content: 'components/researchForm/memberLayer.html',
+                                area: ['100%', '100%'],
+                                // btn: ['确定', '取消'],
+                                yes: function (index, layero) {
+                                    sessionStorage.removeItem("memberListData");
+                                    layer.close(index);
+                                },
+                                success: function () {
+                                    var objData= $.extend(true,{},data);
+                                    sessionStorage.removeItem("memberListData");
+                                    sessionStorage.setItem("memberListData", JSON.stringify(objData));
+                                    $('#memberList iframe')[0].contentWindow.memberListInit(objData);
+                                },
+                                resize: false
+                            });
+                        }else if(layEvent=='btn-member-del'){
+                            layer.confirm('确定删除该条成员信息吗', {
+                                icon: 3,
+                                title: '提示'
+                            }, function(index) {
+                                $.ajax({
+                                    url: "/api/research/member/"+data.id,
+                                    type: 'delete',
+                                    success: function (res) {
+                                        memberInfo();
+                                        layer.close(index);
+                                    }
+                                });
+                            });
+                        }else if(layEvent=='btn-member-look'){
+                            layer.open({
+                                type: 2,
+                                id: 'memberList',
+                                title: '项目组成员信息',
+                                moveOut: true,
+                                content: 'components/researchForm/memberLayer.html',
+                                area: ['100%', '100%'],
+                                // btn: ['确定', '取消'],
+                                yes: function (index, layero) {
+                                    sessionStorage.removeItem("memberListData");
+                                    layer.close(index);
+                                },
+                                success: function () {
+                                    var objData= $.extend(true,{},data);
+                                    sessionStorage.setItem("memberListData", JSON.stringify(objData));
+                                    //查看第二个参数传true;
+                                    $('#memberList iframe')[0].contentWindow.memberListInit(objData,true);
+
+                                    console.log($("#memberList"),4755757)
+                                    // buttonElem.attr('disabled', 'disabled');
+                                },
+                                resize: false
+                            });
+                        }
+                    });
+                    if(response.data.list.length!=0){
+                        var data =response.data.list[0];
+                        $('#memberName').val(data.memberName);
+                        $('#memberName').attr('data-name',data.memberName);
+                        $('#memberName').attr('data-id',data.memberNameId);
+                        $('input[name=memberOverseas][value='+data.studyAbroadType+']').attr('checked',true);
+                        $('#memberLandline').val(data.memberTelephone);
+                        $('#memberTitleLevel').val(data.jobLevelId);
+                        $('#memberMajor').val(data.memberProfession);
+                        $('#memberPhone').val(data.memberMobilePhone);
+                        $('input[name=memberGender][value='+data.memberSex+']').attr('checked',true);
+                        $('#memberDivision').val(data.mainTaskDescription);
+                        $('#memberCertificates').val(data.memberCard);
+                        $('#memberEmail').val(data.memberEmail);
+                        form.render();
+                        editType='put';
+                    }else{
+                        editType='post';
+                    }
+                    var submitFun = function(obj,type){
+                        var memberObj=obj.field;
+                        var memberData ={
+                            // "extInfo1": "string",
+                            // "id": "string",
+                            "jobLevel": $('#memberTitleLevel').attr('data-name'),
+                            "jobLevelId": $('#memberTitleLevel').attr('data-id'),
+                            "leaderFlag": 1,
+                            "mainTaskDescription":memberObj.memberDivision,
+                            "memberCard": memberObj.memberCertificates,
+                            "memberDegree": $('#memberAcademic').attr('data-name'),
+                            "memberDegreeId": $('#memberAcademic').attr('data-id'),
+                            "memberEducation": $('#memberEducation').attr('data-name'),
+                            "memberEducationId": $('#memberEducation').attr('data-id'),
+                            "memberEmail": memberObj.memberEmail,
+                            "memberMobilePhone": memberObj.memberPhone,
+                            "memberName": $('#memberName').attr('data-name'),
+                            "memberNameId": $('#memberName').attr('data-id'),
+                            "memberProfession": memberObj.memberMajor,
+                            "memberSex": memberObj.memberGender,
+                            "memberTelephone": memberObj.memberLandline,
+                            "researchProjectId": $('#researchProjectId').val(),
+                            "studyAbroadType": memberObj.memberOverseas
+                        };
+                        if(response.data.list.length!=0){
+                            memberData.id=response.data.list[0].id;
+                        }
+                        $.ajax({
+                            url: "/api/research/member",
+                            data: JSON.stringify(memberData),
+                            type: editType,
+                            contentType: "application/json",
+                            success: function (res) {
+                                if(res.ok){
+                                    if(type){
+                                        memberInfo();
+                                        table.reload('memberTable');
+                                        layer.msg('保存成功！', {
+                                            icon: 1
+                                        });
+                                    }else{
+                                        $('#form-tree li a cite').eq(indexType).click();
+                                    }
+                                } else {
+                                    return layer.msg(res.message, {
+                                        icon: 5
+                                    });
+                                }
+                            }
+                        })
+                    };
+                    form.on('submit(btn-member-save)', function (obj) {
+                        submitFun(obj,true);
+                    });
+                    form.on('submit(btn-member-next)', function (obj) {
+                        submitFun(obj);
+                    });
+                    $('.member-refresh').off('click').on('click',function () {
+                        table.reload('memberTable');
+                    });
+                    $('#btn-member-add').off('click').on('click',function () {
+                        sessionStorage.removeItem("memberListData");
+                        // sessionStorage.setItem("memberListData", JSON.stringify(data));
+                        layer.open({
+                            type: 2,
+                            id: 'memberList',
+                            title: '项目组成员信息',
+                            moveOut: true,
+                            content: 'components/researchForm/memberLayer.html',
+                            area: ['90%', '80%'],
+                            // btn: ['确定', '取消'],
+                            yes: function (index, layero) {
+                                layer.close(index);
+                            },
+                            success: function () {
+                                $('#memberList iframe')[0].contentWindow.memberListInit('');
+                            },
+                            resize: false
+                        });
+                    });
+                }
+            });
+        };
+        /**
+         * 功能:项目简介
+         * 时间:2019/8/26
+         * 作者:lijiacheng
+         * @param
+         */
+        var introduction = function () {
+            $('.introduction').css('display','block');
+            $('.introduction').siblings().css('display','none');
+            var editType = 'post';
+            $.ajax({
+                url: "/api/research/endProjectSummary?procBusinessKey="+$('#procBusinessKey').val()+"&researchProjectId="+$('#researchProjectId').val(),
+                type: 'get',
+                success: function (res) {
+                    if(res.ok){
+                        if(res.data.length!=0){
+                            $('#introContent').val(res.data[0].researchProjectContent);
+                            $('#introTarget').val(res.data[0].totalTarget);
+                            $('#introContentNew').val(res.data[0].researchProjectContentAct);
+                            $('#introTargetNew').val(res.data[0].totalTargetAct);
+                            editType = 'put';
+                        }else{
+                            editType = 'post';
+                        }
+                    }
+                    // if($('#isEdit').val()==2){
+                    //     $('.introduction .layui-form-item').css('display',"none");
+                    //     $('.introduction .introductionTrue').css('display',"block");
+                    // }
+                    var submitFun = function(obj,type){
+                        var objData=obj.field;
+                        var infoData ={
+                            "researchProjectContentAct": objData.introContentNew,
+                            "researchProjectId": $('#researchProjectId').val(),
+                            "procBusinessKey":$('#procBusinessKey').val(),
+                            "totalTargetAct": objData.introTargetNew
+                        };
+                        if(res.data.length!=0){
+                            infoData.id=res.data[0].id;
+                        }
+                        $.ajax({
+                            url: "/api/research/endProjectSummary",
+                            data: JSON.stringify(infoData),
+                            type: editType,
+                            contentType: "application/json",
+                            success: function (res) {
+                                if(res.ok){
+                                    if(type){
+                                        layer.msg('保存成功！', {
+                                            icon: 1
+                                        });
+                                        introduction();
+                                    }else{
+                                        $('#form-tree li a cite').eq(indexType).click();
+                                    }
+                                }
+                            }
+                        })
+                    }
+                    form.on('submit(btn-intro-save)', function (obj) {
+                        submitFun(obj,true)
+                    });
+                    form.on('submit(btn-intro-next)', function (obj) {
+                        submitFun(obj);
+                    });
+                }
+            });
+        };
+        /**
+         * 功能:考核指标
+         * 时间:2019/8/26
+         * 作者:lijiacheng
+         * @param
+         */
+        var assessment = function () {
+            $('.assessment').css('display','block');
+            $('.assessment').siblings().css('display','none');
+            var editType='post';
+            $.ajax({
+                url: "/api/research/endProjectKpi?procBusinessKey="+$('#procBusinessKey').val()+"&researchProjectId=" + $('#researchProjectId').val(),
+                type: 'get',
+                contentType: "application/json",
+                success: function (res) {
+                    if(res.ok){
+                        if(res.data.length!=0){
+                            $('#numAppearancePatentsNew').val(res.data[0].numAppearancePatents);
+                            $('#numCopyrightNew').val(res.data[0].numCopyright);
+                            $('#numCorePapersNew').val(res.data[0].numCorePapers);
+                            $('#numInventionPatentsNew').val(res.data[0].numInventionPatents);
+                            $('#numOtherPapersNew').val(res.data[0].numOtherPapers);
+                            $('#numUtilityModelsNew').val(res.data[0].numUtilityModels);
+                            $('#otherNew').val(res.data[0].other);
+                        }else{
+                            return layer.msg(res.message, {
+                                icon: 5
+                            });
+                        }
+                    }else{
+                        return layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                }
+            });
+            $.ajax({
+                url: "/api/research/kpi?researchProjectId="+$('#researchProjectId').val(),
+                type: 'get',
+                contentType: "application/json",
+                success: function (res) {
+                    if(res.ok){
+                        if(res.data.length!=0){
+                            $('#numAppearancePatents').val(res.data[0].numAppearancePatents);
+                            $('#numCopyright').val(res.data[0].numCopyright);
+                            $('#numCorePapers').val(res.data[0].numCorePapers);
+                            $('#numInventionPatents').val(res.data[0].numInventionPatents);
+                            $('#numOtherPapers').val(res.data[0].numOtherPapers);
+                            $('#numUtilityModels').val(res.data[0].numUtilityModels);
+                            $('#other').val(res.data[0].other);
+                        }
+                    }else{
+                        return layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                    var submitFun = function(obj,type){
+                        var objData = {
+                            numAppearancePatents:$('#numAppearancePatentsNew').val(),
+                            numCopyright:$('#numCopyrightNew').val(),
+                            numCorePapers:$('#numCorePapersNew').val(),
+                            numInventionPatents:$('#numInventionPatentsNew').val(),
+                            numOtherPapers:$('#numOtherPapersNew').val(),
+                            numUtilityModels:$('#numUtilityModelsNew').val(),
+                            other:$('#otherNew').val()
+                        };
+                        objData.researchProjectId = $('#researchProjectId').val();
+                        objData.procBusinessKey = $('#procBusinessKey').val();
+                        if(res.data.length != 0){
+                            objData.id = res.data[0].id;
+                        }
+                        $.ajax({
+                            url: "/api/research/endProjectKpi",
+                            data: JSON.stringify(objData),
+                            type: 'put',
+                            contentType: "application/json",
+                            success: function (res) {
+                                if(res.ok){
+                                    if(type){
+                                        layer.msg('保存成功！', {
+                                            icon: 1
+                                        });
+                                        assessment();
+                                    }else{
+                                        if(arr && arr.length!=0){
+                                            $('#form-tree li a cite').eq(indexType).click();
+                                        }else {
+                                            assessment();
+                                            layer.msg('交付物的技术指标未添加,请先添加!',{
+                                                icon:5
+                                            })
+                                        }
+                                    }
+                                }
+                            }
+                        })
+                    }
+                    form.on('submit(btn-assess-save)', function (obj) {
+                        submitFun(obj,true);
+                    });
+                    form.on('submit(btn-assess-next)', function (obj) {
+                        submitFun(obj);
+                    });
+                    var layerOpen = function(obj){
+                        var type ='post';
+                        if(obj){
+                            type='put'
+                        }
+                        layer.open({
+                            type: 1,
+                            title: '项目预期交付物',
+                            content: '<div id="searchDate" class="layui-form" lay-filter="searchDate"; style="padding: 20px" >\n' +
+                            '                    <div class="layui-form-item">\n' +
+                            '                        <div class="">\n' +
+                            ' <label style="display: inline-block;width: 110px"><span class="redSpan">*</span>交付物：</label>' +
+                            '                         <input type="text" maxlength="80" style="display: inline-block;width: calc(100% - 120px);" placeholder="请填写交付物" class="layui-input" id="delivery"  lay-verify="required">\n' +
+                            '                        </div>\n' +
+                            '                    </div>\n' +
+                            '                    <div class="layui-form-item" style="position: relative">\n' +
+                            '<div style="display: inline-block;width: 110px;height:19px">' +
+                            ' <label style="white-space: pre;position: absolute;top:0px;"><span class="redSpan">*</span>交付物技术指标：</label>' +
+                            '</div>'+
+                            '                        <div style="display: inline-block;width: calc(100% - 120px)">\n' +
+                            '                            <textarea maxlength="200" style="display: inline-block;width: 100%;height: 88px;"   class="layui-input" id="deliveryTechnology"></textarea>\n' +
+                            '                        </div>\n' +
+                            '                    </div>\n' +
+                            '                </div>',
+                            area: ['600px', '300px'],
+                            btn: ['确定', '取消'],
+                            yes: function(index, layero) {
+                                if(!$('#delivery').val()||!$('#delivery').val().trim()){
+                                    return layer.msg('请填写交付物', {
+                                        icon: 5
+                                    });
+                                }
+                                if(!$('#deliveryTechnology').val()||!$('#deliveryTechnology').val().trim()){
+                                    return layer.msg('请填写交付物技术指标', {
+                                        icon: 5
+                                    });
+                                }
+                                var data={
+                                    name:$('#delivery').val(),
+                                    kpi:$('#deliveryTechnology').val()
+                                };
+                                if(obj){
+                                    data.id=obj.id;
+                                }
+                                data.researchProjectId=$('#researchProjectId').val();
+                                data.procBusinessKey=$('#procBusinessKey').val();
+                                $.ajax({
+                                    url: "/api/research/endProjectKpiDeliverable",
+                                    data: JSON.stringify(data),
+                                    type: type,
+                                    contentType: "application/json",
+                                    success: function (res) {
+                                        if(res.ok){
+                                            table.reload('assessrTableNew');
+                                            layer.close(index);
+                                        }else{
+                                            return layer.msg(res.message, {
+                                                icon: 5
+                                            });
+                                        }
+                                    }
+                                });
+                            },
+                            success: function() {
+                                if(obj){
+                                    $('#delivery').val(obj.name);
+                                    $('#deliveryTechnology').val(obj.kpi);
+                                }
+                            },
+                            resize: false
+                        });
+                    };
+                    var arr;
+                    var col=[ {
+                        type: 'numbers',
+                        title: '序号',
+                        fixed: 'left',
+                        width:80
+                    },{
+                        title: '交付物',
+                        field: 'name',
+                        align: 'center'
+                    }, {
+                        title: '交付物技术指标',
+                        field: 'kpi',
+                        align: 'center'
+                    }
+                        // ,{
+                        //     title: '操作',
+                        //     align: 'center',
+                        //     toolbar:'#memberTool'
+                        // }
+                    ];
+
+                    table.render({
+                        elem: '#assessrTable',
+                        url: admin.formatUrl('/api/research/kpiDeliverable/page?researchProjectId='+$('#researchProjectId').val()), //数据接口
+                        method: 'GET',
+                        id: 'assessrTable',
+                        // 格式化后台返回的数据
+                        parseData: function (res) { //res 即为原始返回的数据
+                            // 返回结果，进行渲染表格
+                            return {
+                                "code": res.respCode, //解析接口状态
+                                "count": res.data.count,
+                                "msg": res.message, //解析提示文本
+                                "data": res.data.list //解析数据列表
+                            };
+                        },
+                        request: {
+                            pageName: 'page',
+                            limitName: 'pageSize'
+                        },
+                        page:true,
+                        cols: [
+                            col
+                        ]
+                    });
+                    var newCol =[ {
+                        type: 'numbers',
+                        title: '序号',
+                        fixed: 'left',
+                        width:80
+                    },{
+                        title: '交付物',
+                        field: 'name',
+                        align: 'center'
+                    }, {
+                        title: '交付物技术指标',
+                        field: 'kpi',
+                        align: 'center'
+                    },{
+                        title: '操作',
+                        align: 'center',
+                        toolbar:'#assessTool'
+                    }
+                    ];
+                    if($('#isEdit').val()==1||$('#isEdit').val()==2){
+                        newCol.splice(newCol.length-1,1);
+                    };
+                    table.render({
+                        elem: '#assessrTableNew',
+                        url: admin.formatUrl('/api/research/endProjectKpiDeliverable/page?procBusinessKey='+$('#procBusinessKey').val()+'&researchProjectId='+$('#researchProjectId').val()), //数据接口
+                        method: 'GET',
+                        id: 'assessrTableNew',
+                        // 格式化后台返回的数据
+                        parseData: function (res) { //res 即为原始返回的数据
+                            arr=res.data.list;
+                            // 返回结果，进行渲染表格
+                            return {
+                                "code": res.respCode, //解析接口状态
+                                "count": res.data.count,
+                                "msg": res.message, //解析提示文本
+                                "data": res.data.list //解析数据列表
+                            };
+                        },
+                        request: {
+                            pageName: 'page',
+                            limitName: 'pageSize'
+                        },
+                        page:true,
+                        cols: [
+                            newCol
+                        ]
+                    });
+                    table.on('tool(assessrTableNew)', function (obj) {
+                        // 获取点击列的数据
+                        var data = obj.data;
+                        var layEvent = obj.event;
+                        if(layEvent=='btn-member-edit'){
+                            layerOpen(data);
+                        }else if(layEvent=='btn-member-del'){
+                            if(arr.length==1){
+                                return  layer.msg('交付物的技术指标应至少存在一条', {
+                                    icon: 5
+                                });
+                            }
+                            layer.confirm('确定删除该条交付物吗', {
+                                icon: 3,
+                                title: '提示'
+                            }, function(index) {
+                                $.ajax({
+                                    url: "/api/research/endProjectKpiDeliverable/"+data.id,
+                                    type: 'delete',
+                                    success: function (res) {
+                                        table.reload('assessrTableNew');
+                                        layer.close(index);
+                                    }
+                                });
+                            });
+                        }
+                    });
+                    $('#btn-assess-add').off('click').on('click',function () {
+                        layerOpen();
+                    });
+                }
+            })
+
+        };
+        /**
+         * 功能: 工作进度安排
+         * 时间: 2019/8/26
+         * 作者: lijiacheng
+         * 修改时间: 2019/9/11
+         * 修改人: menglingyan
+         * 修改内容: 点击下一步时候先判断表格是否有数据,如果没有数据就提示请先添加一个数据
+         * @param:
+         */
+        var schedule = function () {
+            $('.schedule').css('display','block');
+            $('.schedule').siblings().css('display','none');
+            $('#btn-schedule-next').off('click').on('click',function () {
+                if(arr && arr.length!=0){
+                    $('#form-tree li a cite').eq(indexType).click();
+                }else {
+                    layer.msg('检查内容未添加,请先添加!',{
+                        icon:5
+                    })
+                }
+            });
+            var layerOpen = function(obj){
+                layer.open({
+                    type: 1,
+                    title: '项目工作进度安排',
+                    content: '<div id="searchDate" class="layui-form" lay-filter="searchDate"; style="padding: 20px" >\n' +
+                    '<div class="layui-form-item">\n' +
+                    '<div class="">\n' +
+                    '<label style="display: inline-block;width: 80px"><span class="redSpan">*</span>检查内容：</label>' +
+                    '<input type="text" maxlength="80" style="display: inline-block;width: calc(100% - 90px);" placeholder="请填写检查内容" class="layui-input" id="checkContent"  lay-verify="required">\n' +
+                    '</div>\n' +
+                    '</div>\n' +
+                    '<div class="layui-form-item" style="position: relative">\n' +
+                    '<div style="display: inline-block;width: 80px;height:19px">' +
+                    '<label style="white-space: pre;position: absolute;top:5px;"><span class="redSpan">*</span>检查时间：</label>' +
+                    '</div>'+
+                    '<div style="display: inline-block;width: calc(100% - 90px);position: relative">\n' +
+                    '<input type="text" style="cursor: pointer" placeholder="请选择检查时间" lay-verify="required"  readonly class="layui-input" name="checkDate" id="checkDate" >\n' +
+                    '<img src="/assetsInfo/images/riliform.png" style="position: absolute; top: 50%; right: 5px; font-size: 20px; width: 20px; height: 20px; margin-top: -10px;"/>\n' +
+                    '</div>\n' +
+                    '</div>\n' +
+                    '</div>',
+                    area: ['600px', '250px'],
+                    btn: ['确定', '取消'],
+                    yes: function(index, layero) {
+                        if(!$('#checkContent').val()||!$('#checkContent').val().trim()){
+                            return layer.msg('请填写检查内容', {
+                                icon: 5
+                            });
+                        }
+                        if(!$('#checkDate').val()){
+                            return layer.msg('请选择检查日期', {
+                                icon: 5
+                            });
+                        }
+                        var data={
+                            checkDetail:$('#checkContent').val(),
+                            date:$('#checkDate').val(),
+                            "procBusinessKey":$('#procBusinessKey').val(),
+                        };
+                        var editType='post';
+                        if(obj){
+                            editType='put';
+                            data.id=obj.id;
+                        }
+                        data.researchProjectId=$('#researchProjectId').val();
+                        $.ajax({
+                            url: "/api/research/progress",
+                            data: JSON.stringify(data),
+                            type: editType,
+                            contentType: "application/json",
+                            success: function (res) {
+                                if(res.ok){
+                                    table.reload('scheduleTable');
+                                    layer.close(index);
+                                }else{
+                                    return layer.msg(res.message, {
+                                        icon: 5
+                                    });
+                                }
+                            }
+                        });
+                    },
+                    success: function() {
+                        laydate.render({
+                            elem: '#checkDate'
+                        });
+                        if(obj){
+                            if(obj.mask){
+                                var mask=obj.mask;
+                                var changeArr = mask.split(',');
+                                for(var i =0;i<changeArr.length;i++){
+                                    if(changeArr[i]=='checkDetail'){
+                                        changeArr[i]='checkContent';
+                                    }
+                                    if(changeArr[i]=='date'){
+                                        changeArr[i]='checkDate';
+                                    }
+                                }
+                                $('.redChange').removeClass('redChange');
+                                for(var i =0;i<changeArr.length;i++){
+                                    $('#'+changeArr[i]).addClass('redChange');
+                                }
+                            }
+                            $('#checkContent').val(obj.checkDetail);
+                            $('#checkDate').val(obj.date);
+                        }
+                    },
+                    resize: false
+                });
+            };
+            var col= [ {
+                type: 'numbers',
+                title: '序号',
+                fixed: 'left',
+                width:80
+            },{
+                title: '检查内容',
+                field: 'checkDetail',
+                align: 'center'
+            }, {
+                title: '检查时间',
+                field: 'date',
+                align: 'center',
+                templet: function (row) {
+                    if (row.date) {
+                        return '<div title="'+tools.getDate(row.date,"YYYY-MM-DD")+'"><span>'+ tools.getDate(row.date,"YYYY-MM-DD") +'</span></div>' ;
+                    }
+                }
+            }
+            ];
+            var colNew= [ {
+                type: 'numbers',
+                title: '序号',
+                fixed: 'left',
+                width:80
+            },{
+                title: '检查内容',
+                field: 'checkDetail',
+                align: 'center'
+            }, {
+                title: '检查时间',
+                field: 'date',
+                align: 'center',
+                templet: function (row) {
+                    if (row.extInfo3&&row.extInfo3!='未检查') {
+                        row.extInfo3=Number(row.extInfo3);
+                        return '<div title="'+tools.getDate(row.extInfo3,"YYYY-MM-DD")+'"><span>'+ tools.getDate(row.extInfo3,"YYYY-MM-DD") +'</span></div>' ;
+                    }else{
+                        return '<div title="未检查"><span>未检查</span></div>' ;
+                    }
+                }
+            }
+            ];
+            var arr;
+            table.render({
+                elem: '#scheduleTable',
+                url: admin.formatUrl('/api/research/progress/page?researchProjectId='+$('#researchProjectId').val()), //数据接口
+                method: 'GET',
+                id: 'scheduleTable',
+                // 格式化后台返回的数据
+                parseData: function (res) { //res 即为原始返回的数据
+                    arr = res.data.list;
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "count": res.data.count,
+                        "msg": res.message, //解析提示文本
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                request: {
+                    pageName: 'page',
+                    limitName: 'pageSize'
+                },
+                page: true,
+                cols: [col],
+            });
+            table.render({
+                elem: '#scheduleTableNew',
+                url: admin.formatUrl('/api/research/progress/page?&researchProjectId='+$('#researchProjectId').val()), //数据接口
+                method: 'GET',
+                id: 'scheduleTableNew',
+                // 格式化后台返回的数据
+                parseData: function (res) { //res 即为原始返回的数据
+                    arr = res.data.list;
+                    for(var i =0;i<res.data.list.length;i++){
+                        res.data.list[i].date= res.data.list[i].extInfo1!=1?"未检查":res.data.list[i].date
+                    }
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "count": res.data.count,
+                        "msg": res.message, //解析提示文本
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                request: {
+                    pageName: 'page',
+                    limitName: 'pageSize'
+                },
+                page: true,
+                cols: [colNew],
+            });
+            table.on('tool(scheduleTable)', function (obj) {
+                // 获取点击列的数据
+                var data = obj.data;
+                var layEvent = obj.event;
+                if(layEvent=='btn-member-edit') {
+                    layerOpen(data);
+                } else if(layEvent=='btn-member-del') {
+                    layer.confirm('确定删除该条工作进度吗', {
+                        icon: 3,
+                        title: '提示'
+                    }, function(index) {
+                        $.ajax({
+                            url: "/api/research/progress/"+data.id,
+                            type: 'delete',
+                            success: function (res) {
+                                if(res.ok){
+                                    table.reload('scheduleTable');
+                                    layer.close(index);
+                                }else{
+                                    return layer.msg(res.message, {
+                                        icon: 5
+                                    });
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+            $('#btn-schedule-add').off('click').on('click',function () {
+                layerOpen();
+            });
+        };
+        /**
+         * 功能:资金支出
+         * 时间:2019/8/27
+         * 作者:lijiacheng
+         * @param
+         */
+        var expenditure = function () {
+            $('.expenditure').css('display','block');
+            $('.expenditure').siblings().css('display','none');
+            $.ajax({
+                type: "get",
+                url: "/api/research/menu?topNodeId=M001",
+                success: function (res) {
+                    $.ajax({
+                        type: "get",
+                        url: "/api/research/endCapitalExpenditure?procBusinessKey="+$('#procBusinessKey').val(),
+                        success: function (infoData) {
+                            var thHtml ='<th style="text-align: center">科目</th>' +
+                                '<th style="text-align: center">预算</th>' +
+                                '<th style="text-align: center">支出</th>' +
+                                '<th style="text-align: center">备注</th>';
+                            var html ='';
+                            $('#expenditureTable thead').empty().append(thHtml);
+                            //判断数据是否存在
+                            var isData =infoData.data.length!=0?true:false;
+                            var editType='post';
+                            if(isData){
+                                editType='put';
+                            }
+                            for (var i = 0; i <res.data.data.length ; i++) {
+                                var typeData =res.data.data[i];
+                                if(i>0){
+                                    var budget0 = (isData &&infoData.data[i-1].budget0?infoData.data[i-1].budget0:"");
+                                    var other = (isData &&infoData.data[i-1].other?infoData.data[i-1].other:"");
+                                    var expenditureS = (isData &&infoData.data[i-1].expenditure?infoData.data[i-1].expenditure:"");
+                                    if(i>2){
+                                        html+='<tr id="'+typeData.id+'">' +
+                                            '<td style="text-align: left;overflow: hidden;"><span style="position: relative;left:'+(typeData.level*20)+'px">'+(typeData.extInfo1+'  '+typeData.name)+'</span></td>' +
+                                            '<td>'+budget0 +'</td>' +
+                                            '<td>' +
+                                            '<div class="form-input layui-form-item">\n' +
+                                            '<input  type="text" lay-verify="numberOrNull" maxlength="9" onkeyup="replaceit(this)" onblur="mainFormBlur(this)" value="'+expenditureS+'" data-parentid2="'+typeData.parentId+'6" data-id="'+typeData.id+'" ' +
+                                            'data-parentid="'+typeData.parentId+'" data-type="type2" data-parentid1="'+typeData.parentId+'1" class="layui-input '+typeData.id+'1 '+typeData.parentId+'6 '+(typeData.level==2?"type2":"")+'" >\n' +
+                                            '</div>' +
+                                            '</td>' +
+                                            '<td>' +
+                                            '<div class="form-input layui-form-item">\n' +
+                                            '<input type="text"  value="'+other+'" title="'+other+'" onkeyup="setTitle(this)" maxlength="200"  data-parentid2="'+typeData.parentId+'7" data-id="'+typeData.id+'" ' +
+                                            'data-parentid="'+typeData.parentId+'" data-type="type3" data-parentid1="'+typeData.parentId+'2" class="layui-input '+typeData.id+'2 '+typeData.parentId+'7 '+(typeData.level==2?"type3":"")+'">\n' +
+                                            '</div>' +
+                                            '</td>' +
+                                            '</tr>';
+                                    } else if(!typeData.leafFlag) {
+                                        html+='<tr id="'+typeData.id+'">' +
+                                            '<td style="text-align: left"><span style="position: relative;left:'+(typeData.level*20)+'px">'+(typeData.extInfo1+'  '+typeData.name)+'</span></td>' +
+                                            '<td class="'+typeData.id+'0  ">'+budget0+'</td>' +
+                                            '<td class="type2 '+typeData.id+'1">'+expenditureS+'</td>' +
+                                            '<td class="type3 '+typeData.id+'2">'+other+'</td>' +
+                                            '</tr>';
+                                    } else {
+                                        html+='<tr id="'+typeData.id+'">' +
+                                            '<td style="text-align: left"><span style="position: relative;left:'+(typeData.level*20)+'px">'+typeData.name+'</span></td>' +
+                                            '<td >'+budget0+'</td>' +
+                                            '<td class="sum2">'+expenditureS+'</td>' +
+                                            '<td >'+other+'</td>' +
+                                            '</tr>'
+                                    }
+                                }
+                            }
+                            $('#expenditureTable tbody').empty().append(html);
+
+                            var submitFun = function(type){
+                                var arrData =[];
+                                // var reguxx = /^\d+(\.?|(\.\d+)?)$/;
+                                for (var i = 0; i <$('#expenditureTable tbody tr').length ; i++) {
+                                    var trData = $('#expenditureTable tbody tr').eq(i);
+                                    var budget0 = trData.children('td').children('.form-input').length!=0 ? trData.children('td').eq(1).children('.form-input').children('input').val():trData.children('td').eq(1).html();
+                                    var expenditureS = trData.children('td').children('.form-input').length!=0?trData.children('td').eq(2).children('.form-input').children('input').val():trData.children('td').eq(2).html();
+                                    var other =trData.children('td').children('.form-input').length!=0?trData.children('td').eq(3).children('.form-input').children('input').val():trData.children('td').eq(3).html();
+                                    if(trData.children('td').eq(1).children('.form-input').children('input').val()){
+                                        extInfo1=trData.children('td').eq(1).children('.form-input').children('input').val();
+                                    }else if(trData.children('td').eq(1).html()){
+                                        extInfo1=trData.children('td').eq(1).html();
+                                    }
+                                    var id =trData.attr('id');
+                                    arrData.push(
+                                        {
+                                            "budget0": budget0,
+                                            "expenditure": expenditureS,
+                                            "other": other,
+                                            "researchProjectId": $('#researchProjectId').val(),
+                                            'extInfo2':i,
+                                            'extInfo3':id,
+                                            'id':isData?infoData.data[i].id:'',
+                                            "procBusinessKey":$('#procBusinessKey').val()
+                                        }
+                                    );
+                                }
+                                //加一层校验 避免增加的数据条数不对
+                                if(arrData.length==$('#expenditureTable tbody tr').length){
+                                    $.ajax({
+                                        url: "/api/research/endCapitalExpenditure/multi",
+                                        data: JSON.stringify(arrData),
+                                        type: editType,
+                                        contentType: "application/json",
+                                        success: function (res) {
+                                            if(res.ok){
+                                                if(type){
+                                                    layer.msg('保存成功！', {
+                                                        icon: 1
+                                                    });
+                                                    expenditure();
+                                                }else{
+                                                    $('#form-tree li a cite').eq(indexType).click();
+                                                }
+                                            }else{
+                                                return layer.msg(res.message, {
+                                                    icon: 5
+                                                });
+                                            }
+                                        }
+                                    })
+                                }
+                            }
+                            // $('#btn-expenditure-next').off('click').on('click',function () {
+                            form.on('submit(btn-expenditure-next)',function (data) {
+                                submitFun();
+                            });
+                            // });
+                            // $('#btn-expenditure-save').off('click').on('click',function () {
+                            form.on('submit(btn-expenditure-save)',function (data) {
+                                submitFun(true);
+                            });
+                            // })
+                        }
+                    })
+                }
+            })
+        };
+        /**
+         * 功能:实施方案
+         * 时间:2019/8/26
+         * 作者:lijiacheng
+         * @param docType 1 实施方案  docType 2 提交项目申请书
+         */
+        var programme = function (docType) {
+            var changeFile=function(){
+                $('#upFileData').off('change').on('change',function () {
+                    if(this.files[0]){
+                        $('#fileBriefing').val(this.files[0].name);
+                        $('#fileBriefing').attr("title",this.files[0].name);
+                    }else{
+                        $('#fileBriefing').val('');
+                        $('#fileBriefing').attr("title",'');
+                    }
+                    $('#fileBriefing').attr('data-id','');
+                });
+            };
+            var delfun = function(){
+                var obj = document.getElementById('upFileData') ;
+                obj.outerHTML=obj.outerHTML;
+                $('#upFileData').val('');
+                changeFile();
+                $('#fileBriefing').attr('data-id','');
+                $('#fileBriefing').attr('data-fileid','');
+                $('#fileBriefing').attr('title','');
+                $('#fileBriefing').val('');
+                $('.upload-text').html('未上传');
+            };
+            // if(docType==1){
+            //     // $('.programmeTitle').html('实施方案');
+            //     $('.programmeBox').css('display','inline-block');
+            //     $('.programmeBox').css('display','inline-block');
+            //     $(".programmeText").html('上传实施方案正文:');
+            //     $('.sumbitBox').css('display','none');
+            //     $('.nextBox').css('display','block');
+            // }else{
+            //     // $('.programmeTitle').html('提交项目申请书');
+            //     $('.programmeBox').css('display','none');
+            //     $('.programmeBox').css('display','none');
+            //     $(".programmeText").html('上传项目申请书:');
+            //     $('.sumbitBox').css('display','block');
+            //     $('.nextBox').css('display','none');
+            // }
+            $('#downFile').off('click').on('click',function () {
+                window.location.href = "/ADC_info/api/sys/file/9e48b8e12aca42268c90a785453908ea/download";
+            });
+            form.on('submit(btn-programme-save)', function (obj) {
+                if(!$('#fileBriefing').attr('data-fileid')){
+                    return  layer.msg('请上传文件', {
+                        icon: 5,
+                        time:1000
+                    });
+                }
+                var objData = {
+                    "extInfo2": $('#fileBriefing').val(),
+                    "procBusinessKey": $('#procBusinessKey').val(),
+                    "rsFileId": $('#fileBriefing').attr('data-fileid'),
+                };
+
+                $.ajax({
+                    url: "/api/research/endBase",
+                    data: JSON.stringify(objData),
+                    type: 'put',
+                    contentType: "application/json",
+                    success: function (res) {
+                        $('#fileBriefing').attr('data-id',res.data.rsFileId);
+                        $('.upload-text').html('已保存');
+                        layer.msg('保存成功！', {
+                            icon: 1
+                        });
+                    }
+                });
+            });
+            $('#btn-programme-next').off('click').on('click',function () {
+                if(!$('#fileBriefing').attr('data-fileid')){
+                    return  layer.msg('请上传文件', {
+                        icon: 5,
+                        time:1000
+                    });
+                }
+                $('#form-tree li a cite').eq(indexType).click();
+            });
+            delfun();
+            var editType ='post';
+            $.ajax({
+                url: "/api/research/endBase?procBusinessKey="+$('#procBusinessKey').val(),
+                type: 'get',
+                success: function (res) {
+                    var resData = res;
+                    if(res.data.length!=0){
+                        $('#fileBriefing').attr('data-fileid',res.data[0].rsFileId);
+                        $('#fileBriefing').attr('data-id',res.data[0].rsFileId);
+                        $('#fileBriefing').val(res.data[0].extInfo2);
+                        $('#downLoadFile').off('click').on('click',function () {
+                            window.location.href = "/ADC_info/api/sys/file/"+res.data[0].rsFileId+"/download";
+                        });
+                        if(res.data[0].rsFileId){
+                            $('.upload-text').html('已保存');
+                        }
+                        if($('#isEdit').val()==1){
+                            $('#downLoadFile').css('display','inline-block');
+                        }else{
+                            $('#downLoadFile').css('display','none');
+                        }
+                        editType = 'put';
+                    }
+                    $('.programme').css('display', 'block');
+                    $('.programme').siblings().css('display', 'none');
+                    $('#choiceFile').off('click').on('click',function () {
+                        $('#upFileData').click();
+                    });
+
+                    $('#briefingName').off('change').on('change',function () {
+                        $('#briefingName').attr('title',this.value);
+                    });
+                    // 删除
+                    $('#delFile').off('click').on('click',function () {
+                        if(!$('#fileBriefing').attr('data-fileid')){
+                            return  layer.msg('请上传文件', {
+                                icon: 5,
+                                time:1000
+                            });
+                        }
+                        delfun();
+                        // var objData = {
+                        //     "extInfo2": "",
+                        //     "procBusinessKey": $('#procBusinessKey').val(),
+                        //     "rsFileId": "",
+                        // };
+                        //
+                        // $.ajax({
+                        //     url: "/api/research/hiBase",
+                        //     data: JSON.stringify(objData),
+                        //     type: 'put',
+                        //     contentType: "application/json",
+                        //     success: function (res) {
+                        //         // 防止上传相同文件时不会触发change事件，清空file的文件和值
+                        //         delfun();
+                        //         layer.msg('删除成功！', {
+                        //             icon: 1
+                        //         });
+                        //     }
+                        // });
+                    });
+                    // 上传
+                    $('#uploadFile').off('click').on('click',function () {
+                        var fileBriefingName = $('#fileBriefing').val();
+                        console.log($('#upFileData')[0].files[0],'12aaaaa');
+                        var fileDatta = $('#upFileData')[0].files[0];
+                        if(!fileBriefingName || !fileDatta){
+                            return layer.msg('请选择文件', {
+                                icon: 5,
+                                time:1000
+                            });
+                        }
+                        var exts = 'pdf|doc|docx|xlsx|xls|zip|rar|jpg|jpeg|png|gif|ppt|pptx';
+                        if(!RegExp("\\w\\.("+exts+")$","i").test(escape(fileBriefingName.toLowerCase()))){
+                            return  layer.msg('文件格式错误，请重新选择', {
+                                icon: 5,
+                            });
+                        }
+                        var formData = new FormData();
+                        formData.append("file",$('#upFileData')[0].files[0]);
+                        var index = layer.load(2);
+                        $.ajax({
+                            url:'/api/sys/file/upload', /*接口域名地址*/
+                            type:'post',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success:function(res){
+                                layer.close(index);
+                                if(res.respCode === '0'){
+                                    $('#fileBriefing').attr('data-fileid',res.data.fileId);
+                                    $('.upload-text').html('未保存');
+                                    layer.msg('上传成功！', {
+                                        icon: 1
+                                    });
+
+                                }else{
+                                    layer.msg('上传失败！', {
+                                        icon: 5
+                                    });
+                                }
+                            },
+                            error:function () {
+                                layer.close(index);
+                                layer.msg('上传失败！', {
+                                    icon: 5
+                                });
+                            }
+                        });
+                    });
+                }
+            });
+        }
+    })
+</script>
+

@@ -1,0 +1,69 @@
+{
+  "ok": true,
+  "message": "success",
+  "data": [
+    {
+      "name": "任务名称",
+      "searchName":"names",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":true
+    },
+    {
+      "name": "任务类型",
+      "searchName":"types",
+      "type":"select",
+      "searchType":"1",
+      "isSearch":true
+    },
+    {
+      "name": "所属业务",
+      "searchName":"taskBelongBudgetName",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":true
+    },
+    {
+      "name": "所属项目",
+      "searchName":"taskBelongProjectName",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":true
+    },
+    {
+      "name": "任务组成员",
+      "searchName":"taskMemberNames",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":true
+    },
+    {
+      "name": "任务预计开始时间",
+      "searchName":"planStartTimes",
+      "type":"date",
+      "searchType":"2",
+      "isSearch":true
+    },
+    {
+      "name": "任务预计结束时间",
+      "searchName":"planEndTimes",
+      "type":"date",
+      "searchType":"2",
+      "isSearch":true
+    },
+    {
+      "name": "个人工时投入（人天）",
+      "searchName":"taskWorkTime",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":true
+    },
+    {
+      "name": "任务完成情况",
+      "searchName":"taskStatus",
+      "type":"select",
+      "searchType":"1",
+      "isSearch":true
+    }
+  ]
+}

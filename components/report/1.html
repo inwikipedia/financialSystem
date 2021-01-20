@@ -1,0 +1,330 @@
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<link rel="stylesheet" href="../../assetsInfo/css/report.css">
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+
+    .titDivbox {
+        width: 90%;
+        margin: auto;
+        position: relative;
+    }
+
+    .titDiv {
+        width: 100%;
+        font-size: 16px;
+        font-weight: bold;
+        color: #888;
+        position: absolute;
+        top: 25px;
+    }
+
+    .tit01,
+    .tit02 {
+        width: 50%;
+        float: left;
+        text-align: center;
+    }
+
+    .botTable {
+        padding-bottom: 10px;
+    }
+
+    @media screen and (min-width: 1366px) and (max-width: 1920px) {
+        .pie-chart {
+            height: 250px;
+        }
+
+    }
+
+    @media screen and (min-width: 1920px) {
+        .pie-chart {
+            height: 250px;
+        }
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span class="layui-card-header-title"><strong>收入预算执行率/成本预算执行率</strong></span>
+                <!-- <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-sm exportbtn">导出PPT</a> -->
+            </div>
+
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <div class="layui-form-item pie-chart" id="picture" style="width: 90%; margin:auto; min-width: 435px" ></div>
+                </div>
+                <div class="layui-col-md6">
+                    <div class="layui-form-item pie-chart" id="picture2" style="width: 90%; margin:auto;min-width: 435px"></div>
+
+                </div>
+             </div>
+
+            <div class="botTable">
+
+                <table id="tableContent-form" lay-filter="tableContent-form"></table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+</script>
+<script>
+
+    layui.use(['table'], function() {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer;
+
+        // 渲染表格
+        function initRender() {
+            table.render({
+                elem: '#tableContent-form',
+                id: 'tableContent-form',
+                url:  admin.formatUrl('../../json/report.json'),
+                // 格式化后台返回的数据
+                parseData: function(res) {
+
+                    var year1=res.year1;
+                    var incomeData=[{name:year1+'年收入预算金额',value:res.incomeAndRedgetRate[0].year1Income},{name:year1+'年收入执行金额',value:res.incomeAndRedgetRate[0].time1}]
+                    var budgetData=[{name:year1+'年成本预算金额',value:res.incomeAndRedgetRate[1].year1Income},{name:year1+'年成本执行金额',value:res.incomeAndRedgetRate[1].time1}]
+
+                  incomeData[0].itemStyle={color:'rgb(122,190,239)'}
+                  incomeData[1].itemStyle={color:'rgb(166,236,86)'}
+                    budgetData[0].itemStyle={color:'rgb(122,190,239)'}
+                    budgetData[1].itemStyle={color:'rgb(166,236,86)'}
+                    setPieData('picture',incomeData,'收入预算执行率')
+                   setPieData('picture2',budgetData,'成本预算执行率')
+                    return {data:res.incomeAndRedgetRate,code:0};
+                },
+                cols: [
+                    [{
+                        title: '项目',
+                        field: 'project',
+                        align: 'center'
+                    },
+                        {
+                            title: '201801-03',
+                            field: 'time1',
+                            align: 'center'
+                        },
+                        {
+                            title: '201901-03',
+                            field: 'time2',
+                            align: 'center'
+                        },
+                        {
+                            title: '同期对比',
+                            field: 'compareRate',
+                            align: 'center'
+                        },
+                        {
+                            title: '预算完成率',
+                            field: 'budgetRate',
+                            align: 'center'
+                        },
+                        {
+                            title: '2018年度',
+                            field: 'year1Income',
+                            align: 'center'
+                        },
+                        {
+                            title: '2019年预算',
+                            field: 'year2Budget',
+                            align: 'center'
+                        }
+                    ]
+                ],
+                cellMinWidth: 120,
+            });
+        };
+        initRender();
+        layui.admin.addTableCache('tableContent-form');
+
+
+        function setPieData(elem,data, title) {
+            var option = {
+                title: {
+                    text: title,
+                    x: 'center',
+                    y:"10px",
+                    textStyle: {
+                        fontSize: 16
+                    },
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{b} : {c} ({d}%)"
+                },
+                grid: {
+                    top:"2%"
+                },
+                legend: {
+                    type: 'scroll',
+                    // orient: 'vertical',
+                    x: 'center', // 'center' | 'left' | {number},
+                    bottom: '5%', // 'center' | 'bottom' | {number}
+                    icon: "roundRect",
+                    itemWidth: 10,
+                    itemHeight: 10
+                },
+                series: [{
+                    type: 'pie',
+                    radius: ['20%','50%'],
+                    center: ['50%', '46%'],
+                    data: data,
+                    label: {
+                        normal: {
+                            show: true,
+                            formatter: '{b}:\n{c}({d}%)' //自定义显示格式(b:name, c:value, d:百分比)
+                        }
+
+                    },
+                    labelLine: {
+                        length: 10,
+                        // length2: 10
+                        show:true
+                    },
+                }]
+            };
+            var myChart = echarts.init(document.getElementById(elem));
+            myChart.setOption(option);
+
+        }
+        function setPieData1(id,data,title) {
+            data = data ? data : '';
+            var myChart = echarts.init(document.getElementById(id));
+            var option = {
+                title: {
+                    text: title,
+                    x: 'center',
+                    textStyle: {
+                        fontSize: 16
+                    },
+                },
+                // title: {
+                //     show: true,
+                //     x: 'center',
+                //     y: 'center',
+                //     textStyle: {
+                //         fontSize: '16',
+                //         color: '#3BA0FF',
+                //         fontWeight: 'normal'
+                //     }
+                // },
+                grid: {
+                    top: '1%',
+                    bottom: '1%',
+                    containLabel: true
+                },
+                tooltip: { //提示框组件
+                    trigger: 'item', //触发类型(饼状图片就是用这个)
+                    formatter: "{b} : {c} ({d}%)"
+                },
+                color: ['#3BA0FF', '#36CBCB', '#4ECB74', '#FAD337'],  //手动设置每个图例的颜色
+                legend: {
+                    icon:'circle',
+                    type: 'scroll',
+                    y: '0',   //图例在垂直方向上面显示居中
+                    right: 5,
+                    // top: 20,
+                    itemWidth:10  //图例标记的图形宽度
+                },
+                series: [ //系列列表
+                    {
+                        name: '',  //系列名称
+                        type: 'pie',   //类型 pie表示饼图
+                        radius: ['20%','50%'],
+                        center: ['50%', '66%'],//饼图的半径,第一项是内半径,第二项是外半径,内半径为0就是真的饼,不是环形
+                        itemStyle: {  //图形样式
+                            normal: { //normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式，比如在鼠标悬浮或者图例联动高亮时。
+                                label: {  //饼图图形上的文本标签
+                                    show: true,  //平常显示
+                                    formatter: "{blue|{c}%} \n{b}",//提示框浮层内容格式器
+                                    rich: {
+                                        gray: {
+                                            color: 'BABABA'
+                                        },
+                                        blue: {
+                                            color: '#3BA0FF',
+                                            fontSize: 14,   //文字大小
+                                            fontWeight: 'bold'
+                                        }
+                                    },
+                                    textStyle: {    //图例文字的样式
+                                        color: '#333',  //文字颜色
+                                        fontSize: 12    //文字大小
+                                    }  ,
+                                },
+                                labelLine: {     //标签的视觉引导线样式
+                                    show: true,  //平常显示
+                                    color: '#e9e9e9',
+                                    length:11,
+                                    length2:11,
+                                    textStyle: {    //图例文字的样式
+                                        color: '#333',  //文字颜色
+                                        fontSize: 12    //文字大小
+                                    }
+                                },
+                                borderWidth: 3,
+                                borderColor: '#fff'
+                            },
+                            emphasis: {   //normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式，比如在鼠标悬浮或者图例联动高亮时。
+                                label: {  //饼图图形上的文本标签
+                                    show: true,
+                                    position: 'center',
+                                    textStyle: {
+                                        fontSize: '14',
+                                        fontWeight: 'bold'
+                                    }
+                                }
+                            }
+                        },
+                        data: data
+                    }
+                ]
+            };
+            myChart.setOption(option)
+        }
+
+
+
+        function syncFunction() {
+            //重置表格
+            initRender();
+            //重置图表
+            initOption();
+            myChart.setOption(echartsOption, true);
+        };
+
+        setTimeout(function() {
+            window.onresize = function() {
+                myChart.resize();
+                //myChartLine.resize();
+                //GantChart.resize();
+                // myChartPie.resize();
+            }
+        }, 200);
+
+
+    });
+
+
+</script>

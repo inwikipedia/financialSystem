@@ -1,0 +1,91 @@
+<div id="placeholder"></div>
+<script type="text/javascript" src="http://192.168.13.231/ds-vpath/web-apps/apps/api/documents/api.js"></script>
+<script type="text/javascript" src="../../assetsInfo/libs/jquery-1.12.4.min.js"></script>
+
+<script>
+    var name = sessionStorage.getItem("name");
+    var type = sessionStorage.getItem("type");
+    var savePath = sessionStorage.getItem("savePath");
+    var root = sessionStorage.getItem("root");
+    var id = sessionStorage.getItem("id");
+
+
+    /** 随机生成固定位数或者一定范围内的字符串数字组合
+     * @param {Number} min 范围最小值
+     * @param {Number} max 范围最大值，当不传递时表示生成指定位数的组合
+     * @returns {String} 返回字符串结果
+     * */
+   /* function randomRange(min, max) {
+        var returnStr = "",
+            range = (max ? Math.round(Math.random() * (max - min)) + min : min),
+            arr = ['0', '1', '2', '3', '4', '5', '6',
+                '7', '8', '9', 'a', 'b', 'c', 'd', 'e',
+                'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+                'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C',
+                'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+                'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
+                'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        for (var i = 0; i < range; i++) {
+            var index = Math.round(Math.random() * (arr.length - 1));
+            returnStr += arr[index];
+        }
+        return returnStr;
+    }
+    var key = randomRange(20);*/
+
+
+
+    if (1) {
+
+        config = {
+            "document": {
+                "permissions": {
+                    "edit": true,
+                },
+                "key": "Khirz6zTPdfd7", //key值相同才可以协同工作
+                "fileType": type,  //文件的类型doc,xlsx,ppt等
+                "title": name + '.' + type,  //文件名+文件类型
+                //文件的存放位置
+                "url": "http://192.168.13.238:8800/components/file/Files/" + savePath
+
+            },
+
+            "editorConfig": {
+                "lang": "zh-CN",   //"en-US",汉化
+                //回调only office的API接口，将修改后的文档存放起来
+                //ONLYOFFICE文档服务器通知文档编辑状态的URL
+                "callbackUrl": "http://192.168.13.238:8800/api/detail/detail/save?path=" + savePath + "&id=" + id,
+
+                "user": {
+                    "id":id,
+                    "name": name    //这里是文档的使用者
+                },
+
+                "customization": {
+                    "autosave": true,//自动保存
+                    "forcesave": true,//“保存”按钮时，将请求发送回ONLYOFFICE Document Server执行保存操作
+                    "textColor": "#FF0000",
+                }
+            }
+        };
+        var docEditor = new DocsAPI.DocEditor("placeholder", config);
+    } else if (root === "false") {
+        config = {
+            "document": {
+                "permissions": {
+                    "edit": true,
+                },
+                "fileType": type,
+                "title": name + '.' + type,
+                "url": "http://192.168.13.238:8800/components/file/Files/" + savePath
+
+            },
+            "editorConfig": {
+                "lang": "zh-CN",
+            }
+        };
+        var docEditor = new DocsAPI.DocEditor("placeholder", config);
+
+    }
+</script>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="utf-8" />
+    <title>ADC智能信息化系统</title>
+
+    <!-- Favorites Icon Start -->
+    <link rel="shortcut icon" href="./favicon.ico">
+    <link rel="icon" href="./favicon.ico">
+    <!-- Favorites Icon End -->
+
+    <!-- CSS Links -->
+    <link rel="stylesheet" href="assetsInfo/libs/layui/css/layui.css" />
+    <link rel="stylesheet" href="assetsInfo/css/admin.css" />
+
+    <link rel="stylesheet" href="module/formSelects/formSelects-v4.css" />
+    <link rel="stylesheet" href="module/treeSelect/treeSelect.css">
+
+    <link rel="stylesheet" href="assetsInfo/css/LayValidator.css" />
+    <!-- tableb编辑校验 -->
+
+    <link rel="stylesheet" href="assetsInfo/css/style.css">
+
+    <link rel="stylesheet" href="assetsInfo/css/theme.css" />
+    <!-- 自定义主题，使用主题文件生成器生成 -->
+
+    <!--[if lt IE 9]>
+    <script src="./assetsInfo/libs/html5.min.js"></script>
+    <script src="./assetsInfo/libs/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+        body,html{
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+        }
+        body{
+            background: url("./assetsInfo/images/home_page/1920_bg.png") no-repeat center;
+            background-size: cover;
+        }
+        .homePage-header{
+            height: 47px;
+            background: #008fc3;
+            font-weight:bold;
+            color:#FFFFFF;
+        }
+        .homePage-title{
+            line-height: 47px;
+            height: 47px;
+            display: flex;
+            align-items: center;
+        }
+        .homePage-title, .homePage-userImg, .homePage-userName{
+            float: left;
+            line-height: 47px;
+        }
+        .homePage-content{
+            margin-left: 10px;
+            width:210px;
+            font-size:18px;
+            font-family:Source Han Sans CN;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .homePage-userInfor{
+            height: 47px;
+            float: right;
+            display: flex;
+            align-items: center;
+        }
+
+        /* 自定义layui导航栏样式 */
+        .homePage-userInfor .layui-nav{
+            background: none;
+        }
+        .homePage-userInfor .layui-nav .layui-nav-item{
+            line-height: 47px!important;
+        }
+        .homePage-userInfor .layui-nav-bar{
+            display: none;
+        }
+        .homePage-userInfor .layui-nav-child{
+            top:47px;
+        }
+
+        .homePage-userName{
+            font-size: 12px;
+            width: 60px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .homePage-userName img{
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            margin-left: -20px;
+        }
+        .homePage-logo{
+            position: relative;
+            padding-left: 20px;
+        }
+        .homePage-logo img{
+            display: block;
+            width: 25px;
+            height: 25px;
+        }
+        .homePage-userImg{
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #0a6332;
+            margin-right: 10px;
+        }
+        .homePage-container{
+            width: 1430px;
+            height: 360px;
+            display: flex;
+            justify-content: space-around;
+            position: absolute;
+            top: 0;bottom: 0;left: 0;right: 0;
+            margin: auto;
+        }
+
+        .page-Item{
+            width:250px;
+            height:360px;
+            background:#FFFFFF;
+            border-radius:10px;
+            font-size:24px;
+            font-family:Source Han Sans CN;
+            font-weight:bold;
+            cursor: pointer;
+            color:#333333;
+        }
+        .item-img{
+            position: relative;
+            height: 234px;
+        }
+        .item-img img{
+            position: absolute;
+            top: 0;bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+        .item-name{
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .item-link{
+            cursor: pointer;
+            height: 24px;
+            width: 100px;
+            margin: auto;
+            line-height: 24px;
+            overflow: hidden;
+        }
+        .homePage-icon{
+            float: left;
+            width: 24px;
+            height: 24px;
+            background: url("./assetsInfo/images/home_page/arrow.png") no-repeat center;
+        }
+        .page-Item:hover .item-link{
+            color: #55B7FF;
+        }
+        .page-Item:hover .item-link .homePage-icon{
+            background: url("./assetsInfo/images/home_page/arrow_active.png") no-repeat center;
+        }
+        .item-menu{
+            float: right;
+            font-size: 18px;
+        }
+        @media screen and (min-width: 1366px) and (max-width: 1920px) {
+
+        }
+        @media (max-width: 1366px) {
+            body{
+                background: url("./assetsInfo/images/home_page/1366_bg.png") no-repeat center;
+                background-size: cover;
+            }
+            .homePage-container{
+                width: 1130px;
+                height: 310px;
+            }
+            .page-Item{
+                width:200px;
+                height:310px;
+                cursor: pointer;
+            }
+            .item-img{
+                height: 184px;
+            }
+            .item-img img{
+                width: 92px;
+            }
+        }
+        .page-Item{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="homePage-header">
+    <div class="homePage-title">
+        <div class="homePage-logo">
+            <img src="./assetsInfo/images/logo.png" alt="">
+        </div>
+        <div class="homePage-content">ADC智能办公信息化平台</div>
+    </div>
+    <div class="homePage-userInfor ">
+        <ul class="layui-nav">
+            <li class="layui-nav-item" lay-unselect>
+                <a href="javascript:;" class="homePage-userName">
+                    <img src="" onerror="this.src='/assetsInfo/images/avatar/girl3.png'"/>
+                    <cite></cite>
+                </a>
+                <i class="layui-icon layui-icon-down" style="font-size: 15px; color: #FFFFFF;opacity: 0.7;margin-left: -10px;"></i>
+                <dl class="layui-nav-child">
+                    <dd lay-unselect id="btn-setinf"><a>个人信息</a></dd>
+                    <dd lay-unselect id="btn-setpw"><a>修改密码</a></dd>
+                    <hr>
+                    <dd lay-unselect id="btn-logout"><a>退出</a></dd>
+                </dl>
+            </li>
+        </ul>
+
+        <!--<div class="homePage-userImg">
+            <img src="" alt="" class="">
+        </div>
+        <div class="homePage-userName">李晓明</div>
+        <div class="homePage-userControl"></div>-->
+    </div>
+</div>
+<div class="homePage-container">
+    <div class="page-Item" id="xiangmu" onclick="openProjectManage()">
+        <div class="item-img">
+            <img src="./assetsInfo/images/home_page/xiang_mu_guan_li.png" alt="">
+        </div>
+        <div class="item-name" title="项目管理系统">项目管理系统</div>
+        <div class="item-link" >
+            <div class="homePage-icon"></div>
+            <div class="item-menu">点击进入</div>
+        </div>
+    </div>
+    <div class="page-Item" id="bangong" >
+        <div class="item-img">
+            <img src="./assetsInfo/images/home_page/xie_tong_ban_gong.png" alt="">
+        </div>
+        <div class="item-name" title="协同办公系统">协同办公系统</div>
+        <div class="item-link" >
+            <div class="homePage-icon"></div>
+            <div class="item-menu">点击进入</div>
+        </div>
+    </div>
+    <div class="page-Item" id="renshi">
+        <div class="item-img">
+            <img src="./assetsInfo/images/home_page/ren_shi_xi_tong.png" alt="">
+        </div>
+        <div class="item-name" title="人事系统">人事系统</div>
+        <div class="item-link" >
+            <div class="homePage-icon"></div>
+            <div class="item-menu">点击进入</div>
+        </div>
+    </div>
+    <div class="page-Item" id="caiwu" onclick="openProjectFinance()">
+        <div class="item-img">
+            <img src="./assetsInfo/images/home_page/cai_wu_xi_tong.png" alt="">
+        </div>
+        <div class="item-name" title="财务系统">财务系统</div>
+        <div class="item-link" >
+            <div class="homePage-icon"></div>
+            <div class="item-menu">点击进入</div>
+        </div>
+    </div>
+    <div class="page-Item" id="xuexi">
+        <div class="item-img">
+            <img src="./assetsInfo/images/home_page/xue_xi_xi_tong.png" alt="">
+        </div>
+        <div class="item-name" title="学习系统">学习系统</div>
+        <div class="item-link" >
+            <div class="homePage-icon"></div>
+            <div class="item-menu">点击进入</div>
+        </div>
+    </div>
+</div>
+<form style="display: none" action="http://60.247.58.104:56240/servlet/SSOLogin" target="_blank" method="POST"  >
+    <input type="text" id="userCode" name="userCode"  >
+    <button id="renshi-btn" type="submit">测试</button>
+</form>
+</body>
+<!-- jQuery 1.x 版本兼容 IE8 -->
+<script type="text/javascript" src="./assetsInfo/libs/jquery-1.12.4.min.js"></script>
+<!-- Q.js 轻量路由框架 -->
+<script type="text/javascript" src="./assetsInfo/libs/q.js"></script>
+<!-- jQuery 轻量级 MVVM 框架 -->
+<script type="text/javascript" src="./assetsInfo/libs/pandyle.min.js"></script>
+<!-- layui 脚本文件 -->
+<script type="text/javascript" src="./assetsInfo/libs/layui/layui.js"></script>
+<!-- table编辑校验 -->
+<script type="text/javascript" src="./assetsInfo/js/LayValidator.js"></script>
+<script type="text/javascript" src="./assetsInfo/js/LayCalculator.js"></script>
+<script type="text/javascript" src="./assetsInfo/js/md5.js"></script>
+<script type="text/javascript" src="./assetsInfo/js/jsencrypt.min.js"></script>
+<script>
+
+</script>
+<script>
+    function openProjectManage() {
+        window.location.replace('./');
+    }
+    function openProjectCoordination() {
+        window.open('http://123.127.164.40:18888/seeyon/index.jsp','_self');
+    }
+    function openProjectPersonnel() {
+        window.open('http://60.247.58.104:56240/templates/index/hrlogon.jsp','_self');
+    }
+    function openProjectFinance() {
+        window.open('http://60.30.69.78:6666/portal/app/mockapp/login.jsp','_self');
+    }
+
+    function calculateSign(action, secret, corpCode, usernName, timestamp) {
+        var signingText = secret + "|"+ action + "|" + corpCode + "|" + usernName + "|" + timestamp + "|" + secret;
+        return hex_md5(signingText);
+    }
+    var dateChange=function(data){
+        var str = data.replace(/-/g,'');
+        return str;
+    };
+    var strChange=function(data){
+        var str = data.replace(/\\n/g,'');
+        str = str.replace(/\\r/g,'');
+        return JSON.parse(str);
+    };
+    layui.config({
+        base: 'module/'
+    }).extend({
+        formSelects: 'formSelects/formSelects-v4',
+        treetable: 'treetable-lay/treetable',
+        treeSelect: 'treeSelect/treeSelect',
+    }).use(['config', 'form','element','index','tools'], function () {
+        var config = layui.config;
+        var tools = layui.tools;
+        var account = config.getAccount();
+        var code=account.userCode;
+        var config = layui.config;
+        //if(code&&(code.indexOf('A')==0||code.indexOf('B')==0)){
+        if(code){
+            $('#bangong').show();
+            $('#caiwu').show();
+
+        }else{
+            $('#bangong').hide();
+            $('#caiwu').hide();
+        }
+        $('#xiangmu').show();
+        $('#renshi').show();
+        $('#xuexi').show();
+        // if(account.userCode){
+        //     $('#renshi').css('cursor','pointer');
+            $('#userCode').val(account.userCode);
+            $('#renshi').off('click').on('click',function () {
+                //openProjectPersonnel();
+                if(window.location.port=='21936') return;
+                $.ajax({
+                    url: 'http://60.247.58.104:56240/servlet/validUserCode',
+                    type: 'post',
+                    data:{userCode:account.userCode},
+                    dataType: 'JSON',
+                    async:false,
+                    success: function (res) {
+                        if(res.ok&&res.ok!='0'){
+                            $('#renshi-btn').click();
+                        }else{
+                            layer.msg('当前系统不允许您登陆，请联系管理员！', {
+                                icon: 5
+                            });
+                        }
+                    }
+                })
+            });
+        $('#bangong').off('click').on('click',function () {
+            // openProjectCoordination()
+                $.ajax({
+                    //url: 'http://60.247.58.105:18888/third/user.jsp?code='+code,
+                    url: 'http://123.127.164.40:18888/ADC/user.jsp?code='+code,
+                    type: 'post',
+                    dataType: 'text',
+                    async:false,
+                    success: function (res) {
+                        var Data=strChange(JSON.stringify(res));
+                        if(Data.indexOf('true')!=-1){
+                            var input=code+"seeyon"+dateChange(tools.getDate(new Date(),"YYYY-MM-DD"));
+                            var md5Data=hex_md5(input);
+                            var ticket = code+"@"+md5Data;
+                            console.log(md5Data,dateChange(tools.getDate(new Date(),"YYYY-MM-DD")));
+                            window.open('http://123.127.164.40:18888/seeyon/login/sso?ticket='+ticket+'&from=adc','_blank');
+                        }else{
+                            layer.msg('当前系统不允许您登陆，请联系管理员！', {
+                                icon: 5
+                            });
+                        }
+                    }
+                })
+        });
+        $('#xuexi').off('click').on('click',function () {
+            var secret = "D0A03D84FE9D47759B6F08C0CE0C2743";
+            var corpCode = "adc";
+            var action = "sso";
+            var timestamp = new Date().getTime();
+            var userName = code;
+            var url = encodeURI('http://adc.21tb.com/login/sso.init.do?userName='+ userName +'&timestamp='+ timestamp +'&corpCode='+ corpCode +'&sign=' + calculateSign(action,secret,corpCode,userName,timestamp))
+            window.open(url)
+        });
+
+
+
+    // $.ajax({
+    //     url: '/api/index',
+    //     type: 'get',
+    //     contentType: 'application/json; charset=UTF-8',
+    //     dataType: 'JSON',
+    //     async:false,
+    //     success: function (data) {
+    //         if (data.ok) {
+                // 保存登录信息
+                // config.putAccount(data.data);
+                // 跳转主页
+                //注意：导航 依赖 element 模块，否则无法进行功能性操作
+
+                    var element = layui.element;
+
+                    var loginInfo = layui.data('ADCDA').account;
+                    if(loginInfo){
+                        var a = JSON.parse(loginInfo);
+                        $('.homePage-userName cite').html(a.usname);
+                        $('.homePage-userName cite').attr('title',a.usname);
+                        // $('.homePage-userName img').attr('src',a.avatar);
+                        if (a.avatar&&a.avatar.indexOf('/assetsInfo/') != -1){
+                            $('.homePage-userName img').attr('src','./'+a.avatar);
+                        }else {
+                            $('.homePage-userName img').attr('src','/ADC_info/api/sys/file/' + a.avatar + '/download');
+                        }
+                    }else {
+                        if(window.location.pathname != '/ADC_info/login.html'){
+                            layui.data('ADCDA', {
+                                key: 'account',
+                                remove: true
+                            });
+                            layer.msg('登录状态失效，请重新登录！');
+                            setTimeout(function () {
+                                location.replace('/ADC_info/login.html');
+                            },2000);
+                        }
+                    }
+                // UEditor 路径
+                window.UEDITOR_HOME_URL = '/assetsInfo/libs/ueditor_v1.4.3/';
+                    var index = layui.index,
+                        admin = layui.admin,
+                        config = layui.config;
+
+                    // 入口文件，统一处理 Ajax 请求
+                    // 增加 loading
+                    // http://api.jquery.com/jquery.ajax/
+                    var reqCount = 0,
+                        loading = false;
+                    $.ajaxSetup({
+                        // headers: {
+                        //     "Authorization": 'Basic JWTJWTJWTJWTJWTJWTJWTJWTJWTJWTJWTJWT'
+                        // },
+                        beforeSend: function(jqXHR, settings) {
+                            if (settings.url.indexOf('/api') != -1&&settings.url.indexOf("/ADC_info")==-1) {
+                                reqCount++;
+                                jqXHR.api = true;
+                                settings.url='/ADC_info'+settings.url;
+                            }
+                            if (reqCount > 0 && !loading) {
+                                admin.showLoading();
+                                loading = true;
+                            }
+                            // function encryptedData (publicKey, pwd) {
+                            //     // 私钥 和后端沟通
+                            //     // 新建JSEncrypt对象
+                            //     var encryptor = new JSEncrypt();
+                            //     // 设置公钥
+                            //     encryptor.setPublicKey(publicKey);
+                            //     // 加密数据
+                            //     var decrypt = encryptor.encrypt(pwd.toString());
+                            //     return decrypt
+                            // }
+                            // var pubKey="MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKtSP3y2DkyoDQsFGr6sn4saLBFwcijEPWsWQ1Hnz8sIvn7V3TyNrSesf+7nPgnUk9Gt/7aKsXUkY67BzMJ5xkECAwEAAQ==";
+                            // var verifyToken = encryptedData(pubKey,new Date().getTime());
+                            // jqXHR.setRequestHeader("Verify-Token", verifyToken);
+                        },
+                        error: function(jqXHR, err) {},
+                        complete: function(jqXHR, textStatus) {
+                            if (jqXHR.api) reqCount--;
+
+                            if (reqCount === 0) {
+                                admin.removeLoading();
+                                loading = false;
+                            }
+                            if (jqXHR.status === 401) {
+                                layer.msg('登录状态失效，请重新登录！');
+                                setTimeout(function () {
+                                    config.removeAccount();
+                                    if (window.top!=null && window.top.document.URL!=document.URL){
+                                        window.top.location.replace(window.top.location.origin+'/ADC_info/login.html?redirect_to=' + window.location.hash);
+                                    }else{
+                                        location.replace('/ADC_info/login.html?redirect_to=' + window.location.hash);
+                                    }
+                                    // location.replace('/ADC_info/login.html');
+                                },2000);
+                            }
+                        }
+                    });
+
+                    // 初始化
+                    index.init(function() {
+                        $('.layui-layout-admin').css('visibility', 'visible');
+                    });
+                    // 重写时间戳转换方法
+                    Date.prototype.toLocaleString = function() {
+                        return this.getFullYear() + "-" + (this.getMonth() + 1 < 10 ? '0' + (this.getMonth() + 1) : this.getMonth() + 1) + "-" + (this.getDate() < 10 ? '0' + (this.getDate()) : this.getDate()) + " " + (this.getHours() < 10 ? '0' + (this.getHours()) : this.getHours()) + ":" + (this.getMinutes() < 10 ? '0' + (this.getMinutes()) : this.getMinutes()) + ":" + (this.getSeconds() < 10 ? '0' + (this.getSeconds()) : this.getSeconds());
+                    };
+
+                    // 重写时间戳转换方法
+                    Date.prototype.toLocaleDate = function() {
+                        return this.getFullYear() + "-" + (this.getMonth() + 1 < 10 ? '0' + (this.getMonth() + 1) : this.getMonth() + 1) + "-" + (this.getDate() < 10 ? '0' + (this.getDate()) : this.getDate());
+                    };
+            // } else {
+            //     location.replace('/api/login');
+            // }
+    //     },
+    //     error: function (xhr) {
+    //         layer.msg('服务错误！' + xhr.statusText);
+    //     }
+    // });
+    });
+</script>
+
+</html>

@@ -1,0 +1,470 @@
+/**
+ *
+ * 重写 layui card 样式
+ *
+ */
+
+/*body{*/
+    /*overflow: hidden;*/
+/*}*/
+.layui-card-header {
+    height: 48px;
+    line-height: 48px;
+    color: #181818;
+    border-bottom: 1px solid #f6f6f6;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.layui-card-body {
+    height: auto;
+    min-height: auto;
+}
+
+/* card header 右面的功能按钮 */
+.layui-card-header .layui-card-header-right-btn {
+    float: right;
+    color: #949494;
+    font-size: 14px;
+    font-weight: normal;
+    cursor: pointer;
+    margin-left: 10px;
+    height: 48px;
+    transition: color .3s;
+}
+
+.layui-card-header .layui-card-header-right-btn:hover {
+    color: rgba(85, 183, 255, 1);
+}
+
+/**
+ *
+ * 任务信息
+ *
+ */
+.tasks-info {
+
+}
+
+.tasks-info img {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+    margin-top: 20px;
+    display: block;
+}
+
+.tasks-info strong {
+    font-size: 20px;
+    font-weight: normal;
+    margin: 0 auto;
+    margin-top: 8px;
+    display: block;
+    text-align: center;
+}
+
+.tasks-info span {
+    font-size: 16px;
+    color: #949494;
+    margin: 0 auto;
+    margin-bottom: 24px;
+    display: block;
+    text-align: center;
+}
+
+/**
+ *
+ * 跟踪任务
+ *
+ */
+.tasks-track-container {
+    overflow: hidden;
+    height: 160px;
+}
+
+.tasks-track {
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, .65);
+    cursor: pointer;
+}
+
+.tasks-track p {
+    display: inline-block;
+    max-width: 48%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 380px) {
+
+    /* 适配 iPhone 5 小屏幕 */
+    .tasks-track p {
+        max-width: 32%;
+    }
+}
+
+.tasks-track span {
+    float: right;
+    margin-left: 8px;
+    width: 100px;
+    height: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tasks-track a {
+    color: rgba(85, 183, 255, 1);
+    float: right;
+    margin-left: 8px;
+}
+
+.tasks-track a:hover {
+    color: rgba(85, 183, 255, .8);
+}
+
+/**
+ *
+ * 待办任务
+ * 重写 layui 表格样式
+ *
+ */
+.tableTodolist {
+    height: auto !important;
+}
+
+.tableTodolist .layui-table td,
+.tableTodolist .layui-table th,
+.tableTodolist .layui-table-header,
+.tableTodolist .layui-table-page,
+.tableTodolist .layui-table-view,
+.tableTodolist .layui-table-box {
+    /*border: none;*/
+}
+
+.tableTodolist .layui-table thead tr {
+    background-color: #FAFAFA;
+    height: 42px;
+    color: rgba(0, 0, 0, .65);
+}
+
+.tableTodolist .layui-table thead th {
+    font-weight: bold;
+    background-color: #cde3f5;
+}
+
+.tableTodolist .layui-table tr:nth-child(even) {
+    background-color: #ebf7fe;
+}
+.tableTodolist .layui-table tr:nth-child(odd) {
+    background-color: #fff;
+}
+.tableTodolist .layui-table-header {
+    background-color: #fff;
+}
+
+.tableTodolist .layui-table tbody tr {
+    border-bottom: 1px solid #EBEBEB;
+    height: 28px;
+    color: rgba(0, 0, 0, .65);
+}
+
+.tableTodolist .layui-table tbody tr:hover {
+    background-color: transparent;
+}
+
+.tableTodolist .layui-table-page {
+    margin-top: -8px;
+    text-align: right;
+}
+
+.tableTodolist .layui-table-box {
+    margin-bottom: 10px;
+}
+
+/**
+ *
+ * 日程事件
+ *
+ */
+.dateViewer {
+    height: 357px;
+}
+
+.dateViewer .layui-laydate,
+.layui-laydate-header {
+    border: none;
+    box-shadow: none;
+}
+
+.dateViewer .layui-laydate,
+.dateViewer .layui-laydate .layui-laydate-main,
+.dateViewer .layui-laydate .layui-laydate-main table {
+    width: 100%;
+}
+
+.dateViewer .layui-laydate .layui-this {
+    background-color: #55B7FF !important;
+}
+
+.dateViewer .laydate-day-mark::after {
+    background-color: #55B7FF;
+}
+
+.layui-laydate-header i:hover,
+.layui-laydate-header span:hover {
+    color: #55B7FF;
+}
+
+.gap {
+    height: 427px;
+    line-height: 427px;
+    text-align: center
+}
+
+.lc-header {
+    height: 31px;
+    line-height: 36px;
+    color: #333;
+    font-family: SourceHanSansCN-Medium;
+    font-size: 15px;
+}
+.btn-active{
+    border: 1px solid #10ADE8 !important;
+    color: #10ADE8;
+}
+.btn-disabled {
+
+    cursor: not-allowed !important;
+    background: #efebeb !important;
+    color: #999;
+}
+.btn-disabled:hover  {
+    color: #999 !important;
+}
+#task {
+    background: #f5f5f5;
+    /*height: 305px;*/
+    cursor: default;
+    overflow-y: auto;
+    height: calc(100vh - 473px);
+    min-height: 268px;
+    color:#666666;
+}
+#task div{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+body .fc-time-grid .fc-event{
+    width: 100%;
+    position: absolute;
+    left: 0 !important;
+    margin-top: 3px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    height: 15px;
+    padding-top: 2px;
+}
+boby .fc-time-grid .fc-content-col {
+    overflow: hidden;
+}
+.wz_title {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    padding: 2px;
+    color: #333;
+}
+.fc .fc-toolbar .fc-agendaWeek-button {
+    margin-left: -1px !important;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+#departmentBtn .layui-btn{
+    height: 22px;
+    line-height: 22px;
+    margin-bottom: 2px;
+}
+body #main{
+    margin-top: 0;
+}
+#dealAndIncome button,#dataStatic button{
+    height: 22px;
+    line-height: 20px;
+}
+.height-bottom-block{
+    height: calc(100vh - 402px);
+    min-height: 342px;
+}
+body hr.fc-divider {
+    height: 0;
+    margin: 0;
+    padding: 0 0 0;
+    border-width: 1px 0;
+    border: none;
+}
+body .fc-unthemed td.fc-today {
+    background: #fff;
+    border-top-color: #10ADE8;
+}
+.fc-toolbar .fc-center {
+    display: inline-block;
+    padding-right: 10px;
+    padding-left: 7px;
+}
+.personWorkTimeStatic-line{
+    position: absolute;
+    height: 259px;
+    width: 1px;
+    background: #eee;
+    top: 16px;
+    right: -8px;
+}
+
+.fc-time-grid .fc-slats tr:nth-child(even) td{
+        border-top:none ;
+}
+.fc-agendaWeek-view .fc-widget-content .fc-scroller.fc-time-grid-container{
+    overflow:hidden !important;
+}
+/*.fc-agendaWeek-view .fc-event-container a:last-child{*/
+    /*top:auto !important;*/
+    /*bottom: -144px !important;*/
+/*}*/
+.week-morning{
+    top: 0;
+}
+/*.week-afternoon{*/
+    /*top: 6px !important;*/
+/*}*/
+/*.week-night{*/
+    /*top: 14px !important;*/
+/*}*/
+/*.week-none{*/
+    /*width: 1px !important;*/
+    /*opacity: 0;*/
+/*}*/
+ /*.fc-agendaWeek-view .fc-event-container  .week-afternoon:nth-child(2){*/
+    /*top: 125px !important;*/
+/*}*/
+.fc-agendaWeek-view  .week-morning1{
+    top: 20px !important;
+}
+.fc-agendaWeek-view  .week-morning2{
+    top: 40px !important;
+}
+.fc-agendaWeek-view  .week-morning3{
+    top: 60px !important;
+}
+.fc-agendaWeek-view  .week-morning4{
+    top: 80px !important;
+}
+.fc-agendaWeek-view  .week-afternoon1{
+    top: 120px !important;
+}
+.fc-agendaWeek-view  .week-afternoon2{
+    top: 140px !important;
+}
+.fc-agendaWeek-view  .week-afternoon3{
+    top: 160px !important;
+}
+.fc-agendaWeek-view  .week-afternoon4{
+    top: 180px !important;
+}
+.fc-agendaWeek-view  .week-night1{
+    top: 220px !important;
+}
+.fc-agendaWeek-view  .week-night2{
+    top: 240px !important;
+}
+.fc-agendaWeek-view  .week-night3{
+    top: 263px !important;
+}
+.fc-agendaWeek-view  .week-night4{
+    top: 280px !important;
+}
+#modelR>button{
+    position: absolute;
+    right: 9px;
+    z-index: 100;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    display: inline-block;
+    padding: 5px 1px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 0.9;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    width: 43px;
+    height: 23px;
+    display: none;!important;
+}
+#modelR .month-btn{
+    right: 52px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-right:none ;
+}
+#modelR .week-btn{
+    display: none;
+    top: 7px;
+    right: 8px;
+    border-left: none;
+
+}
+/*兼容自适应高度问题*/
+@media screen and (max-width: 1366px) {
+    .height-bottom-block {
+        min-height: 298px;
+    }
+    #task{
+        min-height: 225px;
+    }
+    .fc-agendaWeek-view  .week-morning1{
+        top: 22px !important;
+    }
+    .fc-agendaWeek-view  .week-morning2{
+        top: 44px !important;
+    }
+    .fc-agendaWeek-view  .week-morning3{
+        top: 66px !important;
+    }
+    .fc-agendaWeek-view  .week-afternoon0{
+        top: 91px !important;
+    }
+    .fc-agendaWeek-view  .week-afternoon1{
+        top: 113px !important;
+    }
+    .fc-agendaWeek-view  .week-afternoon2{
+        top: 135px !important;
+    }
+    .fc-agendaWeek-view  .week-afternoon3{
+        top: 156px !important;
+    }
+    .fc-agendaWeek-view  .week-night0{
+        top: 181px !important;
+    }
+    .fc-agendaWeek-view  .week-night1{
+        top: 203px !important;
+    }
+}

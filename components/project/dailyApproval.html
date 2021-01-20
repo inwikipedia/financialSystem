@@ -1,0 +1,618 @@
+
+<!-- zTree 样式 -->
+<link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/metroStyle.css">
+<style>
+    #btn-export {
+        margin-left: 10px;
+    }
+
+    .ztree li span.button.chk.checkbox_false_disable {
+        display: none;
+    }
+    .work-search-input{
+        /*height:20px;*/
+        /*padding:3px 6px;*/
+        float: left;
+        width: 100px;
+    }
+    .work-search-label{
+        width: auto;
+        padding-left: 0px;
+        padding-right: 2px;
+    }
+    .rili{
+        background:url('../../assetsInfo/images/rili.jpg') no-repeat right center;
+        background-position:95% ;
+        background-size: 25px 21px;
+    }
+</style>
+<div class="layui-row layui-col-space15">
+    <!-- 单列普通表格 -->
+    <div class="layui-col-md12">
+        <div class="layui-card p-main">
+            <div class="layui-card-header" style="height: 0px"></div>
+            <!-- 卡片容器 -->
+            <div class="layui-card-body">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class=" table-top-bar">
+                        <div>
+                                <div class="layui-inline layui-form-item" style="width: 100%;border-bottom:1px solid #e5e5e5;margin-bottom: 0px;padding-bottom: 15px">
+                                    <label class="layui-form-label work-search-label" style="font-size: 16px">查询：</label>
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label work-search-label">姓名</label>
+                                        <input type="text" placeholder="请输入" class="createUserName work-search-input layui-input">
+                                    </div>
+
+                                    <div class="layui-inline layui-form-item">
+                                        <label class="layui-form-label work-search-label">业务</label>
+                                        <input type="text" placeholder="请输入" class="budgetName work-search-input layui-input">
+                                    </div>
+
+                                    <div class="layui-inline layui-form-item">
+                                        <label class="layui-form-label work-search-label">项目</label>
+                                        <input type="text" placeholder="请输入" class="projectName work-search-input layui-input">
+                                    </div>
+                                    <div class="layui-inline layui-form-item">
+                                        <label class="layui-form-label work-search-label">任务</label>
+                                        <input type="text" placeholder="请输入" class="taskName work-search-input layui-input">
+                                    </div>
+                                    <div class="layui-inline layui-form-item">
+                                        <label class="layui-form-label work-search-label">审批状态</label>
+                                        <div class="layui-inline" style="text-align: center;width:100px;">
+                                            <select  name="approveState_search" id='approveState_search'   lay-filter="approveState_search" >
+                                                <option value=""  selected>请选择</option>
+                                                <option value="1">已审批</option>
+                                                <option value="2">未审批</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-form-item">
+                                        <label class="layui-form-label work-search-label">审批时间</label>
+                                        <input autocomplete="off" style="width: 210px;border-radius: 6px;display: inline-block" type="text" name="startTime"
+                                               id="startTime" placeholder="日期" class="layui-input rili" >
+                                        <!--<input autocomplete="off" style="width: 120px;border-radius: 6px;display: inline-block" type="text" name="endTime"-->
+                                               <!--id="endTime" placeholder="日期" class="layui-input rili" >-->
+                                    </div>
+                                    <button class="layui-btn layui-btn-sm layui-btn-danger" style="float: right;margin-left: 10px;"  id="btn-daily-reset">
+                                        <img src="../../assetsInfo/images/reset.png" style="position: relative;top: -1px;">
+                                        重置
+                                    </button>
+                                    <button class="layui-btn layui-btn-sm layui-btn-normal" style="float: right;margin-left: 0px;background-color: #239FFF;color: #fff"  id="btn-daily-search">
+                                        <img src="../../assetsInfo/images/chaxun.png" style=" width: 16px">
+                                        查询
+                                    </button>
+
+
+                                </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="layui-inline" style="margin-top: 10px">
+                    <button class="layui-btn layui-btn-sm layui-btn-danger" style="background-color: #239FFF;color: #fff" id="btn-allApproval">
+                        <img src="../../assetsInfo/images/yiyue.png" style="position: relative;top: -1px;">
+                        批量已阅
+                    </button>
+                    <button class="layui-btn layui-btn-sm layui-btn-danger" id="btn-allBack">
+                        <img src="../../assetsInfo/images/bohui.png" style="position: relative;top: -1px;">
+                        批量驳回
+                    </button>
+                </div>
+
+                <!-- 下部表格容器 -->
+                <table id="tableContent-daily" lay-filter="tableContent-daily"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="barTool">
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-look">已阅</button>
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-reBack">驳回</button>
+    {{#  if(d.taskResultFileId) { }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-down">下载成果物</button>
+    {{#  } }}
+</script>
+<!-- zTree js 文件 -->
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+<script src="../../assetsInfo/js/MenuAuthHelper.js"></script>
+
+<script>
+    // 初始化 layui
+    layui.use(['laydate', 'table', 'upload', 'formSelects'], function () {
+        var table = layui.table,
+            form = layui.form,
+            upload = layui.upload,
+            formSelects = layui.formSelects,
+            laydate = layui.laydate,
+            tools = layui.tools,
+            config = layui.config,
+            admin = layui.admin;
+
+        // 初始化日期组件
+        laydate.render({
+            elem: '#planStartName',
+            max: 0
+        });
+        laydate.render({
+            elem: '#startTime',
+            range: true,
+        });
+        // laydate.render({
+        //     elem: '#endTime',
+        // });
+        var account = config.getAccount();
+
+
+        // 渲染表格
+        var renderTable = function (search) {
+            if (!search) {
+                search = {};
+            }
+            // 渲染表格
+            table.render({
+                elem: '#tableContent-daily',
+                id: 'tableContent-daily',
+                url: admin.formatUrl('/api/Daily/page4Tips'),
+                contentType: "application/json",
+                method: 'post',
+                // 格式化后台返回的数据
+                parseData: function (res) { //res 即为原始返回的数据
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "count": res.data.count,
+                        "msg": res.message, //解析提示文本
+                        "data": res.data.dataList //解析数据列表
+                    };
+                },
+                request: {
+                    pageName: 'page',
+                    limitName: 'pageSize'
+                },
+                height: 'full-195',
+                cols: [
+                    [{
+                        type: 'checkbox'
+                    },
+                        {
+                            field: 'createUserName',
+                            title: '姓名',
+                            width: 100,
+                            align: 'center',
+                        },
+                        {
+                            field: 'budgetName',
+                            title: '业务',
+                            align: 'center',
+                            templet: function(d) {
+                                return '<div title="'+d.budgetName+'"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ d.budgetName +'</div></div>';
+                            }
+                        },
+                        {
+                            field: 'projectName',
+                            title: '项目',
+                            align: 'center',
+                            templet: function(d) {
+                                return '<div title="'+d.projectName+'"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ d.projectName +'</div></div>';
+                            }
+                        }, {
+                        field: 'taskName',
+                        title: '任务',
+                        align: 'center',
+                        templet: function(d) {
+                            return '<div title="'+d.taskName+'"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ d.taskName +'</div></div>';
+                        }
+                    }, {
+                        field: 'dailyCreateTime',
+                        title: '日期',
+                        align: 'center',
+                        templet: function (row) {
+                            if (row.dailyCreateTime) {
+                                return '<div title="'+tools.getDate(row.dailyCreateTime,"YYYY-MM-DD")+'"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ tools.getDate(row.dailyCreateTime,"YYYY-MM-DD") +'</div></div>' ;
+                            }
+                        }
+                    }, {
+                        field: 'workCostTime',
+                        title: '时长',
+                        align: 'center',
+                        width: 60,
+                    }, {
+                        field: 'workDescription',
+                        title: '工作描述',
+                        align: 'center',
+                        templet: function(d) {
+                            return '<div title="'+d.workDescription+'"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ d.workDescription +'</div></div>';
+                        }
+                    }, {
+                        field: 'createTime',
+                        title: '提交时间',
+                        align: 'center',
+                        templet: function (row) {
+                            if (row.createTime) {
+                                return '<div title="'+tools.getDate(row.createTime,"YYYY-MM-DD HH:mm:ss")+'"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ tools.getDate(row.createTime,"YYYY-MM-DD HH:mm:ss") +'</div></div>' ;
+                            }
+                        }
+                    }, {
+                        field: 'approveUserName',
+                        title: '审批人',
+                        width: 100,
+                        align: 'center',
+                    }, {
+                        field: 'modifyTime',
+                        title: '审批时间',
+                        align: 'center',
+                        templet: function (row) {
+                            if (row.modifyTime) {
+                                return '<div title="'+tools.getDate(row.modifyTime,"YYYY-MM-DD HH:mm:ss")+'"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ tools.getDate(row.modifyTime,"YYYY-MM-DD HH:mm:ss") +'</div></div>' ;
+                            }else{
+                                return '';
+                            }
+                        }
+                    }, {
+                        field: 'approveState ',
+                        title: '审批状态',
+                        align: 'center',
+                        templet: function (row) {
+                            if (row.approveState) {
+                                var arr=['已审批','未审批'];
+                                var color;
+                                if(row.approveState==1){
+                                    color='#00d84c';
+                                }else if(row.approveState==2){
+                                    color='#ff0000';
+                                }
+                                return '<span style="color:'+color+'">'+arr[row.approveState-1]+'</span>';
+                            }else{
+                                return '';
+                            }
+                        }
+                    },{
+                        title: '操作',
+                        align: 'center',
+                        toolbar:'#barTool',
+                        width: 200
+                    }
+                    ]
+                ],
+                page: true,
+                limit: 15, //显示的数量
+                limits: [10, 15, 20, 25, 30],
+                cellMinWidth: 90,
+                where: search
+            });
+        }
+
+        // 初始化，执行一次渲染表格
+        renderTable();
+        table.on('tool(tableContent-daily)', function (obj) {
+            var data = obj.data;
+            var newdata = {};
+            if (obj.event === 'btn-look') {
+                console.log(obj,'已阅');
+                var globalProcessData = {
+                    "comment": "",
+                    "formContent": "1",
+                    "type": 0,
+                    //日报的id
+                    "businessKeyArray":[],
+                    "variables": {
+                        "approve": "agreeView"
+                    }
+
+                };
+                if(data.approveState==1){
+                    return layer.msg('该日报已审批！', {
+                        icon: 0
+                    });
+                }else if(data.approveState==2){
+                    globalProcessData.businessKeyArray.push(data.id)
+                }
+                admin.req('/api/customized-branch/complete_multi_task_id',globalProcessData , function (res) {
+                    if (res.ok) {
+                        if(!res.data||res.data.length==0){
+                            layer.msg('批阅成功！', {
+                                icon: 1
+                            });
+                            clearInterval(timeOutDailyNumber);
+                            getDailyNumber();
+                            timeOutDailyNumber =setInterval(function () {
+                                getDailyNumber();
+                            },300000);
+                            table.reload('tableContent-daily', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        }else{
+                            var option=[{
+                                'approveState':1,
+                                'id':data.id
+                            }];
+                            // data.modifyTime=new Date().getTime();
+                            admin.req('/api/Daily/updateDailyState',option , function (data) {
+                                layer.msg('批阅成功！', {
+                                    icon: 1
+                                });
+                                clearInterval(timeOutDailyNumber);
+                                getDailyNumber();
+                                timeOutDailyNumber =setInterval(function () {
+                                    getDailyNumber();
+                                },300000);
+                                table.reload('tableContent-daily', {
+                                    where: {
+                                        reload: new Date().getTime()
+                                    }
+                                });
+                            }, {
+                                method: 'post'
+                            });
+                        }
+                    } else {
+                        layer.msg('批阅失败！' + res.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: 'post'
+                });
+            }else if(obj.event==='btn-reBack'){
+                console.log(obj,'驳回');
+                if(data.approveState==1) {
+                    return layer.msg('该日报已审批，不可驳回，请重新选择！', {
+                        icon: 0
+                    });
+                }
+                layer.open({
+                    type: 1,
+                    title: '驳回',
+                    content: '<textarea maxlength="200"  style="width:90%;height:200px;margin:25px 27px" name="workDescription" type="text" rows="8"\n' +
+                        '                                  placeholder="请输入驳回意见"\n' +
+                        '                                  class="layui-textarea workDescription_new workInfo"\n' +
+                        '                        ></textarea>',
+                    area: ['550px', '350px'],
+                    btn: ['确定', '取消'],
+                    yes: function(index, layero) {
+                        var text =$('.workInfo').val();
+                        var globalProcessData = {
+                            "comment": text,
+                            "formContent": "1",
+                            "type": 0,
+                            //日报的id
+                            "businessKeyArray":[],
+                            "variables": {
+                                "approve": "reject"
+                            }
+
+                        };
+                        if(data.approveState==2){
+                            globalProcessData.businessKeyArray.push(data.id)
+                        }
+                        admin.req('/api/customized-branch/complete_multi_task_id',globalProcessData , function (res) {
+                            if (res.ok) {
+                                layer.msg('驳回成功！', {
+                                    icon: 1
+                                });
+                                clearInterval(timeOutDailyNumber);
+                                getDailyNumber();
+                                timeOutDailyNumber =setInterval(function () {
+                                    getDailyNumber();
+                                },300000);
+                                layer.close(index);
+                                table.reload('tableContent-daily', {
+                                    where: {
+                                        reload: new Date().getTime()
+                                    }
+                                });
+                            } else {
+                                layer.msg('驳回失败！' + res.message, {
+                                    icon: 5
+                                });
+                            }
+                        }, {
+                            method: 'post'
+                        });
+                    },
+                    success: function() {
+
+                    },
+                    resize: false
+                });
+
+            }else if(obj.event==='btn-down'){
+                if(data.taskResultFileId){
+                    window.open("/ADC_info/api/sys/file/"+data.taskResultFileId+"/download")
+                }
+            }
+        });
+        // DONE: 侧边栏变化时刷新数据表格
+        // 将 table ID 存入数组
+        layui.admin.addTableCache('tableContent-daily');
+        $('#btn-daily-search').off('click').on('click',function () {
+            var data={
+                createUserName:$('.createUserName').val(),
+                budgetName:$('.budgetName').val(),
+                projectName:$('.projectName').val(),
+                taskName:$('.taskName').val(),
+                approveState:$('#approveState_search option:selected').val(),
+                queryStartDate:$("#startTime").val().substring(0,10),
+                queryEndDate:$("#startTime").val().substring(13,23),
+            };
+            renderTable(data);
+        });
+        $('#btn-daily-reset').off('click').on('click',function () {
+
+                $('.createUserName').val('');
+                $('.budgetName').val('');
+                $('.projectName').val('');
+                $('.taskName').val('');
+                $("#approveState_search option[value='']").prop('selected', 'selected');
+                 form.render('select');
+                $('#startTime')[0].value='';
+                // $('#endTime')[0].value='';
+
+             renderTable();
+        });
+        // 表单提交，查询
+        form.on('submit(btn-daily-search)', function (data) {
+            // 获取表单数据
+            var d = data.field;
+            console.log(d)
+            // renderTable(d);
+
+
+        });
+        //type 1 已阅 2 驳回
+        var getAllApproval=function(type,index,text){
+            var checkStatus = table.checkStatus('tableContent-daily');
+            if (checkStatus.data.length == 0&&type==1) {
+                return layer.msg('请选择至少一条日报！', {
+                    icon: 0
+                });
+            }
+            var approve,textMsg,comment;
+            if(type==1){
+                approve='agreeView';
+                textMsg='批阅';
+                comment='';
+            }else if(type=2){
+                approve='reject';
+                textMsg='驳回';
+                comment=text;
+            }
+            var globalProcessData = {
+                "comment": comment,
+                "formContent": "1",
+                "type": 0,
+                //日报的id
+                "businessKeyArray":[],
+                "variables": {
+                    "approve": approve
+                }
+
+            };
+            for (var i = 0; i <checkStatus.data.length ; i++) {
+
+                if(checkStatus.data.length==1){
+                    if(checkStatus.data[i].approveState==1){
+                        return layer.msg('该日报已审批！', {
+                            icon: 0
+                        });
+                    }else if(checkStatus.data[i].approveState==2){
+                        globalProcessData.businessKeyArray.push(checkStatus.data[i].id)
+                    }
+                }else{
+                    if(checkStatus.data[i].approveState==2){
+                        globalProcessData.businessKeyArray.push(checkStatus.data[i].id)
+                    }
+                }
+            }
+            admin.req('/api/customized-branch/complete_multi_task_id',globalProcessData , function (res) {
+                if (res.ok) {
+                    if(!res.data||res.data.length==0){
+                        layer.msg(''+textMsg+'成功！', {
+                            icon: 1
+                        });
+                        clearInterval(timeOutDailyNumber);
+                        getDailyNumber();
+                        timeOutDailyNumber =setInterval(function () {
+                            getDailyNumber();
+                        },300000);
+                        if(index){
+                            layer.close(index);
+                        }
+                        table.reload('tableContent-daily', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    }else{
+                        var option=[];
+                        for(var i =0;i<res.data.length;i++){
+                            option.push({
+                                'approveState':1,
+                                'id':res.data[i]
+                            });
+                        }
+                        admin.req('/api/Daily/updateDailyState',option , function (data) {
+                            layer.msg(''+textMsg+'成功！', {
+                                icon: 1
+                            });
+                            clearInterval(timeOutDailyNumber);
+                            getDailyNumber();
+                            timeOutDailyNumber =setInterval(function () {
+                                getDailyNumber();
+                            },300000);
+                            if(index){
+                                layer.close(index);
+                            }
+                            table.reload('tableContent-daily', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        }, {
+                            method: 'post'
+                        });
+                    }
+                } else {
+                    layer.msg(''+textMsg+'失败！' + res.message, {
+                        icon: 5
+                    });
+                }
+            }, {
+                method: 'post'
+            });
+        }
+        //批量已阅
+        $('#btn-allApproval').off('click').on('click', function() {
+            getAllApproval(1);
+        });
+        //批量驳回
+        $('#btn-allBack').off('click').on('click', function() {
+            var checkStatus = table.checkStatus('tableContent-daily');
+            if (checkStatus.data.length == 0) {
+                return layer.msg('请选择至少一条日报！', {
+                    icon: 0
+                });
+            }
+            for (var i = 0; i <checkStatus.data.length ; i++) {
+                if(checkStatus.data.length==1){
+                    if(checkStatus.data[i].approveState==1) {
+                        return layer.msg('该日报已审批，不可驳回，请重新选择！', {
+                            icon: 0
+                        });
+                    }
+                }else{
+                    if(checkStatus.data[i].approveState==1) {
+                        return layer.msg('存在已审批的日报，不可驳回，请重新选择！', {
+                            icon: 0
+                        });
+                    }
+                }
+
+            }
+            layer.open({
+                type: 1,
+                title: '驳回',
+                content: '<textarea maxlength="200"  style="width:90%;height:200px;margin:25px 27px" name="workDescription" type="text" rows="8"\n' +
+                    '                                  placeholder="请输入驳回意见"\n' +
+                    '                                  class="layui-textarea workDescription_new workInfo"\n' +
+                    '                        ></textarea>',
+                area: ['550px', '350px'],
+                btn: ['确定', '取消'],
+                yes: function(index, layero) {
+                    var text =$('.workInfo').val();
+                    getAllApproval(2,index,text);
+                    // layer.close(index);
+                },
+                success: function() {
+
+                },
+                resize: false
+            });
+
+        });
+    });
+
+</script>

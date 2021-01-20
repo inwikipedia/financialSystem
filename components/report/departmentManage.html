@@ -1,0 +1,704 @@
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<link rel="stylesheet" href="assetsInfo/css/report.css">
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+
+    .titDivbox {
+        width: 90%;
+        margin: auto;
+        position: relative;
+    }
+
+    .titDiv {
+        width: 100%;
+        font-size: 16px;
+        font-weight: bold;
+        color: #888;
+        position: absolute;
+        top: 25px;
+    }
+
+    .tit01,
+    .tit02 {
+        width: 50%;
+        float: left;
+        text-align: center;
+    }
+
+    .botTable {
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+
+    .chart {
+        height: 240px;
+        width: 96%;
+    }
+  body .botTable th .layui-table-cell{
+        /*height:56px !important;*/
+    }
+    .layui-table-cell span{
+        /*white-space:pre-line ;*/
+    }
+    @media screen and (min-width: 1366px) and (max-width: 1920px) {
+        .chart {
+            height: 240px;
+            width: 96%;
+        }
+    }
+
+    @media screen and (min-width: 1920px) {
+        .chart {
+            height: 370px;
+            width: 96%;
+        }
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span class="layui-card-header-title"><strong>部门经营情况</strong></span>
+                <!-- <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-sm exportbtn">导出PPT</a> -->
+            </div>
+            <div class="layui-row" style="text-align: left;">
+                <span style="background-color: #96cbfd;color:#fff">一类部门：</span>
+            </div>
+            <div class="layui-row">
+                <div id="departChart1" class="chart"></div>
+            </div>
+
+            <div class="botTable">
+                <table id="tableContent-form1" lay-filter="tableContent-form1"></table>
+            </div>
+            <div class="layui-row" style="text-align: left">
+                <span style="background-color: #96cbfd;color:#fff">二类部门：</span>
+            </div>
+            <div class="layui-row">
+                <div id="departChart2" class="chart"></div>
+            </div>
+            <div class="layui-row">
+                <div id="departChart3" class="chart"></div>
+            </div>
+            <div class="layui-row">
+                <div id="departChart4" class="chart"></div>
+            </div>
+            <div class="botTable">
+                <table id="tableContent-form2" lay-filter="tableContent-form2"></table>
+            </div>
+            <div class="layui-row" style="text-align: left">
+                <span style="background-color: #96cbfd;color:#fff">三类部门：</span>
+            </div>
+            <div class="layui-row">
+                <div id="departChart5" class="chart"></div>
+            </div>
+            <div class="botTable">
+                <table id="tableContent-form3" lay-filter="tableContent-form3"></table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+
+<script>
+    layui.use(['table'], function() {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer,
+            thisYear=new Date().getFullYear();
+        var index = layer.load(2);
+        // 渲染表格
+        table.render({
+            elem: '#tableContent-form1',
+            url: admin.formatUrl('/api/business/tableReport/getIncomeProfitAndCostByYearAndMonths?deptTypeCode=firstDept&startMonth=1&endMonth=12&thisYear='+thisYear), //数据接口
+            method: 'GET',
+            parseData: function (res) { //res 即为原始返回的数据
+                layer.close(index);
+                //echart数据处理
+                var xData = [];
+                var yData1 = [],
+                    yData2 = [],
+                    yData3 = [],
+                    title=['实际成本','费用预算','成本费用完成率（%）'];
+                for (var i = 0; i <res.data.length ; i++) {
+                    xData.push(res.data[i].deptName);
+                    yData1.push({name:'实际成本',value:res.data[i].actualCost});
+                    yData2.push({name:'费用预算',value:res.data[i].costBudget});
+                    yData3.push({name:'成本费用完成率（%）',value:(res.data[i].costCompleteRate*100).toFixed(2)});
+                    res.data[i].profitCompleteRate=(res.data[i].profitCompleteRate!=0?(res.data[i].profitCompleteRate*100).toFixed(2):(res.data[i].profitCompleteRate*100))+'%';
+                    res.data[i].budgetCompleteRate=(res.data[i].budgetCompleteRate!=0?(res.data[i].budgetCompleteRate*100).toFixed(2):(res.data[i].budgetCompleteRate*100))+'%';
+                    res.data[i].costCompleteRate=(res.data[i].costCompleteRate!=0?(res.data[i].costCompleteRate*100).toFixed(2):(res.data[i].costCompleteRate*100))+'%';
+                }
+                chartInit(xData, yData1, yData2,yData3,1,title);
+                // 返回结果，进行渲染表格
+                return {
+                    "code": res.respCode, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "data": res.data //解析数据列表
+                };
+            },
+            cols: [
+                [{
+                    title: '部门',
+                    field: 'deptName',
+                    align: 'center'
+                }, {
+                    title: '实际利润（万元）',
+                    field: 'actualProfit',
+                    align: 'center'
+                }, {
+                    title: '利润预算（万元）',
+                    field: 'profitBudget',
+                    align: 'center'
+                }, {
+                    title: '利润指标完成率',
+                    width:120,
+                    field: 'profitCompleteRate',
+                    align: 'center'
+                }, {
+                    title: '实际收入（万元）',
+                    field: 'actualIncome',
+                    align: 'center'
+                }, {
+                    title: '收入预算（万元）',
+                    field: 'incomeBudget',
+                    align: 'center'
+                }, {
+                    title: '预算指标完成率',
+                    width:120,
+                    field: 'budgetCompleteRate',
+                    align: 'center'
+                }, {
+                    title: '实际成本（万元）',
+                    field: 'actualCost',
+                    align: 'center'
+                }, {
+                    title: '成本预算（万元）',
+                    field: 'costBudget',
+                    align: 'center'
+                }, {
+                    title: '成本指标完成率',
+                    width:120,
+                    field: 'costCompleteRate',
+                    align: 'center'
+                }, {
+                    title: '实际工时（人天）',
+                    field: 'actualWorkTime',
+                    align: 'center'
+                }, {
+                    title: '人员数量',
+                    field: 'workerNumber',
+                    align: 'center'
+                }]
+            ],
+
+
+        });
+        table.render({
+            elem: '#tableContent-form2',
+            url: admin.formatUrl('/api/business/tableReport/getIncomeProfitAndCostByYearAndMonths?deptTypeCode=secondDept&startMonth=1&endMonth=12&thisYear='+thisYear), //数据接口
+            method: 'GET',
+            parseData: function (res) { //res 即为原始返回的数据
+                layer.close(index);
+                //echart数据处理
+                var xData = [];
+                var yDataProfit1 = [],
+                    yDataProfit2 = [],
+                    yDataProfit3 = [],
+                    titleProfit = ['实际利润','目标利润','利润指标完成率（%）'],
+                    yDataCost1 = [],
+                    yDataCost2 = [],
+                    yDataCost3 = [],
+                    titleCost=['实际成本','费用预算','成本费用完成率（%）'],
+                    yDataIncome1 = [],
+                    yDataIncome2 = [],
+                    yDataIncome3 = [],
+                    titleIncome = ['实际收入','收入预算','收入预算完成率（%）'];
+                for (var i = 0; i <res.data.length ; i++) {
+                    xData.push(res.data[i].deptName);
+                    yDataProfit1.push({name:'实际利润',value:res.data[i].actualProfit});
+                    yDataProfit2.push({name:'目标利润',value:res.data[i].profitBudget});
+                    yDataProfit3.push({name:'利润指标完成率（%）',value:(res.data[i].profitCompleteRate*100).toFixed(2)});
+                    yDataCost1.push({name:'实际成本',value:res.data[i].actualCost});
+                    yDataCost2.push({name:'费用预算',value:res.data[i].costBudget});
+                    yDataCost3.push({name:'成本费用完成率（%）',value:(res.data[i].costCompleteRate*100).toFixed(2)});
+                    yDataIncome1.push({name:'实际开票',value:res.data[i].actualIncome});
+                    yDataIncome2.push({name:'收入预算',value:res.data[i].incomeBudget});
+                    yDataIncome3.push({name:'收入预算完成率（%）',value:(res.data[i].budgetCompleteRate*100).toFixed(2)});
+                    res.data[i].profitCompleteRate=(res.data[i].profitCompleteRate!=0?(res.data[i].profitCompleteRate*100).toFixed(2):(res.data[i].profitCompleteRate*100))+'%';
+                    res.data[i].budgetCompleteRate=(res.data[i].budgetCompleteRate!=0?(res.data[i].budgetCompleteRate*100).toFixed(2):(res.data[i].budgetCompleteRate*100))+'%';
+                    res.data[i].costCompleteRate=(res.data[i].costCompleteRate!=0?(res.data[i].costCompleteRate*100).toFixed(2):(res.data[i].costCompleteRate*100))+'%';
+                }
+                chartInit(xData, yDataProfit1, yDataProfit2,yDataProfit3,2,titleProfit);
+                chartInit(xData, yDataIncome1, yDataIncome2,yDataIncome3,3,titleIncome);
+                chartInit(xData, yDataCost1, yDataCost2,yDataCost3,4,titleCost);
+                // 返回结果，进行渲染表格
+                return {
+                    "code": res.respCode, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "data": res.data //解析数据列表
+                };
+            },
+            cols: [
+                [{
+                    title: '部门',
+                    field: 'deptName',
+                    align: 'center'
+                }, {
+                    title: '实际利润（万元）',
+                    field: 'actualProfit',
+                    align: 'center'
+                }, {
+                    title: '目标利润（万元）',
+                    field: 'profitBudget',
+                    align: 'center'
+                }, {
+                    title: '利润指标完成率',
+                    width:120,
+                    field: 'profitCompleteRate',
+                    align: 'center'
+                }, {
+                    title: '实际收入（万元）',
+                    field: 'actualIncome',
+                    align: 'center'
+                }, {
+                    title: '收入预算（万元）',
+                    field: 'incomeBudget',
+                    align: 'center'
+                }, {
+                    title: '预算收入完成率',
+                    width:120,
+                    field: 'budgetCompleteRate',
+                    align: 'center'
+                }, {
+                    title: '实际成本（万元）',
+                    field: 'actualCost',
+                    align: 'center'
+                }, {
+                    title: '费用预算（万元）',
+                    field: 'costBudget',
+                    align: 'center'
+                }, {
+                    title: '成本费用完成率',
+                    width:120,
+                    field: 'costCompleteRate',
+                    align: 'center'
+                }, {
+                    title: '实际工时（人天）',
+                    field: 'actualWorkTime',
+                    align: 'center'
+                }, {
+                    title: '人员数量',
+                    field: 'workerNumber',
+                    align: 'center'
+                }]
+            ],
+
+
+        });
+        table.render({
+            elem: '#tableContent-form3',
+            url: admin.formatUrl('/api/business/tableReport/getIncomeProfitAndCostByYearAndMonths?deptTypeCode=thirdDept&startMonth=1&endMonth=12&thisYear='+thisYear), //数据接口
+            method: 'GET',
+            parseData: function (res) { //res 即为原始返回的数据
+                layer.close(index);
+                //echart数据处理
+                var xData = [];
+                var yDataProfit1 = [],
+                    yDataProfit2 = [],
+                    yDataProfit3 = [],
+                    yDataCost1 = [],
+                    yDataCost2 = [],
+                    yDataCost3 = [],
+                    title=['实际利润','目标利润','实际成本','费用预算','利润指标完成率（%）','成本费用完成率（%）'];
+                for (var i = 0; i <res.data.length ; i++) {
+                    xData.push(res.data[i].deptName);
+                    yDataProfit1.push({name:'实际利润',value:res.data[i].actualProfit});
+                    yDataProfit2.push({name:'目标利润',value:res.data[i].profitBudget});
+                    yDataProfit3.push({name:'利润指标完成率（%）',value:(res.data[i].profitCompleteRate*100).toFixed(2)});
+                    yDataCost1.push({name:'实际成本',value:res.data[i].actualCost});
+                    yDataCost2.push({name:'费用预算',value:res.data[i].costBudget});
+                    yDataCost3.push({name:'成本费用完成率（%）',value:(res.data[i].costCompleteRate*100).toFixed(2)});
+                    res.data[i].profitCompleteRate=(res.data[i].profitCompleteRate!=0?(res.data[i].profitCompleteRate*100).toFixed(2):(res.data[i].profitCompleteRate*100))+'%';
+                    res.data[i].budgetCompleteRate=(res.data[i].budgetCompleteRate!=0?(res.data[i].budgetCompleteRate*100).toFixed(2):(res.data[i].budgetCompleteRate*100))+'%';
+                    res.data[i].costCompleteRate=(res.data[i].costCompleteRate!=0?(res.data[i].costCompleteRate*100).toFixed(2):(res.data[i].costCompleteRate*100))+'%';
+                }
+                chartInit5(xData, yDataProfit1, yDataProfit2,yDataCost1,yDataCost2,yDataProfit3,yDataCost3,5,title);
+                // 返回结果，进行渲染表格
+                return {
+                    "code": res.respCode, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "data": res.data //解析数据列表
+                };
+            },
+            cols: [
+                [{
+                    title: '部门',
+                    field: 'deptName',
+                    align: 'center'
+                }, {
+                    title: '实际利润\n（万元）',
+                    field: 'actualProfit',
+                    align: 'center'
+                }, {
+                    title: '目标利润（万元）',
+                    field: 'profitBudget',
+                    align: 'center'
+                }, {
+                    title: '利润指标完成率',
+                    width:120,
+                    field: 'profitCompleteRate',
+                    align: 'center'
+                },{
+                    title: '实际成本（万元）',
+                    field: 'actualCost',
+                    align: 'center'
+                }, {
+                    title: '费用预算（万元）',
+                    field: 'costBudget',
+                    align: 'center'
+                }, {
+                    title: '成本费用完成率',
+                    width:120,
+                    field: 'costCompleteRate',
+                    align: 'center'
+                }, {
+                    title: '实际工时（人天）',
+                    field: 'actualWorkTime',
+                    align: 'center'
+                }, {
+                    title: '人员数量',
+                    field: 'workerNumber',
+                    align: 'center'
+                }]
+            ],
+
+
+        });
+        var myChart1 = echarts.init(document.getElementById("departChart1"));
+        var myChart2 = echarts.init(document.getElementById("departChart2"));
+        var myChart3 = echarts.init(document.getElementById("departChart3"));
+        var myChart4 = echarts.init(document.getElementById("departChart4"));
+        var myChart5 = echarts.init(document.getElementById("departChart5"));
+        var chartInit = function(xData, data1, data2, data3,type,legendTitle) {
+            // 图表初始化
+            // 图表配置项
+            var option = {
+                title: {
+                    left: 'center',
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    textStyle: {
+                        align: 'left'
+                    },
+
+                    axisPointer: {
+                        type: 'cross',
+                        crossStyle: {
+                            color: '#999'
+                        }
+                    },
+                },
+                grid: {
+                    left: 45,
+                    right: 50,
+                    bottom:90,
+                },
+                legend: {
+                    data: [{
+                        name: legendTitle[0],
+                        icon: "roundRect"
+                    }, {
+                        name: legendTitle[1],
+                        icon: "roundRect"
+                    }, {
+                        name:legendTitle[2],
+                        itemWidth: '15'
+                    }],
+                    left: 'center',
+                    bottom: 'bottom',
+                    padding: [7, 0, 0, 0],
+                    itemWidth: 10,
+                    itemHeight: 10
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: xData,
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#949494',
+                        }
+                    },
+                    axisLabel:{
+                        rotate:45
+                    }
+                }],
+                yAxis: [{
+                    type: 'value',
+
+                    min: 0,
+                    axisLabel: {
+                        formatter: '{value}'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#949494',
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    }
+                }, {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value}%'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#949494',
+                        }
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle:{
+                            type:'dashed',
+                            color:"#E8E8E8"
+                        }
+                    },
+
+                }
+
+                ],
+                series: [{
+                    type: 'bar',
+                    barMaxWidth: 30,
+                    name:legendTitle[0],
+                    data: data1,
+                    color: 'RGBA(124,190,253,0.8)',
+                }, {
+                    type: 'bar',
+                    barMaxWidth: 30,
+                    name:legendTitle[1],
+                    color: 'RGB(237,128,54)',
+                    data: data2
+                }, {
+                    type: 'line',
+                    color: '#a5a5a5',
+                    yAxisIndex: 1,
+                    name:legendTitle[2],
+                    data: data3,
+                    itemStyle: { //设置折线拐点处数值
+                        normal: {
+                            label: {
+                                show: true,
+                                color: "#000",
+                                formatter: "{c}%"
+                            }
+                        }
+                    }
+                },
+
+                ]
+            };
+            if(type==1){
+                myChart1.setOption(option);
+            }else if(type==2){
+                myChart2.setOption(option);
+            }else if(type==3){
+                myChart3.setOption(option);
+            }else if(type==4){
+                myChart4.setOption(option);
+            }
+        };
+        var chartInit5 = function(xData, data1, data2, data3,data4,data5,data6,type,legendTitle) {
+            // 图表初始化
+            // 图表配置项
+            var option = {
+                title: {
+                    left: 'center',
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    textStyle: {
+                        align: 'left'
+                    },
+
+                    axisPointer: {
+                        type: 'cross',
+                        crossStyle: {
+                            color: '#999'
+                        }
+                    },
+                },
+                grid: {
+                    left: 45,
+                    right: 50,
+                    bottom:90,
+                },
+                legend: {
+                    data: [{
+                        name: legendTitle[0],
+                        icon: "roundRect"
+                    }, {
+                        name: legendTitle[1],
+                        icon: "roundRect"
+                    }, {
+                        name: legendTitle[2],
+                        icon: "roundRect"
+                    }, {
+                        name: legendTitle[3],
+                        icon: "roundRect"
+                    }, {
+                        name:legendTitle[4],
+                        itemWidth: '15'
+                    }, {
+                        name:legendTitle[5],
+                        itemWidth: '15'
+                    }],
+                    left: 'center',
+                    bottom: 'bottom',
+                    padding: [7, 0, 0, 0],
+                    itemWidth: 10,
+                    itemHeight: 10
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: xData,
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#949494',
+                        }
+                    },
+                    axisLabel:{
+                        rotate:45
+                    }
+                }],
+                yAxis: [{
+                    type: 'value',
+
+                    min: 0,
+                    axisLabel: {
+                        formatter: '{value}'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#949494',
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    }
+                }, {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value}%'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#949494',
+                        }
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle:{
+                            type:'dashed',
+                            color:"#E8E8E8"
+                        }
+                    },
+
+                }
+
+                ],
+                series: [{
+                    type: 'bar',
+                    barMaxWidth: 30,
+                    name:legendTitle[0],
+                    data: data1,
+                    color: 'RGBA(124,190,253,0.8)',
+                }, {
+                    type: 'bar',
+                    barMaxWidth: 30,
+                    name:legendTitle[1],
+                    color: 'RGB(237,128,54)',
+                    data: data2
+                }, {
+                    type: 'bar',
+                    barMaxWidth: 30,
+                    name:legendTitle[2],
+                    data: data3,
+                    color: '#ffc000',
+                }, {
+                    type: 'bar',
+                    barMaxWidth: 30,
+                    name:legendTitle[3],
+                    color: '#4472c4',
+                    data: data4
+                },{
+                    type: 'line',
+                    color: '#a5a5a5',
+                    yAxisIndex: 1,
+                    name:legendTitle[4],
+                    data: data5,
+                    itemStyle: { //设置折线拐点处数值
+                        normal: {
+                            label: {
+                                show: true,
+                                color: "#000",
+                                formatter: "{c}%"
+                            }
+                        }
+                    }
+                },{
+                    type: 'line',
+                    color: '#70ad47',
+                    yAxisIndex: 1,
+                    name:legendTitle[5],
+                    data: data6,
+                    itemStyle: { //设置折线拐点处数值
+                        normal: {
+                            label: {
+                                show: true,
+                                color: "#000",
+                                formatter: "{c}%"
+                            }
+                        }
+                    }
+                },
+
+                ]
+            };
+                myChart5.setOption(option);
+        };
+        setTimeout(function() {
+            window.onresize = function() {
+                myChart1.resize();
+                myChart2.resize();
+                myChart3.resize();
+                myChart4.resize();
+                myChart5.resize();
+                //myChartLine.resize();
+                //GantChart.resize();
+                // myChartPie.resize();
+            }
+        }, 200);
+    });
+</script>

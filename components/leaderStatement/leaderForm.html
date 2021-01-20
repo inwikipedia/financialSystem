@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="../assetsInfo/css/leaderForm.css">
+<body>
+<div class="leaderForm">
+    <div class="reportTree" id="reportTree"></div>
+    <div class="reportRight">
+        <div class="layui-row">
+            <div class="layui-col-md12 reportTableForm">
+                <div class=" layui-row layui-card layui-form" >
+                    <div class="  layui-col-md10" id="reportItem" >
+                    </div>
+                    <div class="layui-col-md2" >
+                        <div style="margin: 15px 15px 15px 0px">
+                            <button id="searchReport" style="background-color: rgba(51,166,212,1);color:#fff"  class="layui-btn layui-btn-sm layui-btn-normal bigBtn" lay-submit title="查询">查询</button>
+                            <button  id="resetReport" style="color:#666" class="layui-btn layui-btn-sm layui-btn-normal bigBtn" lay-submit title="重置">重置</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card botTable">
+                    <table id="tableContent-form" lay-filter="tableContent-form"></table>
+                </div>
+            </div>
+            <div class="researchMoney ">
+                <div class="reportTitle" >
+                    <img style="width: 60px" src="/assetsInfo/images/duty-img1.png" >
+                    <div class="reportInline">
+                        <div class="projectReceipts">78894</div>
+                        <div>项目总实收</div>
+                    </div>
+                </div>
+                <div class="reportTitle">
+                    <img style="width: 60px" src="/assetsInfo/images/duty-img2.png" >
+                    <div class="reportInline">
+                        <div class="projectExpend">65655</div>
+                        <div>项目总支出</div>
+                    </div>
+                </div>
+                <div class="reportTitle">
+                    <img style="width: 60px" src="/assetsInfo/images/duty-img3.png" >
+                    <div class="reportInline">
+                        <div class="projectIncome">77319</div>
+                        <div>项目总收入</div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md12 reportEchart">
+                <div  id="echartBox"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<script src="../assetsInfo/js/leaderForm.js"></script>

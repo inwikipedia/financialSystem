@@ -1,0 +1,131 @@
+/*2018.12.3 报表公共样式*/
+.btn-myself{
+    width: 66px;
+    height: 34px;
+}
+.btn-myself i.layui-icon  {
+    font-size: 14px!important;
+    /* padding: 40px 6px; */
+    margin-right: 0 !important;
+}
+
+.layui-card-header .layui-card-header-title {
+    border-left: 4px solid #00acff;
+    padding: 2px 10px;
+    font-size: 16px;
+}
+
+.exportbtn {
+    float: right;
+    margin-top: 6px;
+    border-radius: 5px;
+}
+
+.layui-card {
+    background: rgba(255, 255, 255, 1);
+    /*border-radius: 4px;*/
+}
+
+body .botTable {
+    width: 100%;
+    margin: auto;
+    padding-bottom: 1px;
+}
+
+.toptxt {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 10px 20px 0 20px;
+    line-height: 22px;
+}
+
+
+#scrollPage{
+    border-bottom: 1px solid #2a4b68;padding-bottom: 9px;
+    position: fixed;top: 39px;width: 228px;background: #305475; z-index: 1001;
+    padding: 2.5px 6px 2px 10px;
+}
+#scrollPage .searchInput {
+    width: 92%;
+    /* text-align: center; */
+    color: #fff;
+}
+.htmlRight{
+    width: calc(100vw - 263px);
+    float: right;
+    background: #EEEEEE;
+    padding: 0 10px;
+    overflow: auto;
+    height: calc(100vh - 55px);
+    padding-top: 21px;
+}
+body .tree-block {
+    width: 340px;
+}
+body .tree-block .ztree li a {
+    width: 99% !important;
+     padding-right: 0;
+}
+body .level0.line li:last-child:after {
+    height: 29px;
+}
+body .ztree {
+    height: calc(100vh - 65px);
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+body .layui-col-space15>* {
+    padding: 0 7.5px;
+}
+
+body .layui-card-header {
+
+    text-align: left;
+}
+body .layui-table-cell {
+    padding: 0;
+    text-align: center;
+}
+.layui-table {
+    min-width: 100%;
+    background-color: #fff;
+    color: #666;
+}
+.layui-card{
+    padding: 0 20px;
+}
+body .layui-row  .tree-block {
+    width: 245px;
+}
+body  .layui-card-header{
+    padding: 0;
+}
+
+body .layui-table-body {
+    position: relative;
+    overflow: auto;
+    margin-right: -1px;
+    margin-bottom: -1px;
+    border-right: 1px solid #e6e6e6;
+}
+
+body .layui-table-box {
+    border-right: none;
+}
+
+@media screen and (min-width: 1366px) and (max-width: 1920px) {
+    body .chart {
+        height: 250px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+}
+
+@media screen and (min-width: 1920px) {
+   body  .chart {
+        height: 250px;
+        width: 100%;
+        margin: 0 auto;
+    }
+}

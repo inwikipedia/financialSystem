@@ -1,0 +1,336 @@
+<!--
+File   : user.html
+Created: Tuesday September 18th 2020 9:15:20 am
+Author : hetengfei
+License: MIT License
+
+Copyright (c) 2020 hetengfei
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Modified By  : hetengfei
+-----
+Description: 数据看板 - 交流频次表
+-----
+HISTORY:
+-->
+<style>
+    /*layui 插件choosen 冲突 当有两个select 切换页面会渲染出两个，原因未知*/
+    body{
+        overflow-y: hidden;
+    }
+    .acFrequency .layui-table-box{
+        height: 90% !important;
+    }
+    .acFrequency .layui-table-body{
+        height: 93.5% !important;
+    }
+    .acFrequency .layui-form.layui-border-box.layui-table-view{
+        height: 490px !important;
+    }
+</style>
+<div class="layui-row layui-col-space15">
+    <!-- 左侧 -->
+    <div class="layui-col-md12 autoScrollLeft">
+        <div class="layui-card acFrequency">
+            <!-- 卡片容器 -->
+            <div class="layui-card-header">交流频次表</div>
+            <div class="layui-card-body">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar">
+                        <!-- 左侧 -->
+                        <div class="layui-inline">
+                            <div class="layui-inline">
+                                <button type="button" class="layui-btn layui-btn-sm layui-import" id="crm-customer-btn-import" title="导入">
+                                    <i class="layui-icon layui-icon-upload-drag"></i>导入
+                                </button>
+                                <button id="btn_download_project" class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_download_project" lay-submit title="下载模板">
+                                    <i class="layui-icon layui-icon-download-circle"></i>下载模板
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 下部表格容器 -->
+                <table id="tableContent-user" lay-filter="tableContent-user"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="btn-edit">编辑</a>
+</script>
+<script src="/assetsInfo/js/tempDown.js"></script>
+<script>
+    // 初始化 layui
+    layui.use(['table', 'formSelects','upload'], function() {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            formSelects = layui.formSelects,
+            upload = layui.upload
+        // 渲染左侧表格
+        var renderTable = function () {
+            var heightTable = $(document).height() - 140;
+            // 渲染表格
+            table.render({
+                elem: '#tableContent-user',
+                id: 'tableContent-user',
+                url: admin.formatUrl('/api/industymeeting/communicationFrequency/page'),
+                // 格式化后台返回的数据
+                parseData: function (res) { //res 即为原始返回的数据
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                height: heightTable,
+                cols: [
+                    [{
+                        type: 'checkbox'
+                    }, {
+                        type: 'numbers',
+                        title: '#'
+                    },{
+                        field: 'province',
+                        title: '省份',
+                        templet: function (d) {
+                            let text = d.province ? d.province : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'frequency',
+                        title: '高层交流次数',
+                        templet: function (d) {
+                            let text = (d.frequency||d.frequency==0) ? d.frequency : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'updateUser',
+                        title: '更新人',
+                        templet: function (d) {
+                            let text = d.updateUser ? d.updateUser : "";
+                            return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        field: 'updateTime',
+                        title: '更新日期',
+                        templet: function (d) {
+                            let text = d.updateTime ?timestampToTime(d.updateTime) : "";
+                                return '<div title="' + text + '"><span>' + text + '</span></div>'
+                        }
+                    }, {
+                        align: 'center',
+                        title: '操作',
+                        width: 120,
+                        toolbar: '#control-1',
+                        unresize: true
+                    }]
+                ],
+                cellMinWidth: 90,
+                page: {
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                },
+                request: {
+                    pageName: 'page',
+                    limitName: 'pageSize'
+                }
+            });
+        };
+
+         //时间戳转换年月日时分秒
+        function timestampToTime(timestamp) {
+            var date = new Date(timestamp);
+            Y = date.getFullYear();
+            M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
+            D = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+            h = date.getHours()<10?'0'+date.getHours():date.getHours();
+            mm = date.getMinutes()<10?'0'+date.getMinutes():date.getMinutes();
+            s = date.getSeconds()<10?'0'+date.getSeconds():date.getSeconds();
+            return Y + '-'+ M+ '-' + D+" "+h+':'+mm+':'+s;
+
+        }
+
+        // 初始化，执行一次渲染表格树
+        renderTable();
+        table.on('tool(tableContent-user)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'btn-edit') {
+                popMenu("edit", data);
+            }
+        });
+        // DONE: 侧边栏变化时刷新数据表格
+        // 将 table ID 存入数组
+        layui.admin.addTableCache('tableContent-user');
+        // 下载模板
+        $('#btn_download_project').on('click', function () {
+            tempDownByDicCode("ac_frequency_template");
+        });
+        // 导入
+        upload.render({
+            elem: '#crm-customer-btn-import',
+            url: '/api/industymeeting/communicationFrequency/upload', //上传接口
+            accept: 'file',
+            acceptMime: 'xlsx/xlsm',
+            method: 'POST',
+            before: function (obj) {
+                layer.load(); //上传loading
+            },
+            done: function (res) {
+                layer.closeAll();
+
+                if (res.respCode == 0) {
+                    layer.msg('导入成功！', {
+                        icon: 1
+                    });
+                    table.reload('tableContent-user', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                } else {
+                    return layer.msg('导入失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            },
+            error: function () {
+                //请求异常回调
+                layer.closeAll();
+                return layer.msg('导入出现错误，请重试！', {
+                    icon: 5
+                });
+            }
+        });
+
+        // 弹出框
+        function popMenu(type, data) {
+            // 判断操作事件
+            var width = 600;
+            if (type === 'edit') {
+                var title = '编辑交流频次'
+
+            }
+            admin.popupCenter({
+                title: title,
+                width: width,
+                path: 'components/acFrequency/acFrequency_edit.html',
+                finish: function () {
+                    table.reload('tableContent-user', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                },
+                success: function () {
+                    if (type === "edit") {
+                        setFormValue(data);
+                    }
+                    $('#user-area .layui-col-md6').removeClass("layui-col-md6");
+                    $('#user-detial-area').css("height", '200px');
+                    admin.showLoading('.roleName-loading');
+                    admin.showLoading('.orgName-loading');
+                    admin.showLoading('.userState-loading');
+                }
+            });
+            // 表单提交
+            Form_submit(type,data.id)
+        }
+
+        // 设置表单内容
+        function setFormValue(obj) {
+            var inputs = $('.layui-tpl-container').find('input'),
+                formNames = ['province','frequency'];
+            for (var i = 0; i < formNames.length; i++) {
+                if (obj[formNames[i]]) {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+
+                } else {
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val('');
+                }
+            }
+            if(obj.frequency===null||obj.frequency===0){
+                $('#frequency').val('0')
+            }
+        }
+
+
+        // 表单提交
+        function Form_submit(type,id) {
+            form.on('submit(menuSave_user)', function (list) {
+                // 获取表单数据
+                var d = list.field,
+                    elem = list.elem;
+                // 判断菜单名称、父级菜单 ID 是否填写
+                if (d.province === '') {
+                    return layer.msg('请填写必填项！', {
+                        icon: 5
+                    });
+                }
+                //当应收余额为空时
+                if(d.frequency===''){
+                    d.frequency=0
+                }
+                // 设置不同的 HTTP 方法，和提示信息
+                if (type === 'edit') {
+                    var ajaxType = 'PUT',
+                        ajaxName = '编辑交流频次';
+                    d.id = id;
+                    admin.req('/api/industymeeting/communicationFrequency', d, function (data) {
+                        if (data.ok) {
+                            layer.msg(ajaxName + '成功！', {
+                                icon: 1
+                            });
+                            admin.finishPopupCenter();
+                        } else {
+                            admin.closePopupCenter();
+                            return layer.msg(ajaxName + '失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: ajaxType
+                    });
+                }
+
+            });
+        }
+
+        //模板下载
+        $('#btn_download_project').off("click").on('click', function() {
+            tempDownByDicCode("ac_frequency_template");
+        });
+
+        // form.verify({
+        //     frequency: function (value, item) {
+        //         // 数字正则
+        //         if (value && !(/^\d+$/.test(value))) {
+        //             return '交流次数字符类型错误，请输入整数类型！';
+        //         }
+        //     },
+        // })
+    })
+</script>

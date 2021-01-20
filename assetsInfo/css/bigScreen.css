@@ -1,0 +1,96 @@
+/*隐藏滚动条*/
+::-webkit-scrollbar {
+    display: none;
+}
+/*设置全屏后的背景颜色*/
+:-webkit-full-screen {
+    background-color: #f2f6f8 !important;
+}
+
+:-moz-full-screen {
+    background-color: #f2f6f8 !important;
+}
+
+:-ms-fullscreen {
+    background-color: #f2f6f8 !important;
+}
+
+:fullscreen {
+    background-color: #f2f6f8 !important;
+}
+
+/*导航隐藏*/
+.layui-layout-admin .admin-breadcrumb {
+    display: none;
+}
+
+.layui-layout-admin .layui-body {
+    padding: 5px 10px 10px 10px;
+}
+
+.layui-body {
+    height: calc(100vh - 40px);
+}
+
+#bigMain {
+    background-color: #f2f6f8;
+    height: calc(100% - 10px);
+    width: 100%;
+}
+
+.card-cycle {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    background-color: #1C9FE7;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.allScreen {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    cursor: pointer;
+}
+
+.noAll {
+    display: none;
+}
+
+.bigMain .bigHead {
+    /*width: 100%;*/
+    height: 46px;
+    padding: 5px;
+    background-color: white;
+}
+
+.bigMain .bigHead .bigHead-content {
+    width: 100%;
+    background: rgba(28, 159, 231, 0.1);
+    height: 100%;
+    position: relative;
+}
+
+.bigMain .bigHead .bigHead-content .bigHead-title {
+    font-size: 28px;
+    text-align: center;
+    color: #0085B5;
+    font-weight: bold;
+    height: 46px;
+    line-height: 46px;
+}
+
+.bigContent {
+    margin-top: 5px;
+    height: calc(100% - 51px);
+    display: flex;
+    background-color: #f2f6f8;
+}
+.goBack {
+    position: absolute;
+    left: 9px;
+    top: 6px;
+    cursor: pointer;
+}

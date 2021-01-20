@@ -1,0 +1,198 @@
+<!--
+File   : mine_candidate_group.html
+Created: Wednesday September 19th 2018 9:29:58 am
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Last Modified: Sunday September 30th 2018 3:33:12 pm
+Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+-----
+Description: 我的流程 - 受理组任务
+-----
+HISTORY:
+-->
+
+<div class="layui-row layui-col-space15">
+    <!-- 单列普通表格 -->
+    <div class="layui-col-md12">
+        <div class="layui-card p-main">
+            <!--<div class="layui-card-header"></div>-->
+            <!-- 卡片容器 -->
+            <div class="layui-card-body">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar">
+                        <!-- 左侧 -->
+                       <!-- <div class="layui-inline">
+                            <div class="layui-inline search-item">
+                                <i class="layui-icon layui-icon-search"></i>
+                                <input type="text" name="taskName" id="taskName" placeholder="输入任务名称" class="layui-input">
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="search_candidateGroup" title="查询"><span>查询</span></button>
+                                <button class="layui-btn layui-btn-sm layui-btn-primary" lay-submit lay-filter="reset_candidateGroup" title="重置"><span>重置</span></button>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+                <!-- 下部表格容器 -->
+                <table id="tableContent-candidateGroup" lay-filter="tableContent-candidateGroup"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="gettask" title="申领任务">申领任务</a>
+</script>
+
+<script>
+    // 初始化 layui
+    layui.use(['table'], function () {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            account = config.getAccount();
+
+        // 渲染左侧表格
+        var renderTable = function () {
+            // 渲染表格
+            table.render({
+                elem: '#tableContent-candidateGroup',
+                id: 'tableContent-candidateGroup',
+                url: admin.formatUrl('/api/activiti-task/group?assignee=' + account.usid),
+                // 格式化后台返回的数据
+                parseData: function (res) { //res 即为原始返回的数据
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                height: 472,
+                cols: [
+                    [{
+                        type: 'numbers'
+                    }, {
+                        field: 'name',
+                        title: '任务名称',
+                        templet:function(d) {
+                            var text= d.name ? d.name : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }, {
+                        field: 'createTimeStr',
+                        title: '任务创建时间',
+                        width: 180,
+                        templet:function(d) {
+                            var text= d.createTimeStr ? d.createTimeStr : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }, {
+                        templet: '#control-1',
+                        title: '操作',
+                        align: 'center',
+                        width: 90,
+                        unresize: true
+                    }]
+                ],
+                cellMinWidth: 120,
+                page: {
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                },
+                limit: 20, //显示的数量
+                limits:[10,20,30],
+                request: {
+                    pageName: 'pageNo',
+                    limitName: 'pageSize'
+                }
+            });
+        }
+
+        // 初始化，执行一次渲染表格
+        renderTable();
+        // DONE: 侧边栏变化时刷新数据表格
+        // 将 table ID 存入数组
+        layui.admin.addTableCache('tableContent-candidateGroup');
+
+        // 搜索
+        form.on('submit(search_candidateGroup)', function (data) {
+            var searchValue = data.field;
+            searchValue.reload = new Date().getTime();
+            table.reload('tableContent-candidateGroup', {
+                where: searchValue
+            });
+        });
+        // 重置
+        form.on('submit(reset_candidateGroup)', function () {
+            $('#taskName').val('');
+            table.reload('tableContent-candidateGroup', {
+                where: {
+                    taskName: '',
+                    reload: new Date().getTime()
+                }
+            });
+        });
+
+        // 监听表格工具条事件
+        table.on('tool(tableContent-candidateGroup)', function (obj) {
+            // 获取点击列的数据
+            var data = obj.data;
+            var layEvent = obj.event;
+            // 判断操作类型
+            if (layEvent === 'gettask') {
+                // 申领任务
+                // console.log(data)
+                layer.confirm('确定申领任务：' + data.name + ' 吗？', {
+                    icon: 3,
+                    title: '提示'
+                }, function () {
+                    admin.req('/api/activiti-task/group/' + data.id + '?usid=' + account.usid, {},
+                        function (data) {
+                            if (data.ok) {
+                                layer.msg('申领任务成功！', {
+                                    icon: 1
+                                });
+                                table.reload('tableContent-candidateGroup', {
+                                    where: {
+                                        reload: new Date().getTime()
+                                    }
+                                });
+                            } else {
+                                return layer.msg('申领任务失败：' + data.message, {
+                                    icon: 5
+                                });
+                            }
+                        }, {
+                            method: 'post'
+                        });
+                });
+            }
+            // TODO: 受理组任务应该增加查看任务信息
+        });
+    });
+</script>

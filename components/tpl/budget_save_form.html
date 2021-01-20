@@ -1,0 +1,651 @@
+<!--
+File   : system_dic_tpl_add_edit.html
+Created: Monday September 17th 2018 8:51:22 am
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Last Modified: Monday September 17th 2018 10:12:34 am
+Modified By  : yuchunyu97 at <yuchunyu97@gmail.com>
+-----
+Description:
+-----
+HISTORY:
+-->
+<style>
+    .layui-input-block{
+        padding-right: 0px !important;
+    }
+    .layui-tab-content{
+        /*height: 420px;*/
+        overflow: hidden;
+    }
+    .addWidth{
+        width: 105px;
+    }
+    .reduceMarginL{
+        margin-left: 135px;
+    }
+    #budgetSaveForm{
+        height: 550px!important;
+        overflow: auto!important;
+    }
+    dl[xid='leader_blong']{
+        height: 150px;
+    }
+</style>
+
+<div class="layui-tpl-container" id="budgetSaveForm" style="padding-top: 0px">
+    <div class="layui-form p-form">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">基本信息</li>
+                <li class="keyan_noRender">预算详情</li>
+            </ul>
+            <div class="layui-tab-content" style="min-height: 100px;padding-top: 20px">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label addWidth"> <span style="color: red;">*</span>业务名称</label>
+                        <div class="layui-input-block reduceMarginL">
+                            <input type="text" name="projectName" placeholder="请输入业务名称" autocomplete="off" class="layui-input"  lay-verify="required" maxlength="50">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label addWidth"> <span style="color: red;">*</span>业务属性</label>
+                        <div class="layui-input-block reduceMarginL selectProperty">
+                            <!--<input type="radio"  name="property" value="0" title="经营类"  lay-filter="property">
+                            <input type="radio"  name="property" value="1" title="日常事务类" lay-filter="property">
+                            <input type="radio"  name="property" value="2" title="科研类"  lay-filter="property">-->
+                        </div>
+                    </div>
+
+                    <div class="keyan_noRender">
+                        <div class=" layui-row">
+                            <div class="layui-col-md6">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label addWidth"> <span style="color: red;">*</span>项目组名称</label>
+                                    <div class="layui-input-block reduceMarginL">
+                                        <input autocomplete="off" type="text" name="teamName" placeholder="请输入项目组名称" class="layui-input"  lay-verify="required" maxlength="50">
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label addWidth"> <span style="color: red;">*</span> 业务周期</label>
+                                    <div class="layui-input-block reduceMarginL">
+                                        <input  autocomplete="off" type="text" class="layui-input" id="cycle" name='cycle' placeholder="请输入业务周期" readonly lay-verify="required">
+                                        <!--<input type="text" name="cycle" placeholder="请输入项目周期" class="layui-input">-->
+                                    </div>
+                                </div>
+
+                                <!--<div class="layui-form-item">
+                                    <label class="layui-form-label"> 项目所属平台/领域</label>
+                                    <div class="layui-input-block">
+                                        <select name="domainId"  id="domin_pop" xm-select="domin_pop" xm-select-search  xm-select-skin="normal" xm-select-direction="auto" xm-select-radio="" >
+                                        </select>
+                                    </div>
+                                </div>-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label addWidth"><span  > 2019年实际合同</span> </label>
+                                    <div class="layui-input-block reduceMarginL">
+                                        <input autocomplete="off" type="text" name="currentYearDeal" placeholder="请输入(不超过9位数)" class="layui-input" lay-verify="isRealNumber"  maxlength="9">
+                                        <span style="position: absolute; right: 5%; top: 12%; color: #666">万元</span>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label addWidth"><span  id="currentyear_span"> 2019年实际收入</span> </label>
+                                    <div class="layui-input-block reduceMarginL" style="position: relative">
+                                        <input autocomplete="off" type="text" name="currentYearEstimate" placeholder="请输入(不超过9位数)" class="layui-input" lay-verify="isRealNumber" maxlength="9">
+                                        <span style="position: absolute; right: 5%; top: 12%; color: #666">万元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md6">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label addWidth"><span style="color: red;">*</span> 业务经理</label>
+                                    <div class="layui-input-block reduceMarginL">
+                                        <select name="pm" id='leader_blong' xm-select="leader_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-search xm-select-radio="" lay-verify="required">
+                                            <option value="">选择业务经理</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label addWidth"> 业务管理员</label>
+                                    <div class="layui-input-block reduceMarginL">
+                                        <select name="businessAdminId" id='manager_blong' xm-select="manager_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-search xm-select-radio="" >
+                                            <option value="">选择业务管理员</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label addWidth"><span style="color: red;">*</span> 业务性质</label>
+                                    <div class="layui-input-block reduceMarginL">
+                                        <select name="propertyId" id="property_pop" xm-select="property_pop" xm-select-search  xm-select-skin="normal" xm-select-direction="auto" xm-select-radio="" lay-verify="required"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" layui-form-item">
+                            <label class="layui-form-label addWidth"> 备注</label>
+                            <div class="layui-input-block reduceMarginL">
+                                <textarea name="remark" placeholder="业务备注(长度最大是200)" class="layui-textarea" maxlength="200"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: none;" class="keyan_render layui-row">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label addWidth"> <span style="color: red;">*</span> 业务周期</label>
+                                <div class="layui-input-block reduceMarginL">
+                                    <input autocomplete="off" type="text" class="layui-input" id="cycle_keyanRender" placeholder="请输入业务周期" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-tab-item">
+                    <div id="incomeType">
+                        <div class="layui-row">
+                            <div class="layui-col-md3" >
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label income" style="width: 50%"> 1月合同</label>
+                                    <label class="layui-form-label noIncome"> 1月预算</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear1Deal" placeholder="" class="layui-input"    onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3 income">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="width: 50%"> 1月收入</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear1Income" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label income" style="width: 50%"> 7月合同</label>
+                                    <label class="layui-form-label noIncome"> 7月预算</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear7Deal" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3 income">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="width: 50%"> 7月收入</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear7Income" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label income" style="width: 50%"> 2月合同</label>
+                                    <label class="layui-form-label noIncome"> 2月预算</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear2Deal" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3 income">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="width: 50%"> 2月收入</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear2Income" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label income" style="width: 50%"> 8月合同</label>
+                                    <label class="layui-form-label noIncome"> 8月预算</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear8Deal" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3 income">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="width: 50%"> 8月收入</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear8Income" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label income" style="width: 50%"> 3月合同</label>
+                                    <label class="layui-form-label noIncome"> 3月预算</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear3Deal" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3 income">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="width: 50%"> 3月收入</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear3Income" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label income" style="width: 50%"> 9月合同</label>
+                                    <label class="layui-form-label noIncome"> 9月预算</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear9Deal" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3 income">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="width: 50%"> 9月收入</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear9Income" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label income" style="width: 50%"> 4月合同</label>
+                                    <label class="layui-form-label noIncome"> 4月预算</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear4Deal" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3 income">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="width: 50%"> 4月收入</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear4Income" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label income" style="width: 50%"> 10月合同</label>
+                                    <label class="layui-form-label noIncome"> 10月预算</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear10Deal" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3 income">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="width: 50%"> 10月收入</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear10Income" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label income" style="width: 50%"> 5月合同</label>
+                                    <label class="layui-form-label noIncome"> 5月预算</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear5Deal" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3 income">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="width: 50%"> 5月收入</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear5Income" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label income" style="width: 50%"> 11月合同</label>
+                                    <label class="layui-form-label noIncome"> 11月预算</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear11Deal" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3 income">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="width: 50%"> 11月收入</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear11Income" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label income" style="width: 50%"> 6月合同</label>
+                                    <label class="layui-form-label noIncome"> 6月预算</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear6Deal" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3 income">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="width: 50%"> 6月收入</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear6Income" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label income" style="width: 50%"> 12月合同</label>
+                                    <label class="layui-form-label noIncome"> 12月预算</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear12Deal" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3 income">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="width: 50%"> 12月收入</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="nextYear12Income" placeholder="" class="layui-input" onkeyup="clearNoNum(this)" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="margin-left:25px"><span style="color: red;">*金额单位为万元（小数点前最大为6位，小数点后最大为2位）</span></p>
+                </div>
+
+                <!-- 提交按钮 -->
+                <!-- 取消按钮 -->
+                <div class="layui-form-item"style="left: 328px;position: absolute;bottom: 10px;">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="menuSave-budget">保存</button>
+                    <button class="layui-btn layui-btn-primary" id="popmenuCancle">取消</button>
+                </div>
+            </div>
+        </div>
+        <input type="text" name="type" style="display: none;">
+        <input type="text" name="handleType" style="display: none;">
+        <input type="text" name="id" style="display: none;">
+        <input type="text" id="propertyInfo" style="display: none;">
+    </div>
+</div>
+<script>
+    layui.use(['form','formSelects','laydate'], function() {
+        var laydate = layui.laydate,
+            form= layui.form,
+            formSelects = layui.formSelects,
+            config = layui.config,
+            orgPermission = false;
+
+        // 经营、日常事务类的业务周期
+        laydate.render({
+            elem: '#cycle'
+            ,range: true
+            ,value:new Date().toLocaleDate()+' - '+new Date().toLocaleDate()
+        });
+        $('#cycle').off('mouseenter').on('mouseenter',function () {
+            if($('#cycle').is(':focus')){
+                $('#cycle').blur()
+            }
+        });
+        // 科研业务的业务周期
+        laydate.render({
+            elem: '#cycle_keyanRender',
+            range: true,
+            value: new Date().toLocaleDate()+' - '+new Date().toLocaleDate()
+        });
+        $('#cycle_keyanRender').off('mouseenter').on('mouseenter',function () {
+            if($('#cycle_keyanRender').is(':focus')){
+                $('#cycle_keyanRender').blur()
+            }
+        });
+
+        /**
+         * 功能:非主任 非超管 非市场发展部的人员 只显示业务属性为 日常事务类,且触发选中事件
+         * 时间:2019/9/5
+         * 作者:menglingyan
+         * 修改时间:2019/9/11
+         * 修改内容:当选择科研类业务时 一部分表单不进行渲染
+         * @params: data:选中的radio DOM元素
+         */
+        function userPower(data) {
+            // 业务周期重置
+            $('#cycle').attr('lay-verify','required');
+            $('#cycle').attr('name','cycle');
+            $('#cycle_keyanRender').attr('lay-verify','');
+            $('#cycle_keyanRender').attr('name','');
+            // 项目组名称重置
+            $('input[name="teamName"]').val('');
+            // 业务经理重置
+            formSelects.btns('leader_blong', []);
+            formSelects.render('leader_blong');
+         var  dataInfo=  $('#leader_blong').attr("data-info")?JSON.parse($('#leader_blong').attr("data-info")):[];
+            for(var item of dataInfo){
+                $('dd[lay-value="' + item.id + '"]').attr('title',item.orgName);
+            }
+            // 业务性质重置
+            formSelects.btns('property_pop', []);
+            formSelects.render('property_pop');
+            // 隐藏科研不需要的表单
+            $('.keyan_noRender').css('display','');
+            $('.keyan_render').css('display','none');
+            // if(data.value==2) {
+            //     $("#manager_blong").parent().parent().hide();
+            // }else{
+            //     $("#manager_blong").parent().parent().show();
+            // }
+            if(data.value!=0) {
+                $('input[name="currentYearDeal"]').attr('disabled','disabled');
+                $('input[name="currentYearDeal"]').addClass('layui-disabled');
+                $('input[name="currentYearEstimate"]').attr('disabled','disabled');
+                $('input[name="currentYearEstimate"]').addClass('layui-disabled');
+                $('input[name="currentYearDeal"]').val(0);
+                $('input[name="currentYearEstimate"]').val(0);
+                $(".income").hide();
+                $(".noIncome").show();
+
+                // 科研类的业务,有一些表单不渲染
+                if(data.value == 2){
+                    $('.keyan_noRender').css('display','none');
+                    $('.keyan_render').css('display','');
+
+                    // 由于layui.form的表单提交识别name,所以两个周期选择器的name需要动态操作
+                    $('#cycle').attr('lay-verify','');
+                    $('#cycle').attr('name','');
+                    $('#cycle_keyanRender').attr('lay-verify','required');
+                    $('#cycle_keyanRender').attr('name','cycle');
+                    $('#cycle_keyanRender').val('');
+
+                    $('input[name="teamName"]').val('无');
+                    formSelects.value('property_pop', ['xz']);// 科研业务性质指定为 新增
+                    formSelects.value('leader_blong',['YPUACBULVN']);// 科研业务经理指定为 科研管理员
+                }
+
+            }else {
+                $('input[name="currentYearDeal"]').removeAttr('disabled');
+                $('input[name="currentYearDeal"]').removeClass('layui-disabled');
+                $('input[name="currentYearEstimate"]').removeAttr('disabled');
+                $('input[name="currentYearEstimate"]').removeClass('layui-disabled');
+                $('.noIncome').hide();// 预算
+                $(".income").show();// 合同 收入
+            }
+            form.render();
+        }
+
+        window.clearNoNum = function(obj) {
+            obj.value = obj.value.replace(/[^\d.]/g,"");  //清除“数字”和“.”以外的字符
+            obj.value = obj.value.replace('e',"");  //e也是数字字符 也去除
+            obj.value = obj.value.replace(/^\./g,"");  //验证第一个字符是数字而不是.
+            obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个. 清除多余的.
+            obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+            if(obj.value.indexOf('.')!=-1) {
+                var value=obj.value.split('.');
+                if(value[0].length>6) {
+                    value[0]=value[0].substring(0,6);
+                }
+                if(value[1].length>2) {
+                    value[1]=value[1].substring(0,2);
+                }
+                obj.value=value[0]+'.'+value[1];
+            }
+            else{
+                if(obj.value.length>6) {
+                    obj.value=obj.value.substring(0,6);
+                }
+            }
+      }
+        for (var item of config.getAccount().orgs){
+            if (item.id == "JAD87PGP8V"){// 市场发展部id
+                orgPermission = true;
+                $('.selectProperty').append(
+                    $('<input/>',{
+                        "type":"radio",
+                        "name":"property",
+                        "value":"0",
+                        "lay-verify":"required",
+                        "title":'经营类',
+                        "lay-filter":"property",
+                        "checked":"true"
+                    }),
+                    $('<input/>',{
+                        "type":"radio",
+                        "name":"property",
+                        "lay-verify":"required",
+                        "value":"1",
+                        "title":'日常事务类',
+                        "lay-filter":"property"
+                    }),
+                    $('<input/>',{
+                        "type":"radio",
+                        "name":"property",
+                        "lay-verify":"required",
+                        "value":"2",
+                        "title":'科研类',
+                        "lay-filter":"property"
+                    })
+                )
+                form.render();
+                break;
+            }
+        }
+        if(orgPermission == false){
+            var flag = false;
+            var keyan_Flag = false;
+            for(var item of config.getAccount().roles){
+                if(item.extInfo == 'SUPER_ADMIN' || item.extInfo == 'ZHU_REN'){
+                     flag = true;
+                     break;
+                }
+                if(item.extInfo == 'RS_ADMIN'){
+                    keyan_Flag = true;
+                    break;
+                }
+            }
+            if(flag){
+                orgPermission = true;
+                $('.selectProperty').append(
+                    $('<input/>',{
+                        "type":"radio",
+                        "name":"property",
+                        "value":"0",
+                        "title":'经营类',
+                        "lay-verify":"required",
+                        "lay-filter":"property",
+                        "checked":"true"
+                    }),
+                    $('<input/>',{
+                        "type":"radio",
+                        "name":"property",
+                        "lay-verify":"required",
+                        "value":"1",
+                        "title":'日常事务类',
+                        "lay-filter":"property"
+                    }),
+                    $('<input/>',{
+                        "type":"radio",
+                        "name":"property",
+                        "lay-verify":"required",
+                        "value":"2",
+                        "title":'科研类',
+                        "lay-filter":"property"
+                    })
+                )
+            } else {
+                // 当登录用户是科研管理员,就只能操作科研类业务
+                if (keyan_Flag){
+                    $('.selectProperty').html('<input type="radio"  name="property" disabled value="0"  title="经营类" lay-filter="property">' +
+                        '<input type="radio" name="property"  value="1" disabled title="日常事务类" lay-filter="property">' +
+                        '<input type="radio" name="property"   value="2" title="科研类" lay-filter="property">');
+                }else {
+                    $('.selectProperty').html('<input type="radio"  name="property" disabled value="0"  title="经营类" lay-filter="property">' +
+                        '<input type="radio" name="property"  value="1"  title="日常事务类" lay-filter="property">' +
+                        '<input type="radio" name="property"  value="2" disabled title="科研类" lay-filter="property">');
+                }
+                //经营类、日常事务类、科研类radio注入值
+                setTimeout(function () {
+                    if($('#propertyInfo').val()){
+                        $('.selectProperty input[value="'+$('#propertyInfo').val()+'"]')[0].checked=true;
+                        // var data ={
+                        //     value:$('#propertyInfo').val()
+                        // };
+                        // userPower($('#propertyInfo').val());
+                        form.render();
+                    }
+                    if($(' input[name="handleType"]').val()=='add'){
+                        var data;
+                        if(keyan_Flag){
+                            $('.selectProperty input[value="2"]')[0].checked=true;
+                            data ={
+                                value:2
+                            };
+                        }else if(!keyan_Flag){
+                            $('.selectProperty input[value="1"]')[0].checked=true;
+                            data ={
+                                value:1
+                            };
+                        }
+                        userPower(data);
+                        form.render();
+                    }
+
+                },0)
+                // userPower(1);
+            }
+            form.render();
+        }
+
+        form.on('radio(property)',function(data){
+            userPower(data);
+        })
+    })
+</script>

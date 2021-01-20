@@ -1,0 +1,397 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>下拉菜单</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-ie6.css">
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/ie.css">
+    <![endif]-->
+    <script type="text/javascript" src="../dialogs/internal.js"></script>
+    <script src="./utils.js"></script>
+    <script src="./jquery-1.7.2.min.js"></script>
+</head>
+
+<body>
+    <div class="content">
+        <table class="table table-bordered table-striped table-hover">
+            <tr>
+                <th>控件名称（建议使用中文，易辨识）<span class="label label-important">*</span></th>
+                <th>控件样式</th>
+            </tr>
+            <tr>
+                <td><input id="adcform_title" placeholder="必填" type="text" /></td>
+                <td>宽 <input id="adcform_width" type="text" value="190" class="input-small span1" /> px&nbsp;
+                    高 <input id="adcform_height" type="text" value="30" class="input-small span1" /> px
+                </td>
+            </tr>
+            <tr>
+                <th>数据字典</th>
+                <th>初始选定</th>
+            </tr>
+            <tr>
+                <td>
+                    <select id="adcform_dic">
+                        <!-- <option value="0">请选择数据字典</option> -->
+                    </select>
+                </td>
+                <td>
+                    <span id="adcform_value" class="uneditable-input"></span>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    外部接口
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <input id="adcform_url" type="text">
+                </td>
+                <td>
+                    <button title="获取" onclick="getFormUrl();" class="btn btn-default">获取</button>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    列表值<span class="label label-important">*</span>
+                </th>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <select id="adcform_list" multiple="multiple" class="span14"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" placeholder="输入列表值" class="span2" id="adcform_text">
+                    <div class="btn-group pull-right">
+                        <a title="新增" onclick="adcformBtnAdd();" class="btn btn-primary"><i class="icon-white icon-plus"></i></a>
+                        <a title="修改" onclick="adcformBtnModify();" class="btn btn-default"><i class="icon-edit"></i></a>
+                    </div>
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <button title="上移" onclick="adcformBtnMove(-1);" class="btn btn-default"><i class="icon-arrow-up"></i></button>
+                        <button title="下移" onclick="adcformBtnMove(1);" class="btn btn-default"><i class="icon-arrow-down"></i></button>
+                        <button title="设为初始选定值" onclick="adcformBtnSetValue();" class="btn btn-default"><i class="icon-ok-circle"></i></button>
+                        <button title="删除" onclick="adcformBtnDelete();" class="btn btn-default"><i class="icon-ban-circle"></i></button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        var oNode = null,
+            // 列表值选择框
+            oListText = '',
+            thePlugins = 'adc_form_select';
+        window.onload = function () {
+            oListText = $G('adcform_list');
+            // 初始化数据字典
+            initDataDictionary();
+            if (UE.plugins[thePlugins].editdom) {
+                oNode = UE.plugins[thePlugins].editdom;
+                var gTitle = oNode.getAttribute('title').replace(/&quot;/g, "\""),
+                    gWidth = oNode.getAttribute('adcform_width'),
+                    gHeight = oNode.getAttribute('adcform_height');
+                gTitle = gTitle == null ? '' : gTitle;
+                $G('adcform_value').innerHTML = oNode.value;
+                $G('adcform_title').value = gTitle;
+                $G('adcform_height').value = gHeight;
+                $G('adcform_width').value = gWidth;
+                for (var i = 0; i < oNode.options.length; i++) {
+                    var sText = oNode.options[i].value;
+                    fnAddComboOption(oListText, sText, sText);
+                }
+            }
+        }
+        dialog.oncancel = function () {
+            if (UE.plugins[thePlugins].editdom) {
+                delete UE.plugins[thePlugins].editdom;
+            }
+        };
+        dialog.onok = function () {
+            if ($G('adcform_title').value == '') {
+                alert('控件名称不能为空');
+                return false;
+            }
+            if (oListText.options.length == 0) {
+                alert('请添加下拉菜单列表值！');
+                return false;
+            }
+            var gHeight = $G('adcform_height').value;
+            var gWidth = $G('adcform_width').value;
+            var gTitle = $G('adcform_title').value.replace(/&quot;/g, "\"");
+
+            if (!oNode) {
+                try {
+                    oNode = createElement('select', 'select');
+                    oNode.setAttribute('type', 'select');
+                    oNode.setAttribute('title', gTitle);
+                    oNode.setAttribute('adcform', thePlugins);
+                    if (gHeight != '') {
+                        oNode.style.height = gHeight + 'px';
+                        oNode.setAttribute('adcform_height', gHeight);
+                    }
+                    if (gWidth != '') {
+                        oNode.style.width = gWidth + 'px';
+                        oNode.setAttribute('adcform_width', gWidth);
+                    }
+
+                    // Add all available options.
+                    for (var i = 0; i < oListText.options.length; i++) {
+                        var sText = oListText.options[i].value;
+                        //var sId = oListText.options[i].id;    //需要加id就用这个，顺便要改fnAddComboOption方法传的参数，以及当前html中所有其它使用了这个方法的地方
+                        if (sText.length == 0) {
+                            sText = sText;
+                        }
+                        //console.log(sText);
+                        var oOption = fnAddComboOption(oNode, sText, sText);
+                        if (sText == $G('adcform_value').innerHTML) {
+                            fnSetAttribute(oOption, 'selected', 'selected');
+                            oOption.selected = true;
+                        }
+                    }
+                    //firefox要利用span
+                    // editor.execCommand('insertHtml', '{|-<span adcform="select">' + oNode.outerHTML +
+                    //     '&nbsp;&nbsp;</span>-|}');
+                    //console.log(oNode.outerHTML);
+                    editor.execCommand('insertHtml', oNode.outerHTML);
+                    return true;
+                } catch (e) {
+                    try {
+                        editor.execCommand('error');
+                    } catch (e) {
+                        alert('控件异常！');
+                    }
+                    return false;
+                }
+            } else {
+                oNode.setAttribute('title', gTitle);
+                if (gHeight != '') {
+                    oNode.style.width = gHeight + 'px';
+                    oNode.setAttribute('adcform_height', gHeight);
+                }
+                if (gWidth != '') {
+                    oNode.style.width = gWidth + 'px';
+                    oNode.setAttribute('adcform_width', gWidth);
+                }
+                // Remove all options.
+                while (oNode.options.length > 0) {
+                    oNode.remove(0);
+                }
+                for (var i = 0; i < $G('adcform_list').options.length; i++) {
+                    var sText = $G('adcform_list').options[i].value;
+                    if (sText.length == 0) {
+                        sText = sText;
+                    }
+                    var oOption = fnAddComboOption(oNode, sText, sText);
+                    if (sText == $G('adcform_value').innerHTML) {
+                        fnSetAttribute(oOption, 'selected', 'selected');
+                        oOption.selected = true;
+                    }
+                }
+                delete UE.plugins[thePlugins].editdom;
+            }
+        };
+
+
+        // 初始化数据字典
+        function initDataDictionary() {
+            $.ajax({
+                url: "/ADC_info/api/sys/dictionary",
+                type: "GET",
+                async: false,
+                success: function (data) {
+                    var cur = data.data.list;
+                    var option = '<option value="0">通过数据字典添加列表值</option>';
+                    for (var i = 0; i < cur.length; i++) {
+                        var land = cur[i];
+                        option += '<option value="' + land.id + '">' + land.dictionaryName + '</option>';
+                    }
+                    $("#adcform_dic").empty();
+                    $("#adcform_dic").append(option);
+                    $("#adcform_dic option:first").prop("selected", 'selected');
+                },
+                error: function (data) {
+                    layer.msg('获取信息失败！');
+                }
+            });
+        }
+        // 选择数据字典时，获取详细内容添加到列表值
+        $("select#adcform_dic").change(function () {
+            $.ajax({
+                url: "/ADC_info/api/sys/dictype/page?dicId=" + $(this).val(),
+                type: "GET",
+                async: false,
+                success: function (data) {
+                    var cur = data.data.list;
+                    var option = "";
+                    for (var i = 0; i < cur.length; i++) {
+                        var land = cur[i];
+                        option += '<option value="' + land.dicTypeName + '">' + land.dicTypeName +
+                            '</option>';
+                    }
+                    $("#adcform_list").empty();
+                    $("#adcform_list").append(option);
+                },
+                error: function (data) {
+                    layer.msg('获取信息失败！');
+                },
+            });
+        });
+        //根据url获取列表值
+        function getFormUrl() {
+            var oUrl = document.getElementById("adcform_url").value;
+            $.ajax({
+                url:oUrl,
+                type:"GET",
+                async:false,
+                success:function (data) {
+                    //console.log(data);
+                    //数据结构先做成和数据字典一样
+                    var cur = data.data;
+                    var option = "";
+                    for (var i = 0; i < cur.length; i++) {
+                        var land = cur[i];
+                        option += '<option value=\"' + land.name + '\" id=\"'+ land.id + '\">' + land.name +
+                            '</option>';
+                    }
+                    console.log(option);
+                    $("#adcform_list").empty().append(option);
+                    //$("#adcform_list");
+                },
+                error:function (err) {
+                    layer.msg('获取信息失败！');
+                    console.log(err);
+                }
+            })
+        }
+
+
+        function adcformBtnAdd() {
+            var olistText = document.getElementById("adcform_text");
+            fnAddComboOption(oListText, olistText.value, olistText.value);
+            oListText.selectedIndex = oListText.options.length - 1;
+            olistText.value = '';
+            olistText.focus();
+        }
+
+        function adcformBtnModify() {
+            var iIndex = oListText.selectedIndex;
+            if (iIndex < 0) return;
+            var olistText = document.getElementById("adcform_text");
+            oListText.options[iIndex].innerHTML = fnHTMLEncode(olistText.value);
+            oListText.options[iIndex].value = olistText.value;
+            olistText.value = '';
+            olistText.focus();
+        }
+
+        function adcformBtnMove(steps) {
+            var combo = oListText;
+            var iActualIndex = combo.selectedIndex;
+            if (iActualIndex < 0) {
+                return;
+            }
+            var iFinalIndex = iActualIndex + steps;
+            if (iFinalIndex < 0) {
+                iFinalIndex = 0;
+            }
+            if (iFinalIndex > (combo.options.length - 1)) {
+                iFinalIndex = combo.options.length - 1;
+            }
+            if (iActualIndex == iFinalIndex) {
+                return;
+            }
+            var oOption = combo.options[iActualIndex];
+            if (oOption.value == "") {
+                var sText = fnHTMLDecode(oOption.value);
+            } else {
+                var sText = fnHTMLDecode(oOption.innerHTML);
+            }
+            combo.remove(iActualIndex);
+            oOption = fnAddComboOption(combo, sText, sText, null, iFinalIndex);
+            oOption.selected = true;
+        }
+
+        function adcformBtnDelete() {
+            var combo = oListText;
+            // Save the selected index
+            var iSelectedIndex = combo.selectedIndex;
+            var oOptions = combo.options;
+            // Remove all selected options
+            for (var i = oOptions.length - 1; i >= 0; i--) {
+                if (oOptions[i].selected) combo.remove(i);
+            }
+
+            // Reset the selection based on the original selected index
+            if (combo.options.length > 0) {
+                if (iSelectedIndex >= combo.options.length) iSelectedIndex = combo.options.length - 1;
+                combo.selectedIndex = iSelectedIndex;
+            }
+        }
+
+        function adcformBtnSetValue() {
+            var iIndex = oListText.selectedIndex;
+            if (iIndex < 0) return;
+            var olistText = document.getElementById("adcform_value");
+            olistText.innerHTML = oListText.options[iIndex].value;
+        }
+        // Add a new option to a SELECT object (combo or list)
+        function fnAddComboOption(combo, optionText, optionValue, documentObject, index) {
+            var oOption;
+            if (documentObject) {
+                oOption = documentObject.createElement("option");
+            } else {
+                oOption = document.createElement("option");
+            }
+            if (index != null) {
+                combo.options.add(oOption, index);
+            } else {
+                combo.options.add(oOption);
+            }
+            oOption.innerHTML = optionText.length > 0 ? fnHTMLEncode(optionText) : '&nbsp;';
+            oOption.value = optionValue;
+            //oOption.id = optionValue;    //对应前文
+            return oOption;
+        }
+
+        function fnHTMLEncode(text) {
+            if (!text) {
+                return '';
+            }
+            text = text.replace(/&/g, '&amp;');
+            text = text.replace(/</g, '&lt;');
+            text = text.replace(/>/g, '&gt;');
+            return text;
+        }
+
+        function fnHTMLDecode(text) {
+            if (!text) {
+                return '';
+            }
+            text = text.replace(/&gt;/g, '>');
+            text = text.replace(/&lt;/g, '<');
+            text = text.replace(/&amp;/g, '&');
+            return text;
+        }
+
+        function fnSetAttribute(element, attName, attValue) {
+            if (attValue == null || attValue.length == 0) {
+                element.removeAttribute(attName, 0);
+            } else {
+                element.setAttribute(attName, attValue, 0);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

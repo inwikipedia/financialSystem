@@ -1,0 +1,694 @@
+<style>
+    .bigContent .contentLeft {
+        flex: 1;
+        margin-right: 10px;
+        border-radius: 2px;
+    }
+
+    .bigContent .contentRight {
+        flex: 4.3;
+        height: 100%;
+    }
+
+    .bigContent .contentLeft .contentLeft-title {
+        position: relative;
+        height: 7%;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #CDCDCD;
+    }
+
+    .bigContent .contentLeft .contentLeft-title .paiming {
+        position: absolute;
+        left: 2%;
+    }
+
+    .contentLeft-Text {
+        font-size: 16px;
+        /*font-weight:600;*/
+        color: rgba(51, 51, 51, 1);
+        text-align: center;
+        display: inline-block;
+        width: 100%;
+        /*margin-top: 8%;*/
+    }
+
+    .contentLeft-main {
+        width: 100%;
+        background-color: white;
+        height: 93%;
+    }
+
+    .ulContent {
+        width: 100%;
+        height: 100%;
+        overflow-x: auto;
+    }
+
+    .ulContent .contentLeft-info {
+        height: calc(10% - 5px);
+        position: relative;
+        width: calc(100% - 10px);
+        display: flex;
+        align-items: center;
+        margin: 5px 5px 0px 5px;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+
+    .ulContent .contentLeft-info .paimingImg {
+        width: 15%;
+        height: 100%;
+        display: flex;
+        /*align-items: center;*/
+        justify-content: center;
+        /*position: absolute;*/
+    }
+    .topImg img{
+        /*align-items: center;*/
+        width: 26px;
+        height: 26px;
+    }
+    .paiming-content {
+        width: 60%;
+        height: 100%;
+        display: flex;
+        /*align-items: center;*/
+        font-size: 14px;
+        color: #666;
+        display: -webkit-box;
+        line-height: 1.8;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        word-break: break-all;
+        /*white-space: nowrap;*/
+    }
+    @media (min-width: 1920px) {
+        .paiming-content{
+            font-size: 16px;
+        }
+    }
+
+    .paiming-number {
+        width: 25%;
+        height: 100%;
+        display: flex;
+        /*align-items: center;*/
+        justify-content: center;
+        font-weight: bold;
+    }
+
+    .liActive {
+        color: #18B1EB;
+        background: rgba(242, 250, 254, 1);
+    }
+
+    .businessContent-top {
+        height: calc(24% - 10px);
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .businessContent-center {
+        height: calc(38% - 10px);
+        width: 100%;
+        margin-bottom: 10px;
+        display: flex;
+    }
+
+    .businessContent-bottom {
+        height: 38%;
+        width: 100%;
+        background-color: white;
+        border-radius: 2px;
+    }
+
+    .businessContent-top .projectTitle {
+        color: #18B1EB;
+        background-color: #f2f6f8;
+        width: 100%;
+        height: 25%;
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .businessContent-top .projectInfo {
+        width: 100%;
+        height: 75%;
+        display: flex;
+        flex-flow: row;
+        border-radius: 2px;
+        justify-content: center;
+        background-color: white;
+    }
+
+    .businessContent-top .projectInfo .projectInfoBox {
+        width: 16.2%;
+        height: 100%;
+        display: flex;
+        flex-flow: row;
+        background-color: white;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .projectInfoCycle {
+        font-size: 20px;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        border: 2px solid #16D0FF;
+        color: #16D0FF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        background: rgba(22, 208, 255, 0.1);
+    }
+
+    .projectInfoText {
+        width: calc(100% - 75px);
+        margin-left: 10px;
+        height: 66px;
+    }
+
+    .infoNumber {
+        color: #008FC3;
+        font-size: 30px;
+    }
+
+    .infoCount {
+        font-size: 12px;
+        color: #858585;
+    }
+
+    .infoMessage {
+        color: #D0D0D0;
+        font-size: 20px;
+        height: 30px;
+    }
+
+    .contentRight .noBusiness {
+        height: 100%;
+    }
+
+    .contentRight .noBusiness .layui-card-header {
+        height: 34px;
+        line-height: 34px;
+    }
+
+    .contentRight .layui-card-header {
+        border-color: #E5E5E5;
+        color: #5D5D5D;
+        font-weight: bold;
+    }
+
+    .businessContent-center .centerLine {
+        flex: 2;
+        height: 100%;
+        margin-right: 10px;
+        background-color: white;
+        border-radius: 2px;
+    }
+
+    .businessContent-center .centerBar {
+        flex: 1;
+        height: 100%;
+        background-color: white;
+        border-radius: 2px;
+    }
+
+    .pointCanvas, .lineCanvas, .barCanvas {
+        width: 100%;
+        height: calc(100% - 35px);
+        background-color: white;
+        border-radius: 2px;
+    }
+
+    .paddingCard {
+        height: 100%;
+    }
+    .paimingCycle {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: rgba(245, 245, 245, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+<div class="bigHead">
+    <div class="bigHead-content">
+        <img title="返回" src="/assetsInfo/images/fanhuishouye.png" class="goBack"/>
+        <div class="bigHead-title">
+            <span class="card-cycle"></span>
+            <span calss="bigHead-titleCotent">数据中心大数据展板</span>
+            <span class="card-cycle"></span>
+        </div>
+        <img src="/assetsInfo/images/quanping.png" title="全屏" class="allScreen isAll"/>
+        <img src="/assetsInfo/images/esc.png" title="退出全屏"  class="allScreen noAll"/>
+    </div>
+</div>
+<div class="bigContent">
+    <div class="contentLeft">
+        <div class="contentLeft-title">
+            <img class="paiming" src="/assetsInfo/images/paiming.png"/>
+            <span class="contentLeft-Text"></span>
+            <!--<p class="bigMore" id="leftBigMore">更多</p>-->
+        </div>
+        <div class="contentLeft-main">
+            <ul class="ulContent">
+            </ul>
+        </div>
+    </div>
+    <div class="contentRight">
+        <div class="businessContent-top">
+            <div class="projectTitle">
+
+            </div>
+            <div class="projectInfo">
+                <div class="projectInfoBox">
+                    <div style="display: inline-block;height: 60px">
+                        <div class="projectInfoCycle">项</div>
+                    </div>
+                    <div class="projectInfoText">
+                        <div class="infoNumber" id="sumProject"></div>
+                        <div class="infoCount">项目总数（个）</div>
+                    </div>
+                </div>
+                <div class="projectInfoBox">
+                    <div style="display: inline-block;height: 60px">
+                        <div class="projectInfoCycle">合</div>
+                    </div>
+                    <div class="projectInfoText">
+                        <div class="infoNumber" id="totalContract"></div>
+                        <div class="infoCount">业务年度合同执行总额（万元）</div>
+                    </div>
+                </div>
+                <div class="projectInfoBox">
+                    <div style="display: inline-block;height: 60px">
+                        <div class="projectInfoCycle">票</div>
+                    </div>
+                    <div class="projectInfoText">
+                        <div class="infoNumber" id="totalBilling"></div>
+                        <div class="infoCount">业务年度开票总额（万元）</div>
+                    </div>
+                </div>
+                <div class="projectInfoBox">
+                    <div style="display: inline-block;height: 60px">
+                        <div class="projectInfoCycle">人</div>
+                    </div>
+                    <div class="projectInfoText">
+                        <div class="infoNumber" id="workTime"></div>
+                        <div class="infoCount">业务年度投入人力（人天）</div>
+                    </div>
+                </div>
+                <div class="projectInfoBox">
+                    <div style="display: inline-block;height: 60px">
+                        <div class="projectInfoCycle">收</div>
+                    </div>
+                    <div class="projectInfoText">
+                        <div class="infoMessage">数据整理中</div>
+                        <div class="infoCount">业务年度进账总额（万元）</div>
+                    </div>
+                </div>
+                <div class="projectInfoBox">
+                    <div style="display: inline-block;height: 60px">
+                        <div class="projectInfoCycle">支</div>
+                    </div>
+                    <div class="projectInfoText">
+                        <div class="infoMessage">数据整理中</div>
+                        <div class="infoCount">业务年度支出总额（万元）</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="businessContent-center">
+            <div class="centerLine">
+                <div class="layui-row noBusiness">
+                    <div class="layui-col-md12 paddingCard">
+                        <div class="layui-card-header lc-header cart-title">
+                            &nbsp;月度开票情况
+                        </div>
+                        <div class="lineCanvas" id="lineCanvas">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="centerBar">
+                <div class="layui-row noBusiness">
+                    <div class="layui-col-md12 paddingCard">
+                        <div class="layui-card-header lc-header cart-title">
+                            &nbsp;人力投入情况
+                        </div>
+                        <div class="barCanvas" id="barCanvas">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="businessContent-bottom">
+            <div class="layui-row noBusiness">
+                <div class="layui-col-md12 paddingCard">
+                    <div class="layui-card-header lc-header cart-title">
+                        &nbsp;合同签订情况
+                    </div>
+                    <div class="pointCanvas" id="pointCanvas">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bigYear"></div>
+<script>
+    layui.use(['element', 'form', 'layer'], function () {
+        var tools=layui.tools;
+        var thisYear = sessionStorage.getYear;
+
+        $(".contentLeft-Text").html(thisYear+'经营业务开票额排名');
+        //设置左侧排名
+        var setPaimingList = function (paimingData) {
+            var html = '';
+            for (var i = 0; i < paimingData.length; i++) {
+                var amount = Math.round(paimingData[i].amount / 10000);
+                var itemImg = '';
+                var liActive='';
+                var topImg="topImg";
+                if (i == 0) {
+                    itemImg = '<img src="/assetsInfo/images/guanjun.png">';
+                    liActive='liActive';
+                } else if (i == 1) {
+                    itemImg = '<img src="/assetsInfo/images/yajun.png">';
+                } else if (i == 2) {
+                    itemImg = '<img src="/assetsInfo/images/jijun.png">';
+                } else {
+                    itemImg = '<span class="paimingCycle">' + (i + 1) + '</span>';
+                    var topImg="";
+                }
+                html += '<li class="contentLeft-info '+liActive+'" data-name="'+paimingData[i].name+'" id="' + paimingData[i].id + '" >\n' +
+                    '                    <div class="paimingImg '+topImg+'">\n' +
+                    itemImg +
+                    '                    </div>\n' +
+                    '                    <span title="'+paimingData[i].name+'" class="paiming-content '+topImg+'">' + paimingData[i].name + '</span>\n' +
+                    '                    <span class="paiming-number '+topImg+'">' + amount + '</span>\n' +
+                    '                </li>'
+            }
+            $(".ulContent").empty().append(html);
+        };
+        //绘制散点图
+        var setPointCanvas = function (data) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("pointCanvas"));
+            myChart.resize();
+
+            var cur = [];
+            var total = 0;
+            var num =0;
+            var arrMax =[];
+            for (var i = 0; i < data.list.length; i++) {
+                num++;
+                var infoX =data.list[i];
+                arrMax.push(infoX.contractAmount ? Math.round(infoX.contractAmount / 10000) : 0);
+                cur.push([parseInt(infoX.extInfo01),
+                    infoX.contractAmount ? Math.round(infoX.contractAmount / 10000) : 0,
+                    infoX.extInfo02,
+                    infoX.extInfo03,
+                    infoX.createTime?tools.getDate(infoX.createTime, "YYYY-MM-DD"):"--"]);
+                total += infoX.contractAmount ? Math.round(infoX.contractAmount / 10000) : 0;
+            }
+            for(var j =0;j<data.y.length;j++){
+                if(!data.y[j]){
+                    cur.push([
+                        j+1,
+                        0,
+                        "--",
+                        "--",
+                        "--"
+                        ]
+                    )
+                }
+            }
+            var max = Math.max.apply(null, arrMax);
+            var itemStyle = {
+                normal: {
+                    opacity: 0.8,
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowOffsetY: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            };
+            var option = {
+                // backgroundColor: '#333',
+                color: [
+                    '#b2d9ff'
+                ],
+                tooltip: {
+                    padding: 10,
+                    formatter: function (obj) {
+                        var value = obj.value;
+                        return '合同金额（万元）：' + value[1] + '<br>'
+                            + '合同名称：' + value[2] + '<br>'
+                            + '签订单位：' + value[3] + '<br>'
+                            + '签订日期：' + value[4] + '<br>'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '10%',
+                    bottom: '5%',
+                    top: '15%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                    data: data.x,
+                    axisTick:{
+                        lineStyle:{color:'#3B4961'},    // x轴刻度的颜色
+                        alignWithLabel: true
+                    },
+                    axisLabel:{
+                        color:'#3B4961',
+                        interval:0
+                    },
+                    splitNumber:12
+                },
+                yAxis: {
+                    type: 'value',
+                    axisTick:{
+                        lineStyle:{color:'#3B4961'}    // x轴刻度的颜色
+                    },
+                    axisLabel:{color:'#3B4961'}
+                },
+                visualMap: [
+                    {
+                        left: 'right',
+                        top: 'center',
+                        dimension: 1,
+                        min: 0,
+                        max: max,
+                        itemWidth: 30,
+                        itemHeight: 100,
+                        calculable: true,
+                        show:data.list.length!=0?true:false,
+                        // precision: 0.1,
+                        // text: ['合同签订'],
+                        // textGap: 30,
+                        // textStyle: {
+                        //     color: '#000'
+                        // },
+                        inRange: {
+                            symbolSize: [10, 70]
+                        },
+                        outOfRange: {
+                            symbolSize: [10, 70],
+                            color: ['rgba(255,255,255,.2)']
+                        },
+                        controller: {
+                            inRange: {
+                                color: ['#b2d9ff']
+                            },
+                            outOfRange: {
+                                color: ['#fff']
+                            }
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        // name: '北京',
+                        type: 'scatter',
+                        // itemStyle: itemStyle,
+                        data: cur,
+                        symbolSize: function (val) {
+                            var value =     (val[1] /total );
+                            // if(value==1){
+                            //     value= value/2;
+                            // }
+                            return  value*num*15;
+                        }
+
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        };
+        //绘制柱状图
+        var setBarCanvas = function (data) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("barCanvas"));
+            myChart.resize();
+            var option = {
+                xAxis: {
+                    type: 'category',
+                    data: data.x,
+                    axisTick:{
+                        lineStyle:{color:'#3B4961'}    // x轴刻度的颜色
+                    },
+                    axisLabel:{color:'#3B4961'}
+                },
+                tooltip: {
+                    padding: 10,
+                    formatter: function (obj) {
+                        var value = obj.value;
+                        return '人力投入（人天）：' + value;
+                    }
+                },
+                color: '#4da9fe',
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '5%',
+                    top: '10%',
+                    containLabel: true
+                },
+                yAxis: {
+                    type: 'value',
+                    axisTick:{
+                        lineStyle:{color:'#3B4961'}    // x轴刻度的颜色
+                    },
+                    axisLabel:{color:'#3B4961'}
+                },
+                series: [{
+                    data: data.y,
+                    type: 'bar'
+                }]
+            };
+
+            myChart.setOption(option);
+        };
+        //绘制折现图
+        var setLineCanvas = function (data) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("lineCanvas"));
+            myChart.resize();
+            var option = {
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: data.x,
+                    axisTick:{
+                        lineStyle:{color:'#3B4961'}    // x轴刻度的颜色
+                    },
+                    axisLabel:{color:'#3B4961'}
+                },
+                tooltip: {
+                    padding: 10,
+                    formatter: function (obj) {
+                        var value = obj.value;
+                        return '月度开票（万元）：' + value;
+                    }
+                },
+                color: "#57afff",
+                yAxis: {
+                    type: 'value',
+                    axisTick:{
+                        lineStyle:{color:'#3B4961'}    // x轴刻度的颜色
+                    },
+                    axisLabel:{color:'#3B4961'}
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '5%',
+                    top: '10%',
+                    containLabel: true
+                },
+                series: [{
+                    data: data.y,
+                    type: 'line',
+                    areaStyle: {}
+                }]
+            };
+            myChart.setOption(option);
+        };
+
+
+        $.ajax({
+            url: "/api/dataBoard/budgetTree/" + thisYear + "/"+0b001,
+            type: "GET",
+            contentType: 'application/json',
+            async: false,
+            success: function (result) {
+                if (result.ok) {
+                    setPaimingList(result.data.billing);
+                    if(result.data.billing.length!=0){
+                        $(".projectTitle").html(result.data.billing[0].name);
+                        loadDetail(result.data.billing[0].id);
+                    }
+                }
+
+            },
+            error: function (err) {
+                layer.msg('获取信息失败！');
+                console.log(err);
+            }
+        });
+
+
+        $('.ulContent li').off("click").on("click", function () {
+            $(this).addClass('liActive').siblings().removeClass('liActive');
+            $(".projectTitle").html($(this).attr('data-name'));
+            loadDetail($(this).attr('id'));
+        });
+        // Math.round(paimingData[i].amount/10000)
+        function loadDetail(id) {
+            var index = layer.load(2);
+            $.ajax({
+                url: "/api/dataBoard/detail?budgetId=" + id + "&year=" + thisYear,
+                type: "GET",
+                contentType: 'application/json',
+                async: false,
+                success: function (result) {
+                    layer.close(index);
+                    if (result.ok) {
+                        var data = result.data;
+                        $("#workTime").html(data.workTime);
+                        $("#totalBilling").html(Math.round(data.totalBilling / 10000));
+                        $("#totalContract").html(Math.round(data.totalContract / 10000));
+                        $("#sumProject").html(data.sumProject);
+                        for (var i = 0; i < data.billGraph.y.length; i++) {
+                            data.billGraph.y[i] = data.billGraph.y[i] ? Math.round(data.billGraph.y[i] / 10000) : 0;
+                            data.contractGraph.y[i] = data.contractGraph.y[i] ? Math.round(data.contractGraph.y[i] / 10000) : 0;
+                        }
+                        setLineCanvas(data.billGraph);
+                        setBarCanvas(data.workTimeGraph);
+                        setPointCanvas(data.contractGraph);
+                    }
+
+                },
+                error: function (err) {
+                    layer.msg('获取信息失败！');
+                    console.log(err);
+                }
+            });
+        }
+    })
+</script>

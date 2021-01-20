@@ -1,0 +1,553 @@
+<style>
+    .otherBtn{
+        background-color: white;
+        color: #333;
+        border: 1px solid #229FFF;
+    }
+    .otherBtn:hover{
+        color: #229FFF;
+    }
+    .work-search-input{
+        /*height:20px;*/
+        /*padding:3px 6px;*/
+        float: left;
+        width: 250px;
+    }
+    .work-search-label{
+        width: 70px;
+        padding-left: 0px;
+        padding-right: 2px;
+    }
+    .rili{
+        background:url('../../assetsInfo/images/rili.jpg') no-repeat right center;
+        background-position:95% ;
+        background-size: 25px 21px;
+    }
+    .searchBox{
+        margin-top: 10px;
+        width: 332px;
+    }
+    .selectBox{
+        width: 250px;
+    }
+    .sicLay .layui-form-select dl{
+        top: 33px;
+        max-height:180px;
+    }
+    @media (min-width: 1920px) {
+        .searchBox{
+            width:255px;
+        }
+        .work-search-input , .selectBox{
+            width: 170px;
+        }
+    }
+    .sicLay{
+        overflow: auto;
+    }
+    .statusBox{
+        display: inline-block;
+        border-radius: 9px;
+        color: white;
+        background: red;
+        height: 24px;
+        line-height: 24px;
+        width: 50px;
+    }
+    .isFinish{
+        background: #bfbfbf;
+    }
+</style>
+<div class="layui-row layui-col-space15 sicLay">
+    <!-- 单列普通表格 -->
+    <div class="layui-col-md12">
+        <div class="layui-card p-main">
+            <div class="layui-card-header" style="height: 0px"></div>
+            <!-- 卡片容器 -->
+            <div class="layui-card-body" style="overflow: hidden">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class=" table-top-bar">
+                        <div>
+                            <div class="layui-inline layui-form-item" style="width: 100%;border-bottom:1px solid #e5e5e5;margin-bottom: 0px;padding-bottom: 15px">
+                                <div class="layui-inline searchBox">
+                                    <label class="layui-form-label work-search-label">会议类型</label>
+                                    <div class="layui-inline selectBox" style="text-align: center;">
+                                        <select  name="meetType" id='meetType'   lay-filter="meetType" >
+                                            <option value="">请选择会议类型</option>
+                                            <option value="0">党委会</option>
+                                            <option value="1">办公会</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline searchBox">
+                                    <label class="layui-form-label work-search-label">主题</label>
+                                    <input type="text" placeholder="请输入"  class="meetTile work-search-input layui-input">
+                                </div>
+
+                                <!--<div class="layui-inline searchBox">-->
+                                    <!--<label class="layui-form-label work-search-label">负责人</label>-->
+                                    <!--<input type="text" placeholder="请输入" class="leaderIdName work-search-input layui-input">-->
+                                <!--</div>-->
+
+                                <!--<div class="layui-inline searchBox">-->
+                                    <!--<label class="layui-form-label work-search-label">主申报部门</label>-->
+                                    <!--<input type="text" placeholder="请输入" class="deptIdName work-search-input layui-input">-->
+                                <!--</div>-->
+
+                                <!--<div class="layui-inline searchBox">-->
+                                    <!--<label class="layui-form-label work-search-label">承担方式</label>-->
+                                    <!--<div class="layui-inline selectBox" style="text-align: center;">-->
+                                        <!--<select  name="undertaking" id='undertaking'   lay-filter="undertaking" >-->
+
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="layui-inline layui-form-item">-->
+                                <!--<label class="layui-form-label work-search-label">经费结算</label>-->
+                                <!--<input type="text" placeholder="请输入" name="amount" class=" work-search-input layui-input">-->
+                                <!--</div>-->
+                                <!--<div class="layui-inline searchBox">-->
+                                    <!--<label class="layui-form-label work-search-label">提交时间</label>-->
+                                    <!--<input type="text" placeholder="请输入" name="committedTimeArea" id="committedTimeArea" class="rili work-search-input layui-input">-->
+                                <!--</div>-->
+                                <div class="layui-inline searchBox" style="width: 220px">
+                                    <button class="layui-btn layui-btn-sm layui-btn-danger" style="float: right;margin-left: 10px;"  id="btn-daily-reset">
+                                        <img src="../../assetsInfo/images/reset.png" style="position: relative;top: -1px;">
+                                        重置
+                                    </button>
+                                    <button class="layui-btn layui-btn-sm layui-btn-normal" style="float: right;margin-left: 0px;background-color: #239FFF;color: #fff"  id="btn-daily-search">
+                                        <img src="../../assetsInfo/images/chaxun.png" style=" width: 16px">
+                                        查询
+                                    </button>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="layui-inline" style="margin-top: 10px">
+                    <button class="layui-btn layui-btn-sm layui-btn-danger"  id="btn-create">
+                        <!--<img src="../../assetsInfo/images/yiyue.png" style="position: relative;top: -1px;">-->
+                        新建
+                    </button>
+                    <!--<button class="layui-btn layui-btn-sm layui-btn-danger" id="btn-export">-->
+                    <!--&lt;!&ndash;<img src="../../assetsInfo/images/bohui.png" style="position: relative;top: -1px;">&ndash;&gt;-->
+                    <!--导出-->
+                    <!--</button>-->
+                </div>
+                <!-- 下部表格容器 -->
+                <table id="committeeTable" lay-filter="committeeTable"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--{{# if( d.status==0){ }}-->
+<!--<button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-edit">编辑</button>-->
+<!--{{#  } else { }}-->
+
+<!--{{#  } }}-->
+<script type="text/html" id="barTool">
+    <button class="layui-btn layui-btn-normal layui-btn-xs " lay-event="btn-look">查看</button>
+    <button class="layui-btn layui-btn-normal layui-btn-xs otherBtn" lay-event="btn-del">删除</button>
+</script>
+<script>
+    layui.use(['table', 'config'], function () {
+        var config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer,
+            laydate = layui.laydate,
+            form = layui.form,table = layui.table,tools=layui.tools;
+        var account = config.getAccount();
+        console.log(account,5555);
+        var dateChange=function(data){
+            var str = data.replace(/-/g,'/');
+            var date = new Date(str).getTime();
+            return date;
+        };
+        // 渲染表格
+        var renderTable = function (search) {
+            if (!search) {
+                search = {};
+            }
+            // 渲染表格
+            table.render({
+                elem: '#committeeTable',
+                id: 'committeeTable',
+                url: admin.formatUrl('/api/smallprogram/scheduleMeet/queryByPageAdmin'),
+                // 格式化后台返回的数据
+                parseData: function (res) { //res 即为原始返回的数据
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                // height: 472,
+                cols: [
+                    [ {
+                        field: 'meetType',
+                        title: '类别',
+                        align: 'center',
+                        templet:function(d) {
+                            if(d.meetType==0){
+                                d.meetType="党委会"
+                            }else if(d.meetType==1){
+                                d.meetType="办公会"
+                            }
+                            var text= d.meetType ? d.meetType : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    }, {
+                        field: 'title',
+                        title: '主题',
+                        align: 'center',
+                        templet:function(d) {
+                            var text= d.title ? d.title : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    },  {
+                        field: 'createTime',
+                        title: '创建时间',
+                        align: 'center',
+                        width:150,
+                        templet:function(d) {
+                            var text= d.createTime ? tools.getDate(d.createTime, "YYYY-MM-DD HH:mm:ss") : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    },  {
+                        field: 'createUserName',
+                        title: '创建人',
+                        align: 'center',
+                        templet:function(d) {
+                            var text= d.createUserName ? d.createUserName : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    },  {
+                        field: 'extInfo',
+                        title: '接收人',
+                        align: 'center',
+                        templet:function(d) {
+                            var text= d.extInfo ? d.extInfo : "";
+                            return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                        }
+                    },{
+                        align: 'center',
+                        title: '操作',
+                        width: 120,
+                        toolbar:'#barTool',
+                        unresize: true
+                    }]
+                ],
+                cellMinWidth: 90,
+                page: {
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                },
+                request: {
+                    pageName: 'page',
+                    limitName: 'pageSize'
+                },
+                where: search
+            });
+        };
+        renderTable();
+        var setCommitteeInfo = function (infoData,type,msg) {
+            var scheduleMeetUserEOList=[];
+            var sendMemberNameArr=$('#sendMember').attr('data-name')?$('#sendMember').attr('data-name').split(','):[];
+            var sendMemberIdArr=$('#sendMember').attr('data-id')?$('#sendMember').attr('data-id').split(','):[];
+            if(sendMemberNameArr.length!=0){
+                for(var i =0;i<sendMemberNameArr.length;i++){
+                    scheduleMeetUserEOList.push({
+                        receiveUserName:sendMemberNameArr[i],
+                        receiveUserId:sendMemberIdArr[i]
+                    })
+                }
+            }
+            var data={
+                scheduleMeetEO:{
+                    address:infoData.address,
+                    detail:infoData.detail,
+                    meetType:infoData.meetType,
+                    title:infoData.title,
+                    createUserId:account.usid,
+                    createUserName:account.usname,
+                    deadTime:dateChange(infoData.deadTime)
+                },
+                scheduleMeetUserEOList:scheduleMeetUserEOList
+            };
+            $.ajax({
+                url: "/api/smallprogram/scheduleMeet/saveMeetVO",
+                type: type,
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (res) {
+                    if (res.ok) {
+                        layer.msg(msg, {
+                            icon: 1
+                        });
+                        admin.finishPopupCenter(true)
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error: function (err) {
+                    layer.msg('获取信息失败！');
+                    console.log(err);
+                }
+            });
+        };
+        $('#btn-daily-search').off('click').on('click',function () {
+            var data={
+                // meetType:$('.meetType').val(),
+                title:$('.meetTile').val(),
+                // createUserName:$('.createUserName').val(),
+                meetType:$('#meetType option:selected').val()
+            };
+            console.log(data,'fgdjkalfjldjl;fj');
+            renderTable(data);
+        });
+        $('#btn-daily-reset').off('click').on('click',function () {
+            $('.meetTile').val('');
+            $("#meetType option[value='']").eq(0).prop('selected', 'selected');
+            form.render('select');
+            renderTable();
+        });
+        table.on('tool(committeeTable)', function (obj) {
+            var data=obj.data;
+            if(obj.event === 'btn-edit'){
+                admin.popupCenter({
+                    title: obj.event === 'btn-look'?'查看':'编辑',
+                    area: ['100%', '100%'],
+                    path: 'components/sicManage/sicCreate.html',
+                    finish: function(data) {
+
+                        if(data){
+                            table.reload('committeeTable', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        }
+                    },
+                    success: function () {
+
+                    }
+                });
+            }else if (obj.event === 'btn-look'){
+                admin.popupCenter({
+                    title: '查看安排',
+                    area: ['652px', '520px'],
+                    path: 'components/committeeMeeting/committeeCreate.html',
+                    finish: function(data) {
+
+                        if(data){
+                            table.reload('committeeTable', {
+                                where: {
+                                    reload: new Date().getTime()
+                                }
+                            });
+                        }
+                    },
+                    success: function () {
+                        $.ajax({
+                            url: "/api/smallprogram/scheduleMeet/selectByMeetId/"+data.id,
+                            type: 'get',
+                            success: function (res) {
+                                if (res.ok) {
+                                    $(".lookInfo").css("display","block");
+                                    var scheduleMeetEO=res.data.scheduleMeetEO;
+                                    var scheduleMeetUserEOList=res.data.scheduleMeetUserEOList;
+                                    for (var item in scheduleMeetEO){
+                                        if(scheduleMeetEO[item]){
+                                            scheduleMeetEO[item] = ADCFormDesignHelper.htmlDecodeByRegExp(scheduleMeetEO[item]);
+                                        }
+                                    }
+                                    $("#address").val(scheduleMeetEO.address);
+                                    $("#detail").val(scheduleMeetEO.detail);
+                                    $("#title").val(scheduleMeetEO.title);
+                                    $("#deadTime").val(tools.getDate(scheduleMeetEO.deadTime, "YYYY-MM-DD HH:mm:ss"));
+                                    $('input:radio[name=meetType][value="' + scheduleMeetEO.meetType + '"]')[0].checked = true;
+                                    var receiveUserName=[];
+                                    var receiveUserId=[];
+                                    for(var i =0;i<scheduleMeetUserEOList.length;i++){
+                                        receiveUserName.push(scheduleMeetUserEOList[i].receiveUserName);
+                                        receiveUserId.push(scheduleMeetUserEOList[i].receiveUserId);
+                                    }
+                                    $('#sendMember').attr('data-name',receiveUserName.join(","));
+                                    $('#sendMember').attr('data-id',receiveUserId.join(","));
+                                    $("#sendMember").val(receiveUserName.join(","));
+                                    $("#sendMember").attr("title",receiveUserName.join(","));
+                                    var elem = '.committeeCreate';
+                                    var inputElem = $(elem + ' input'),
+                                        textareaElem = $(elem + ' textarea'),
+                                        selectElem = $(elem + ' select'),
+                                        buttonElem = $(elem + ' button');
+                                    inputElem.attr('disabled', 'disabled');
+                                    textareaElem.attr('disabled', 'disabled');
+                                    selectElem.attr('disabled', 'disabled');
+                                    buttonElem.attr('disabled', 'disabled');
+                                    $("#sendMemberClick").attr('disabled', 'disabled');
+                                    for (var i = 0; i <buttonElem.length ; i++) {
+                                        buttonElem.eq(i).css('display','none');
+                                    }
+                                    // 渲染表格
+                                    table.render({
+                                        elem: '#infoTable',
+                                        id: 'infoTable',
+                                        data:scheduleMeetUserEOList,
+                                        // height: 472,
+                                        cols: [
+                                            [ {
+                                                field: 'status',
+                                                title: '状态',
+                                                align: 'center',
+                                                templet:function(d) {
+                                                    var text='';
+                                                    var isFinish="";
+                                                    if(d.status==0||d.status==-1){
+                                                        text='未完成';
+                                                    }else if(d.status==1||d.status==-2){
+                                                        text='已完成';
+                                                        isFinish="isFinish";
+                                                    }
+                                                    return '<div class="statusBox '+isFinish+'" title="'+text+'"><span>'+ text +'</span></div>'
+                                                }
+                                            }, {
+                                                field: 'receiveUserName',
+                                                title: '接收人',
+                                                align: 'center',
+                                                templet:function(d) {
+                                                    var text= d.receiveUserName ? d.receiveUserName : "";
+                                                    return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                                                }
+                                            },  {
+                                                field: 'finishedTime',
+                                                title: '完成时间',
+                                                align: 'center',
+                                                templet:function(d) {
+                                                    var text= d.finishedTime ? tools.getDate(d.finishedTime, "YYYY-MM-DD HH:mm:ss") : "";
+                                                    return '<div title="'+text+'"><span>'+ text +'</span></div>'
+                                                }
+                                            }]
+                                        ],
+                                        cellMinWidth: 90,
+                                        limit: scheduleMeetUserEOList.length
+                                    });
+                                    form.render();
+                                }else{
+                                    return  layer.msg(res.message, {
+                                        icon: 5
+                                    });
+                                }
+                            }
+                        });
+
+                    }
+                });
+            }else if(obj.event === 'btn-del'){
+                layer.confirm('确定删除此条安排吗', {
+                    icon: 3,
+                    title: '提示'
+                }, function() {
+                    $.ajax({
+                        url: "/api/smallprogram/scheduleMeet/softDelete/"+data.id,
+                        type: 'delete',
+                        contentType: 'application/json',
+                        success: function (res) {
+                            if (res.ok) {
+                                table.reload('committeeTable', {
+                                    where: {
+                                        reload: new Date().getTime()
+                                    }
+                                });
+                                return  layer.msg('删除成功', {
+                                    icon: 1
+                                });
+                            }else{
+                                return  layer.msg(res.message, {
+                                    icon: 5
+                                });
+                            }
+                        }
+                    });
+                });
+            }
+        });
+        $('#btn-create').off('click').on('click',function () {
+            admin.popupCenter({
+                title: '新建安排',
+                area: ['652px', '480px'],
+                path: 'components/committeeMeeting/committeeCreate.html',
+                finish: function(data) {
+
+                    if(data){
+                        table.reload('committeeTable', {
+                            where: {
+                                reload: new Date().getTime()
+                            }
+                        });
+                    }
+                },
+                success: function () {
+                    $('#sendMemberClick').off('click').on('click', function () {
+                        var data = {
+                            data: []
+                        };
+                        var sendMemberNameArr = $('#sendMember').attr('data-name') ? $('#sendMember').attr('data-name').split(',') : [];
+                        var sendMemberIdArr = $('#sendMember').attr('data-id') ? $('#sendMember').attr('data-id').split(',') : [];
+                        if (sendMemberNameArr.length != 0) {
+                            for (var i = 0; i < sendMemberNameArr.length; i++) {
+                                data.data.push({
+                                    name: sendMemberNameArr[i],
+                                    id: sendMemberIdArr[i]
+                                })
+                            }
+                        }
+                        layer.open({
+                            type: 2,
+                            id: 'personnelSelect',
+                            title: '请选择',
+                            content: 'components/tpl/personnel_group_select.html',
+                            area: ['96%', '80%'],
+                            btn: ['确定', '取消'],
+                            yes: function (index, layero) {
+                                var finalData = $('#personnelSelect iframe')[0].contentWindow
+                                    .task_personnel_select.finish();
+                                var finalDataName = [];
+                                var finalDataId = [];
+                                for (var i = 0; i < finalData.length; i++) {
+                                    finalDataName.push(finalData[i].name);
+                                    finalDataId.push(finalData[i].id);
+                                }
+                                $('#sendMember').attr('data-name', finalDataName.join(","));
+                                $('#sendMember').val(finalDataName.join(","));
+                                $('#sendMember').attr("title",finalDataName.join(","));
+                                $('#sendMember').attr('data-id', finalDataId.join(","));
+                                layer.close(index);
+                            },
+                            success: function () {
+                                // 执行 iframe 内的方法
+                                $('#personnelSelect iframe')[0].contentWindow.task_personnel_select
+                                    .init(data);
+                            },
+                            resize: false
+                        });
+                    });
+                    form.on('submit(submitBriefing)', function (data) {
+                        // 获取表单数据
+                        var d = data.field;
+                        setCommitteeInfo(d,'post','新增成功');
+
+                    });
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,1534 @@
+<style>
+    .layui-form-radio {
+        margin: 0px;
+    }
+
+    /*.layui-layer {
+        top: 10px !important;
+    }*/
+
+    .ztree li span.button.chk.checkbox_false_disable {
+        display: none;
+    }
+
+    .xm-select-parent .xm-select .xm-select-input {
+        width: 200px !important;
+    }
+
+    .layui-form-checkbox {
+        height: 20px;
+        line-height: 20px;
+        padding-right: 25px;
+        margin-top: 10px;
+
+    }
+
+    .layui-form-checkbox span {
+        font-size: 12px;
+        line-height: 20px;
+        background: #18B1EB;
+    }
+
+    .layui-form-checkbox:hover span {
+        background: #18B1EB;
+    }
+
+    .layui-form-checkbox i {
+        width: 20px;
+        height: 18px;
+    }
+
+    .searchInput {
+        width: 45%;
+        border-radius: 20px;
+        border: 1px solid #ccc;
+        height: 24px;
+        text-indent: 15px;
+        margin: 0 20px 0 10px;
+    }
+    .search {
+        color: #8db9d6;
+        position: absolute;
+        right: 1px;
+        margin-right: 47%;
+        line-height: 28px;
+        top: 6.5%;
+    }
+    .layui-form-checkbox {
+        margin-top: 0;
+    }
+    .rili{
+        background:url('../../assetsInfo/images/rili.jpg') no-repeat right center;
+        background-position:95% ;
+        background-size: 25px 21px;
+    }
+    .dailyTime{
+        width: 120px;
+        border-radius: 6px;
+        display: inline-block;
+
+    }
+    .workTime{
+        width:105px;
+        height: 30px;
+        border: 1px solid #e6e6e6;
+        border-radius: 6px;
+        padding-left: 10px;
+    }
+    .workInfo{
+        height: 30px;
+        border: 1px solid #e6e6e6;
+        padding-left: 10px;
+    }
+    .workName{
+        width:170px;
+        height: 30px;
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: text-top;
+        cursor: default;
+        padding-left: 10px;
+    }
+    .dailyHeight{
+        min-height: 460px;
+    }
+    .dailyBox{
+        background:rgba(255,255,255,1);
+        border-radius:2px;
+        box-shadow: 0px 2px 18px 2px #ddd;
+        padding: 10px;
+        margin:10px 20px;
+    }
+
+    .noDaily{
+        color: #666;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        line-height: 480px;
+        font-size: 20px;
+    }
+    .labelWidth{
+        padding: 5px 8px;
+    }
+    .reduceMarginL{
+        margin-left: 40px;
+        margin-right: 100px;
+        padding-right: 15px!important;
+    }
+    .ztree li{
+        white-space: normal!important;
+    }
+    .ztree li a {
+        display: contents !important;
+    }
+    #treeRoleMenu li{
+        white-space: nowrap !important;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        word-break: break-all;
+    }
+    .dailySelectMember{
+        margin: 10px 0 0 0;
+    }
+   #daily-form .wenhao{
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+    }
+    #daily-form .dailySelectBox{
+        background-color: #FFF;
+        position: relative;
+        border: 1px solid #E6E6E6;
+        border-radius: 2px;
+        display: block;
+        width: 100%;
+        cursor: pointer;
+        outline: none;
+    }
+    #daily-form .dailySelectBox > .xm-label.single-row {
+        position: absolute;
+        top: 0;
+        bottom: 0px;
+        left: 0px;
+        right: 30px;
+        overflow: auto hidden;
+    }
+    #daily-form .dailySelectBox * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-size: 14px;
+        font-weight: 400;
+        text-overflow: ellipsis;
+        user-select: none;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+    }
+    /*#daily-form  xm-select > .xm-label.single-row{*/
+        /*position: relative;*/
+    /*}*/
+    /*#daily-form xm-select > .xm-label.single-row .label-content{*/
+        /*flex-wrap: wrap;*/
+    /*}*/
+    /*#daily-form xm-select > .xm-body{*/
+        /*top: 42px !important;*/
+        /*bottom: auto !important;*/
+    /*}*/
+    #daily-form xm-select{
+        border:1px solid rgba(216,216,216,1) !important;
+        border-radius:2px;
+    }
+    #daily-form xm-select > .xm-body .xm-search{
+        display: inline-block;
+        text-align: right;
+        height: 23px;
+        width: 275px;
+    }
+    #daily-form  xm-select > .xm-body .xm-search-input{
+        position: relative;
+        right: -119px;
+         padding:0 19px 0 10px;
+        cursor: text;
+        height: 25px;
+        border: 1px solid rgba(216,216,216,1);
+        width: 150px;
+    }
+    #daily-form xm-select > .xm-body .scroll-body::-webkit-scrollbar-track {
+         background-color: transparent;
+    }
+    #daily-form xm-select > .xm-body .scroll-body{
+        margin: 0 10px;
+        padding: 0px !important;
+        border:1px solid rgba(238,238,238,1);
+        border-radius:2px;
+    }
+    #daily-form xm-select > .xm-body .xm-option{
+        /*padding: 0px ;*/
+    }
+    #daily-form xm-select > .xm-body .xm-search > i{
+        background-image: url(/assetsInfo/images/sousuo.png);
+        width: 16px;
+        height: 16px;
+        background-size: cover;
+        right: 18px;
+        z-index: 1000;
+        top: 5px;
+    }
+    #daily-form xm-select > .xm-body .xm-search > i:before{
+        content: "";
+    }
+    #daily-form xm-select > .xm-body .xm-toolbar{
+        display: inline-block;
+    }
+    #daily-form xm-select > .xm-body .xm-toolbar .toolbar-tag{
+        display: inline-block;
+    }
+    #daily-form xm-select .xm-label .xm-label-block{
+        border:1px solid rgba(216,216,216,1);
+        border-radius:2px;
+        background-color: #f6f6f6 !important;
+        color:#666666;
+    }
+    #daily-form xm-select > .xm-label .xm-label-block > span ,#daily-form xm-select > .xm-label .xm-label-block > i {
+        color:#666666;
+    }
+    #daily-form  xm-select > .xm-body .xm-toolbar .toolbar-tag{
+        border: 1px solid rgb(216, 216, 216);
+        border-radius: 2px;
+        height: 24px;
+        line-height: 24px;
+        width: 38px;
+        text-align: center;
+    }
+    #daily-form  xm-select > .xm-body .xm-toolbar .toolbar-tag:first-child{
+        margin-right:5px;
+    }
+    #daily-form  xm-select > .xm-body .xm-toolbar .toolbar-tag > i{
+        display: none;
+    }
+    #daily-form .layui-form-label{
+        padding: 5px 0;
+        text-align: left;
+    }
+    #daily-form .layui-input-block {
+        margin-left: 80px;
+        padding-right: 0;
+    }
+</style>
+
+<div class="layui-tpl-container" style="overflow: auto;padding-right: 0px;" id="daily-form">
+    <div class="layui-form">
+        <div class="layui-row">
+            <div class="layui-col-md5" style="overflow-y: auto;max-height: 480px;overflow-x: hidden;margin-bottom: 10px;">
+                <!-- zTree 树 -->
+                <h3 style="margin-bottom: 10px;">我的任务</h3>
+
+                <input type="text" class="searchInput text" placeholder="请输入关键字" id="key"
+                       onfocus="$(this).css('border','1px solid #18B1EB')"
+                       onblur="$(this).css('border','1px solid #ccc')">
+                <span>
+                        <input type="checkbox" lay-filter="daily_check" title="全选" name="checkbox">
+                    </span>
+                <ul id="treeRoleMenu" class="ztree"></ul>
+            </div>
+            <div class="layui-col-md7" style="overflow: auto;max-height: 480px;margin-bottom: 10px;">
+                <div id="oldWork">
+                    <div class="layui-form-item" id="dailytype-form">
+                        <label class="layui-form-label"><span style="color: red;">*</span> 类型</label>
+                        <div class="layui-input-block" style="margin-bottom: 15px">
+                            <p>
+                                <input type="radio" name="dailyType" value="0" title="工作" lay-filter="dailyType" checked>
+                                <input type="radio" name="dailyType" value="1" title="出差" lay-filter="dailyType">
+                                <!--<input type="radio" name="dailyType" value="2" title="请假" lay-filter="dailyType">-->
+                                <input type="radio" name="dailyType" value="3" title="加班" lay-filter="dailyType">
+                            </p>
+                            <p>
+                                <input type="radio" name="dailyType" value="4" title="会议" lay-filter="dailyType">
+                                <input type="radio" name="dailyType" value="5" title="行业会议" lay-filter="dailyType">
+                                <input type="radio" name="dailyType" value="6" title="培训" lay-filter="dailyType">
+                                <input type="radio" name="dailyType" value="7" title="其他" lay-filter="dailyType">
+                            </p>
+
+                        </div>
+                    </div>
+                    <!--出差是才显示-->
+                    <div id="center-area">
+                        <div class="layui-form-item" id="customer_form">
+                            <label class="layui-form-label">出差地点</label>
+                            <div class="layui-input-block">
+                                <select name="customer" id='customerId' xm-select="customerId" xm-select-skin="normal"
+                                        xm-select-search="" xm-select-direction="down" xm-select-radio="">
+                                    <option value="" style="width: 100%">请输入出差地点</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item" id="dep_form">
+                            <label class="layui-form-label">部门</label>
+                            <div class="layui-input-block">
+                                <select name="dept" id='dep_select' xm-select="dep_select" xm-select-skin="normal"
+                                        xm-select-search="" xm-select-direction="down" xm-select-radio="">
+                                    <option value="">选择部门</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item" id="person_form">
+                            <label class="layui-form-label">人员</label>
+                            <div class="layui-input-block">
+                                <select name="contacts" id='person_select' xm-select="person_select" xm-select-skin="normal"
+                                        xm-select-search="" xm-select-direction="down" xm-select-radio="">
+                                    <option value="">选择人员</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span style="color: red;">*</span> 日期</label>
+                        <div class="layui-input-block">
+                            <input autocomplete="off" style="width: 180px;border-radius: 6px;" type="text" name="dailyCreateTime"
+                                   id="dailyCreateTime" placeholder="日期" class="layui-input rili" lay-verify="required">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="time_form">
+                        <label class="layui-form-label"><span style="color: red;">*</span> 时间</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="timeSlot" value="上午" title="上午" lay-filter="timeSlot" checked>
+                            <input type="radio" name="timeSlot" value="下午" title="下午" lay-filter="timeSlot">
+                            <input type="radio" name="timeSlot" value="晚上" title="晚上" lay-filter="timeSlot">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item  layui-form-text">
+                        <label class="layui-form-label ">&nbsp&nbsp工作描述</label>
+                        <div class="layui-input-block">
+                        <textarea maxlength="200" name="workDescription" type="text" rows="8"
+                                  placeholder="输入日程内容(长度最大是200)"
+                                  class="layui-textarea workDescription_new"
+                                  id="workDescription"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class=" dailyHeight" id="dailyInfoList">
+                    <div class="noDaily">请先在左侧选择您的任务</div>
+                </div>
+
+            </div>
+            <div class="layui-form-item" style="text-align: center;margin-top: 30px">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="btn-sumbit-save"
+                        id="btn-sumbit-save">提交审批
+                </button>
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="btn-daily-save"
+                        id="btn-daily-save">保存
+                </button>
+                <button class="layui-btn layui-btn-primary" id="btn-daily-cancel">关闭</button>
+            </div>
+        </div>
+        <!--传递过来的操作类型-->
+        <input type="text" name="handleType" id="handleType" style="display: none;">
+        <!-- 如果是编辑传过来的id-->
+        <input type="text" name="id" id="id" style="display: none;">
+        <input type="text" name="customerInfo" id="customerInfo" style="display: none;">
+        <input type="text" name="taskChecked" id="taskChecked" style="display: none;">
+        <input type="text" name="approveState" id="approveState" style="display: none;">
+        <input type="text" name="workCostTime" id="workCostTime" style="display: none;">
+
+
+    </div>
+</div>
+
+<script src="../../assetsInfo/libs/exhide.js"></script>
+<script src="../../assetsInfo/libs/fuzzy.js"></script>
+
+<script>
+
+        layui.use(['form', 'formSelects', 'laydate','upload',"xmSelect"], function () {
+        var admin = layui.admin,
+            laydate = layui.laydate,
+            config = layui.config,
+            form = layui.form,
+            layer = layui.layer,
+            xmSelect=layui.xmSelect,
+            upload = layui.upload,
+            customerInfo = [],
+            formSelects = layui.formSelects;
+        var thisYear=new Date().getFullYear();
+
+        var maxYear = thisYear+"-12-31";
+        var minYear = thisYear+"-1-1";
+        var taskNum = 0;
+        form.verify({
+            numberInt: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!/^([0-9]*(\.\d)?)$/.test(value)){
+                    return '请填写0至24之间的数字(含一位小数)！';
+                }
+                if(parseFloat(value)===0||parseFloat(value)>24){
+                    return '请填写0至24之间的数字(含一位小数)！';
+                }
+            }
+        });
+
+        //验证登陆人以及
+        var usidReapt =localStorage.usid;
+        var usid = localStorage.usid;
+        // 人员id
+        if($('#usidNum').val()){
+            usid=$('#usidNum').val();
+        }
+        if (config.getAccount().usid != usid) {
+            $('#daily-form input').attr("disabled", 'disabled');
+            $('#btn-daily-save').attr("disabled", 'disabled');
+            $('#btn-sumbit-save').css("display", 'none');
+            $('#btn-daily-save').removeClass("layui-btn-normal");
+            $('#btn-daily-save').addClass("layui-btn layui-btn-disabled");
+            $('#daily-form textarea').attr("readonly", 'readonly');
+        }
+
+        if($('#usidNum').val()==usidReapt&&$('#usidEdit').val()){
+            $('#daily-form input').removeAttr("disabled");
+            $('#daily-form textarea').removeAttr("readonly");
+        }
+        $('#key').bind('input propertychange', function() {
+            var _keywords = $(this).val();
+            console.log("关键字")
+            addTree(_keywords); //call lazy load
+        });
+        form.on('submit(btn-sumbit-save)', function (obj) {
+            console.log(obj);
+            var data = obj.field,
+                elem = data.elem;
+            data.taskIdArray = [];
+            var checkStatus = zTreeObj.getCheckedNodes();
+            var taskIdArray=[];
+            for (var i = 0; i < checkStatus.length; i++) {
+                taskIdArray.push(checkStatus[i].id);
+            }
+            var msg ="";
+            var dailyBoxParID="";
+            if($('.dailyBox').length!=taskIdArray.length){
+                for(var z =0;z<$('.dailyBox').length;z++){
+                    if(taskIdArray.indexOf($('.dailyBox')[z].id)==-1){
+                        msg=$('.dailyBox').eq(z).children('.workName').html();
+                        dailyBoxParID=$('.dailyBox').eq(z).attr("dailyParentCreateUserId")
+                    }
+                }
+            }
+            if (msg&&!dailyBoxParID) {
+                return layer.msg(msg+'任务已被隐藏，请先前往“隐藏设置”中进行显示设置', {
+                    icon: 0
+                });
+            }
+            if (checkStatus.length === 0&&$('.dailyBox').length==0) {
+                return layer.msg('请选择子任务', {
+                    icon: 0
+                });
+            }
+            var workList=[];
+            for (var i = 0; i <$('.dailyBox').length ; i++) {
+                var approvestate=$('.dailyBox').eq(i).children('.workName').data('approvestate');
+                var childrenDailyCreateUserIds=[],childrenDailyCreateUserNames=[];
+                var memberIds_blong_xmSelect = xmSelect.get('#dailyMemberIds'+$('.dailyBox')[i].id, true);
+                if(approvestate!=6&&memberIds_blong_xmSelect){
+                    var selectArr = memberIds_blong_xmSelect.getValue();
+                    for(var j =0;j<selectArr.length;j++){
+                        childrenDailyCreateUserIds.push(selectArr[j].value);
+                        childrenDailyCreateUserNames.push(selectArr[j].name);
+                    }
+                }
+                if(approvestate==3||approvestate==6){
+                    approvestate=2
+                }
+                var fileId = $('.dailyBox')[i].id;
+                var workDescriptionS=$('.dailyBox').eq(i).children('.workInfo').val();
+                console.log(workDescriptionS,555555)
+                // workDescriptionS = workDescriptionS.replace(/\</g,"&lt;");
+                // workDescriptionS = workDescriptionS.replace(/\>/g,"&gt;");
+                workList.push(
+                    {
+                        'approveState':approvestate?approvestate:2,
+                        'taskIdArray':[$('.dailyBox')[i].id],
+                        'dailyCreateTime':$('.dailyBox').eq(i).children('.dailyTime').val(),
+                        'workDescription':workDescriptionS,
+                        "workCostTime":$('.dailyBox').eq(i).children('.workTime').val(),
+                        "taskName":$('.dailyBox').eq(i).children('.workName').html(),
+                        "approveUserId":$('.dailyBox').eq(i).children('.workName')[0].id,
+                        'id':$('.dailyBox').eq(i).children('.workName').data('id')?$('.dailyBox').eq(i).children('.workName').data('id'):'',
+                        'budgetId':$('.dailyBox').eq(i).children('.workName').data('budgetid'),
+                        'projectId':$('.dailyBox').eq(i).children('.workName').data('projectid'),
+                        'taskResultFileId': ($('#fileName_'+fileId).prop('name')&&$('#fileName_'+fileId).prop('name')!='null')?$('#fileName_'+fileId).prop('name'):"",
+                        'taskResultFileName': ($('#fileName_'+fileId).val()&&$('#fileName_'+fileId).val()!='null')?$('#fileName_'+fileId).val():"",
+                        'childrenDailyCreateUserIds': childrenDailyCreateUserIds,
+                        'childrenDailyCreateUserNames': childrenDailyCreateUserNames,
+                        'dailyParentId':($('.dailyBox').eq(i).attr("dailyParentId")&&$('.dailyBox').eq(i).attr("dailyParentId")!='null')?$('.dailyBox').eq(i).attr("dailyParentId"):"",
+                        'dailyParentCreateUserId':($('.dailyBox').eq(i).attr("dailyParentCreateUserId")&&$('.dailyBox').eq(i).attr("dailyParentCreateUserId")!='null')?$('.dailyBox').eq(i).attr("dailyParentCreateUserId"):"",
+                        'dailyParentCreateUserName':($('.dailyBox').eq(i).attr("dailyParentCreateUserName")&&$('.dailyBox').eq(i).attr("dailyParentCreateUserName")!='null')?$('.dailyBox').eq(i).attr("dailyParentCreateUserName"):"",
+                        'childTaskFlag':$('.dailyBox').eq(i).attr("childTaskFlag")==4?true:false
+
+                    }
+                );
+            }
+            admin.req('/api/Daily/saveList', workList, function (data) {
+                $(elem).attr('disabled', false);
+                if (data.ok) {
+                    var globalProcessData1 = {
+                        "processDefinitionKey":"p478e4b877d504d39a392ba9317bd35e8",
+                        'businessKeyAssigneeMap':{
+
+                        },
+                        formData: 1
+                    };
+                    var globalProcessData2 = {
+                        "comment": "",
+                        "formContent": "1",
+                        "type": 0,
+                        //日报的id
+                        "businessKeyArray":[],
+                        "variables": {
+                            "approve": "restartagree"
+                        }
+
+                    };
+                    var load1=false,load2=false;
+                    for (var i = 0; i <data.data.length ; i++) {
+                        if(data.data[i].approveState==4||data.data[i].approveState==5){
+                            globalProcessData2.businessKeyArray.push(data.data[i].id);
+                        }else if(data.data[i].approveState!=1){
+                            globalProcessData1.businessKeyAssigneeMap[data.data[i].id]='';
+                        }
+                    }
+                    if(globalProcessData2.businessKeyArray.length==0&&$.isEmptyObject(globalProcessData1.businessKeyAssigneeMap)){
+                        layer.msg('提交审批成功！', {
+                            icon: 1
+                        });
+                        admin.finishPopupCenter();
+                    }
+                    if(globalProcessData2.businessKeyArray.length!=0){
+                        admin.req('/api/customized-branch/complete_multi_task_id',globalProcessData2 , function (res) {
+                            load2=true;
+                            if (res.ok) {
+                                if(load2&&load1){
+                                    layer.msg('提交审批成功！', {
+                                        icon: 1
+                                    });
+                                    admin.finishPopupCenter();
+                                }
+                            } else {
+                                if(load2&&load1){
+                                    layer.msg('提交审批失败！' + res.message, {
+                                        icon: 5
+                                    });
+                                    admin.finishPopupCenter();
+                                }
+                            }
+                        }, {
+                            method: 'post'
+                        });
+                    }else{
+                        load2=true;
+                    }
+                    if(!$.isEmptyObject(globalProcessData1.businessKeyAssigneeMap)){
+                        admin.req('/api/customized-branch/startProcessMulti',globalProcessData1 , function (res) {
+                            load1=true;
+                            if (res.ok) {
+                                if(load2&&load1){
+                                    layer.msg('提交审批成功！', {
+                                        icon: 1
+                                    });
+                                    admin.finishPopupCenter();
+                                }
+                            } else {
+                                if(load2&&load1){
+                                    layer.msg('提交审批失败！' + res.message, {
+                                        icon: 5
+                                    });
+                                    admin.finishPopupCenter();
+                                }
+                            }
+                        }, {
+                            method: 'post'
+                        });
+                    }else{
+                        load1=true;
+                    }
+                } else {
+                    return layer.msg('保存失败：' + data.message, {
+                        icon: 5
+                    });
+                }
+            }, {
+                method: 'post'
+            });
+
+        });
+        function addTree(keyword) {
+            admin.req('/api/budget/task/tree', {
+                userId: usid,
+                keyword: keyword
+            }, function (d) {
+                if (d.length == 0) {
+                    $("#treeRoleMenu").html("暂无子任务")
+                }
+                var daily = localStorage.getItem("daily");
+                // if (daily) {
+                //     daily = JSON.parse(daily).taskIdArray
+                // } else {
+                //     daily = [];
+                // }
+                var arr = [];
+                var checkArr=[];
+                taskNum = 0;
+                var taskChecked = $('#taskChecked').val().split(',');
+                if($('.dailyBox').length!=0){
+                    for(var z =0;z<$('.dailyBox').length;z++){
+                        if(taskChecked.indexOf($('.dailyBox')[z].id)==-1){
+                            taskChecked.push($('.dailyBox')[z].id);
+                        }
+                    }
+                }
+                for (var i = 0; i < d.data.length; i++) {
+                    d.data[i].open = true;
+                    // var checked =d.data[i].is(':checked');
+                    // console.log(checked);
+                    // var parent_id=d.data[i].id;
+                    // var child_id=d.data[i].id;
+                    // if(checked && parent_id == child_id){
+                    //
+                    // }
+                    // d.data[i].change(function () {
+                    //        console.log(1)
+                    //     })
+                    // if($('#usidNum').val()){
+                    //     d.data[i].chkDisabled = true;
+                    //     arr.push(d.data[i]);
+                    // }else{
+                    if (taskChecked.length > 0) {
+                        if(d.data[i].type == 4 || d.data[i].type==3){
+                            taskNum++;
+                        for (var j = 0; j < taskChecked.length; j++) {
+                            //如果不是本人
+                                if (d.data[i].id == taskChecked[j]) {
+                                    d.data[i].checked = true;
+                                    checkArr.push(d.data[i]);
+                                }
+
+                        }
+                            if($('#usidNum').val()){
+                                d.data[i].chkDisabled=true;
+                            }
+                            if($('#usidNum').val()==usidReapt&&$('#usidEdit').val()){
+                                d.data[i].chkDisabled=false;
+                            }
+
+                        }else{
+                            d.data[i].chkDisabled=true;
+                        }
+                    }
+                    arr.push(d.data[i]);
+                }
+                // if (taskChecked.length==taskNum)
+                // {
+                //     $("input[name='checkbox']").attr("checked",'true');//全选
+                //     form.render();
+                //
+                // }
+                var setting = {
+                    data: {
+                        simpleData: {
+                            enable: true,
+                            idKey: "id",
+                            pIdKey: "parentId",
+                            rootPId: ''
+                        }
+                    },
+                    check: {
+                        enable: true,
+                        autoCheckTrigger: true,
+                        chkboxType:{ "Y" : "s", "N" : "s" }
+                    },
+                    callback: {
+                        beforeClick: function(treeId, treeNode){
+                                if(treeNode.checked){
+                                    var dataId = $('#'+treeNode.id+'').children().first().attr('data-id')
+                                    var dataApproveState = $('#'+treeNode.id+'').children().first().attr('data-approveState')
+                                    if(dataApproveState==4||dataApproveState==3){
+                                        layer.confirm('确定删除'+treeNode.name+'日报吗？', {
+                                            icon: 3,
+                                            title: '提示',
+                                            yes: function(){
+                                                admin.req('/api/Daily/' +dataId, {}, function(data) {
+                                                    // load1=true;
+                                                    if (data.ok) {
+                                                        var treeObj = $.fn.zTree.getZTreeObj("treeRoleMenu");
+                                                        treeObj.checkNode(treeNode,false,true,false);
+                                                        $('#'+treeNode.id+'').remove();
+                                                        if($('#dailyInfoList').children().length == 1){
+                                                            $('.noDaily').css('display', 'block');
+                                                        }
+                                                        layer.msg('删除成功！', {
+                                                            icon: 1
+                                                        });
+                                                    } else {
+                                                        return layer.msg('删除失败：' + data.message, {
+                                                            icon: 5
+                                                        });
+                                                    }
+                                                }, {
+                                                    method: 'delete'
+                                                });
+                                            },
+                                            cancel:function(){
+
+                                            }
+                                        })
+                                    }else{
+                                        var treeObj = $.fn.zTree.getZTreeObj("treeRoleMenu");
+                                        treeObj.checkNode(treeNode,false,true,false);
+                                        $('#'+treeNode.id+'').remove();
+                                        if($('#dailyInfoList').children().length == 1){
+                                            $('.noDaily').css('display', 'block');
+                                        }
+                                    }
+                                    return false;
+                                }else{
+
+                                    return true;
+                                }
+
+
+                        },
+                        beforeCheck: function(treeId, treeNode){
+                            if(treeNode.checked){
+                                var dataId = $('#'+treeNode.id+'').children().first().attr('data-id')
+                                var dataApproveState = $('#'+treeNode.id+'').children().first().attr('data-approveState')
+                                if(dataApproveState==4||dataApproveState==3){
+                                    layer.confirm('确定删除'+treeNode.name+'日报吗？', {
+                                        icon: 3,
+                                        title: '提示',
+                                        yes: function(){
+                                            admin.req('/api/Daily/' +dataId, {}, function(data) {
+                                                // load1=true;
+                                                if (data.ok) {
+                                                    var treeObj = $.fn.zTree.getZTreeObj("treeRoleMenu");
+                                                    treeObj.checkNode(treeNode,false,true,false);
+                                                    $('#'+treeNode.id+'').remove();
+                                                    if($('#dailyInfoList').children().length == 1){
+                                                        $('.noDaily').css('display', 'block');
+                                                    }
+                                                    layer.msg('删除成功！', {
+                                                        icon: 1
+                                                    });
+                                                } else {
+                                                    return layer.msg('删除失败：' + data.message, {
+                                                        icon: 5
+                                                    });
+                                                }
+                                            }, {
+                                                method: 'delete'
+                                            });
+                                        },
+                                        cancel:function(){
+
+                                        }
+                                    })
+                                }else{
+                                    var treeObj = $.fn.zTree.getZTreeObj("treeRoleMenu");
+                                    treeObj.checkNode(treeNode,false,true,false);
+                                    $('#'+treeNode.id+'').remove();
+                                    if($('#dailyInfoList').children().length == 1){
+                                        $('.noDaily').css('display', 'block');
+                                    }
+                                }
+                                return false;
+                            }else{
+                                return true;
+                            }
+                        },
+                        onClick: function (event, treeId, treeNode) {
+                            console.log(event, treeId, treeNode,"初次点击")
+                            var workCostTime=$('#workCostTime').val();
+                            var dailyCreateTime=$('#dailyCreateTime').val();
+                            var handleType=$('#handleType').val();
+                            console.log($('#handleType').val());
+                            zTreeObj.checkNode(treeNode, !treeNode.checked, true);
+                            if(workCostTime||handleType=='add'){
+                                if(treeNode.checked!==undefined){
+                                    if(treeNode.checked){
+                                        var loadD2 =layer.load(2);
+                                        var urlDaily ="/api/budget/task/query/";
+                                        if(treeNode.type==4){
+                                            urlDaily="/api/budget/childrentask/query/";
+                                        }
+                                        $.ajax({
+                                            url: urlDaily+treeNode.id,
+                                            type: 'get',
+                                            // data: JSON.stringify(optionNum),
+                                            // contentType: 'application/json',
+                                            async: false,
+                                            success: function (res) {
+                                                layer.close(loadD2);
+                                                if (res.ok) {
+                                                    var arr =res.data.mapsList;
+                                                    var arr1 =res.data.userIdDeptNameMapList?res.data.userIdDeptNameMapList:[];
+                                                    var formSelectArr=[];
+                                                    for (var i = 0; i < arr.length; i++) {
+                                                        var title="";
+                                                        for(var j =0;j<arr1.length;j++){
+                                                            if(arr1[j].id==arr[i].id){
+                                                                title=arr1[j].name;
+                                                            }
+                                                        }
+                                                        if(arr[i].id!=config.getAccount().usid){
+                                                            formSelectArr.push({
+                                                                name: arr[i].name,
+                                                                value: arr[i].id,
+                                                                title:title
+                                                            });
+                                                        }
+                                                    }
+                                                    $('.noDaily').css('display', 'none');
+                                                    $('#dailyInfoList').append('<div class="dailyBox layui-form-item" childTaskFlag="'+treeNode.type+'" id="'+treeNode.id+'">\n' +
+                                                        '                        <span  class="workName" data-budgetId="'+(treeNode.budgetId?treeNode.budgetId:"")+'" data-projectId="'+(treeNode.projectId?treeNode.projectId:"")+'" id="'+treeNode.projectLeaderId+'" title="'+treeNode.name+'" >'+treeNode.name+'</span>\n' +
+                                                        '                        <input autocomplete="off"  type="text" name="dailyTime"\n' +
+                                                        '                             id="dailyTime'+treeNode.id+'" value="'+(dailyCreateTime.substring(0,4)<=thisYear.toString()?dailyCreateTime:"")+'"  placeholder="日期" class="layui-input rili dailyTime" readonly lay-verify="required">\n' +
+                                                        '                        <input type="text" class="workTime" onkeyup="replaceit(this)" lay-verify="required|numberInt"  />\n' +
+                                                        '<span>小时</span>\n' +
+                                                        '                        <textarea maxlength="200" name="workDescription" type="text" rows="8"\n' +
+                                                        '                                  placeholder="请输入任务描述,字数控制在200字以内"\n' +
+                                                        '                                  class="layui-textarea workDescription_new workInfo"\n' +
+                                                        '                        ></textarea>' +
+                                                        '<div class="layui-form-item " style="height: 36px;margin-top: 10px;margin-bottom:0px;position: relative">\n' +
+                                                        '                    <label style="width:35px;padding:5px 0" class="layui-form-label labelWidth"><span>成果:</span> </label>\n' +
+                                                        '                    <div class="layui-input-block reduceMarginL" style="position: relative">\n' +
+                                                        '                        <input style="background: #F6F8FE" type="text" placeholder="请上传附件" id="fileName_'+ treeNode.id +'" class="layui-input" readonly>\n' +
+                                                        '                    </div>\n' +
+                                                        '                    <div class="layui-inline " style="position:absolute;right:0;top: 1px;margin-right:0px">\n' +
+                                                        '                        <button style="background: #229FFF;color:#fff;border:none" class="layui-btn layui-btn-sm layui-btn-normal" title="上传" id="chooseFile_'+ treeNode.id +'">上传</button>\n' +
+                                                        '                        <button style="background: #87C459;color:#fff;border:none;margin-left: 3px;display: none" class="layui-btn layui-btn-sm layui-btn-normal" title="下载" id="download_'+ treeNode.id +'" >下载</button>\n' +
+                                                        '                        <button style="background: #FC6664;color:#fff;border:none;margin-left: 3px" class="layui-btn layui-btn-sm layui-btn-normal" title="删除" id="delFile_'+ treeNode.id +'" >删除</button>\n' +
+                                                        '                        <button class="layui-btn layui-btn-sm layui-btn-normal" title="上传" id="upload_'+ treeNode.id +'" style="display: none">上传</button>\n' +
+                                                        '                    </div>\n' +
+                                                        '                </div>'+
+                                                        '<div class="layui-form-item dailySelectMember">\n' +
+                                                        '        <label class="layui-form-label" >协作人<img src="/assetsInfo/images/wenhao.png"  class="menW'+treeNode.id+' wenhao" />：</label>\n' +
+                                                        '        <div class="layui-input-block" >\n' +
+                                                        '            <div name="dailyMemberIds'+treeNode.id+'" id="dailyMemberIds'+treeNode.id+'">\n' +
+                                                        '            </div>\n' +
+                                                        '        </div>\n' +
+                                                        '</div>'+
+                                                        '                    </div>');
+                                                    var memberIds_blong_xmSelect = xmSelect.render({
+                                                        el: '#dailyMemberIds'+treeNode.id,
+                                                        filterable: true,
+                                                        on: function(data){
+
+                                                        },
+                                                        theme: {
+                                                            color: '#0081ff',
+                                                        },
+                                                        searchTips: '输入你要找的人',
+                                                        autoRow: true,
+                                                        direction: 'down',
+                                                        toolbar: {
+                                                            show: true,
+                                                        },
+                                                        data: formSelectArr,
+                                                        show:function(){
+
+                                                        },
+                                                        template: function(name, value, selected, disabled){
+                                                            return "<span title="+name.item.title+">"+name.item.name+"</span>";        //返回一个html结构, 用于显示选项
+
+                                                        },
+                                                    });
+                                                    var menIndex;
+                                                    $(".menW"+treeNode.id).off('mouseleave').on('mouseleave',function () {
+                                                        layer.close(menIndex);
+                                                    }).off('mouseenter').on('mouseenter',function () {
+                                                        menIndex=layer.tips("<span style='color:#333333;'>选择协作人后，此条日报将同时进入协作人的日程管理中，并计入其工时。</span>", '.menW'+treeNode.id, {
+                                                            tips: [1, '#fff'],
+                                                        });
+                                                    });
+                                                    giveBind(treeNode.id)
+                                                } else {
+                                                    return layui.layer.msg(res.message, {
+                                                        icon: 5
+                                                    });
+                                                }
+                                            },
+                                            error: function (err) {
+                                                layer.close(loadD2);
+                                                return layui.layer.msg(err.message, {
+                                                    icon: 5
+                                                });
+                                            }
+                                        });
+
+                                    }
+                                    if($('#'+treeNode.id+'').length!=0&&!treeNode.checked){
+                                        var dataId = $('#'+treeNode.id+'').children().first().attr('data-id')
+                                        var dataApproveState = $('#'+treeNode.id+'').children().first().attr('data-approveState')
+                                        if(dataApproveState==4||dataApproveState==3){
+                                            layer.confirm('确定删除'+treeNode.name+'日报吗？', {
+                                                icon: 3,
+                                                title: '提示',
+                                                yes: function(){
+                                                    admin.req('/api/Daily/' +dataId, {}, function(data) {
+                                                        if (data.ok) {
+                                                            $('#'+treeNode.id+'').remove();
+                                                            if($('#dailyInfoList').children().length == 1){
+                                                                $('.noDaily').css('display', 'block');
+                                                            }
+                                                            layer.msg('删除成功！', {
+                                                                icon: 1
+                                                            });
+
+                                                        } else {
+                                                            return layer.msg('删除失败：' + data.message, {
+                                                                icon: 5
+                                                            });
+                                                        }
+                                                    }, {
+                                                        method: 'delete'
+                                                    });
+                                                },
+                                                cancel:function(){
+                                                    var treeObj = $.fn.zTree.getZTreeObj("treeRoleMenu");
+                                                    treeObj.checkNode(treeNode,true,true,false);
+                                                },
+                                                btn2:function(){
+                                                    var treeObj = $.fn.zTree.getZTreeObj("treeRoleMenu");
+                                                    treeObj.checkNode(treeNode,true,true,false);
+                                                }
+                                            })
+                                        }else{
+                                            $('#'+treeNode.id+'').remove();
+                                            if($('#dailyInfoList').children().length == 1){
+                                                $('.noDaily').css('display', 'block');
+                                            }
+                                        }
+                                    }
+                                    laydate.render({
+                                        elem: '#dailyTime'+treeNode.id+'',
+                                        type: 'date',
+                                        // min:minYear,
+                                        max:maxYear
+                                    });
+                                }
+                            }
+                        },
+                        onCheck: function (event, treeId, treeNode) {
+                            console.log(event, treeId, treeNode,"勾选点击");
+                            var hasCheck = zTreeObj.getCheckedNodes(true);
+                            var workCostTime=$('#workCostTime').val();
+                            var dailyCreateTime=$('#dailyCreateTime').val();
+                            var handleType=$('#handleType').val();
+                            console.log($('#handleType').val(),"=======","workCostTime");
+                            console.log(123,event,treeId, treeNode);
+                            if(workCostTime||handleType=='add'){
+                                if(treeNode.checked){
+                                    if($("#"+treeNode.id).length!=0){
+                                        return
+                                    }
+                                    var loadD2 =layer.load(2);
+                                    var urlDaily ="/api/budget/task/query/";
+                                    if(treeNode.type==4){
+                                        urlDaily="/api/budget/childrentask/query/";
+                                    }
+                                    $.ajax({
+                                        url: urlDaily+treeNode.id,
+                                        type: 'get',
+                                        // data: JSON.stringify(optionNum),
+                                        // contentType: 'application/json',
+                                        async: false,
+                                        success: function (res) {
+                                            layer.close(loadD2);
+                                            if (res.ok) {
+                                                var arr =res.data.mapsList;
+                                                var arr1 =res.data.userIdDeptNameMapList?res.data.userIdDeptNameMapList:[];
+                                                var formSelectArr=[];
+                                                for (var i = 0; i < arr.length; i++) {
+                                                    var title="";
+                                                    for(var j =0;j<arr1.length;j++){
+                                                        if(arr1[j].id==arr[i].id){
+                                                            title=arr1[j].name;
+                                                        }
+                                                    }
+                                                    if(arr[i].id!=config.getAccount().usid){
+                                                        formSelectArr.push({
+                                                            name: arr[i].name,
+                                                            value: arr[i].id,
+                                                            title:title
+                                                        });
+                                                    }
+                                                }
+                                                $('.noDaily').css('display', 'none');
+                                                $('#dailyInfoList').append('<div class="dailyBox layui-form-item" childTaskFlag="'+treeNode.type+'" id="'+treeNode.id+'">\n' +
+                                                    '                        <span  class="workName" data-budgetId="'+(treeNode.budgetId?treeNode.budgetId:"")+'" data-projectId="'+(treeNode.projectId?treeNode.projectId:"")+'" id="'+treeNode.projectLeaderId+'" title="'+treeNode.name+'" >'+treeNode.name+'</span>\n' +
+                                                    '                        <input autocomplete="off"  type="text" name="dailyTime"\n' +
+                                                    '                             id="dailyTime'+treeNode.id+'" value="'+(dailyCreateTime.substring(0,4)<=thisYear.toString()?dailyCreateTime:"")+'"  placeholder="日期" class="layui-input rili dailyTime" readonly lay-verify="required">\n' +
+                                                    '                        <input type="text" class="workTime" onkeyup="replaceit(this)" lay-verify="required|numberInt"  />\n' +
+                                                    '<span>小时</span>\n' +
+                                                    '                        <textarea maxlength="200" name="workDescription" type="text" rows="8"\n' +
+                                                    '                                  placeholder="请输入任务描述,字数控制在200字以内"\n' +
+                                                    '                                  class="layui-textarea workDescription_new workInfo"\n' +
+                                                    '                        ></textarea>' +
+                                                    '<div class="layui-form-item " style="height: 36px;margin-top: 10px;margin-bottom:0px;position: relative">\n' +
+                                                    '                    <label style="width:35px;padding:5px 0" class="layui-form-label labelWidth"><span>成果:</span> </label>\n' +
+                                                    '                    <div class="layui-input-block reduceMarginL" style="position: relative">\n' +
+                                                    '                        <input style="background: #F6F8FE" type="text" placeholder="请上传附件" id="fileName_'+ treeNode.id +'" class="layui-input" readonly>\n' +
+                                                    '                    </div>\n' +
+                                                    '                    <div class="layui-inline " style="position:absolute;right:0;top: 1px;margin-right:0px">\n' +
+                                                    '                        <button style="background: #229FFF;color:#fff;border:none" class="layui-btn layui-btn-sm layui-btn-normal" title="上传" id="chooseFile_'+ treeNode.id +'">上传</button>\n' +
+                                                    '                        <button style="background: #87C459;color:#fff;border:none;margin-left: 3px;display: none" class="layui-btn layui-btn-sm layui-btn-normal" title="下载" id="download_'+ treeNode.id +'" >下载</button>\n' +
+                                                    '                        <button style="background: #FC6664;color:#fff;border:none;margin-left: 3px" class="layui-btn layui-btn-sm layui-btn-normal" title="删除" id="delFile_'+ treeNode.id +'" >删除</button>\n' +
+                                                    '                        <button class="layui-btn layui-btn-sm layui-btn-normal" title="上传" id="upload_'+ treeNode.id +'" style="display: none">上传</button>\n' +
+                                                    '                    </div>\n' +
+                                                    '                </div>'+
+                                                    '<div class="layui-form-item dailySelectMember">\n' +
+                                                    '        <label class="layui-form-label" >协作人<img src="/assetsInfo/images/wenhao.png"  class="menW'+treeNode.id+' wenhao" />：</label>\n' +
+                                                    '        <div class="layui-input-block" >\n' +
+                                                    '            <div name="dailyMemberIds'+treeNode.id+'" id="dailyMemberIds'+treeNode.id+'">\n' +
+                                                    '            </div>\n' +
+                                                    '        </div>\n' +
+                                                    '    </div>'+
+                                                    '                    </div>');
+                                                var memberIds_blong_xmSelect = xmSelect.render({
+                                                    el: '#dailyMemberIds'+treeNode.id,
+                                                    filterable: true,
+                                                    on: function(data){
+
+                                                    },
+                                                    theme: {
+                                                        color: '#0081ff',
+                                                    },
+                                                    searchTips: '输入你要找的人',
+                                                    autoRow: true,
+                                                    direction: 'down',
+                                                    toolbar: {
+                                                        show: true,
+                                                    },
+                                                    data: formSelectArr,
+                                                    show:function(){
+
+                                                    },
+                                                    template: function(name, value, selected, disabled){
+                                                        return "<span title="+name.item.title+">"+name.item.name+"</span>";        //返回一个html结构, 用于显示选项
+
+                                                    },
+                                                });
+                                                var menIndex;
+                                                $(".menW"+treeNode.id).off('mouseleave').on('mouseleave',function () {
+                                                    layer.close(menIndex);
+                                                }).off('mouseenter').on('mouseenter',function () {
+                                                    menIndex=layer.tips("<span style='color:#333333;'>选择协作人后，此条日报将同时进入协作人的日程管理中，并计入其工时。</span>", '.menW'+treeNode.id, {
+                                                        tips: [1, '#fff'],
+                                                    });
+                                                });
+                                                giveBind(treeNode.id)
+                                            } else {
+                                                return layui.layer.msg(res.message, {
+                                                    icon: 5
+                                                });
+                                            }
+                                        },
+                                        error: function (err) {
+                                            layer.close(loadD2);
+                                            return layui.layer.msg(err.message, {
+                                                icon: 5
+                                            });
+                                        }
+                                    });
+
+                                }
+                                if($('#'+treeNode.id+'').length!=0&&!treeNode.checked){
+                                    var dataId = $('#'+treeNode.id+'').children().first().attr('data-id')
+                                    var dataApproveState = $('#'+treeNode.id+'').children().first().attr('data-approveState')
+                                    if(dataApproveState==4||dataApproveState==3){
+                                        layer.confirm('确定删除'+treeNode.name+'日报吗？', {
+                                            icon: 3,
+                                            title: '提示',
+                                            yes: function(){
+                                                admin.req('/api/Daily/' +dataId, {}, function(data) {
+                                                    if (data.ok) {
+                                                        $('#'+treeNode.id+'').remove();
+                                                        if($('#dailyInfoList').children().length == 1){
+                                                            $('.noDaily').css('display', 'block');
+                                                        }
+                                                        layer.msg('删除成功！', {
+                                                            icon: 1
+                                                        });
+
+                                                    } else {
+                                                        return layer.msg('删除失败：' + data.message, {
+                                                            icon: 5
+                                                        });
+                                                    }
+                                                }, {
+                                                    method: 'delete'
+                                                });
+                                            },
+                                            cancel:function(){
+                                                var treeObj = $.fn.zTree.getZTreeObj("treeRoleMenu");
+                                                treeObj.checkNode(treeNode,true,true,false);
+                                            },
+                                            btn2:function(){
+                                                var treeObj = $.fn.zTree.getZTreeObj("treeRoleMenu");
+                                                treeObj.checkNode(treeNode,true,true,false);
+                                            }
+                                        })
+                                    }else{
+                                        $('#'+treeNode.id+'').remove();
+                                        if($('#dailyInfoList').children().length == 1){
+                                            $('.noDaily').css('display', 'block');
+                                        }
+                                    }
+                                }
+                                laydate.render({
+                                    elem: '#dailyTime'+treeNode.id+'',
+                                    type: 'date',
+                                    // min:minYear,
+                                    max:maxYear
+                                });
+                            }
+
+                            // for(var i of hasCheck){
+                            //     for(var j of i.children){
+                            //         console.log(j);
+                            //         console.log(j.checked);
+                            //         if(j.checked == undefined){
+                            //             console.log(11);
+                            //            zTreeObj.checkNode(treeNode, true, true);
+                            //         }
+                            //         // $(j).attr('checked',true);
+                            //         // j =zTreeObj.getCheckedNodes(true);
+                            //     }
+                            // }
+                            if (hasCheck.length == taskNum) {
+                                $("input[name='checkbox']").prop("checked", 'true');//全选
+
+                            }
+                            else {
+
+                                $("input[name='checkbox']").removeAttr("checked");//取消全选
+                            }
+                            form.render();
+
+                        }
+                    }
+                };
+                // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
+                var zNodes = arr;
+                zTreeObj = $.fn.zTree.init($("#treeRoleMenu"), setting, zNodes);
+                // fuzzySearch('treeRoleMenu', '#key', false, null, '.layui-col-md6')
+            });
+        }
+
+        addTree();
+
+        admin.req('/api/Daily/branch', {}, function (res) {
+            customerInfo = $('#customerInfo').val().split(',');
+            var arr = res.data,
+                formSelectArr = [];
+            for (var i = 0; i < arr.length; i++) {
+                formSelectArr.push({
+                    name: arr[i].customerName,
+                    value: arr[i].customerName,
+                    id: arr[i].customerNumber
+                });
+            }
+            formSelects.data('customerId', 'local', {
+                arr: []
+            });
+            formSelects.data('customerId', 'local', {
+                arr: formSelectArr
+            });
+            formSelects.btns('customerId', []);
+
+            if (customerInfo.length > 0) {
+                formSelects.value('customerId', [customerInfo[0]]);
+                var checked = formSelects.value("customerId");
+                if (checked.length > 0) {
+
+                    getDept(checked[0].id);
+                }
+
+            }
+        });
+
+        // form.on('radio(dailyType)',function(data){
+        //
+        //     if (data.value==1)
+        //     {
+        //         $('#center-area').show();
+        //     }
+        //     else {
+        //         $('#center-area').hide();
+        //     }
+        //
+        // })
+        formSelects.on('customerId', function (id, vals, val) {
+            console.log(id)
+            console.log(vals)
+            console.log(val)
+            console.log($('#customerId').id)
+
+            getDept(val.id);
+
+        });
+
+        form.on('checkbox(daily_check)', function (data) {
+            if (data.elem.checked) {
+                zTreeObj.checkAllNodes(true);
+            }
+            else {
+                zTreeObj.checkAllNodes(false);
+            }
+        });
+
+
+        //难点三级赋值
+        function getDept(id) {
+            formSelects.data('dep_select', 'local', {
+                arr: []
+            });
+            formSelects.data('person_select', 'local', {
+                arr: []
+            });
+            admin.req('/api/crm/customerContact', {
+                customerNumber: id
+
+            }, function (res) {
+                var arr = res.data;
+                var depName = {};
+                var dep = [];
+                for (var i = 0; i < arr.length; i++) {
+                    var dept = arr[i].dept;
+                    if (!depName[dept]) {
+                        depName[dept] = true;
+                        var data = {name: dept, value: dept, list: [], index: dep.length};
+                        data.list.push({name: arr[i].contacts, value: arr[i].contacts});
+                        dep.push(data);
+                    }
+                    else {
+                        for (var j in dep) {
+                            if (dep[j].value == dept) {
+                                dep[j].list.push({name: arr[i].contacts, value: arr[i].contacts});
+                            }
+                        }
+                    }
+                }
+                formSelects.data('dep_select', 'local', {
+                    arr: dep
+                });
+                formSelects.btns('dep_select', []);
+                if (customerInfo.length > 1) {
+                    formSelects.value('dep_select', [customerInfo[1]]);
+                    var checked = formSelects.value("dep_select");
+                    if (checked.length > 0) {
+                        formSelects.data('person_select', 'local', {
+                            arr: dep[checked[0].index].list
+                        });
+                        formSelects.btns('person_select', []);
+                        if (customerInfo.length > 2) {
+                            formSelects.value('person_select', [customerInfo[2]]);
+                        }
+                    }
+
+                }
+            });
+        }
+
+        formSelects.on('dep_select', function (id, vals, val) {
+            formSelects.data('person_select', 'local', {
+                arr: val.list
+            });
+            formSelects.btns('person_select', []);
+        })
+
+
+        $('#btn-daily-cancel').on('click', function () {
+            admin.finishPopupCenter();
+            // admin.closePopupCenter();
+        });
+
+        form.on('submit(btn-daily-save)', function (obj) {
+            var data = obj.field,
+                elem = data.elem;
+            data.approveState= 3;
+            var checkStatus = zTreeObj.getCheckedNodes();
+            var taskIdArray=[];
+            for (var i = 0; i < checkStatus.length; i++) {
+                taskIdArray.push(checkStatus[i].id);
+            }
+
+
+            var msg ="";
+            var dailyBoxParID="";
+            if($('.dailyBox').length!=taskIdArray.length){
+                for(var z =0;z<$('.dailyBox').length;z++){
+                    if(taskIdArray.indexOf($('.dailyBox')[z].id)==-1){
+                        msg=$('.dailyBox').eq(z).children('.workName').html();
+                        dailyBoxParID=$('.dailyBox').eq(z).attr("dailyParentCreateUserId")
+                    }
+                }
+            }
+            if (msg&&!dailyBoxParID) {
+                return layer.msg(msg+'任务已被隐藏，请先前往“隐藏设置”中进行显示设置', {
+                    icon: 0
+                });
+            }
+            if (checkStatus.length === 0&&$('.dailyBox').length==0) {
+                return layer.msg('请选择子任务', {
+                    icon: 0
+                });
+            }
+            var workList=[];
+            for (var i = 0; i <$('.dailyBox').length ; i++) {
+                var approvestate=$('.dailyBox').eq(i).children('.workName').data('approvestate');
+                var childrenDailyCreateUserIds=[],childrenDailyCreateUserNames=[];
+                var memberIds_blong_xmSelect = xmSelect.get('#dailyMemberIds'+$('.dailyBox')[i].id, true);
+                if(approvestate!=6&&memberIds_blong_xmSelect){
+                    var selectArr = memberIds_blong_xmSelect.getValue();
+                    for(var j =0;j<selectArr.length;j++){
+                        childrenDailyCreateUserIds.push(selectArr[j].value);
+                        childrenDailyCreateUserNames.push(selectArr[j].name);
+                    }
+                }
+                if(approvestate==4||approvestate==5){
+                    approvestate=approvestate;
+                }else{
+                    approvestate=3;
+                }
+                var fileId = $('.dailyBox')[i].id;
+                var workDescriptionS=$('.dailyBox').eq(i).children('.workInfo').val();
+                // workDescriptionS = workDescriptionS.replace(/\</g,"&lt;");
+                // workDescriptionS = workDescriptionS.replace(/\>/g,"&gt;");
+                workList.push(
+                    {
+                        'approveState':approvestate?approvestate:2,
+                        'taskIdArray':[$('.dailyBox')[i].id],
+                        'dailyCreateTime':$('.dailyBox').eq(i).children('.dailyTime').val(),
+                        'workDescription':workDescriptionS,
+                        "workCostTime":$('.dailyBox').eq(i).children('.workTime').val(),
+                        "taskName":$('.dailyBox').eq(i).children('.workName').html(),
+                        "approveUserId":$('.dailyBox').eq(i).children('.workName')[0].id,
+                        'id':$('.dailyBox').eq(i).children('.workName').data('id')?$('.dailyBox').eq(i).children('.workName').data('id'):'',
+                        'budgetId':$('.dailyBox').eq(i).children('.workName').data('budgetid'),
+                        'projectId':$('.dailyBox').eq(i).children('.workName').data('projectid'),
+                        'taskResultFileId': ($('#fileName_'+fileId).prop('name')&&$('#fileName_'+fileId).prop('name')!='null')?$('#fileName_'+fileId).prop('name'):"",
+                        'taskResultFileName': ($('#fileName_'+fileId).val()&&$('#fileName_'+fileId).val()!='null')?$('#fileName_'+fileId).val():"",
+                        'childrenDailyCreateUserIds': childrenDailyCreateUserIds,
+                        'childrenDailyCreateUserNames': childrenDailyCreateUserNames,
+                        'dailyParentId':($('.dailyBox').eq(i).attr("dailyParentId")&&$('.dailyBox').eq(i).attr("dailyParentId")!='null')?$('.dailyBox').eq(i).attr("dailyParentId"):"",
+                        'dailyParentCreateUserId':($('.dailyBox').eq(i).attr("dailyParentCreateUserId")&&$('.dailyBox').eq(i).attr("dailyParentCreateUserId")!='null')?$('.dailyBox').eq(i).attr("dailyParentCreateUserId"):"",
+                        'dailyParentCreateUserName':($('.dailyBox').eq(i).attr("dailyParentCreateUserName")&&$('.dailyBox').eq(i).attr("dailyParentCreateUserName")!='null')?$('.dailyBox').eq(i).attr("dailyParentCreateUserName"):"",
+                        'childTaskFlag':$('.dailyBox').eq(i).attr("childTaskFlag")==4?true:false
+                    }
+                );
+            }
+            //如果登录人事陈部  特殊操作！！！后期改
+//                if(usid=="JL7MUFEB8G"){
+//
+//                    data.taskIdArray.push("b81f940c-09b8-489d-ad2a-7f3cb243654c");
+//            }  else {
+            //其他人
+
+//                }
+
+            // if(data.dailyType && data.dailyType == "1"){
+            //     if(!data.customer){
+            //         return layer.msg('请选择客户', {
+            //             icon: 0
+            //         });
+            //     }
+            //     // if(!data.dept){
+            //     //     return layer.msg('请选择部门', {
+            //     //         icon: 0
+            //     //     });
+            //     // }
+            //     // if(!data.contacts){
+            //     //     return layer.msg('请选择人员', {
+            //     //         icon: 0
+            //     //     });
+            //     // }
+            // }
+            admin.req('/api/Daily/saveList', workList, function (data) {
+                $(elem).attr('disabled', false);
+                if (data.ok) {
+                        layer.msg('保存成功！', {
+                            icon: 1
+                        });
+                        admin.finishPopupCenter();
+                } else {
+                    return layer.msg('保存失败：' + data.message, {
+                        icon: 5
+                    });
+                    admin.finishPopupCenter();
+                }
+            }, {
+                method: 'post'
+            });
+
+        });
+        var file = '';
+        function giveBind(id){
+
+            var files
+            // 清空文件队列
+            function clearFile(){
+                for (var x in files) {
+                    delete files[x];
+                }
+            }
+            var index;
+            $('#delFile_'+id).off('click').on('click',function () {
+                if(!$('#fileName_'+id).val()){
+                    return layer.msg('请先上传文件', {
+                        icon: 5
+                    });
+                }else{
+                    $('#fileName_'+id).val('')
+                    $('#fileName_'+id).prop('name','')
+                    $('#chooseFile_'+id).css("display","inline-block");
+                    $('#download_'+id).css("display","none");
+                }
+            });
+
+
+            // 上传
+            var uploadRender = upload.render({
+                elem: '#chooseFile_'+id,
+                url: '/api/sys/file/upload',
+                field: 'file',
+                accept: 'file',// 所有文件
+                auto: false,// 自动上传
+                exts:'pdf|doc|docx|xlsx|xls|zip|rar|jpg|jpeg|png|gif|ppt|pptx',// 允许上传的文件后缀
+                bindAction: '#upload_'+id,
+                choose:function(obj){
+                    console.log("上传")
+                    uploadRender.config.elem.next()[0].value = '';// 防止choose方法只触发一次
+                    files = obj.pushFile();// 文件队列
+                    clearFile();
+                    obj.preview(function(index, file, result){// file:准备上传的文件对象
+                        files = obj.pushFile();
+                        $('#fileName_'+id).val(file.name);
+                        $('#upload_'+id).click()
+                    });
+                },
+                before:function () {
+                    if($('#fileName_'+id).val()){
+                        index = layer.load(2);
+                    }else {
+                        return layer.msg('请先选择文件', {
+                            icon: 5
+                        });
+                    }
+                },
+                done: function(res,indexs) {// 上传完毕回调
+                    layer.close(index);
+                    if (res.ok) {
+                        layer.msg('文件上传成功！', {
+                            icon: 1
+                        });
+                        console.log(res.data,"RRRRRRRRRR")
+                        file = res.data.fileId;
+                        $('#fileName_'+id).prop('name',res.data.fileId)
+                        $('#chooseFile_'+id).css("display","none");
+                        $('#download_'+id).css("display","inline-block");
+                        //删除附件
+                        $('#delFile_'+id).off('click').on('click',function () {
+                            if($('#fileName_'+id).val()){
+                                $.ajax({
+                                    url: "/api/knowledge/paper/deleteFile/"+file,
+                                    type: 'delete',
+                                    success: function (data) {
+                                        if (data.ok) {
+                                            delete files[indexs];
+                                            $('#fileName_'+id).val('');
+                                            $('#fileName_'+id).prop('name',"");
+                                            file = '';
+                                            $('#chooseFile_'+id).css("display","inline-block");
+                                            $('#download_'+id).css("display","none");
+                                        } else {
+                                            return layer.msg(data.reason, {
+                                                icon: 5
+                                            });
+                                        }
+                                    }
+                                })
+                            }else {
+                                return layer.msg('请先上传文件', {
+                                    icon: 5
+                                });
+                            }
+
+                        })
+                        $('#download_'+id).off('click').on('click',function () {
+                            if($('#fileName_'+id).val()){
+                                window.open("/ADC_info/api/sys/file/"+file+"/download")
+                            }else{
+                                return layer.msg('文件损坏请联系管理员', {
+                                    icon: 5
+                                });
+                            }
+                        })
+                    } else {
+                        layer.msg('文件上传失败：' + res.message, {
+                            icon: 5
+                        });
+                    }
+                }
+            });
+
+        }
+
+
+
+
+    })
+
+
+</script>

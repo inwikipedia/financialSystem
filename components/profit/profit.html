@@ -1,0 +1,269 @@
+<!--
+Author : hetengfei
+License: MIT License
+
+Copyright (c) 2020 hetengfei
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+Modified By  : hetengfei
+-----
+Description: 财务简报管理-利润管理
+-----
+HISTORY:
+-->
+<style>
+    /*layui 插件choosen 冲突 当有两个select 切换页面会渲染出两个，原因未知*/
+    body{
+        /*overflow-y: hidden;*/
+    }
+    .tradesCouncil .layui-table-box{
+        height: 90% !important;
+    }
+    .tradesCouncil .layui-table-body{
+        height: 93.5% !important;
+    }
+    .tradesCouncil .layui-form.layui-border-box.layui-table-view{
+        /*height: 450px !important;*/
+    }
+    .another{
+        display: none;
+    }
+</style>
+<div class="layui-row layui-col-space15">
+    <!-- 左侧 -->
+    <div class="layui-col-md12 autoScrollLeft">
+        <div class="layui-card tradesCouncil">
+            <!-- 卡片容器 -->
+            <div class="layui-card-header">利润</div>
+            <div class="layui-card-body">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar">
+                        <div class="layui-inline">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:auto;padding-left: 0"><span>业务名称:</span> </label>
+                                <div class="layui-input-inline" style="margin-left:-10px">
+                                    <input type="text" placeholder="请输入" class="layui-input" name="businessGonfigName" id="businessGonfigName">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:auto;"><span>年:</span> </label>
+                                <div class="layui-input-inline" style="margin-left:-10px">
+                                    <input type="text" placeholder="请选择" class="layui-input" name="pmYear" id="year" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:auto;"><span>月:</span> </label>
+                                <div class="layui-input-inline" style="margin-left:-10px">
+                                    <input type="text" placeholder="请选择" class="layui-input" name="pmMonth" id="month" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btn_search_user" class="layui-btn layui-btn-sm layui-btn-normal" lay-filter="btn_search_user" lay-submit title="查询"> <i class="layui-icon layui-icon-search"></i>查询</button>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btn_reset_user" class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_reset_user" lay-submit title="重置">重置</button>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-pull-right">
+                            <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="btn_add_form" lay-submit title="导出" id="btn_download_out">
+                                <i class="layui-icon layui-icon-download-circle"></i>导出
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 下部表格容器 -->
+                <table id="tableContent-user" lay-filter="tableContent-user"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assetsInfo/js/tempDown.js"></script>
+<script>
+    // 初始化 layui
+    layui.use(['table', 'formSelects','upload','laydate'], function() {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            formSelects = layui.formSelects,
+            upload = layui.upload,
+            laydate=layui.laydate;
+
+        //年
+        laydate.render({
+            elem: '#year',
+            type:'year'
+        });
+        //月
+        laydate.render({
+            elem: '#month',
+            type:'month',
+            format:'M',
+            ready: function(date){
+                $(".layui-laydate-main .layui-laydate-header").css("display","none")
+            }
+
+        });
+        // 渲染左侧表格
+        var renderTable = function() {
+            var heightTable = $(document).height()-140;
+            // 渲染表格
+            table.render({
+                elem: '#tableContent-user',
+                id: 'tableContent-user',
+                url: admin.formatUrl('/api/finance/profitManagement/page'),
+                // 格式化后台返回的数据
+                parseData: function(res) { //res 即为原始返回的数据
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                },
+                // height: heightTable,
+                cols: [
+                    [{
+                        field: 'businessGonfigName',
+                        title: '业务名称',
+                        templet: function (d) {
+                            let text = d.businessGonfigName ? d.businessGonfigName : "";
+                            return '<div title="' + text + '"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">' + text + '</div></div>'
+                        }
+                    }, {
+                        field: 'pmYear',
+                        title: '年',
+                        templet: function (d) {
+                            let text = d.pmYear ? d.pmYear: "";
+                            return '<div title="' + text + '"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">' + text + '</div></div>'
+                        }
+                    }, {
+                        field: 'pmMonth',
+                        title: '月',
+                        templet: function (d) {
+                            let text = d.pmMonth ? d.pmMonth : "";
+                            return '<div title="' + text + '"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">' + text + '</div></div>'
+                        }
+                    },
+                        {
+                            field: 'costMoney',
+                            title: '成本金额（元）',
+                            templet: function (d) {
+                                if(d.costMoney===0){
+                                    d.costMoney='0'
+                                }
+                                let text = d.costMoney ? d.costMoney : "";
+                                return '<div title="' + text + '"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">' + text + '</div></div>'
+                            }
+                        },
+                        {
+                            field: 'incomeMoney',
+                            title: '收入金额（元）',
+                            templet: function (d) {
+                                if(d.incomeMoney===0){
+                                    d.incomeMoney='0'
+                                }
+                                let text = d.incomeMoney ? d.incomeMoney : "";
+                                return '<div title="' + text + '"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">' + text + '</div></div>'
+                            }
+                        },
+                        {
+                            field: 'profitMoney',
+                            title: '利润金额（元）',
+                            templet: function (d) {
+                                if(d.profitMoney===0){
+                                    d.profitMoney='0'
+                                }
+                                let text = d.profitMoney ? d.profitMoney : "";
+                                return '<div title="' + text + '"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">' + text + '</div></div>'
+                            }
+                        },
+                        {
+                            field: 'profitMargin',
+                            title: '利润率',
+                            templet: function (d) {
+                                let text = d.profitMargin ? d.profitMargin : "";
+                                return '<div title="' + text + '"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">' + text + '</div></div>'
+                            }
+                        }]
+                ],
+                cellMinWidth: 90,
+                page: {
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                },
+                request: {
+                    pageName: 'page',
+                    limitName: 'pageSize'
+                },
+                done: function (res, curr, count) {
+                    if (curr > 1 && res.data.length == 0) {
+                        var pageValue = curr - 1;
+                        table.reload('tableContent-user', {
+                            page: { curr: pageValue },// 修改页码
+                        });
+                    }
+                }
+            });
+        };
+        // 初始化，执行一次渲染表格树
+        renderTable();
+        // DONE: 侧边栏变化时刷新数据表格
+        // 将 table ID 存入数组
+
+        layui.admin.addTableCache('tableContent-user');
+        // 搜索
+        form.on('submit(btn_search_user)', function(data) {
+            var searchValue = {
+                "businessGonfigName": data.field.businessGonfigName,
+                'pmYear': data.field.pmYear,
+                'pmMonth': data.field.pmMonth,
+            }
+            table.reload('tableContent-user', {
+                page:{
+                    curr: 1
+                },
+                where: searchValue
+            });
+        });
+        // 重置
+        form.on('submit(btn_reset_user)', function() {
+            $('#month').val('');
+            $('#year').val('');
+            $('#businessGonfigName').val('');
+            table.reload('tableContent-user', {
+                where: {
+                    pmYear: '',
+                    pmMonth: '',
+                    businessGonfigName: '',
+                    reload: new Date().getTime()
+                }
+            });
+        });
+        //导出
+        $('#btn_download_out').on('click', function () {
+            var m=$('#month').val();
+            var y=$('#year').val();
+            var b=$('#businessGonfigName').val();
+            window.open(admin.formatUrl(`/ADC_info/api/finance/profitManagement/exportProfitManagement?pmYear=${y}&pmMonth=${m}&businessGonfigName=${b}`))
+        });
+    });
+</script>

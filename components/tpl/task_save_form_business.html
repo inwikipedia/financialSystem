@@ -1,0 +1,614 @@
+<style>
+    /*.layui-layer{*/
+    /*    top:10px !important;*/
+    /*}*/
+    .layui-layer-page .layui-layer-content{
+        overflow: visible !important;
+    }
+    .xm-select{
+        overflow: auto !important;
+        max-height: 160px !important;
+    }
+    .xm-select-label span{
+        font-size: 12px !important;
+    }
+    .xm-select-parent .xm-form-select dl{
+
+        margin-bottom: 20px !important;
+    }
+    #taskForm{
+       max-height: 600px!important;
+         overflow: auto!important;
+        padding: 20px 0 ;
+    }
+    /*#memberIds_blong{*/
+        /*height: 100px!important;*/
+        /*overflow: auto!important;*/
+    /*}*/
+    .xm-form-select{
+        border: 0.5px solid #e6e6e6;
+        /*top: auto!important;*/
+        /*bottom: 42px!important;*/
+    }
+   #taskForm .layui-input-block{
+       margin-left:120px;
+    }
+    body #taskForm .layui-form-label {
+        width: 120px;
+        padding: 5px 5px 5px 0px;
+    }
+    /* textarea placeholder样式调整(兼容处理) */
+    #taskTarget::-webkit-input-placeholder{
+        position: relative!important;
+        top:6px!important;
+    }
+    #taskTarget:-moz-placeholder{
+        position: relative!important;
+        top:6px!important;
+    }
+    #taskTarget::-moz-placeholder{
+        position: relative!important;
+        top:6px!important;
+    }
+    #taskTarget:-ms-input-placeholder{
+        position: relative!important;
+        top:6px!important;
+    }
+    .taskDiv{
+        width: 49%;
+        float: left;
+        height: 295px;
+        display: inline-block;
+    }
+    .taskDiv .layui-form-item{
+        margin-bottom: 15px;
+    }
+    .taskTop{
+        height: 295px;
+        margin-bottom: 15px;
+        width: 723px;
+    }
+    .taskBottom{
+        min-height: 50px;
+        margin-bottom: 15px;
+        width: 723px;
+    }
+    #taskForm .layui-input-block{
+        padding-right: 8px;
+    }
+    #taskForm .scroll-body{
+        max-height: 180px!important;
+    }
+    #taskForm .xm-select-parent .xm-form-select dl{
+        max-height: 285px!important;
+    }
+    #taskForm .layui-form-radio{
+        margin-right: 0;
+        padding-right: 0;
+    }
+    #taskForm .wenhao{
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+    }
+</style>
+<div class="layui-tpl-container" id="taskForm">
+    <div  class="layui-form " style="overflow: auto;height: 400px;flex-wrap: wrap;width: 740px;">
+        <div class="taskTop ">
+            <div class="taskLeft taskDiv">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 任务名称</label>
+                    <div class="layui-input-block">
+                        <input id='task-name' type="text" name="name" placeholder="请输入任务名称" class="layui-input"  maxlength="50" autocomplete = "off" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 任务目标</label>
+                    <div class="layui-input-block">
+                        <textarea type="text" placeholder="请填写，字数限制在200字以内。" style="height:190px;resize:none"   maxlength="200" lay-verify="required" class="layui-input" name="taskTarget" id="taskTarget" ></textarea>
+                        <!--<input id='task-name' type="text" name="name" placeholder="请输入任务名称" class="layui-input"  maxlength="50">-->
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" id="tasktype"><span style="color: red;">*</span> 所属任务类型</label>
+                    <div class="layui-input-block" >
+                        <input type="radio" name="type" value="0" title="项目任务"  lay-filter="type" checked>
+                        <img src="/assetsInfo/images/wenhao.png" style="" class="proW wenhao" />
+                        <input type="radio" name="type" value="1" title="业务任务" lay-filter="type">
+                        <img src="/assetsInfo/images/wenhao.png"  class="bueW wenhao" />
+                        <!--<input type="radio" name="type" value="2" title="下级任务"  lay-filter="type">-->
+
+                    </div>
+                </div>
+            </div>
+            <div class="taskRight taskDiv">
+                <div class="layui-form-item" id="project_form">
+                    <label class="layui-form-label"><span style="color: red;">*</span>  所属项目</label>
+                    <div class="layui-input-block">
+                        <select name="projectId" id='project_blong' xm-select="project_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-radio="" xm-select-search>
+                            <option value="">选择所属项目</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item dateA" id="business_form">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 所属业务</label>
+                    <div class="layui-input-block">
+                                        <select name="budgetId" id='business_blong' xm-select="business_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-radio="" xm-select-search>
+<!--                        <select name="budgetId" id='business_blong' xm-select="business_blong" xm-select-skin="normal" xm-select-direction="down"xm-select-search>-->
+                            <option value="">选择所属业务</option>
+                        </select>
+                    </div>
+                </div>
+                <!--<div class="layui-form-item" id="task_form">-->
+                <!--<label class="layui-form-label"><span style="color: red;">*</span>  所属任务</label>-->
+                <!--<div class="layui-input-block">-->
+                <!--<select name="projectId" id='task_blong' xm-select="project_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-radio="" xm-select-search>-->
+                <!--<option value="">选择所属项目</option>-->
+                <!--</select>-->
+                <!--</div>-->
+                <!--</div>-->
+                <div class="layui-form-item dateA" >
+                    <label class="layui-form-label" ><span style="color: red;">*</span>  任务负责人<img src="/assetsInfo/images/wenhao.png"  class="leaW wenhao" /></label>
+                    <div class="layui-input-block" >
+                        <select name="approveUserId" id='approveUserId_blong' xm-select="approveUserId_blong" xm-select-skin="normal" xm-select-radio="" xm-select-search>
+                            <option value="">选择任务负责人</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item dateA" >
+                    <!--<img src="/assets/images/wenhao.png"  class="menW wenhao" />-->
+                    <label class="layui-form-label" ><span style="color: red;">*</span>  任务成员</label>
+                    <div class="layui-input-block" >
+                        <!--                <select name="memberIds" id='memberIds_blong' xm-select="memberIds_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-search>-->
+                        <!--                    <option value="">选择任务成员</option>-->
+                        <!--                </select>-->
+                        <div name="memberIds" id='memberIds_blong'>
+                            <option value="">选择任务成员</option>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 任务状态</label>
+                    <div class="layui-input-block">
+                        <select name="taskStatus" id='taskStatus_blong' data-placeholder="选择任务状态"  xm-select="taskStatus_blong" xm-select-skin="normal" xm-select-direction="down" xm-select-radio="" xm-select-search>
+                            <option value="">选择任务状态</option>
+                        </select>
+                    </div>
+                </div> -->
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 开始时间</label>
+                    <div class="layui-input-block">
+                        <input autocomplete="off" type="text" name="planStartTime" id="planStartTaskTime" placeholder="开始时间" class="layui-input" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 结束时间</label>
+                    <div class="layui-input-block">
+                        <input  autocomplete="off" type="text" name="planEndTime" id="planEndTaskTime" placeholder="结束时间" class="layui-input" >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color: red;">*</span> 优先级</label>
+                    <div class="layui-input-block layui-layer-page">
+                        <select name="priority" class="layui-layer-page" id='priority_blong'  xm-select="priority_blong" xm-select-skin="normal"  xm-select-radio="" xm-select-search >
+                            <option value="">选择优先级</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" taskBottom">
+            <div class="layui-form-item">
+                <!--            <label class="layui-form-label"><span style="color: red;">*</span> 任务预计交付物s</label>-->
+                <label class="layui-form-label"> 任务预计交付物</label>
+                <div class="layui-input-block" id="planAddBox">
+                    <div style="display: inline-block;width: 100%;padding-right: 15px;">
+                        <!--                    <input  autocomplete="off" type="text" maxlength="50" lay-verify="required"  style="width: calc(100% - 25px);display: inline-block;" placeholder="请填写交付物" class="layui-input planOutcomesData" >-->
+                        <input  autocomplete="off" type="text" maxlength="50"  style="width: calc(100% - 25px);display: inline-block;" placeholder="请填写交付物" class="layui-input planOutcomesData" >
+                        <img class="clickImg" onclick="addPlanOutcomes(this)" src="/assetsInfo/images/Group-.png" style="cursor: pointer;" _src="/assetsInfo/images/Group-.png">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <!--传递过来的操作类型-->
+        <input type="text" name="handleType" id="handleType" style="display: none;">
+        <!-- 如果是编辑传过来的id-->
+        <input type="text" name="id" id="id" style="display: none;">
+        <input type="text" name="taskStatus" id="taskStatus" style="display: none;">
+        <div class="layui-form-item" style="text-align: center; visibility:hidden;position: absolute;">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="btn-task-save" id="btn-task-save">保存</button>
+            <button class="layui-btn layui-btn-primary" id="btn-task-cancel">取消</button>
+        </div>
+    </div>
+    <div class="layui-form-item" style="text-align: center;">
+        <button class="layui-btn layui-btn-normal btn-task-save">保存</button>
+        <button class="layui-btn layui-btn-primary btn-task-cancel" >取消</button>
+    </div>
+</div>
+
+
+
+<script>
+    var addPlanOutcomes = function(){
+        var html='<div style="display: inline-block;width: 100%;margin-top: 5px;padding-right: 15px">\n' +
+            '        <input   maxlength="50" autocomplete="off" type="text"  style="width: calc(100% - 25px);display: inline-block;" placeholder="请填写交付物" class="layui-input planOutcomesData" >\n' +
+            '        <i class="clickImg layui-icon layui-icon-delete" style="font-size: 20px; margin-right:-50px;cursor:pointer" href="javascript:;" onclick="delPlanOutcomes(this)"></i>\n' +
+            '     </div>';
+        $('#planAddBox').append(html);
+    };
+    // $('.layui-layer').css('top','none')
+    $('#taskForm').parent().parent().css('top')
+    var delPlanOutcomes = function(that){
+        // if($(that).siblings('input').attr('data-id')) {
+        //     $(that).parent().remove();
+        // }
+        layer.confirm('确定删除该条交付物吗', {
+            icon: 3,
+            title: '提示'
+        }, function(index) {
+            $.ajax({
+                url: "/api/budget/taskResult/"+$(that).siblings('input').attr('data-id'),
+                type: 'delete',
+                success: function (res) {
+                    if(res.ok){
+                        $(that).parent().remove();
+                        layer.close(index);
+                        return layer.msg('删除成功', {
+                            icon: 1
+                        });
+                    }else{
+                        return layer.msg(res.message, {
+                            icon: 5
+                        });
+                    }
+                }
+            });
+        });
+    };
+    layui.use(['form', 'laydate','formSelects'], function() {
+        var admin = layui.admin,
+            laydate = layui.laydate,
+
+            form = layui.form,
+            layer = layui.layer,
+            formSelects = layui.formSelects;
+        var proIndex,leaIndex,menIndex,bueIdex;
+        $(".proW").off('mouseleave').on('mouseleave',function () {
+            layer.close(proIndex);
+        }).off('mouseenter').on('mouseenter',function () {
+            proIndex=layer.tips("<span style='color:#333333;'>指创建于特定项目下的任务，适用于大多数情况</span>", '.proW', {
+                tips: [1, '#fff'],
+            });
+        });
+        $(".leaW").off('mouseleave').on('mouseleave',function () {
+            layer.close(leaIndex);
+        }).off('mouseenter').on('mouseenter',function () {
+            leaIndex=layer.tips("<span style='color:#333333;'>负责任务信息、任务人员的维护及该任务下所有人工时的审批</span>", '.leaW', {
+                tips: [1, '#fff'],
+            });
+        });
+        // $(".menW").off('mouseleave').on('mouseleave',function () {
+        //     layer.close(menIndex);
+        // }).off('mouseenter').on('mouseenter',function () {
+        //     menIndex=layer.tips("<span style='color:#333333;'>任务成员必须在所属项目的成员范围内选择</span>", '.menW', {
+        //         tips: [1, '#fff'],
+        //     });
+        // });
+        $(".bueW").off('mouseleave').on('mouseleave',function () {
+            layer.close(bueIdex);
+        }).off('mouseenter').on('mouseenter',function () {
+            bueIdex=layer.tips("<span style='color:#333333;'>指直接创建在业务下任务，过项目一级，适用于无合同的经营任务</span>", '.bueW', {
+                tips: [1, '#fff'],
+            });
+        });
+        // 初始化日期组件
+        setTimeout(function () {
+
+
+        //日期
+        var sTime= $('#planStartTaskTime').val();
+        var eTime= $('#planEndTaskTime').val();
+        console.log(sTime,"MIN");
+        console.log(eTime,"MAX");
+        var startTime=laydate.render({
+            elem:'#planStartTaskTime',
+            // type:'datetime',
+            max: eTime != '' ? eTime : '2099-12-30',
+            btns: ['clear','confirm'],
+            done:function(value,date){
+                endTime.config.min={
+                    year:date.year,
+                    month:date.month-1,//关键
+                    date:date.date,
+                    // hours:date.hours,
+                    // minutes:date.minutes,
+                    // seconds:date.seconds
+                };
+            }
+        })
+        var endTime=laydate.render({
+            elem:'#planEndTaskTime',
+            // type:'datetime',
+            min: sTime != '' ? sTime : '1970-01-01',
+            btns: ['clear','confirm'],
+            done:function(value,date){
+              console.log(endTime.config.dateTime.seconds,'ssdsds')
+                if(endTime.config.dateTime.seconds == 0){
+                    var endTimes = new Date(new Date(new Date(value).getTime() + 24 * 60 * 60 * 1000 -1));
+                    endTime.config.dateTime.hours = endTimes.getHours();
+                    endTime.config.dateTime.minutes = endTimes.getMinutes();
+                    endTime.config.dateTime.seconds = endTimes.getSeconds();
+                }
+                if(date.year){ // 解决清空结束时间，选不了开始时间问题
+                  startTime.config.max={
+                      year:date.year,
+                      month:date.month-1,//关键
+                      date:date.date,
+                      // hours:date.hours,
+                      // minutes:date.minutes,
+                      // seconds:date.seconds
+                  }
+                }else {
+                  startTime.config.max={
+                      year:2099,
+                      month:12,//关键
+                      date:31,
+                      // hours:date.hours,
+                      // minutes:date.minutes,
+                      // seconds:date.seconds
+                  }
+                }
+            }
+        })
+        }, 600);
+        //如下定义所有
+        formSelects.opened('project_blong', function(id){
+            $('.layui-laydate').remove();
+            memberIds_blong_xmSelect.closed();
+
+        });
+        formSelects.opened('approveUserId_blong', function(id){
+            $('.layui-laydate').remove();
+            memberIds_blong_xmSelect.closed();
+        });
+        formSelects.opened('priority_blong', function(id){
+            $('.layui-laydate').remove();
+            memberIds_blong_xmSelect.closed();
+        });
+
+
+        $('#planStartTaskTime').off('mouseenter').on('mouseenter',function () {
+            console.log($('#planStartTaskTime').is(':focus'))
+            if($('#planStartTaskTime').is(':focus')){
+                $('#planStartTaskTime').blur()
+            }
+        })
+        $('#planEndTaskTime').off('mouseenter').on('mouseenter',function () {
+            if($('#planEndTaskTime').is(':focus')){
+                $('#planEndTaskTime').blur()
+            }
+        })
+        $(".btn-task-save").click(function(){
+            $('#btn-task-save').click();
+        })
+        $(".btn-task-cancel").click(function(){
+            $('#btn-task-cancel').click();
+        })
+        form.on('submit(btn-task-save)', function(obj) {
+            console.log(obj,"保存")
+            var data = obj.field,
+                elem = data.elem;
+                var judgeData=[{elem:'#task-name',message:'请输入任务名称'}];
+               if( !verifyEmpty(judgeData)) {
+                   return;
+               }
+          
+
+            if (data.type==0) {
+                if (data.projectId=='') {
+                    return layer.msg('请选择所属项目', {
+                        icon: 5
+                    });
+                }
+                delete data.budgetId;
+            }
+            else {
+                if (data.budgetId=='') {
+                    return layer.msg('请选择所属业务', {
+                        icon: 540
+                    });
+                }
+                delete data.projectId;
+            }
+            var memberIds_blong_xmSelect = xmSelect.get('#memberIds_blong', true);
+            var selectArr = memberIds_blong_xmSelect.getValue();
+
+            data.memberIds  = [];
+            for (selectData of selectArr ) {
+                data.memberIds.push(selectData.id);
+            }
+            if(data.approveUserId =='')
+            {
+                return layer.msg('请选择任务负责人', {
+                    icon: 5
+                });
+            }
+            console.log( data.memberIds )
+            if(!data.memberIds||data.memberIds.length==0)
+            {
+                return layer.msg('请选择任务成员', {
+                        icon: 5
+                    });
+            }
+            // data.memberIds = data.memberIds.concat(data.approveUserId)
+            // function uniq(array){   //  去重
+            //     var temp = []; //一个新的临时数组
+            //     for(var i = 0; i < array.length; i++){
+            //         if(temp.indexOf(array[i]) == -1){
+            //             temp.push(array[i]);
+            //         }
+            //     }
+            //     return temp;
+            // }
+            // // uniq(data.memberIds)
+            // data.memberIds = uniq(data.memberIds.split(','));
+            //data.memberIds = data.memberIds.split(',');
+
+            if (layui.formSelects.value('approveUserId_blong', 'val').length > 0 ) {
+                data.approveUserId = layui.formSelects.value('approveUserId_blong', 'val')[0];
+            };       //取值val数组
+            console.log( data.approveUserId,' data.approveUserId');
+
+             judgeData=[{elem:'#planStartTaskTime',message:'请输入起始时间'},{elem:'#planEndTaskTime',message:'请输入结束时间'}];
+               if( !verifyEmpty(judgeData))
+               {
+                   return;
+               }
+            data.planStartTime = data.planStartTime + ' 00:00:00';
+            data.planEndTime = data.planEndTime + ' 23:59:59';
+            if (new Date(data.planStartTime).getTime() - (new Date(data.planEndTime).getTime()) > 0) {
+                return layer.msg('开始时间不能大于结束时间', {
+                    icon: 5
+                });
+            }
+
+            if(data.priority=='')
+            {
+                return layer.msg('请选择任务优先级', {
+                        icon: 5
+                    });
+
+            }
+            var ajaxType = 'post';
+            if (data.handleType == 'edit') {
+                ajaxType = 'put';
+            }
+            data.taskStatus=data.taskStatus?data.taskStatus:'进行中';
+            var taskResultEOList = [];
+            for (var i = 0; i < $('.planOutcomesData').length; i++) {
+                if($('.planOutcomesData').eq(i).val()){
+                    taskResultEOList.push(
+                        {
+                            taskId: data.id,
+                            resultName: $('.planOutcomesData').eq(i).val(),
+                            id: $('.planOutcomesData').eq(i).attr('data-id')
+                        }
+                    );
+                }
+            }
+            data.taskResultEOList=taskResultEOList;
+            if (data.handleType==='copy'){
+                console.log("dfsafsafd",data.handleType);
+                data.id = '' ;
+            }
+            delete data.handleType;
+            admin.req('/api/budget/task', data, function(res) {
+                $(elem).attr('disabled', false);
+                if (res.ok) {
+                    layer.msg('保存成功！', {
+                        icon: 1
+                    });
+                    admin.finishPopupCenter(res.data);
+                } else {
+                    return layer.msg('保存失败：' + res.message, {
+                        icon: 5
+                    });
+                    admin.finishPopupCenter();
+                }
+            }, {method: ajaxType});
+        });
+        formSelects.on('approveUserId_blong', function(id, vals, val, isAdd, isDisabled){
+            //id:           点击select的id
+            //vals:         当前select已选中的值
+            //val:          当前select点击的值
+            //isAdd:        当前操作选中or取消
+            //isDisabled:   当前选项是否是disabled
+            console.log("approveUserId_blong @@@")
+            if (isAdd) {
+                var memberArr = memberIds_blong_xmSelect.getValue();
+                var boolArr = [];
+                memberArr.forEach(function (item, index) {
+                    boolArr.push(item.value)
+                })
+                if (boolArr.indexOf(val.value) == -1) {
+                    memberIds_blong_xmSelect.append([val.value]);
+                }
+            }
+            // else {
+            //     var memberArrs = memberIds_blong_xmSelect.getValue();
+            //     var boolArrs = [];
+            //     memberArrs.forEach(function (item, index) {
+            //         boolArrs.push(item.value)
+            //     })
+            //     if(boolArrs.indexOf(val.value) > -1) {
+            //         for(var i = 0; i < boolArrs.length; i++){
+            //             if(boolArrs[i] === val.value){
+            //                 boolArrs.splice(i,1);
+            //             }
+            //         }
+            //         console.log("这里！！！！")
+            //         memberIds_blong_xmSelect.append(boolArrs);
+            //     }
+            // }
+
+            //如果return false, 那么将取消本次操作
+            // return false;
+        });
+
+        $("#quanxuan").click(function(){//全选
+            $("#memberIds_blong input[type='checkbox']").prop("checked",true);
+            form.render('checkbox');
+        })
+
+        $('.xm-select').click(function(){
+            console.log(123)
+        })
+        $("#fanxuan").click(function(){//反选
+            $("#bd input[type='checkbox']").each(function(){
+                if($(this).prop("checked")){
+                    $(this).prop("checked",false);
+                }else{
+                    $(this).prop("checked",true);
+                }
+            })
+            form.render('checkbox');
+        })
+
+        $("#buxuan").click(function(){//不选
+            $("#bd input[type='checkbox']").prop("checked",false);
+            form.render("checkbox");
+        })
+
+        function verifyEmpty(data) {
+            var isTrue=true;
+            for(var item of data) {
+                if($(item.elem).val()=='') {
+                    $(item.elem).addClass('layui-form-danger'); 
+                     layer.msg(item.message?item.message:'必填项不能为空', {
+                        icon: 5
+                    });
+                    $(item.elem).focus();
+                    isTrue= false;
+                    break;
+                }
+            }
+            return isTrue;
+        }
+        /*
+        * 取消
+        * */
+        $('#btn-task-cancel').on('click', function() {
+            admin.closePopupCenter();
+        });
+
+    });
+</script>

@@ -1,0 +1,309 @@
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<script src="../../assetsInfo/js/FormMerge.js"></script>
+<link rel="stylesheet" href="assetsInfo/css/report.css">
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+    
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+    
+    .titDivbox {
+        width: 90%;
+        margin: auto;
+        position: relative;
+    }
+    
+    .titDiv {
+        width: 100%;
+        font-size: 16px;
+        font-weight: bold;
+        color: #888;
+        position: absolute;
+        top: 25px;
+    }
+    
+    .tit01,
+    .tit02 {
+        width: 50%;
+        float: left;
+        text-align: center;
+    }
+    
+    .chart {
+        height: 360px;
+        width: 96%;
+    }
+    
+    .form-bottom {
+        overflow: auto
+    }
+    
+    .botTable {
+        width: 70%;
+    }
+    
+    .chart {
+        padding-bottom: 10px;
+    }
+    
+    @media screen and (min-width: 1366px) and (max-width: 1920px) {
+        .chart {
+            height: 360px;
+            width: 96%;
+        }
+        .botTable {
+            width: 70%;
+        }
+    }
+    
+    @media screen and (min-width: 1920px) {
+        .chart {
+            height: 370px;
+            width: 96%;
+        }
+        .botTable {
+            width: 70%;
+        }
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span class="layui-card-header-title"><strong>三大板块合同签定同期对比
+                    </strong></span>
+                <!-- <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-sm exportbtn">导出PPT</a> -->
+            </div>
+            <div class="layui-row">
+                <div id="picture" class="chart"></div>
+            </div>
+            <div class="botTable">
+                <table id="tableContent-form3" lay-filter="tableContent-form3"></table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+</script>
+<script>
+    layui.use(['table'], function() {
+        var table = layui.table,
+            admin = layui.admin,
+            layer = layui.layer;
+
+        //下面表格
+        table.render({
+            elem: '#tableContent-form3',
+            url: '/json/17.json', //数据接口
+            cols: [
+                [ //表头
+                    {
+                        field: 'plate',
+                        title: '板块',
+                        align: 'center'
+                    }, {
+                        field: 'year',
+                        title: '年度',
+                        align: 'center'
+
+                    }, {
+                        field: 'one',
+                        title: '一季度',
+                        align: 'center'
+
+                    }, {
+                        field: 'two',
+                        title: '二季度',
+                        align: 'center'
+
+
+                    }, {
+                        field: 'three',
+                        title: '三季度',
+                        align: 'center'
+
+                    }, {
+                        field: 'four',
+                        title: '四季度',
+                        align: 'center'
+
+
+                    }, {
+                        field: 'count',
+                        title: '合计',
+                        align: 'center'
+
+                    }
+                ]
+
+            ],
+            done: function(res, curr, count) {
+                alarmTableRowSpan("plate", 1);
+            }
+        })
+
+        //图表
+        admin.req('/json/report.json', {}, function(res) {
+            var depObject = res.tp[0];
+            var xData = [];
+            var tableCol = [];
+            for (var key in depObject) {
+                xData.push(depObject[key])
+            }
+            var yData1 = [],
+                yData2 = [],
+                yData3 = [],
+                yData4 = [];
+            for (var key in res.tp[1]) {
+                yData1.push(res.tp[1][key])
+            }
+            for (var key in res.tp[2]) {
+                yData2.push(res.tp[2][key])
+
+            }
+            for (var key in res.tp[3]) {
+                yData3.push(res.tp[3][key])
+            }
+            for (var key in res.tp[4]) {
+                yData4.push(res.tp[4][key])
+
+            }
+            showUpL(xData, yData1, yData2, yData3, yData4)
+
+        }, {
+            method: 'get'
+        });
+        //echart
+        var showUpL = function(xData, data1, data2, data3, data4) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("picture"));
+            // 图表配置项
+            var option = {
+                title: {
+                    left: 'center',
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    textStyle: {　　
+                        align: 'left'　　　　
+                    },
+                    axisPointer: {
+                        type: 'cross',
+                        crossStyle: {
+                            color: '#999'
+                        }
+                    }
+                },
+                grid: {
+                    left: 40,
+                    right: 5,
+                    bottom: 50
+                },
+                legend: {
+                    data: [{
+                        name: '一季度',
+                        icon: "roundRect"
+                    }, {
+                        name: '二季度',
+                        icon: "roundRect"
+                    }, {
+                        name: '三季度',
+                        icon: "roundRect"
+                    }, {
+                        name: '四季度',
+                        icon: "roundRect"
+                    }],
+                    left: 'center',
+                    bottom: 'bottom',
+                    itemWidth: 10,
+                    itemHeight: 10
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: xData,
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#949494',
+                        }
+                    }
+                }],
+                yAxis: [{
+                        type: 'value',
+
+                        min: 0,
+                        axisLabel: {
+                            formatter: '{value}'
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#949494',
+                            }
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                type: 'dashed',
+                                color: "#E8E8E8"
+                            }
+                        },
+                    }
+
+                ],
+                series: [{
+                        name: '一季度',
+                        type: 'bar',
+                        barMaxWidth: 30,
+                        data: data1,
+                        color: 'RGB(124,190,253)'
+
+                    }, {
+                        name: '二季度',
+                        type: 'bar',
+                        color: 'RGB(255,233, 133)',
+                        data: data2
+
+
+                    }, {
+                        name: '三季度',
+                        type: 'bar',
+                        barMaxWidth: 30,
+                        data: data3,
+                        color: 'RGB(136,217,160)'
+
+                    }, {
+                        name: '四季度',
+                        type: 'bar',
+                        color: 'RGB(255,172, 218)',
+                        data: data4
+
+                    },
+
+
+                ]
+            };
+            myChart.setOption(option);
+        };
+
+        setTimeout(function() {
+            window.onresize = function() {
+                myChart.resize();
+            }
+        }, 200);
+
+    });
+</script>

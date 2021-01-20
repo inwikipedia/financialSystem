@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" http-equiv="Content-Type" content="text/html">
+    <title>行程代理配置</title>
+    <style>
+        .layui-tpl-container .p-form,
+        .layui-layout-body .layui-layer-page .layui-layer-content {
+            overflow: visible !important;
+        }
+        .briefing-btn{
+            height: 28px;
+            line-height: 28px;
+        }
+        .upload-label{
+            display: inline-block;
+            width: 90px;
+            text-align: left;
+        }
+        .upload-box{
+            display: inline-block;
+            width: calc(100% - 100px);
+        }
+        .briefingForm .layui-btn:not(.layui-btn-lg):not(.layui-btn-sm):not(.layui-btn-xs){
+            height: 30px;
+            line-height: 30px;
+        }
+        .briefingForm .briefingBtn{
+            width: 50px;
+            height: 24px !important;
+            color: white;
+            line-height: 24px !important;
+            padding: 0px !important;
+            margin-left: 5px !important;
+        }
+        .briefingForm  .layui-form-item{
+            margin-bottom: 15px;
+        }
+        #sendMember{
+            cursor: pointer;
+        }
+        .briefingForm .layui-input:focus{
+            border:1px solid dodgerblue!important;;
+        }
+        .upload-box dl{
+            max-height: 140px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layui-form-item briefingForm" style="text-align: center;padding: 50px 110px 0px">
+    <div class="layui-form" style="margin-bottom: 60px">
+        <div class="layui-form-item">
+            <div>
+                <div class="upload-label">
+                    <span style="color:red;">*</span><label > 源用户：</label>
+                </div>
+                <div class="upload-box">
+                    <select lay-verify="required" lay-search placeholder="请选择源用户" lay-filter="briefingName"  name="briefingName" id="briefingName">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div>
+                <div class="upload-label">
+                    <span style="color:red;">*</span><label > 代理用户：</label>
+                </div>
+                <div class=" upload-box" id="sendMemberClick" style="position: relative;cursor: pointer">
+                    <input type="text" style="overflow: hidden; text-overflow:ellipsis; white-space: nowrap;padding-right: 26px" readonly  placeholder="请选择代理用户" maxlength="50"  class="layui-input" id="sendMember"  lay-verify="required">
+                    <img style="position: absolute;right: 4px;top:4px;" src="/assetsInfo/images/zudui.png" >
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="layui-btn briefing-btn layui-btn-normal " id="submitBriefing" lay-submit lay-filter="submitBriefing">确定</button>
+    <button class="layui-btn briefing-btn layui-btn-primary" id="cancelBriefing">取消</button>
+</div>
+
+<input type="text" readonly id="queryFlag" style="display: none" >
+</body>
+
+</html>
+
+
+<script>
+    var smallInit = function (selfData) {
+        layui.use('upload', function() {
+            var admin = layui.admin;
+            var form = layui.form;
+            if(selfData){
+                $('#sendMember').attr('data-name',selfData.destUserName);
+                $('#sendMember').attr('title',selfData.destUserName);
+                $('#sendMember').val(selfData.destUserName);
+                $('#sendMember').attr('data-id',selfData.destUserId);
+            }
+            $.ajax({
+                type: "get",
+                url: "/api/sys/user/scheduleUser?pageNo=1&pageSize=1000&weight=5200",
+                success: function (res) {
+                    var list = res.data.list;
+                    var con = '';
+                    for (i = 0; i < list.length; i++) {
+                        con += '<option value=' + list[i].usid + '>' + list[i].usname + '</option>'
+                    }
+                    if (!selfData&&list.length != 0) {
+                        $('select[name=briefingName]')[0].dataset.name = list[0].usname;
+                        $('select[name=briefingName]')[0].dataset.id = list[0].usid;
+                    }
+                    form.on('select(briefingName)', function (data) {
+                        data.elem.dataset.name = data.elem[data.elem.selectedIndex].innerHTML;
+                        data.elem.dataset.id = data.elem[data.elem.selectedIndex].value;
+                        form.render("select");
+                    });
+                    $('#briefingName').empty().append(con);
+                    if(selfData){
+                        $('#briefingName').attr('data-name',selfData.originUserName);
+                        $('#briefingName').val(selfData.originUserId);
+                        $('#briefingName').attr('data-id',selfData.originUserId);
+                    }
+                    form.render("select");
+                }
+            });
+            $('#sendMemberClick').off('click').on('click',function () {
+                var data={
+                    data:[]
+                };
+                var sendMemberNameArr=$('#sendMember').attr('data-name')?$('#sendMember').attr('data-name').split(','):[];
+                var sendMemberIdArr=$('#sendMember').attr('data-id')?$('#sendMember').attr('data-id').split(','):[];
+                if(sendMemberNameArr.length!=0){
+                    for(var i =0;i<sendMemberNameArr.length;i++){
+                        data.data.push({
+                            name:sendMemberNameArr[i],
+                            id:sendMemberIdArr[i]
+                        })
+                    }
+                }
+                layer.open({
+                    type: 2,
+                    id: 'personnelSelect',
+                    title: '请选择',
+                    content: 'components/tpl/personnel_group_select.html',
+                    area: ['96%', '80%'],
+                    btn: ['确定', '取消'],
+                    yes: function (index, layero) {
+                        var finalData = $('#personnelSelect iframe')[0].contentWindow
+                            .task_personnel_select.finish();
+                        var finalDataName=[];
+                        var finalDataId=[];
+                        for (var i = 0; i < finalData.length; i++) {
+                            finalDataName.push(finalData[i].name);
+                            finalDataId.push(finalData[i].id);
+                        }
+                        $('#sendMember').attr('data-name',finalDataName.join(","));
+                        $('#sendMember').attr('title',finalDataName.join(","));
+                        $('#sendMember').val(finalDataName.join(","));
+                        $('#sendMember').attr('data-id',finalDataId.join(","));
+                        layer.close(index);
+                    },
+                    success: function () {
+                        // 执行 iframe 内的方法
+                        $('#personnelSelect iframe')[0].contentWindow.task_personnel_select
+                            .init(data);
+                    },
+                    resize: false
+                });
+            });
+            //确定
+            $('#submitBriefing').off('click').on('click',function () {
+                var originUserName =$('#briefingName').attr('data-name');
+                var originUserId =$('#briefingName').attr('data-id');
+                var sendMemberNameArr=$('#sendMember').attr('data-name')?$('#sendMember').attr('data-name').split(','):[];
+                var sendMemberIdArr=$('#sendMember').attr('data-id')?$('#sendMember').attr('data-id').split(','):[];
+                var sendMemberName =  $('#sendMember').attr('data-name');
+                if(!originUserId){
+                    return  layer.msg('请选择源用户', {
+                        icon: 5,
+                        time:1000
+                    });
+                }
+                if(!sendMemberName){
+                    return  layer.msg('请选择目标用户', {
+                        icon: 5,
+                        time:1000
+                    });
+                }
+                var memberArr='';
+                if(sendMemberNameArr.length!=0){
+                    for(var i =0;i<sendMemberNameArr.length;i++){
+                        var icon=',';
+                        if(i==0){
+                            icon=''
+                        }
+                        memberArr+=icon+'{name:'+
+                            sendMemberNameArr[i]+',id:'
+                            +sendMemberIdArr[i]
+                            +'}'
+                    }
+                }
+                var obj ={
+                    "destUserId": $('#sendMember').attr('data-id'),
+                    "destUserMap": memberArr,
+                    "destUserName": $('#sendMember').val(),
+                    "originUserId": originUserId,
+                    "originUserName": originUserName,
+                    "configType":'2',
+                    "id":selfData?selfData.id:''
+                };
+                $.ajax({
+                    url: "/api/smallprogram/scheudlePermission/createAndUpdate",
+                    type: 'post',
+                    data: JSON.stringify(obj),
+                    contentType: 'application/json',
+                    success: function (res) {
+                        if (res.ok) {
+                            admin.finishPopupCenter(true);
+                            return layer.msg(selfData?'编辑成功':'新建成功', {
+                                icon: 1,
+                                time: 1000
+                            });
+
+                        } else {
+                            return layer.msg(res.message, {
+                                icon: 5
+                            });
+                        }
+                    }
+                });
+            });
+            //取消
+            $('#cancelBriefing').off('click').on('click',function () {
+                admin.finishPopupCenter();
+            });
+        });
+    }
+</script>

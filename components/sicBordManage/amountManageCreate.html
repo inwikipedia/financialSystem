@@ -1,0 +1,332 @@
+<style>
+    #adminPopupC {
+        position: relative;
+        padding-bottom: 60px;
+    }
+
+    .sure-btn {
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+    }
+
+    .amountCreate {
+        padding: 20px;
+        overflow: auto;
+        height: 420px;
+    }
+
+    .amountCreate .leftItem,
+    .amountCreate .rightItem {
+        display: inline-block;
+        width: 100%;
+    }
+
+    .amountCreate .layui-form-item {
+        /*height: 30px;*/
+        line-height: 30px;
+    }
+
+    .amountCreate .form-input {
+        position: relative;
+        display: inline-block;
+        width: calc(100% - 495px);
+    }
+
+    .amountCreate label {
+        display: inline-block;
+        width: 480px;
+        text-align: left;
+    }
+
+    label {
+        font-weight: normal;
+    }
+
+    .redSpan {
+        color: red;
+    }
+
+    .layui-layer-load {
+        background-color: white;
+    }
+
+    .layui-layer-iframe iframe {
+        width: 99% !important;
+    }
+
+    .amountCreate .layui-disabled,
+    .amountCreate .layui-disabled:hover {
+        color: rgb(84, 84, 84) !important;
+    }
+
+    .amountCreate .layui-form-select dl {
+        top: 32px;
+        bottom: auto;
+        max-height: 180px;
+    }
+</style>
+
+<div class="layui-form">
+    <div class="amountCreate ">
+        <div class="leftItem">
+            <div class="layui-form-item">
+                <label> <span class="redSpan">*</span>科研项目ID：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请选择科研项目" readonly maxlength="20" readonly class="layui-input"
+                        id="select-project" class="researchProjectId" name="researchProjectId">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label> <span class="redSpan">*</span>科研项目编号：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入科研项目编号" readonly lay-verify="required" maxlength="20"
+                        class="layui-input" name="projectNo">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label> <span class="redSpan">*</span>科研项目名称：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入科研项目名称" lay-verify="required" readonly maxlength="12"
+                        class="layui-input amount" name="projectName" class="projectName">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label><span class="redSpan">*</span>费用类型ID：</label>
+                <div class="form-input ">
+                    <select id="fundsType" lay-search placeholder="请选择费用类型" lay-verify="required" lay-filter="fundsType"
+                        name="fundsType">
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>年份：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请选择年(费用类型ID为预算时不可填写)" readonly class="fundsYear layui-input"
+                        name="fundsYear">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>月份：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请选择月份(费用类型ID为预算时不可填写)" readonly class="fundsMonth layui-input"
+                        name="fundsMonth">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>设备费（含网络设备）-购置设备费（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入购置设备费" maxlength="12" class="layui-input amount"
+                        name="equipPurchaseFee">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>设备费（含网络设备）-试制设备费（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入试制设备费" maxlength="12" class="layui-input amount"
+                        name="equipTestCreateFee">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>设备费（含网络设备）-设备租赁费（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入设备租赁费" maxlength="12" class="layui-input amount"
+                        name="equipRentFee">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>材料费（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入材料费" maxlength="12" class="layui-input amount"
+                        name="materialFee">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>测试化验加工费（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入测试化验加工费" maxlength="12" class="layui-input amount"
+                        name="testProcessFee">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>燃料动力费（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入燃料动力费" maxlength="12" class="layui-input amount"
+                        name="fuelPowerFee">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>差旅费（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入差旅费" maxlength="12" class="layui-input amount" name="travelFee">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>会议费（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入会议费" maxlength="12" class="layui-input amount" name="meetingFee">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>国际合作交流费（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入国际合作交流费" maxlength="12" class="layui-input amount"
+                        name="internationExchangeFee">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>出版/文献/信息传播/知识产权事务费-软件购置费（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入软件购置费" maxlength="12" class="layui-input amount" name="kSoftFee">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>出版/文献/信息传播/知识产权事务费-除软件购置费之外的其他费用（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入其他费用" maxlength="12" class="layui-input amount" name="kOtherFee">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>劳务费（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入劳务费" maxlength="12" class="layui-input amount" name="laborFee">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>专家咨询费（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入专家咨询费" maxlength="12" class="layui-input amount"
+                        name="expertConsultFee">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>外协费（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入外协费" maxlength="12" class="layui-input amount"
+                        name="externalAssistFee">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>人员费（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入人员费" maxlength="12" class="layui-input amount" name="personFee">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>管理费（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入管理费" maxlength="12" class="layui-input amount" name="manageFee">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label>其他费用（万元）：</label>
+                <div class="form-input ">
+                    <input type="text" placeholder="请输入其他费用(费用类型ID为国拨时不可填写)" maxlength="12"
+                        class="layui-input amount otherFee" name="otherFee">
+                </div>
+            </div>
+        </div>
+        <input type="text" name="sicId" id="sicId" readonly style="display: none">
+        <input type="text" name="sicType" id="sicType" readonly style="display: none">
+    </div>
+    <div class="layui-form-item sure-btn" style="text-align: center">
+        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="btn-cost-sure" id="btn-cost-sure">确定</button>
+        <button class="layui-btn layui-btn-primary" id="cancleCost">取消</button>
+    </div>
+</div>
+<script>
+    layui.use('upload', function () {
+        var admin = layui.admin;
+        var laydate = layui.laydate;
+        var windowHeight;
+        //判断窗口分辨率
+        $(document).ready(function () {
+            if (screen.width == 1920) {
+                windowHeight = '60%';
+            }
+            if (screen.width <= 1366) {
+                windowHeight = '90%';
+            }
+        });
+        laydate.render({
+            elem: '.fundsYear',
+            type: "year"
+        });
+        laydate.render({
+            elem: '.fundsMonth',
+            type: "month",
+            format: 'M',
+            ready: function (date) {
+                $(".layui-laydate-main .layui-laydate-header").css("display", "none")
+            }
+        });
+        $('#cancleCost').off('click').on('click', function () {
+            admin.finishPopupCenter(true);
+        });
+        $('.amount').off("input").on("input", function (e) {
+            clearNoNum(this);
+        });
+        // 选择科研项目
+        $('#select-project').off('click').on('click', function () {
+            //   $("input[name='projectNo']").val('111');
+            layer.open({
+                type: 2,
+                id: 'supplierTableInput',
+                title: '请选择科研项目',
+                content: 'components/sicBordManage/accountManageTable.html',
+                area: ['56%', windowHeight],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+
+                    // onclick="javascript:projectNumSelect(this)"
+                    row = window["layui-layer-iframe" + index].callbackdata();
+                    if (!row) {
+                        layer.msg('请选择科研项目');
+                        return false;
+                    }
+                    $("input[name='researchProjectId']").val(row[0].researchProjectId);
+                    $("input[name='projectName']").val(row[0].projectName);
+                    $("input[name='projectNo']").val(row[0].projectNo);
+
+                    $("input[name='sicId']").val(row[0].id);
+                    layer.close(index);
+                },
+                success: function () {
+
+                },
+                resize: false
+            });
+
+        });
+
+        function clearNoNum(obj) {
+            if (obj.value.indexOf('.') > -1) { //判断有没有输入小数点
+            } else {
+                var p11 = /[^\d|^\-]/g;
+                var p22 = /(\d{9})\d*$/g;
+                var p44 = /(\d*)\9/g; //删除当我输入第七位的整数时候进行删除
+                obj.value = obj.value.replace(p11, "").replace(p22, "$1").replace(p44, "$1$9");
+            }
+            obj.value = obj.value.replace(/[^\d|^\-|^.]/g, ""); //清除“数字”和“.”以外的字符
+            obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+            obj.value = obj.value.replace(/\-{2,}/g, "-"); //只保留第一个. 清除多余的
+            obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            obj.value = obj.value.replace("-", "$#$").replace(/\-/g, "").replace("$#$", "-");
+            obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/, '$1$2.$3'); //只能输入两个小数
+            obj.value = obj.value.replace(/\^/g, ""); //只能输入两个小数
+            if (obj.value.indexOf("-") < 0 && obj.value.indexOf(".") < 0 && obj.value !=
+                "") { //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+                obj.value = parseFloat(obj.value);
+            }
+            if (obj.value.indexOf(".") == 0 && obj.value != "") { //首位输入.的按0处理
+                obj.value = parseFloat(obj.value.length == 1 ? 0 : obj.value);
+            }
+            if (obj.value.indexOf("-") == 0 && obj.value.indexOf(".") == 1 && obj.value != "") {
+                obj.value = obj.value.length == 2 ? 0 : obj.value;
+            }
+            if (obj.value.indexOf("-") > -1 && obj.value.indexOf("-") != 0 && obj.value != "") { //首位输入.的按0处理
+                obj.value = obj.value.replace(/\-/g, "");
+            }
+        }
+    });
+</script>

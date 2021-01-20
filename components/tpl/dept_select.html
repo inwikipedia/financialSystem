@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>请选择</title>
+
+    <link rel="stylesheet" href="../../assetsInfo/libs/layui/css/layui.css" />
+    <link rel="stylesheet" href="../../assetsInfo/css/style.css">
+    <link rel="stylesheet" href="../../assetsInfo/css/theme.css" />
+    <link rel="stylesheet" href="../../assetsInfo/css/task_orgs_select.css">
+
+    <!-- zTree 样式 -->
+    <link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/metroStyle.css">
+</head>
+
+<body>
+
+<div class="layui-fluid layui-tab" lay-filter="person-tab">
+    <div class="layui-row person-header">
+        <ul class="layui-tab-title">
+            <li class="layui-this">组织机构</li>
+        </ul>
+    </div>
+    <div class="layui-row person-container">
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md12 person-container-l">
+            <div class="layui-row">
+                <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+                    <!-- tab 切换 -->
+                    <div class="layui-tab-content">
+                        <!-- 组织机构 -->
+                        <div class="layui-tab-item layui-show">
+                            <div class="layui-form person-search">
+                                <div class="layui-form-item">
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="value" placeholder="请输入组织机构名称" class="layui-input" id="keyword"  autocomplete="off">
+                                        <i class="layui-icon layui-icon-search" layui-submit></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="person-select-box">
+                                <div class="person-select-box-t">
+                                    <ul id="select-org" class="ztree"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery 1.x 版本兼容 IE8 -->
+<script type="text/javascript" src="../../assetsInfo/libs/jquery-1.12.4.min.js"></script>
+<!-- Q.js 轻量路由框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/q.js"></script>
+<!-- jQuery 轻量级 MVVM 框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/pandyle.min.js"></script>
+<!-- layui 脚本文件 -->
+<script type="text/javascript" src="../../assetsInfo/libs/layui/layui.js"></script>
+<!-- zTree js 文件 -->
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+
+<script>
+    var task_orgs_select = {
+        zTreeObj: null,
+        clickNode: {},
+        finish: function () {
+            return {
+                id: this.clickNode.id ? this.clickNode.id : '',
+                name: this.clickNode.name ? this.clickNode.name : ''
+            };
+        }
+    };
+
+    layui.config({
+        base: '../../module/'
+    }).use(['element', 'index'], function () {
+        var element = layui.element,
+            $ = layui.jquery,
+            admin = layui.admin;
+        addTree();
+
+        //回车搜索
+        $('#keyword').off('keyup').on('keyup',keyDownSearch);
+        function keyDownSearch(e) {
+            var theEvent = e || window.event;
+            var code = theEvent.keyCode || theEvent.which || theEvent.charCode ;
+            if (code == 13) {
+                var _keywords = $('#keyword').val();
+                addTree(_keywords);
+                return false;
+            }
+            return true;
+        };
+        $('.layui-icon-search').off('click').on('click', function(){
+            var _keywords = $('#keyword').val();
+            addTree(_keywords);
+        })
+        function addTree(keyword) {
+            // 初始化组织机构列表
+            admin.req('/api/sys/org/listOrgEOByOrgNameLeveled?layer=5', {
+                orgName: keyword
+            }, function (d) {
+                if (!d.ok) {
+                    return layer.msg('获取组织机构列表失败：' + d.message, {
+                        icon: 5
+                    });
+                }
+                // 生成 zTree
+                var setting = {
+                    data: {
+                        simpleData: {
+                            enable: true,
+                            idKey: "id",
+                            pIdKey: "parentId",
+                            rootPId: '0'
+                        }
+                    },
+                    view: {
+                        showIcon: false
+                    },
+                    callback: {
+                        onClick: function (event, treeId, treeNode) {
+                            // if (treeNode.children === undefined) {
+                            task_orgs_select.clickNode = treeNode;
+                            // }
+                        }
+                    }
+                };
+                var a = []
+                for(i=0;i<d.data.length;i++){
+                    var x = d.data[i].parentIds.split(',')
+                    if(x.length<=4){
+                        a.push(d.data[i])
+                    }
+                    if(d.data[i].parentId==0){
+                        a.splice(i,1)
+                    }
+                }
+                var zNodes = a;
+                task_orgs_select.zTreeObj = $.fn.zTree.init($("#select-org"), setting, zNodes);
+                task_orgs_select.zTreeObj.expandAll(true);
+            });
+        }
+
+
+    });
+
+    // TODO: 移动端适配
+</script>
+</body>
+
+</html>

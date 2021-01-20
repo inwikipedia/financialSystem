@@ -1,0 +1,103 @@
+{
+    "code": 0,
+    "msg": "",
+    "count": 1000,
+    "data": {
+        "tableOne": [{
+                "type": "合同",
+                "budget2019": 4166,
+                "budget2018": 4138,
+                "budget": 4974,
+                "increate": 6.5,
+                "todo": 93.2
+            },
+            {
+                "type": "开票",
+                "budget2019": 2692,
+                "budget2018": 3142,
+                "budget": 2972,
+                "increate": -6.8,
+                "todo": 90.9
+            }
+        ],
+        "tableTwo": [{
+                "type": "",
+                "budgetall": "2019年第一季度",
+                "budget2018": "2018年第一季度",
+                "budget2019": "2019年第一季度",
+                "budget2020": "2018年第一季度"
+            },
+            {
+                "type": "咨询板块",
+                "budgetall": 772,
+                "budget2018": 2093,
+                "budget2019": 780,
+                "budget2020": 1080
+            },
+            {
+                "type": "数据板块",
+                "budgetall": 3011,
+                "budget2018": 3133,
+                "budget2019": 1101,
+                "budget2020": 1067
+            },
+            {
+                "type": "软件板块",
+                "budgetall": 2411,
+                "budget2018": 3133,
+                "budget2019": 1101,
+                "budget2020": 1067
+            },
+            {
+                "type": "总计",
+                "budgetall": 4887,
+                "budget2018": 3606,
+                "budget2019": 958,
+                "budget2020": 33
+            }
+        ],
+        "tableThree": [{
+                "type": "",
+                "budgetall": "2019年第一季度",
+                "budget2018": "2018年第一季度",
+                "budget2019": "2019年第一季度",
+                "budget2020": "2018年第一季度"
+            },
+            {
+                "type": "智能事业部",
+                "budgetall": 772,
+                "budget2018": 2093,
+                "budget2019": 900,
+                "budget2020": 1080
+            },
+            {
+                "type": "咨询事业部",
+                "budgetall": 3011,
+                "budget2018": 3133,
+                "budget2019": 3101,
+                "budget2020": 1067
+            },
+            {
+                "type": "数据事业部",
+                "budgetall": 2411,
+                "budget2018": 3133,
+                "budget2019": 1801,
+                "budget2020": 1067
+            },
+            {
+                "type": "软件事业部",
+                "budgetall": 3011,
+                "budget2018": 3133,
+                "budget2019": 1801,
+                "budget2020": 1067
+            },
+            {
+                "type": "总计",
+                "budgetall": 4887,
+                "budget2018": 3606,
+                "budget2019": 958,
+                "budget2020": 43
+            }
+        ]
+    }
+}

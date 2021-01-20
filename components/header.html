@@ -1,0 +1,79 @@
+<div class="layui-logo">
+    <img src="./assetsInfo/images/logo.png" />
+    <cite>ADC智能信息化系统</cite>
+</div>
+
+<ul class="layui-nav layui-layout-left">
+    <li class="layui-nav-item" lay-unselect >
+        <a ew-event="flexible" title="侧边伸缩" style="padding:0;"><i class="layui-icon layui-icon-shrink-right"></i></a>
+    </li>
+</ul>
+<div  id="sys-nav" class="layui-layout-left" ></div>
+
+<!--<div class="layui-side" p-com="side" id="sys-nav"></div>-->
+<!--&lt;!&ndash; 面包屑 &ndash;&gt;-->
+<!--<span class="layui-breadcrumb admin-breadcrumb" lay-separator=">">-->
+<!--</span>-->
+<!--<div class="layui-side" p-com="side" id="sys-nav">-->
+<ul  id="hearder-right" class="layui-nav layui-layout-right">
+    <li class="layui-nav-item" lay-unselect >
+        <img style="cursor: pointer" src="/assetsInfo/images/icon/zuo1.png" class="zuoBtn">
+        <img style="cursor: pointer" src="/assetsInfo/images/icon/you1.png" class="youBtn">
+    </li>
+    <li class="layui-nav-item" lay-unselect >
+        <!-- font-weight: 600; 解决原始图标过细的问题 -->
+        <a title="主页" href="./homePage.html" style="padding: 0 5px;"><i class="layui-icon layui-icon-home" style="font-weight: 600;"></i></a>
+    </li>
+    <!--<li class="layui-nav-item" lay-unselect ew-event="refresh">-->
+        <!--<a title="刷新" href="javascript:;" style="padding-left:0px;"><i class="layui-icon layui-icon-refresh-1"></i></a>-->
+    <!--</li>-->
+  <!--  <li class="layui-nav-item" lay-unselect>
+        <a title="消息" href="javascript:;" id="btn-getmsg"><i class="layui-icon layui-icon-notice" style="font-weight: 600;"></i></a>
+    </li>-->
+    <li class="layui-nav-item hidden" lay-unselect>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+
+    <li class="layui-nav-item hidden" lay-unselect>
+        <img src="./assetsInfo/images/UV.png" alt="" width="16" style="padding-right: 3px;margin-bottom: 4px;">
+        <span id="PvNum"></span></li>
+    <li class="layui-nav-item" lay-unselect>
+        <a href="javascript:;" class="usname" p-bind="title: {{usname}}">
+            <cite>您好，{{usname}}</cite>
+        </a>
+        <dl class="layui-nav-child">
+            <dd lay-unselect id="btn-setinf">
+                <a>个人信息</a>
+            </dd>
+            <dd lay-unselect id="btn-setpw">
+                <a>修改密码</a>
+            </dd>
+            <!-- <dd lay-unselect id="btn-themegene">
+                <a href="#!theme">主题生成器</a>
+            </dd> -->
+            <hr>
+            <dd lay-unselect id="btn-logout">
+                <a>退出</a>
+            </dd>
+        </dl>
+    </li>
+</ul>
+<div class="messageBox">
+    <div class="messageTitle">
+        <span class="messageTitle_left"><img src="../assetsInfo/images/firstpage/xiaoxi.png" ></span>
+        <span class="messageTitle_center">消息</span>
+        <span class="messageTitle_right"><img src="../assetsInfo/images/firstpage/suoxiao.png" ></span>
+    </div>
+    <div class="messageUl">
+
+    </div>
+    <div class="messageIgnore">
+        忽略全部
+    </div>
+</div>
+<div class="message-notice">
+    <img class="huiNotice" src="../assetsInfo/images/firstpage/tixing1.png" >
+    <img class="lanNotice" src="../assetsInfo/images/firstpage/tixing2.png" >
+</div>
+<script src="../assetsInfo/libs/addtable/addtable.js"></script>
+<script src="/assetsInfo/libs/echarts.min.js"></script>
+<script src="/assetsInfo/js/ADCFormDesignHelper.js"></script>
+<script src="/assetsInfo/js/noticeMessage.js"></script>

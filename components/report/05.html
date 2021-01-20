@@ -1,0 +1,603 @@
+<script src="../../assetsInfo/libs/echarts.js">
+</script>
+<link rel="stylesheet" href="assetsInfo/css/report.css">
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+    
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+    
+    @media screen and (min-width: 1366px) and (max-width: 1920px) {
+        #picture,
+        #picture1 {
+            height: 260px;
+        }
+    }
+    
+    @media screen and (min-width: 1920px) {
+        #picture,
+        #picture1 {
+            height: 400px;
+        }
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span class="layui-card-header-title"><strong>2017-2018年审批项目--本部执行情况</strong></span>
+                <!-- <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-sm exportbtn">导出PPT</a> -->
+            </div>
+            <div class="toptxt">
+                <p style="font-size: 14px;display: inline-block;width:51%;">其中:项目审批签订合同率前三名的是：<strong id="department" style="font-size: 12px;color: #0D96FF"></strong></p>
+                <p style="font-size: 14px;display: inline-block;width:48%">其中:项目审合同执行率前三名的是：<strong id="department1" style="font-size: 12px;color: #0D96FF"></strong></p>
+            </div>
+            <div class="layui-row" style="margin-top:10px;">
+                <div class="layui-col-md6" id="picture" style="width: 50%;"></div>
+                <div class="layui-col-md6" id="picture1" style="width: 50%;"></div>
+            </div>
+
+
+
+            <div class="botTable">
+                <div class="layui-form-item" style="text-align: right; margin-top:30px;margin-bottom: 5px">
+                    <button class="layui-btn layui-btn-primary" lay-submit lay-filter="btnSave_form" title="保存">保存</button>
+                    <button class="layui-btn layui-btn-primary" id="btnCancle_form" title="重置">重置</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-primary btn-myself" lay-filter="btn_download" lay-submit title="导出">
+                        <i class="layui-icon">导出</i><!-- layui-icon-download-circle-->
+                    </button>
+
+                    <button class="layui-btn layui-btn-sm layui-btn-primary btn-myself" lay-filter="btn_upload" lay-submit id='uploadExcel'>
+                        <i class="layui-icon " title="导入">导入</i><!--layui-icon-upload-circle-->
+                    </button>
+                </button>
+                </div>
+
+                <table id="tableContent-form" lay-filter="tableContent-form"></table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+</script>
+<script>
+    //全局数据id
+    var globleId = 5;
+    //全局获取表格信息
+    var globleData = $.ajax({
+        url: "/api/report/" + globleId,
+        async: false
+    }).responseJSON;
+
+    // 全局表头
+    var globleTitle = globleData.data[0];
+
+
+    // console.log(globleData);
+    var echartsOption;
+    var echartsOption1;
+    var myChart = echarts.init(document.getElementById('picture'));
+    var myChart1 = echarts.init(document.getElementById('picture1'));
+
+    /*筛选排名前五的部门*/
+
+    /*审批执行率排名*/
+    function rank() {
+        //个个部门
+        var bArrays = xAxisAarry();
+
+        var wArrays = newXLableArray(globleData.data, 1, 1);
+        //对完成率冒泡排序 并且排序部门
+        for (var i = 0; i < wArrays.length - 1; i++) {
+            for (var j = 0; j < wArrays.length - 1 - i; j++) {
+                if (parseFloat(wArrays[j]) < parseFloat(wArrays[j + 1])) {
+                    temp = wArrays[j];
+                    wArrays[j] = wArrays[j + 1];
+                    wArrays[j + 1] = temp;
+                    temp = bArrays[j];
+                    bArrays[j] = bArrays[j + 1];
+                    bArrays[j + 1] = temp;
+                }
+            }
+        }
+        var newbArrays = [];
+        for (var k = 0; k < 3; k++) {
+            newbArrays.push(bArrays[k])
+        }
+        return newbArrays;
+    }
+
+    function rank1() {
+        //个个部门
+        var bArrays = xAxisAarry();
+        //每个部门的完成率
+        var wArrays = newXLableArray(globleData.data, 1, 2);
+        //对完成率冒泡排序 并且排序部门
+        for (var i = 0; i < wArrays.length - 1; i++) {
+            for (var j = 0; j < wArrays.length - 1 - i; j++) {
+                if (parseFloat(wArrays[j]) < parseFloat(wArrays[j + 1])) {
+                    temp = wArrays[j];
+                    wArrays[j] = wArrays[j + 1];
+                    wArrays[j + 1] = temp;
+                    temp = bArrays[j];
+                    bArrays[j] = bArrays[j + 1];
+                    bArrays[j + 1] = temp;
+                }
+            }
+        }
+        var newbArrays = [];
+        for (var k = 0; k < 3; k++) {
+            newbArrays.push(bArrays[k])
+        }
+        return newbArrays;
+    }
+    //添加到页面中
+    document.getElementById('department').innerHTML = rank();
+    document.getElementById('department1').innerHTML = rank1();
+
+    //组装数据
+    //处理百分数的数组，显示到图表
+    function paresArrays(data) {
+        var newArrays = []
+        for (var i = 0; i < data.length; i++) {
+            newArrays.push(parseFloat(data[i]))
+        }
+        return newArrays;
+
+    }
+    /* //组装图例数据*/
+    function legendArrays(data, start, num) {
+        var newArrays = [];
+        if (num == 1) {
+            for (var i = start; i < data.length; i++) {
+                if (i == 3 || i == 4 || i == 6) {
+                    continue
+                }
+                newArrays.push(data[i])
+            }
+        } else {
+            for (var i = start; i < data.length; i++) {
+                if (i == 1 || i == 2 || i == 5) {
+                    continue
+                }
+                newArrays.push(data[i])
+            }
+        }
+
+        return newArrays;
+    }
+    /*组装数据*/
+    function zArrays(data, n) {
+        var array = [];
+        for (var k = 1; k < data.length - 1; k++) {
+            array.push(parseFloat(data[k][n]));
+        }
+        return array
+    }
+    /*组装x轴数据*/
+    function xAxisAarry() {
+        var newArrays = [];
+        for (var i = 1; i < globleData.data.length - 1; i++) {
+            newArrays.push(globleData.data[i][0])
+        }
+        return newArrays
+    }
+
+    /* //组装图表内信息 柱状图 或者折线图*/
+    function jsonInfo(data, start, num) {
+        var jsonPropertiesArray = [];
+        if (num == 1) {
+            for (var i = start; i < data[0].length; i++) {
+                if (i == 3 || i == 4 || i == 6) {
+                    continue;
+                }
+                var jsonData = {};
+                if (data[0][i].lastIndexOf('率') != -1) {
+                    jsonData = {
+                        name: data[0][i],
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: zArrays(data, i),
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: true,
+                                    formatter: '{c}%',
+                                    color: '#949494'
+                                },
+                                lineStyle: {
+                                    //color:'#00FF00'
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    jsonData = {
+                        name: data[0][i],
+                        type: 'bar',
+                        data: zArrays(data, i)
+                    }
+                }
+                jsonPropertiesArray.push(jsonData);
+            }
+        } else {
+            for (var i = start; i < data[0].length; i++) {
+                if (i == 1 || i == 2 || i == 5) {
+                    continue;
+                }
+                var jsonData = {};
+                if (data[0][i].lastIndexOf('率') != -1) {
+                    jsonData = {
+                        name: data[0][i],
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: zArrays(data, i),
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: true,
+                                    formatter: '{c}%',
+                                    color: '#949494'
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    jsonData = {
+                        name: data[0][i],
+                        type: 'bar',
+                        data: zArrays(data, i)
+                    }
+                }
+
+                jsonPropertiesArray.push(jsonData);
+            }
+        }
+
+        console.log(jsonPropertiesArray);
+        return jsonPropertiesArray;
+
+    }
+    /*组装要排序的数据*/
+    function newXLableArray(data, num) {
+        var newArrays = [];
+        if (num == 1) {
+            for (var i = 1; i < data.length - 1; i++) {
+                newArrays.push(parseFloat(data[i][5]))
+            }
+        } else {
+            for (var i = 1; i < data.length - 1; i++) {
+                newArrays.push(parseFloat(data[i][6]))
+            }
+        }
+
+        return newArrays
+
+    }
+    /*//图表信息
+
+
+    //设置图属性*/
+    function initOption1() {
+        echartsOption1 = {
+            title: {
+                text: '整体合同执行率是：',
+                left: 18,
+                textStyle: {
+                    color: '#888',
+                    fontSize: 16
+                }
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            //图例
+            legend: {
+                data: legendArrays(globleTitle, 1, 2),
+                bottom: 0
+            },
+            grid: {
+                y2: 80,
+            },
+            xAxis: {
+                data: xAxisAarry(),
+                axisLabel: {
+                    show: true,
+                    interval: '0',
+                    rotate: 18,
+                    margin: 21,
+                    clickable: false,
+                    formatter: null,
+                    textStyle: {
+                        fontSize: 10,
+                    }
+                }
+            },
+            yAxis: [{
+                type: 'value',
+                splitLine: {
+                    lineStyle: {
+                        color: ['#ececec']
+                    },
+                }
+
+            }, {
+                type: 'value',
+                axisLabel: {
+                    show: true,
+                    interval: 'auto',
+                    formatter: '{value} %'
+
+                },
+                splitLine: {
+                    show: false,
+                    lineStyle: {
+                        color: ['#ececec']
+                    },
+                }
+
+            }],
+            color: ['rgba(58,160,255,0.6)', "rgba(78,203,115,0.6)"],
+            series: jsonInfo(globleData.data, 1, 2)
+        }
+    };
+    initOption1();
+    myChart1.setOption(echartsOption1);
+
+    function initOption() {
+        echartsOption = {
+            title: {
+                text: '整体项目审批执行率是：',
+                left: 18,
+                textStyle: {
+                    color: '#888',
+                    fontSize: 16
+                }
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            //图例
+            legend: {
+                data: legendArrays(globleTitle, 1, 1),
+                bottom: 0
+            },
+            grid: {
+                y2: 80,
+            },
+            xAxis: {
+                data: xAxisAarry(),
+                axisLabel: {
+                    show: true,
+                    interval: '0',
+                    rotate: 18,
+                    margin: 21,
+                    clickable: false,
+                    formatter: null,
+                    textStyle: {
+                        fontSize: 10,
+                    }
+                }
+            },
+            yAxis: [{
+                type: 'value',
+                splitLine: {
+                    lineStyle: {
+                        color: ['#ececec']
+                    },
+                }
+
+            }, {
+                type: 'value',
+                axisLabel: {
+                    show: true,
+                    interval: 'auto',
+                    formatter: '{value} %'
+
+                },
+                splitLine: {
+                    show: false,
+                    lineStyle: {
+                        color: ['#ececec']
+                    },
+
+                }
+
+            }],
+            color: ['rgba(58,160,255,0.6)', "rgba(78,203,115,0.6)"],
+            series: jsonInfo(globleData.data, 1, 1)
+        }
+    };
+    initOption();
+    myChart.setOption(echartsOption);
+
+    /*  //组装表格数据*/
+
+    function tableData(data) {
+        var colsList = [];
+        var colDetail = [];
+        for (var i = 0; i < data.length; i++) {
+            if (i == 0) {
+                var jsonTableRow = {
+                    title: data[i],
+                    sort: true,
+                    filed: [i],
+                    align: 'center'
+                };
+            } else {
+                var jsonTableRow = {
+                    edit: 'text',
+                    title: data[i],
+                    sort: true,
+                    filed: [i],
+                    align: 'center'
+                };
+            }
+
+            colDetail.push(jsonTableRow);
+        }
+        colsList.push(colDetail);
+        return colsList;
+    }
+
+    /*渲染表格*/
+    layui.use(['table'], function() {
+        var table = layui.table,
+            form = layui.form,
+            config = layui.config,
+            admin = layui.admin,
+            layer = layui.layer;
+
+        // 渲染表格
+        function initRender() {
+            table.render({
+                elem: '#tableContent-form',
+                id: 'tableContent-form',
+                url: admin.formatUrl('/api/report/' + globleId),
+                // 格式化后台返回的数据
+                parseData: function(res) {
+                    console.log(res);
+
+                    res.data.shift();
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+                },
+                //height: 472,
+                cols: tableData(globleTitle),
+                //globleCols,
+                cellMinWidth: 120,
+                request: {
+                    pageName: 'pageNo',
+                    limitName: 'pageSize'
+                },
+                where: {
+                    design: 0
+                }
+            });
+        };
+        initRender();
+        // 侧边栏变化时刷新数据表格
+        // 将 table ID 存入数组
+        layui.admin.addTableCache('tableContent-form');
+
+        // 监听工具条事件
+        // download
+        form.on('submit(btn_download)', function() {
+            window.location.href = admin.formatUrl('/api/report/export/' + globleId);
+        });
+
+
+        // 重置
+        $('#btnCancle_form').on('click', function() {
+            globleData = $.ajax({
+                url: "/api/report/" + globleId,
+                async: false
+            }).responseJSON;
+            syncFunction();
+        });
+
+        // 保存数据
+        form.on('submit(btnSave_form)', function(data) {
+            admin.req('/api/report/save/' + globleId, globleData.data, function(data) {
+                if (data.ok) {
+                    layer.msg('保存成功！', {
+                        icon: 1
+                    });
+                    globleData = data;
+                } else {
+                    layer.msg('保存失败：' + data.message, {
+                        icon: 5
+                    });
+                }
+            }, {
+                method: 'POST'
+            });
+            syncFunction();
+        });
+
+        //监听单元格编辑
+        table.on('edit(tableContent-form)', function(obj) {
+
+            var value = obj.value //得到修改后的值
+                ,
+                data = obj.data //得到所在行所有键值
+                ,
+                field = obj.field; //得到字段
+
+            var firstCol = obj.data[0];
+            for (i = 0; i < globleData.data.length; i++) {
+                if (firstCol == globleData.data[i][0]) {
+                    var rowNum = i;
+                    break;
+                }
+            }
+            //修改全局数据
+            globleData.data[rowNum][field] = value;
+            //同步刷新图表
+            initOption();
+            myChart.setOption(echartsOption, true);
+            //同步刷新图表
+            initOption1();
+            myChart1.setOption(echartsOption1, true);
+
+            layer.msg('[row: ' + rowNum++ + '] ' + field + ' 字段更改为：' + value);
+        });
+
+        function syncFunction() {
+            //重置表格
+            initRender();
+            //重置图表
+            initOption();
+            myChart.setOption(echartsOption, true);
+            initOption1();
+            myChart1.setOption(echartsOption1, true);
+        };
+    });
+
+    layui.use('upload', function() {
+        var upload = layui.upload;
+        //执行实例
+        var uploadInst = upload.render({
+
+            elem: '#uploadExcel' //绑定元素
+                ,
+            url: '/api/report/import/' + globleId //上传接口
+                ,
+            accept: 'file',
+            done: function(res) {
+                //上传完毕回调
+                syncFunction();
+            },
+            error: function() {
+                //请求异常回调
+            }
+        });
+
+        function syncFunction() {
+            //重置表格
+            layui.table.reload("tableContent-form");
+            //重置图表
+            initOption();
+            myChart.setOption(echartsOption, true);
+            //重置图表
+            initOption1();
+            myChart1.setOption(echartsOption1, true);
+        };
+    });
+</script>

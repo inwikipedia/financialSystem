@@ -1,0 +1,359 @@
+<!--
+File   : dic.html
+Created: Wednesday August 29th 2018 3:11:57 pm
+Author : yuchunyu97
+License: MIT License
+
+Copyright (c) 2018 yuchunyu97
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-----
+
+-----
+Description: 信息化管理 - 业务管理
+-----
+HISTORY:
+-->
+<style>
+    body{
+        overflow-y: hidden;
+    }
+</style>
+<div class="layui-row layui-col-space15">
+    <!-- 左侧 -->
+    <div class="layui-col-md12 autoScrollLeft">
+        <div class="layui-card">
+            <!-- 卡片容器 -->
+            <div class="layui-card-body">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class="layui-form-item table-top-bar">
+                        <!-- 左侧 -->
+                       
+                        <!-- 右侧 -->
+                        <div class="layui-inline layui-pull-right">
+                            <div class="layui-inline">
+                                <button id="btn_add_dic" class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="btn_add_dic"
+                                        lay-submit title="新增">
+                                    <i class="layui-icon layui-icon-add-1"></i>新增
+                                </button>
+                                <button id="btn_edit" type="button" class="layui-btn layui-btn-sm layui-import">
+                                    <i class="layui-icon layui-icon-edit"></i>编辑
+                                </button>
+                                <button id="btn_del_pro_batch" class="layui-btn layui-btn-sm layui-delete" lay-filter="btn_del_pro_batch" lay-submit id="btn_del_pro_batch" title="删除">
+                                    <i class="layui-icon layui-icon-delete"></i>删除
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 下部表格容器 -->
+                <table id="tableContent-business" lay-filter="tableContent-business"></table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+    <a class="table-control-btn table-control-btn-danger" lay-event="del">删除</a>
+</script>
+
+<script>
+    // 初始化 layui
+    layui.use(['table','treetable','formSelects'], function () {
+        var table = layui.table,
+            form = layui.form,
+            formSelects = layui.formSelects,
+            treetable = layui.treetable,
+            config = layui.config,
+            admin = layui.admin;
+
+        var heightTable = $(document).height()-100;
+
+        // 渲染左侧表格
+        var renderTable = function () {
+            // 渲染表格
+            treetable.render({
+                elem: '#tableContent-business',
+                id: 'tableContent-business',
+                treeColIndex: 1, // treetable新增参数
+                treeSpid: '1', // treetable新增参数
+                treeIdName: 'id', // treetable新增参数
+                treePidName: 'parentId', // treetable新增参数
+                treeDefaultClose: false, // treetable新增参数
+                treeLinkage: false, // treetable新增参数
+                url: admin.formatUrl('/api/budget/business/query/all'),
+                // 格式化后台返回的数据
+                dataFilter: function (data) { //res 即为原始返回的数据
+                    // 返回结果，进行渲染表格
+                    for (var i=0;i<data.length;i++)
+                    {
+                        data[i].parentId=data[i].parentId?data[i].parentId:'1';
+                    }
+                    return  data;
+                },
+                height:heightTable,
+                cols: [
+                    [{
+                        type: 'checkbox'
+                    }, {
+                        field: 'name',
+                        title: '业务名称'
+                    }, {
+                        field: 'createTime',
+                        title: '创建时间',
+                        templet: function(d) {
+                            var time= d.createTime ? new Date(parseInt(d.createTime)).toLocaleString() : "";
+                            return '<div title="'+time+'"><span>'+ time +'</span></div>'
+                        },
+                        align: 'center'
+                    },
+                    ]
+                ],
+                cellMinWidth: 120,
+            });
+        }
+        // 批量删除
+        $('#btn_del_pro_batch').on('click', function() {
+            var checkStatus = table.checkStatus('tableContent-business');
+            console.log(checkStatus)
+            var data=checkStatus.data[0];
+            if (checkStatus.data.length != 1) {
+                return layer.msg('请选择1个要删除的业务', {
+                    icon: 0
+                });
+            }
+            // 删除
+            layer.confirm('确定删除业务：' + data.name + ' 吗？', {
+                icon: 3,
+                title: '提示'
+            }, function () {
+                admin.req('/api/budget/business/' + data.id, {}, function (data) {
+                    if (data.ok) {
+                        layer.msg('删除业务成功！', {
+                            icon: 1
+                        });
+                        renderTable();
+
+                    } else {
+                        return layer.msg('删除业务失败：' + data.message, {
+                            icon: 5
+                        });
+                    }
+                }, {
+                    method: 'delete'
+                });
+            });
+        });
+//        编辑按钮
+        $('#btn_edit').on('click', function() {
+            var checkStatus = table.checkStatus('tableContent-business');
+            console.log(checkStatus)
+            if (checkStatus.data.length != 1) {
+                return layer.msg('请选择1个要编辑的业务', {
+                    icon: 0
+                });
+            }
+            popMenu("edit", checkStatus.data[0]);
+
+        });
+        // 初始化，执行一次渲染表格树
+        renderTable();
+        // DONE: 侧边栏变化时刷新数据表格
+        // 将 table ID 存入数组
+        layui.admin.addTableCache('tableContent-business');
+
+        // 搜索
+        form.on('submit(btn_search_dic)', function (data) {
+            var searchValue = data.field;
+            searchValue.reload = new Date().getTime();
+            table.reload('tableContent-business', {
+                where: searchValue
+            });
+        });
+        // 重置
+        form.on('submit(btn_reset_dic)', function () {
+            $('#dicName').val('');
+            $('#dicCode').val('');
+            table.reload('tableContent-business', {
+                where: {
+                    dicName: '',
+                    dicCode: '',
+                    reload: new Date().getTime()
+                }
+            });
+        });
+        // 新增
+        form.on('submit(btn_add_dic)', function () {
+            popMenu('add');
+        });
+
+        // 监听表格工具条事件
+        table.on('tool(tableContent-business)', function (obj) {
+            // 获取点击列的数据
+            var data = obj.data;
+            var layEvent = obj.event;
+            // 判断操作类型
+            if (layEvent === 'del') {
+                // 删除
+                layer.confirm('确定删除业务：' + data.name + ' 吗？', {
+                    icon: 3,
+                    title: '提示'
+                }, function () {
+                    admin.req('/api/budget/business/' + data.id, {}, function (data) {
+                        if (data.ok) {
+                            layer.msg('删除业务成功！', {
+                                icon: 1
+                            });
+                            renderTable();
+
+                        } else {
+                            return layer.msg('删除业务失败：' + data.message, {
+                                icon: 5
+                            });
+                        }
+                    }, {
+                        method: 'delete'
+                    });
+                });
+            } else if (layEvent === 'edit') {
+                // 编辑
+                popMenu('edit', data);
+            } else if (layEvent === 'view') {
+                // 查看
+                showRightMenu('view', data);
+            }
+        });
+
+        // 弹出框
+        function popMenu(type, data) {
+            // 判断操作事件
+            if (type === 'add') {
+                var title = '新增业务';
+                data = {};
+            } else if (type === 'edit') {
+                var title = '编辑业务：' + data.name
+            }
+            data.type = type;
+            admin.popupCenter({
+                title: title,
+                path: 'components/tpl/business_save_form.html',
+                finish: function () {
+                   renderTable();
+                },
+                success: function () {
+                    setFormValue(data);
+                }
+            });
+        }
+
+        // 设置表单内容
+        function setFormValue(obj) {
+            var inputs = $('.p-form').find('input'),
+                title = $('.p-form .layui-card-header'),
+                formNames = ['name',"id",'type'];
+
+            obj.title && title.text(obj.title);
+            for (var i = 0; i < formNames.length; i++) {
+                if (obj[formNames[i]]) {
+                    $('.p-form  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                } else {
+                    $('.p-form  input[name="' + formNames[i] + '"]').val('');
+                }
+            }
+            admin.req('/api/budget/business/query/all', {}, function(res) {
+                var arr = res.data,
+                    tmparr = [];
+                tmparr.push({name:"顶级业务",id:"1",parentId:"0",value:'1'});
+                for (var i = 0; i < arr.length; i++) {
+
+                    tmparr.push({
+                        name: arr[i].name,
+                        value: arr[i].id,
+                        id: arr[i].id,
+                        parentId: arr[i].parentId?arr[i].parentId:'1'
+                    });
+                }
+
+                var formSelectArr = admin.toTree(tmparr);
+                formSelects.data('business_pop', 'local', {
+                    arr: formSelectArr
+                });
+                formSelects.btns('business_pop', []);
+                if(obj.parentId)
+                {
+                    var defaultArray=[];
+                    defaultArray.push(obj.parentId);
+                    layui.formSelects.value('business_pop', defaultArray);
+
+                }
+            });
+
+        }
+
+        // 保存新增/编辑的信息
+        form.on('submit(menuSave-business)', function (data) {
+            var field = data.field;
+            console.log(field)
+            if (field.name === '' ) {
+                return layer.msg('请填写必填项', {
+                    icon: 5
+                });
+            }
+            if (field.type === 'add')
+            {
+                delete field.id;
+            }
+            var method = field.type === 'add' ? 'POST' : 'PUT';
+            submitDicData(field, method, function () {
+                admin.finishPopupCenter();
+            });
+        });
+        // 弹出框取消按钮
+        form.on('submit(popmenuCancle)', function () {
+            admin.closePopupCenter();
+        });
+
+        // 新增和修改请求的封装
+        function submitDicData(d, ajaxType, success, error) {
+            var ajaxName = ajaxType.toUpperCase() === 'POST' ? '新增' : '修改';
+            // 发送请求
+            admin.req('/api/budget/business', d, function (data) {
+                if (data.ok) {
+                    layer.msg(ajaxName + '业务成功！', {
+                        icon: 1
+                    });
+                    success(data);
+                } else {
+                    layer.msg(ajaxName + '业务失败：' + data.message, {
+                        icon: 5
+                    });
+                    error(data);
+                }
+            }, {
+                method: ajaxType
+            });
+        }
+
+
+
+    });
+</script>

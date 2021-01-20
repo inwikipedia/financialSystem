@@ -1,0 +1,164 @@
+<style>
+    #view-patent input{
+        height: 32px;
+    }
+    #view-patent .reduceMarginL{
+        margin-left: 115px;
+    }
+    #view-patent .labelWidth{
+        width: 85px;
+    }
+    #view-patent .layui-form-select dl dd.layui-this{
+        background-color: #229FFF
+    }
+
+</style>
+
+<link rel="stylesheet" href="../../assetsInfo/libs/layui/css/layui.css" />
+<link rel="stylesheet" href="../../assetsInfo/css/style.css">
+
+<div class="layui-tpl-container" style="padding-top: 20px">
+    <div class="layui-form" id="view-patent">
+        <div class="layui-row">
+            <div style="width: 50%;float: left">
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"> 编号</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" name="autoNumber" placeholder="请输入编号" class="layui-input" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"> 专利名称</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" name="name" placeholder="请输入专利名称" class="layui-input"  lay-verify="required" maxlength="50" readonly>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"> 专利类型</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" name="type" placeholder="请输入专利类型" class="layui-input" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">设计人</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入设计人" class="layui-input" name="designerUserNames" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">专利号</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入专利号" class="layui-input" name="num" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">专利申请日期</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" id="application" placeholder="请输入专利申请日期" class="layui-input" name="applyDate" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">部门</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入部门" class="layui-input" name="deptName" readonly>
+                    </div>
+                </div>
+
+            </div>
+            <div style="width: 50%;float: left">
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">专利权人</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入专利权人" class="layui-input" name="belongUserName" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">地址</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入地址" class="layui-input" name="belongUserAddress" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">授权公告日</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" id="announcement" placeholder="请输入授权公告日" class="layui-input" name="authorizeDate" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"><span>授权公告号</span> </label>
+                    <div class="layui-input-block reduceMarginL" style="position: relative">
+                        <input type="text" placeholder="请输入授权公告号" class="layui-input" name="authorizeNum" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"><span>证书号</span> </label>
+                    <div class="layui-input-block reduceMarginL" style="position: relative">
+                        <input type="text" placeholder="请输入证书号" class="layui-input" name="certificateNum" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"><span>附件</span> </label>
+                    <div class="layui-input-block reduceMarginL" style="position: relative">
+                        <input type="text" style="width:160px;float: left;" id="fileName" class="layui-input" readonly name="fileName">
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" title="下载" id="downFile" style="float: right">下载</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../../assetsInfo/libs/jquery-1.12.4.min.js"></script>
+<!-- Q.js 轻量路由框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/q.js"></script>
+<!-- jQuery 轻量级 MVVM 框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/pandyle.min.js"></script>
+<!-- layui 脚本文件 -->
+<script type="text/javascript" src="../../assetsInfo/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assetsInfo/js/jsencrypt.min.js"></script>
+<script type="text/javascript" src="../../module/ajaxSet.js"></script>
+<script src="/assetsInfo/js/ADCFormDesignHelper.js"></script>
+<script>
+    layui.use(['form','laydate','upload','util'], function() {
+        var layer = layui.layer;
+        var parent_json = eval('('+parent.json+')');
+        var id = parent_json.id;
+        var fileId;
+        $.ajax({
+            url: "/ADC_info/api/knowledge/patent/"+id,
+            success: function (data) {
+                for(var item in data.data){
+                    if(data.data[item]){
+                        data.data[item] = ADCFormDesignHelper.htmlDecodeByRegExp(data.data[item])
+                    }
+                }
+                var authorizeDate = data.data.authorizeDate?layui.util.toDateString(data.data.authorizeDate,'yyyy-MM-dd'):'';
+                var applyDate = data.data.applyDate?layui.util.toDateString(data.data.applyDate,'yyyy-MM-dd'):'';
+                $('input[name=autoNumber]').val(data.data.autoNumber);
+                $('input[name=name]').val(data.data.name);
+                $('input[name=designerUserNames]').val(data.data.designerUserNames);
+                $('input[name=type]').val(data.data.type);
+                $('input[name=applyDate]').val(applyDate);
+                $('input[name=num]').val(data.data.num);
+                $('input[name=belongUserName]').val(data.data.belongUserName);
+                $('input[name=belongUserAddress]').val(data.data.belongUserAddress);
+                $('input[name=authorizeDate]').val(authorizeDate);
+                $('input[name=authorizeNum]').val(data.data.authorizeNum);
+                $('input[name=certificateNum]').val(data.data.certificateNum);
+                $('input[name=deptName]').val(data.data.deptName);
+                $('input[name=fileName]').val(data.data.fileName);
+                fileId = data.data.fileId;
+            }
+        })
+        $('#downFile').on('click', function(){
+            if(fileId){
+                window.location.href = "/ADC_info/api/sys/file/"+fileId+"/download"
+            }else{
+                layer.msg('文件不存在')
+            }
+
+        })
+    })
+
+</script>

@@ -1,0 +1,59 @@
+<div class="layui-tpl-container layui-form" style="padding-bottom: 60px;">
+    <div class="layui-form-item tpl-password">
+        <label class="layui-form-label"><span style="color: red;">*</span> 合同编号</label>
+        <div class="layui-input-block">
+            <input type="text" name="contractNo" placeholder="请输入合同编号" class="layui-input" lay-verify="required">
+        </div>
+    </div>
+    <div class="layui-form-item tpl-password">
+        <label class="layui-form-label"><span style="color: red;">*</span> 乙方</label>
+        <div class="layui-input-block">
+            <input type="text" name="secondParty" placeholder="请输入乙方" class="layui-input" lay-verify="required">
+        </div>
+    </div>
+    <div class="layui-form-item tpl-password">
+        <label class="layui-form-label"><span style="color: red;">*</span> 生效日期</label>
+        <div class="layui-input-block">
+            <input type="text" name="startDate" placeholder="请输入生效日期" class="layui-input" lay-verify="required">
+        </div>
+    </div>
+    <div class="layui-form-item tpl-password">
+        <label class="layui-form-label"><span style="color: red;">*</span> 终止日期</label>
+        <div class="layui-input-block">
+            <input type="text" name="endDate" placeholder="请输入终止日期" class="layui-input" lay-verify="required">
+        </div>
+    </div>
+    <div class="layui-form-item tpl-password">
+        <label class="layui-form-label"><span style="color: red;">*</span> 合同名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="contractName" placeholder="请输入合同名称" class="layui-input" lay-verify="required">
+        </div>
+    </div>
+
+    <div class="layui-form-item tpl-password">
+        <label class="layui-form-label"><span style="color: red;">*</span> 合同金额</label>
+        <div class="layui-input-block">
+            <input type="text" name="conMoney" placeholder="请输入合同金额" class="layui-input" lay-verify="required|number">
+        </div>
+    </div>
+
+    <div class="layui-form-item tpl-password">
+        <label class="layui-form-label"><span style="color: red;">*</span> 未开票金额</label>
+        <div class="layui-input-block">
+            <input type="text" name="wkpje" placeholder="请输入未开票金额" class="layui-input" lay-verify="required|number">
+        </div>
+    </div>
+
+    <div class="layui-form-item tpl-password">
+        <label class="layui-form-label"><span style="color: red;">*</span> 未支出金额</label>
+        <div class="layui-input-block">
+            <input type="text" name="wzcje" placeholder="请输入未支出金额" class="layui-input" lay-verify="required|number">
+        </div>
+    </div>
+    <!-- 提交按钮 -->
+    <!-- 取消按钮 -->
+    <div class="layui-form-item" style="text-align: center;position: absolute;bottom: 0;left: 0;right: 0;">
+        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="save_con">保存</button>
+        <button class="layui-btn layui-btn-primary" lay-submit lay-filter="cancle_con">取消</button>
+    </div>
+</div>

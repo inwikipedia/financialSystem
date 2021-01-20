@@ -1,0 +1,239 @@
+<link rel="stylesheet" href="../assetsInfo/css/leaderForm.css">
+<style>
+    .reportRight input {
+        width: 170px;
+    }
+
+    .reportRight .layui-form-item {
+        margin-top: 10px;
+    }
+</style>
+<div class="leaderForm">
+    <div class="reportTree" id="reportTree"></div>
+    <div class="reportRight">
+        <div class="layui-form">
+            <div class=" table-top-bar">
+                <div>
+                    <div class="layui-inline "
+                         style="width: 100%;border-bottom:1px solid #e5e5e5;margin-bottom: 0px;padding-bottom: 15px">
+
+                        <div class="layui-inline layui-form-item">
+                            <label class="layui-form-label work-search-label">表头名称</label>
+                            <input lay-verify="required" type="text" placeholder="请输入" name="name"
+                                   class="headName project-search-input layui-input">
+                        </div>
+
+                        <div class="layui-inline layui-form-item">
+                            <label class="layui-form-label work-search-label">回显字段</label>
+                            <input lay-verify="required" type="text" placeholder="请输入" name="searchName"
+                                   class="searchName project-search-input layui-input">
+                        </div>
+
+                        <div class="layui-inline layui-form-item">
+                            <label class="layui-form-label work-search-label">类型</label>
+                            <div style="display:inline-block;width: 170px">
+                                <select lay-verify="required" name="type">
+                                    <option value="input">文本</option>
+                                    <option value="date">日期</option>
+                                    <option value="select">下拉</option>
+                                </select>
+                            </div>
+                            <!--<input type="text" placeholder="请输入" name="type"-->
+                                   <!--class="headType project-search-input layui-input">-->
+                        </div>
+                        <div class="layui-inline layui-form-item">
+                            <label class="layui-form-label work-search-label">符号类型</label>
+                            <div style="display:inline-block;width: 170px">
+                                <select lay-verify="required" name="searchType">
+                                    <option value="1">like等于</option>
+                                    <option value="2">=</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-form-item">
+                            <label class="layui-form-label work-search-label">是否可搜索</label>
+                            <div style="display:inline-block;width: 170px">
+                                <select lay-verify="required" name="isSearch">
+                                    <option value="是">是</option>
+                                    <option value="否">否</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button lay-submit class="layui-btn layui-btn-sm layui-btn-danger"
+                                style="float: right;margin-left: 10px;" lay-filter="btn-add" id="btn-add">
+                            添加
+                        </button>
+                        <!--<button class="layui-btn layui-btn-sm layui-btn-danger"  style="float: right;margin-left: 10px;"-->
+                                <!--lay-filter="btn-xiugai" id="btn-xiugai">-->
+                            <!--单条修改-->
+                        <!--</button>-->
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <button class="layui-btn layui-btn-normal" style="margin:5px 0px;position: relative;left: 10px" id="xiugai">修改</button>
+        <button class="layui-btn layui-btn-normal" style="margin:5px 0px;position: relative;left: 10px" id="xinzeng">新增</button>
+        <textarea style="width: 100%;height:350px" name="" id="jsonText" cols="30" rows="10"></textarea>
+
+    </div>
+</div>
+<script>
+    layui.use(['element', 'laypage', 'tree', 'util', 'table', 'form', 'laydate'], function () {
+        var element = layui.element,
+            table = layui.table,
+            tree = layui.tree,
+            form = layui.form,
+            admin = layui.admin,
+            laydate = layui.laydate,
+            config = layui.config,
+            layer = layui.layer,
+            tools = layui.tools,
+            util = layui.util;
+        var account = config.getAccount();
+        var newData = [];
+        var treeId = '';
+        $.ajax({
+            type: "get",
+            url: "/api/research/menu?topNodeId=VID000",
+            success: function (res) {
+                if (res != null) {
+                    var childrenData = [];
+                    var data = res.data.data;
+                    treeId = data[2].id;
+                    if ($('#isEdit').val() == 2) {
+                        data.splice(res.data.data.length - 2, 2)
+                    }
+                    for (var i = 0; i < data.length; i++) {
+                        data[i].indexType = i;
+                        if (data[i].level == 2) {
+                            newData.push(data[i])
+                        } else if (data[i].level == 3) {
+                            childrenData.push(data[i])
+                        }
+                    }
+                    for (var j = 0; j < newData.length; j++) {
+                        newData[j].children = [];
+                        for (var i = 0; i < childrenData.length; i++) {
+                            if (childrenData[i].parentId == newData[j].id) {
+                                newData[j].children.push(childrenData[i])
+                            }
+                        }
+                    }
+                    layui.tree({
+                        elem: '#reportTree', // 指定元素
+                        showLine: 'false',
+                        nodes: newData,
+                        click: function (item) { // 点击节点回调
+                            treeId = item.id;
+                            $.ajax({
+                                // "../../components/leaderStatement/"+json
+                                url: "/api/leaderview/jsonTitle/"+treeId,
+                                type: 'get',
+                                contentType:'json',
+                                success: function (res) {
+                                    if(res.data){
+                                        $('#jsonText').val(res.data.data?res.data.data:'');
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    // 默认选中第一个树节点
+                    $('#reportTree ul li a cite').first().css('color', '#18B1EB');
+                    $('#reportTree li ul').addClass('layui-show');
+                    // $('#searchName').attr('name', newData[0].id);
+                    // $('#searchPatent').attr('name', newData[0].id);
+                    // 左侧树样式
+                    $('#reportTree ul li a cite').off('click').on('click', function () {
+                        $('#reportTree li a cite').css('color', '#666')
+                        $(this).css('color', '#18B1EB')
+                    });
+                    $('#reportTree li>a').off('dblclick')
+                    // $('#reportTree li').find('.layui-tree-spread').parent().prepend('<img class="treeImg" style="display:none;position: absolute;right: 15px;top: 2px;" src="../../assetsInfo/images/icon/shouqi.png"/><img class="treeImg" style="position: absolute;right: 15px;top: 2px;" src="../../assetsInfo/images/icon/zhankai1.png"/>');
+                    // $('#reportTree li').find('img').css('cursor', 'pointer');
+                    // for (var x = 0; x < data.length; x++) {
+                    //     if(data[x].level == 2){
+                    //         $('#reportTree li').eq(x-1).prepend('<img style="position: relative;top:-1px;cursor: default" src="../../assetsInfo/images/icon/'+data[x].icon+'.png"/>');
+                    //     }
+                    // }
+                    $('#reportTree li').find('.layui-tree-spread').parent().prepend('<img src="../../assetsInfo/images/icon/shouqi.png"/>');
+                    // $('#reportTree li').find('.layui-tree-leaf').parent().parent().prepend('<img src="../../assetsInfo/images/icon/zhankai.png"/>')
+                    $('#reportTree li ul li ul li').find('.layui-tree-leaf').parent().parent().find('img').css('visibility', 'hidden');
+
+                    /* $('#deliverable-tree li').find('.layui-tree-spread').parent().children('a').on('click', function(){
+                 $(this).parent().find('img').toggle();
+                 $(this).parent().find('ul').toggleClass('layui-show')
+                 })*/
+                    $('#reportTree li').find('.layui-tree-spread').parent().children('img').off('click').on('click', function () {
+                        $(this).parent().find('img.treeImg').toggle();
+                        $(this).parent().find('ul').toggleClass('layui-show')
+                    });
+                    var setInfoFun = function (type) {
+                        var option = {
+                            data: $('#jsonText').val(),
+                            id: treeId
+                        };
+                        $.ajax({
+                            type: type,
+                            data:JSON.stringify(option),
+                            contentType: "application/json",
+                            url: "/api/leaderview/jsonTitle",
+                            success: function (res) {
+                                if(res.ok){
+                                    if(type=='put'){
+                                        return layer.msg('修改成功', {
+                                            icon: 1
+                                        });
+                                    }else{
+                                        return layer.msg('新增成功', {
+                                            icon: 1
+                                        });
+                                    }
+                                }else{
+                                    return layer.msg(res.message, {
+                                        icon: 5
+                                    });
+                                }
+                            }
+                        })
+                    };
+                    $('#xiugai').off('click').on('click', function () {
+                        if($('#jsonText').val()){
+                            setInfoFun('put');
+                        }else{
+                            return layer.msg('请输入内容', {
+                                icon: 5
+                            });
+                        }
+                    });
+                    $('#xinzeng').off('click').on('click', function () {
+                        if($('#jsonText').val()){
+                            setInfoFun('post');
+                        }else{
+                            return layer.msg('请输入内容', {
+                                icon: 5
+                            });
+                        }
+                    });
+                    form.on('submit(btn-add)', function (obj) {
+                        var arrJson=[];
+                        if($('#jsonText').val()){
+                            arrJson = JSON.parse($('#jsonText').val());
+                        }
+                        if(obj.field.isSearch=='是'){
+                            obj.field.isSearch=true;
+                        }else{
+                            obj.field.isSearch=false;
+                        }
+                        arrJson.push(obj.field)
+                        $('#jsonText').val(JSON.stringify(arrJson));
+                        console.log(44444,arrJson);
+                    });
+                    form.render();
+                }
+            }
+        });
+    })
+</script>

@@ -1,0 +1,372 @@
+
+<!-- zTree 样式 -->
+<link rel="stylesheet" href="../../assetsInfo/libs/zTree/css/metroStyle/metroStyle.css">
+<style>
+    #btn-export {
+        margin-left: 10px;
+    }
+
+    .ztree li span.button.chk.checkbox_false_disable {
+        display: none;
+    }
+    .work-search-input{
+        /*height:20px;*/
+        /*padding:3px 6px;*/
+        float: left;
+        width: 100px;
+    }
+    .work-search-label{
+        width: auto;
+        padding-left: 0px;
+        padding-right: 2px;
+    }
+    .rili{
+        background:url('../../assetsInfo/images/rili.jpg') no-repeat right center;
+        background-position:95% ;
+        background-size: 25px 21px;
+    }
+</style>
+<div class="layui-row layui-col-space15">
+    <!-- 单列普通表格 -->
+    <div class="layui-col-md12">
+        <div class="layui-card p-main">
+            <div class="layui-card-header" style="height: 0px"></div>
+            <!-- 卡片容器 -->
+            <div class="layui-card-body">
+                <!-- 数据表格顶部控制栏 -->
+                <div class="layui-form">
+                    <div class=" table-top-bar">
+                        <div>
+                            <div class="layui-inline layui-form-item" style="width: 100%;border-bottom:1px solid #e5e5e5;margin-bottom: 0px;padding-bottom: 15px">
+                                <label class="layui-form-label work-search-label" style="font-size: 16px">查询：</label>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label work-search-label">创建人</label>
+                                    <input type="text" placeholder="请输入" class="createUserName work-search-input layui-input">
+                                </div>
+
+                                <div class="layui-inline layui-form-item">
+                                    <label class="layui-form-label work-search-label">业务</label>
+                                    <input type="text" placeholder="请输入" class="budgetName work-search-input layui-input">
+                                </div>
+
+                                <div class="layui-inline layui-form-item">
+                                    <label class="layui-form-label work-search-label">项目</label>
+                                    <input type="text" placeholder="请输入" class="projectName work-search-input layui-input">
+                                </div>
+                                <div class="layui-inline layui-form-item">
+                                    <label class="layui-form-label work-search-label">任务</label>
+                                    <input type="text" placeholder="请输入" class="taskName work-search-input layui-input">
+                                </div>
+
+                                <div class="layui-inline layui-form-item">
+                                    <label class="layui-form-label work-search-label">日期</label>
+                                    <input autocomplete="off" readonly style="width: 210px;border-radius: 6px;display: inline-block" type="text" name="startTime"
+                                           id="startTime" placeholder="选择日期" class="layui-input rili" >
+                                    <!--<input autocomplete="off" style="width: 120px;border-radius: 6px;display: inline-block" type="text" name="endTime"-->
+                                           <!--id="endTime" placeholder="结束日期" class="layui-input rili" >-->
+                                </div>
+                                <button class="layui-btn layui-btn-sm layui-btn-danger" style="float: right;margin-left: 10px;"  id="btn-daily-export">
+                                    <i class="layui-icon  layui-icon-download-circle"></i>
+                                    导出
+                                </button>
+                                <button class="layui-btn layui-btn-sm layui-btn-danger" style="float: right;margin-left: 10px;"  id="btn-daily-reset">
+                                    <img src="../../assetsInfo/images/reset.png" style="position: relative;top: -1px;">
+                                    重置
+                                </button>
+                                <button class="layui-btn layui-btn-sm layui-btn-normal" style="float: right;margin-left: 0px;background-color: #239FFF;color: #fff"  id="btn-daily-search">
+                                    <img src="../../assetsInfo/images/chaxun.png" style=" width: 16px">
+                                    查询
+                                </button>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!--<div class="layui-inline" style="margin-top: 10px">-->
+                    <!--<button class="layui-btn layui-btn-sm layui-btn-danger" style="background-color: #239FFF;color: #fff" id="btn-allApproval">-->
+                        <!--<img src="../../assetsInfo/images/yiyue.png" style="position: relative;top: -1px;">-->
+                        <!--批量已阅-->
+                    <!--</button>-->
+                    <!--<button class="layui-btn layui-btn-sm layui-btn-danger" id="btn-allBack">-->
+                        <!--<img src="../../assetsInfo/images/bohui.png" style="position: relative;top: -1px;">-->
+                        <!--批量驳回-->
+                    <!--</button>-->
+                <!--</div>-->
+
+                <!-- 下部表格容器 -->
+                <table id="tableContent-daily" lay-filter="tableContent-daily"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="barTool">
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-look">已阅</button>
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-reBack">驳回</button>
+    {{# console.log(d); if(d.taskResultFileId) { }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="btn-down">下载成果物</button>
+    {{#  } }}
+</script>
+<!-- zTree js 文件 -->
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+<script src="../../assetsInfo/js/MenuAuthHelper.js"></script>
+
+<script>
+    // 初始化 layui
+    layui.use(['laydate', 'table', 'upload', 'formSelects'], function () {
+        var table = layui.table,
+            form = layui.form,
+            upload = layui.upload,
+            formSelects = layui.formSelects,
+            laydate = layui.laydate,
+            layer = layui.layer,
+            tools = layui.tools,
+            config = layui.config,
+            admin = layui.admin;
+
+        // 初始化日期组件
+        laydate.render({
+            elem: '#planStartName',
+            max: 0
+        });
+        // laydate.render({
+        //     elem: '#startTime',
+        // });
+        laydate.render({
+            elem: '#endTime',
+        });
+        laydate.render({
+            elem: '#startTime',
+            range: true,
+            // value: new Date().toLocaleDate()+' - '+new Date().toLocaleDate()
+        });
+        var dateChange=function(data){
+            var str = data.replace(/-/g,'/');
+            var date = new Date(str).getTime();
+            return date;
+        };
+      var postExcelFile = function(params, url) {
+            //params是post请求需要的参数，url是请求url地址
+            var form = document.createElement("form");
+            form.style.display = "none";
+            form.action = url;
+            form.method = "post";
+            document.body.appendChild(form);
+            // 动态创建input并给value赋值
+            for (var key in params) {
+                var input = document.createElement("input");
+                input.type = "hidden";
+                input.name = key;
+                input.value = params[key];
+                form.appendChild(input);
+            }
+
+            form.submit();
+            form.remove();
+        }
+        var account = config.getAccount();
+        var dailyPageType = sessionStorage.getItem("dailyPageType");
+        var dailyPageId = sessionStorage.getItem("dailyPageId");
+        if(dailyPageType==0){
+            $(".budgetName").parent().remove();
+        }else if(dailyPageType==1){
+            $(".budgetName").parent().remove();
+            $(".projectName").parent().remove();
+        }else if(dailyPageType==2){
+            $(".budgetName").parent().remove();
+            $(".projectName").parent().remove();
+            $(".taskName").parent().remove();
+        }
+        // 渲染表格
+        var renderTable = function (search) {
+            if (!search) {
+                search = {};
+            }
+            if(dailyPageType==0){
+                search.budgetId=dailyPageId;
+            }else if(dailyPageType==1){
+                search.projectId=dailyPageId
+            }else if(dailyPageType==2){
+                search.taskId=dailyPageId
+            }
+            search.pageType=dailyPageType;
+            // 渲染表格
+            table.render({
+                elem: '#tableContent-daily',
+                id: 'tableContent-daily',
+                url: admin.formatUrl('/api/Daily/page4TipsInByType'),
+                contentType: "application/json",
+                method: 'post',
+                // 格式化后台返回的数据
+                parseData: function (res) { //res 即为原始返回的数据
+                    $("#btn-daily-export").off("click").on("click",function () {
+                        if(res.data.dataList.length==0){
+                           return layer.msg('暂时没有数据可以导出', {
+                                icon: 5
+                            });
+                        }
+                        var option="";
+                        if(dailyPageType==0){
+                            // dateChange($("#"+searchIO.searchName).val().substring(13,23))+86399999
+                            option={
+                                budgetId:dailyPageId,
+                                budgetName:res.data.dataList[0].budgetName,
+                                pageType:dailyPageType,
+                                createUserName:$('.createUserName').val(),
+                                projectName:$('.projectName').val(),
+                                taskName:$('.taskName').val(),
+                                queryStartDate:$("#startTime").val().substring(0,10) ,
+                                queryEndDate:$("#startTime").val().substring(13,23)
+                            };
+                             // option="budgetId="+dailyPageId+"&budgetName="+res.data.dataList[0].budgetName+"&pageType="+dailyPageType+
+                             //        "&createUserName="+$('.createUserName').val()+"&projectName="+$('.projectName').val()+"&taskName="+$('.taskName').val()
+                             //     +"&queryStartDate="+$('#startTime')[0].value+"&queryEndDate="+$('#endTime')[0].value;
+                        }else if(dailyPageType==1){
+                            $(".budgetName").parent().remove();
+                            $(".projectName").parent().remove();
+                            option={
+                                projectId:dailyPageId,
+                                budgetName:res.data.dataList[0].budgetName,
+                                pageType:dailyPageType,
+                                createUserName:$('.createUserName').val(),
+                                taskName:$('.taskName').val(),
+                                queryStartDate:$("#startTime").val().substring(0,10) ,
+                                queryEndDate:$("#startTime").val().substring(13,23)
+                            };
+                            // option="projectId="+dailyPageId+"&budgetName="+res.data.dataList[0].budgetName+"&pageType="+dailyPageType+
+                            //     "&createUserName="+$('.createUserName').val()+"&taskName="+$('.taskName').val()
+                            //     +"&queryStartDate="+$('#startTime')[0].value+"&queryEndDate="+$('#endTime')[0].value;
+                        }else if(dailyPageType==2){
+                            $(".budgetName").parent().remove();
+                            $(".projectName").parent().remove();
+                            $(".taskName").parent().remove();
+                            option={
+                                taskId:dailyPageId,
+                                budgetName:res.data.dataList[0].budgetName,
+                                pageType:dailyPageType,
+                                createUserName:$('.createUserName').val(),
+                                queryStartDate:$("#startTime").val().substring(0,10) ,
+                                queryEndDate:$("#startTime").val().substring(13,23)
+                            };
+                            // option="projectId="+dailyPageId+"&budgetName="+res.data.dataList[0].budgetName+"&pageType="+dailyPageType+
+                            //     "&createUserName="+$('.createUserName').val()+"&queryStartDate="+$('#startTime')[0].value+"&queryEndDate="+$('#endTime')[0].value;
+                        }
+                        postExcelFile(option,"/ADC_info/api/Daily/exportExcelByPage4TipsByType")
+                        // window.open("/api/Daily/exportExcelByPage4TipsByType?"+option)
+                    });
+                    // 返回结果，进行渲染表格
+                    return {
+                        "code": res.respCode, //解析接口状态
+                        "count": res.data.count,
+                        "msg": res.message, //解析提示文本
+                        "data": res.data.dataList //解析数据列表
+                    };
+                },
+                request: {
+                    pageName: 'page',
+                    limitName: 'pageSize'
+                },
+                height: 'full-155',
+                cols: [
+                    [
+                        {
+                            field: 'createUserName',
+                            title: '创建人',
+                            width: 100,
+                            align: 'center',
+                        },
+                        {
+                            field: 'budgetName',
+                            title: '业务',
+                            align: 'center',
+                            templet: function(d) {
+                                return '<div title="'+d.budgetName+'"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ d.budgetName +'</div></div>';
+                            }
+                        },
+                        {
+                            field: 'projectName',
+                            title: '项目',
+                            align: 'center',
+                            templet: function(d) {
+                                return '<div title="'+d.projectName+'"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ d.projectName +'</div></div>';
+                            }
+                        }, {
+                        field: 'taskName',
+                        title: '任务',
+                        align: 'center',
+                        templet: function(d) {
+                            return '<div title="'+d.taskName+'"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ d.taskName +'</div></div>';
+                        }
+                    }, {
+                        field: 'dailyCreateTime',
+                        title: '日期',
+                        align: 'center',
+                        templet: function (row) {
+                            if (row.dailyCreateTime) {
+                                return '<div title="'+tools.getDate(row.dailyCreateTime,"YYYY-MM-DD")+'"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ tools.getDate(row.dailyCreateTime,"YYYY-MM-DD") +'</div></div>' ;
+                            }
+                        }
+                    }, {
+                        field: 'workCostTime',
+                        title: '时长',
+                        align: 'center',
+                        width: 60,
+                    }, {
+                        field: 'workDescription',
+                        title: '工作描述',
+                        align: 'center',
+                        templet: function(d) {
+                            return '<div title="'+d.workDescription+'"><div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ d.workDescription +'</div></div>';
+                        }
+                    }, {
+                        field: 'approveUserName',
+                        title: '审批人',
+                        width: 100,
+                        align: 'center',
+                    }
+                    ]
+                ],
+                page: true,
+                limit: 15, //显示的数量
+                limits: [10, 15, 20, 25, 30],
+                cellMinWidth: 90,
+                where: search
+            });
+        }
+
+        // 初始化，执行一次渲染表格
+        renderTable();
+        table.on('tool(tableContent-daily)', function (obj) {
+            var data = obj.data;
+            var newdata = {};
+        });
+        // DONE: 侧边栏变化时刷新数据表格
+        // 将 table ID 存入数组
+        layui.admin.addTableCache('tableContent-daily');
+        $('#btn-daily-search').off('click').on('click',function () {
+            var data={
+                createUserName:$('.createUserName').val(),
+                budgetName:$('.budgetName').val(),
+                projectName:$('.projectName').val(),
+                taskName:$('.taskName').val(),
+                queryStartDate:dateChange($("#startTime").val().substring(0,10)) ,
+                queryEndDate:dateChange($("#startTime").val().substring(13,23))
+            };
+            renderTable(data);
+        });
+        $('#btn-daily-reset').off('click').on('click',function () {
+
+            $('.createUserName').val('');
+            $('.budgetName').val('');
+            $('.projectName').val('');
+            $('.taskName').val('');
+            form.render('select');
+            $('#startTime')[0].value='';
+            // $('#endTime')[0].value='';
+
+            renderTable();
+        });
+    });
+
+</script>

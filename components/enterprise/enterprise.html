@@ -1,0 +1,950 @@
+<link rel="stylesheet" href="../../assetsInfo/css/dragula.css">
+<link rel="stylesheet" href="../../assetsInfo/css/duty.css">
+<link rel="stylesheet" href="../../assetsInfo/css/workHours.css">
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<style>
+    .layui-card-header {
+        border-bottom: 1px solid white;
+    }
+    .btn-width {
+        width: 100px;
+    }
+
+    .enterTitle {
+        font-size: 15px;
+        padding-top: 15px;
+    }
+
+    .card-top {
+        padding-top: 10px;
+    }
+    body{
+        overflow-y: hidden;
+    }
+    .enterPrise .layui-table-box{
+        height: 90% !important;
+    }
+    .enterPrise .layui-table-body{
+        height: 93.5% !important;
+    }
+    .enterPrise .layui-form.layui-border-box.layui-table-view{
+        height: 490px !important;
+    }
+</style>
+<div class="main enterPrise">
+    <div id="nav" class="nav">
+        <div class="layui-btn-group buttonGroup" style="float: left;margin:1px 8px 0 0">
+            <button class="layui-btn layui-btn-primary layui-btn-sm btn-active"
+                style="border-top-left-radius: 4px;border-bottom-left-radius:4px;" id="organization-btn">
+                <i class="layui-icon">企业</i>
+            </button>
+            <button class="layui-btn layui-btn-primary layui-btn-sm" id="project-btn">
+                <i class="layui-icon">联系人</i>
+            </button>
+        </div>
+    </div>
+    <!-- 企业页面 -->
+    <div id="organization">
+        <div class="layui-row">
+            <div class="layui-card layui-row">
+                <div class="layui-card-header card-top">
+                    <!-- <div class="layui-form-item"> -->
+                    <div class="layui-inline">
+                        <span class="enterTitle">企业名称：</span>
+                    </div>
+                    <div class="layui-inline">
+                        <div class="layui-input-block" style="margin-left: 0px;margin-top: 10px;font-size: 15px;">
+                            <input type="text" name="enterpriseName" class="layui-input" style="height: 28px;"
+                                placeholder="请输入企业名称">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="btn_add_form"
+                            lay-submit title="查询" id="enterpriseSearch">
+                            <i class="layui-icon layui-icon-search"></i>
+                            查询
+                        </button>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="btn_add_form"
+                            lay-submit title="重置" id="enterpriseRest">
+                            <i class="layui-icon layui-icon-refresh"></i>
+                            重置
+                        </button>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="btn_add_form"
+                            lay-submit title="新建" id="enter-create">
+                            <i class="layui-icon layui-icon-add-1"></i>
+                            新建
+                        </button>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="btn_add_form"
+                            lay-submit title="删除" id="enterpriseDel">
+                            <i class="layui-icon layui-icon-delete"></i>
+                            删除
+                        </button>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-primary btn-width"
+                            lay-filter="btn_download_project" lay-submit title="下载模板" id="enterpriseDownload">
+                            <i class="layui-icon layui-icon-download-circle"></i>下载模板
+                        </button>
+                    </div>
+                    <div class="layui-inline" id="enterpriseImport">
+                        <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-submit title="导入">
+                            <i class="layui-icon layui-icon-upload-drag"></i>导入
+                        </button>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-filter="enterpriseOut"
+                            lay-submit title="导出" id="enterpriseOut">
+                            <i class="layui-icon layui-icon-download-circle"></i>
+                            导出
+                        </button>
+                    </div>
+                    <!-- </div> -->
+                </div>
+                <div class="orgData2" style="padding: 4px 15px 9px 15px;overflow: hidden">
+                    <table id="tableContent-form" lay-filter="tableContent-form"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 联系人页面 -->
+    <div id="project" style="display: none;">
+        <div class="layui-row">
+            <div class="layui-card layui-row">
+                <div class="layui-card-header card-top">
+                    <div class="layui-inline">
+                        <span class="enterTitle">企业名称：</span>
+                    </div>
+                    <div class="layui-inline">
+                        <div class="layui-input-block" style="margin-left: 0px;margin-top: 10px;font-size: 15px;">
+                            <input type="text" name="contactsName" class="layui-input" style="height: 28px;"
+                                placeholder="请输入企业名称">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-submit title="查询"
+                            id="contacSearch">
+                            <i class="layui-icon layui-icon-search"></i>
+                            查询
+                        </button>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-submit title="重置"
+                            id="contacRest">
+                            <i class="layui-icon layui-icon-refresh"></i>
+                            重置
+                        </button>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-submit title="新建"
+                            id="contacAdd">
+                            <i class="layui-icon layui-icon-add-1"></i>
+                            新建
+                        </button>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-submit title="删除"
+                            id="contacDel">
+                            <i class="layui-icon layui-icon-delete"></i>
+                            删除
+                        </button>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-submit title="下载模板"
+                            id="contacDownload">
+                            <i class="layui-icon layui-icon-download-circle"></i>下载模板
+                        </button>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-submit title="导入"
+                            id="contacImport">
+                            <i class="layui-icon layui-icon-upload-drag"></i>导入
+                        </button>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-primary btn-width" lay-submit title="导出"
+                            id="contacOut">
+                            <i class="layui-icon layui-icon-download-circle"></i>
+                            导出
+                        </button>
+                    </div>
+                </div>
+                <div class="orgData2" style="padding: 4px 15px 9px 15px;overflow: hidden">
+                    <table id="contacts-form" lay-filter="contacts-form"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+    <a class="table-control-btn table-control-btn-danger" lay-event="del">删除</a>
+</script>
+<script src="../../assetsInfo/libs/zTree/js/jquery.ztree.all.min.js"></script>
+<script src="../../assetsInfo/libs/chosen/chosen.jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../../assetsInfo/libs/exhide.js"></script>
+<script src="../../assetsInfo/libs/fuzzy.js"></script>
+<script src="/assetsInfo/js/tempDown.js"></script>
+<script>
+    var parentData = {};
+    layui.use(['form', 'formSelects', 'layer', 'laydate'], function () {
+        var admin = layui.admin,
+            laydate = layui.laydate,
+            config = layui.config,
+            layer = layui.layer,
+            form = layui.form,
+            table = layui.table,
+            tools = layui.tools,
+            upload = layui.upload;
+        var heightTable = $(document).height()-140;
+        // 企业表格
+        table.render({
+            elem: '#tableContent-form',
+            id: 'tableContent-form',
+            url: admin.formatUrl('/api/customerresourcemanage/enterprise/page'),
+            parseData: function (res) {
+                return {
+                    "code": res.respCode, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.list //解析数据列表
+                };
+            },
+            height: heightTable,
+            cols: [
+                [{
+                    type: 'checkbox', with: '5%',
+                },
+                {
+                    field: 'enterpriseType',
+                    title: '类型',
+                    align: 'center',
+                    width: '10%',
+                    templet: function (d) {
+                        var text = d.enterpriseType ? d.enterpriseType : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                },
+                {
+                    field: 'enterpriseDomain',
+                    title: '企业领域',
+                    align: 'center',
+                    width: '10%',
+                    templet: function (d) {
+                        var text = d.enterpriseDomain ? d.enterpriseDomain : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                },
+                {
+                    field: 'enterpriseName',
+                    title: '企业名称',
+                    align: 'center',
+                    width: '15%',
+                    templet: function (d) {
+                        var text = d.enterpriseName ? d.enterpriseName : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                },
+                {
+                    field: 'enterpriseAddress',
+                    title: '单位地址',
+                    align: 'center',
+                    width: '20%',
+                    templet: function (d) {
+                        var arrdess = d.enterpriseAddress ? d.enterpriseAddress : "";
+                        var Province = d.enterpriseProvince ? d.enterpriseProvince : '';
+                        var text =arrdess;
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                    field: 'createTime',
+                    title: '创建日期',
+                    align: 'center',
+                    width: '10%',
+                    templet: function (d) {
+                        var text = d.createTime?timestampToTime(d.createTime):"";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                    field: 'updateTime',
+                    title: '更新日期',
+                    align: 'center',
+                    width: '10%',
+                    templet: function (d) {
+                        var text = d.updateTime?timestampToTime(d.updateTime):"";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                    field: 'createUserName',
+                    title: '更新人',
+                    width: '10%',
+                    align: 'center',
+                    templet: function (d) {
+                        var text = d.createUserName ? d.createUserName : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                    templet: '#control-1',
+                    title: '操作',
+                    align: 'center',
+                    unresize: true
+                }]
+            ],
+            cellMinWidth: 120,
+            page: {
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+            },
+            request: {
+                page: 'pageNo',
+                limitName: 'pageSize'
+            },
+            where: {
+                design: 0
+            }
+        });
+        table.on('tool(tableContent-form)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent == 'del') {
+                var delids = data.id;
+                delMethod('您确定要删除吗？', '/api/customerresourcemanage/enterprise/batchLogicDelete/' + delids, 'tableContent-form')
+            } else {
+                popMenu("edit", data);
+            }
+        })
+        // 联系人表格
+        table.render({
+            elem: '#contacts-form',
+            id: 'contacts-form',
+            url: admin.formatUrl('/api/customerresourcemanage/contacts/page'),
+            parseData: function (res) {
+                return {
+                    "code": res.respCode, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.list //解析数据列表
+                };
+            },
+            height: heightTable,
+            cols: [
+                [{
+                    type: 'checkbox', with: '5%'
+                },
+                {
+                    field: 'enterpriseName',
+                    title: '企业名称',
+                    align: 'center',
+                    width: '20%',
+                    templet: function (d) {
+                        var text = d.enterpriseName ? d.enterpriseName : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                },
+                {
+                    field: 'contactsUsname',
+                    title: '姓名',
+                    align: 'center',
+                    width: '10%',
+                    templet: function (d) {
+                        var text = d.contactsUsname ? d.contactsUsname : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                },
+                {
+                    field: 'departName',
+                    title: '部门',
+                    align: 'center',
+                    width: '15%',
+                    templet: function (d) {
+                        var text = d.departName ? d.departName : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                },
+                {
+                    field: 'effectName',
+                    title: '影响力',
+                    align: 'center',
+                    width: '10%',
+                    templet: function (d) {
+                        var text = d.effectName ? d.effectName : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                    field: 'createTime',
+                    title: '录入日期',
+                    align: 'center',
+                    width: '10%',
+                    templet: function (d) {
+                        // var text = d.createTime ? d.createTime : "";
+                        var text = d.createTime?timestampToTime(d.createTime):"";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                    field: 'updateTime',
+                    title: '更新日期',
+                    align: 'center',
+                    width: '10%',
+                    templet: function (d) {
+                        // var text = d.updateTime ? d.updateTime : "";
+                        var text = d.updateTime?timestampToTime(d.updateTime):"";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                    field: 'updateUserName',
+                    title: '更新人',
+                    align: 'center',
+                    width: '10%',
+                    templet: function (d) {
+                        var text = d.updateUserName ? d.updateUserName : "";
+                        return '<div title="' + text + '"><span>' + text + '</span></div>'
+                    }
+                }, {
+                    templet: '#control-1',
+                    title: '操作',
+                    align: 'center',
+                    unresize: true
+                }]
+            ],
+            cellMinWidth: 120,
+            page: {
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+            },
+            request: {
+                page: 'pageNo',
+                limitName: 'pageSize'
+            },
+            where: {
+                design: 0
+            }
+        });
+        table.on('tool(contacts-form)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent == 'del') {
+                var delids = data.id;
+                delMethod('您确定要删除吗？', '/api/customerresourcemanage/contacts/delete/' + delids, 'contacts-form')
+            } else {
+                popMenu2("edit", data);
+            }
+        })
+        $('#enter-create').click(function () {
+            popMenu('add', {});
+        })
+        $('#enterpriseSearch').click(function () {
+            var name = $('input[name=enterpriseName]').val();
+            var searchData = {
+                enterpriseName: name
+            }
+            search(searchData, 'tableContent-form')
+        })
+        $('#enterpriseRest').click(function () {
+            $('input[name=enterpriseName]').val('');
+            restData('tableContent-form');
+        })
+        $('#enterpriseDel').click(function () {
+            var checkStatus = layui.table.checkStatus('tableContent-form').data;
+            var delids = '';
+            if (checkStatus.length == 0 || checkStatus == []) {
+                layer.msg('请先选取删除数据');
+            } else {
+                for (let i = 0; i < checkStatus.length; i++) {
+                    if (checkStatus.length > 1) {
+                        delids += checkStatus[i].id + ',';
+                    } else {
+                        delids = checkStatus[i].id;
+                    }
+                }
+                delMethod('您确定要删除选中的企业吗？', '/api/customerresourcemanage/enterprise/batchLogicDelete/' + delids, 'tableContent-form')
+            }
+        })
+        $('#enterpriseDownload').click(function () {
+            tempDownByDicCode("enterprise_resource_template");
+        })
+
+        $('#enterpriseOut').click(function () {
+            getOut('/ADC_info/api/customerresourcemanage/enterprise/excelExportEnterprise')
+        })
+        // 联系人
+        $('#contacSearch').click(function () {
+            var name = $('input[name=contactsName]').val();
+            var searchData = {
+                enterpriseName: name
+            }
+            search(searchData, 'contacts-form')
+        })
+        $('#contacRest').click(function () {
+            $('input[name=contactsName]').val('');
+            restData('contacts-form');
+        })
+        $('#contacAdd').click(function () {
+            popMenu2('add', {})
+        })
+        $('#contacDel').click(function () {
+            var checkStatus = layui.table.checkStatus('contacts-form').data;
+            var delids = [];
+            if (checkStatus.length == 0 || checkStatus == []) {
+                layer.msg('请先选取删除数据');
+            } else {
+                for (let i = 0; i < checkStatus.length; i++) {
+                    delids.push(checkStatus[i].id);
+                }
+                delMethod('您确定要删除选中的联系人吗？', '/api/customerresourcemanage/contacts/batchLogicDelete/' + delids.join(","), 'contacts-form')
+            }
+        })
+        $('#contacDownload').click(function () {
+            tempDownByDicCode("contact_resource_template");
+        })
+        $('#contacOut').click(function () {
+            getOut('/ADC_info/api/customerresourcemanage/contacts/excelExportContacts')
+        })
+        // 查询
+        function search(searchData, tableId) {
+            var searchValue = searchData;
+            table.reload(tableId, {
+                page: {
+                    curr: 1
+                },
+                where: searchValue
+            });
+        }
+        // 重置
+        function restData(tableId) {
+            table.reload(tableId, {
+                page: {
+                    curr: 1
+                },
+                where: ''
+            });
+        }
+        // 删除
+        function delMethod(deleTitle, delApi, tableId) {
+            layer.confirm(deleTitle, {
+                icon: 3,
+                title: '提示'
+            }, function () {
+                admin.req(delApi, {}, function (data) {
+                    if (data.ok) {
+                        layer.msg('删除成功', {
+                            icon: 1
+                        })
+                        table.reload(tableId, {
+                            page: {
+                                curr: 1
+                            },
+                        });
+                    } else {
+                        layer.msg('删除失败' + data.message, {
+                            icon: 5
+                        })
+                    }
+                }, { method: 'delete' })
+            })
+        }
+        //模板下载
+        function download(downApi) {
+            window.open(admin.formatUrl(downApi))
+        }
+        // 导入
+        upload.render({
+            elem: '#enterpriseImport',
+            url: '/api/customerresourcemanage/enterprise/excelImportEnterprise', //上传接口
+            accept: 'file',
+            acceptMime: 'xlsx/xlsm',
+            before: function (obj) {
+                layer.load(); //上传loading
+            },
+            done: function (res) {
+                layer.closeAll();
+                if (res.respCode == 0) {
+                    layer.msg('导入成功！', {
+                        icon: 1
+                    });
+                    table.reload('tableContent-form', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                } else {
+                    return layer.msg('导入失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            },
+            error: function () {
+                //请求异常回调
+                layer.closeAll();
+                return layer.msg('导入出现错误，请重试！', {
+                    icon: 5
+                });
+            }
+        });
+        upload.render({
+            elem: '#contacImport',
+            url: '/api/customerresourcemanage/contacts/excelImportContacts', //上传接口
+            accept: 'file',
+            acceptMime: 'xlsx/xlsm',
+            before: function (obj) {
+                layer.load(); //上传loading
+            },
+            done: function (res) {
+                layer.closeAll();
+                if (res.respCode == 0) {
+                    layer.msg('导入成功！', {
+                        icon: 1
+                    });
+                    table.reload('contacts-form', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                } else {
+                    return layer.msg('导入失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            },
+            error: function () {
+                //请求异常回调
+                layer.closeAll();
+                return layer.msg('导入出现错误，请重试！', {
+                    icon: 5
+                });
+            }
+        });
+        // 导出
+        function getOut(downApi) {
+            window.open(admin.formatUrl(downApi))
+        }
+        // 企业弹窗
+        function popMenu(type, data) {
+            if (type === 'add') {
+                var title = '新增企业';
+                data = {};
+            } else if (type === 'edit') {
+                var title = '编辑企业：'
+            }
+            data.type = type;
+            admin.popupCenter({
+                title: title,
+                area: ['700px', '450px'],
+                path: 'components/enterprise/enterpriseAdd.html',
+                finish: function () {
+                    table.reload('tableContent-form', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                },
+                success: function () {
+                    if (type == 'edit') {
+                        // $('.layui-tpl-container #times').css({ "display": "none" });
+                    }
+                    var load2 =layer.load(2);
+                    $.ajax({
+                        url: "/api/dashboard/provinceArea",
+                        type: 'get',
+                        success: function (res) {
+                            layer.close(load2);
+                            if (res.ok) {
+                                var proHtml = '';
+                                for (var i = 0; i < res.data.length; i++) {
+                                    proHtml += '<option value="' + res.data[i].id + '" data-name="'+res.data[i].province+'">' + res.data[i].province + '</option>';
+                                }
+                                //初始化省数据
+                                $('select[name=province]').append(proHtml);
+                                form.on('select(province)', function (data) {
+                                    data.elem.dataset.name=$(data.elem[data.elem.selectedIndex]).attr('data-name')?$(data.elem[data.elem.selectedIndex]).attr('data-name'):"";
+                                    data.elem.dataset.id=data.elem[data.elem.selectedIndex].value;
+                                });
+                                setFormValue(data);
+                                form.render()
+                            } else {
+                                layer.msg(res.message, {
+                                    icon: 5
+                                });
+                            }
+                        },
+                        error:function (err) {
+                            layer.close(load2);
+                            layer.msg(err.message, {
+                                icon: 5
+                            });
+                        }
+                    });
+
+                }
+            });
+        }
+        function setFormValue(obj) {
+            console.log(obj,55555)
+            var inputs = $('.layui-tpl-container').find('input'),
+                title = $('.layui-tpl-container .layui-card-header'),
+                formNames = ['enterpriseType', 'enterpriseDomain', 'enterpriseName', 'department', 'year', 'enterpriseAddress', 'type', 'id'];
+            obj.province = obj.enterpriseProvince;
+            obj.title && title.text(obj.title);
+            for (var i = 0; i < formNames.length; i++) {
+                if (obj[formNames[i]]) {
+                    obj[formNames[i]] = ADCFormDesignHelper.htmlDecodeByRegExp(obj[formNames[i]]);
+                    $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                } else {
+                    if(formNames[i]!="year"){
+                        $('.layui-tpl-container  input[name="' + formNames[i] + '"]').val('');
+                    }
+                }
+            }
+            if (obj.type == 'edit') {
+                $('.layui-tpl-container  input[name="year"]').val(obj.createTime?tools.getDate(obj.createTime, "YYYY-MM-DD"):"");
+                // $('.layui-tpl-container #times').css({ "display": "none" });
+            }
+            $("#province").val(obj.enterpriseProvinceId?obj.enterpriseProvinceId:"");
+            $("#province").attr("data-id",obj.enterpriseProvinceId?obj.enterpriseProvinceId:"");
+            $("#province").attr("data-name",obj.enterpriseProvince?obj.enterpriseProvince:"");
+
+        }
+        form.on('submit(menuSave_user)', function (data) {
+            // 获取表单数据
+            var d = data.field,
+                elem = data.elem;
+            // 判断是编辑还是新增
+            var ajaxName = '';
+            var urlType = '';
+            var urlApi = '';
+            var postData = {};
+            postData = {
+                enterpriseAddress: d.enterpriseAddress,
+                enterpriseDomain: d.enterpriseDomain,
+                enterpriseName: d.enterpriseName,
+                enterpriseProvince: $('select[name=province]').attr("data-name")?$('select[name=province]').attr("data-name"):"",
+                enterpriseProvinceId: $('select[name=province]').attr("data-id")?$('select[name=province]').attr("data-id"):"",
+                enterpriseType: d.enterpriseType
+            }
+            if (d.type === 'add') {
+                ajaxName = '新增企业';
+                urlType = 'POST';
+                urlApi = '/api/customerresourcemanage/enterprise/create';
+
+            } else if (d.type === 'edit') {
+                ajaxName = '编辑企业';
+                urlApi = '/api/customerresourcemanage/enterprise'
+                urlType = 'PUT';
+                postData.id = d.id;
+            }
+            if (d.year == '') {
+                postData.createTime = "";
+            } else {
+                postData.createTime = d.year;
+            }
+            // // 发送请求
+            admin.req(urlApi, postData, function (data) {
+                if (data.ok) {
+                    layer.msg(ajaxName + '成功！', {
+                        icon: 1
+                    });
+                    admin.finishPopupCenter();
+                } else {
+                    admin.closePopupCenter();
+                    return layer.msg(ajaxName + '失败：' + data.message, {
+                        icon: 5
+                    });
+                    admin.finishPopupCenter();
+                }
+            }, {
+                method: urlType
+            });
+
+        });
+        // 联系人弹窗
+        function popMenu2(type, data) {
+            if (type === 'add') {
+                var title = '新增联系人';
+                data = {};
+            } else if (type === 'edit') {
+                var title = '编辑联系人：'
+            }
+            data.type = type;
+            parentData = {
+                intimacyId: data.intimacyId,
+                effectId: data.effectId,
+                contactsSex: data.contactsSex,
+                contactsBirthday: data.contactsBirthday,
+                createTime: data.createTime,
+                type: data.type
+            }
+            Window.parentData = parentData;
+            admin.popupCenter({
+                title: title,
+                area: ['800px', '600px'],
+                path: 'components/enterprise/contactsAdd.html',
+                finish: function () {
+                    table.reload('contacts-form', {
+                        where: {
+                            reload: new Date().getTime()
+                        }
+                    });
+                },
+                success: function () {
+                    setFormValue2(data);
+                    form.render()
+                }
+            });
+        }
+        function setFormValue2(obj) {
+            var inputs = $('.layuiInput').find('input'),
+                title = $('.layuiInput .layui-card-header'),
+                formNames = ['enterpriseName', "comprehensive",'enterpriseDomain', 'enterpriseProvince', 'enterpriseAddress', 'enterpriseId', 'contactsUsname', 'departName', 'contactsPost', 'contactsLandline', 'contactsHomeaddress', 'contactsBirthplace', 'contactsBirthplace',
+                    'effectName', 'effectId', 'conUsname', 'conPost', 'conEmail', 'contactsSex', 'childDepartName', 'contactsPhone', 'contactsEmail', 'contactsSchool', 'intimacyName', 'intimacyId', 'conDepartName',
+                    'conPhone', 'remark', 'stuff', 'market', 'authentication', 'purchase', 'evaluate', 'statute', 'intelligence', 'finance', 'createUserName', 'type', 'id', 'createUserId'];
+            obj.title && title.text(obj.title);
+            for (var i = 0; i < formNames.length; i++) {
+                if (obj[formNames[i]]) {
+                    obj[formNames[i]] = ADCFormDesignHelper.htmlDecodeByRegExp(obj[formNames[i]]);
+                    $('.layuiInput input[name="' + formNames[i] + '"]').val(obj[formNames[i]]);
+                } else {
+                    if(formNames[i]!="createTime"){
+                        $('.layuiInput  input[name="' + formNames[i] + '"]').val('');
+                    }
+                }
+            }
+            if(obj.type=="add"){
+                $("#createUserName").val(config.getAccount().usname);
+            }
+        }
+        form.on('submit(menuSavecontac)', function (data) {
+            var d = data.field,
+                elem = data.elem;
+            var ajaxName = '';
+            var urlType = '';
+            var urlApi = '';
+            var postData = {};
+            postData = {
+                enterpriseName: d.enterpriseName,
+                contactsUsname: d.contactsUsname,
+                departName: d.departName,
+                contactsPost: d.contactsPost,
+                contactsLandline: d.contactsLandline,
+                contactsHomeaddress: d.contactsHomeaddress,
+                contactsBirthplace: d.contactsBirthplace,
+                comprehensive: d.comprehensive,
+                effectName: d.effectName,
+                conUsname: d.conUsname,
+                conPost: d.conPost,
+                conEmail: d.conEmail,
+                contactsSex: d.contactsSex,
+                childDepartName: d.childDepartName,
+                contactsPhone: d.contactsPhone,
+                contactsEmail: d.contactsEmail,
+                contactsSchool: d.contactsSchool,
+                intimacyName: d.intimacyName,
+                conDepartName: d.conDepartName,
+                conPhone: d.conPhone,
+                remark: d.remark,
+                stuff: d.stuff,
+                market: d.market,
+                authentication: d.authentication,
+                purchase: d.purchase,
+                evaluate: d.evaluate,
+                statute: d.statute,
+                intelligence: d.intelligence,
+                finance: d.finance,
+                createUserName: d.createUserName,
+                createTime: d.createTime,
+                effectId: d.effectId,
+                intimacyId: d.intimacyId,
+                enterpriseId: d.enterpriseId,
+                contactsBirthday: d.contactsBirthday
+            }
+            var account = JSON.parse(layui.data(config.tableName).account);
+            if (d.conUsname == account.usname) {
+                postData.createUserId = account.usid;
+            } else {
+                postData.createUserId = '';
+            }
+            if (d.type === 'add') {
+                ajaxName = '新增联系人';
+                urlType = 'POST';
+                urlApi = '/api/customerresourcemanage/contacts/create';
+                if (d.createTime == '') {
+                    postData.createTime = "";
+                } else {
+                    postData.createTime = d.createTime;
+                }
+                postData.updateTime = postData.createTime;
+            } else if (d.type === 'edit') {
+                ajaxName = '编辑联系人';
+                urlApi = '/api/customerresourcemanage/contacts/update'
+                urlType = 'PUT';
+                postData.id = d.id;
+            }
+            console.log(d.type,66666)
+            // // 发送请求
+            admin.req(urlApi, postData, function (data) {
+                if (data.ok) {
+                    layer.msg(ajaxName + '成功！', {
+                        icon: 1
+                    });
+                    admin.finishPopupCenter();
+                } else {
+                    admin.closePopupCenter();
+                    return layer.msg(ajaxName + '失败：' + data.message, {
+                        icon: 5
+                    });
+                    admin.finishPopupCenter();
+                }
+            }, {
+                method: urlType
+            });
+
+        });
+        //点击企业
+        $('#organization-btn').click(function () {
+            classify = "organization";
+            $(this).addClass('btn-active');
+            $(this).siblings().removeClass('btn-active');
+            $('#organization').show();
+            $('#project').hide();
+            table.reload("tableContent-form");
+        });
+        //点击联系人
+        $('#project-btn').click(function () {
+            classify = "project";
+            $(this).addClass('btn-active');
+            $(this).siblings().removeClass('btn-active');
+            $('#organization').hide();
+            $('#project').show();
+            table.reload("contacts-form");
+        });
+        //时间戳转换年月日
+        function timestampToTime(timestamp) {
+            var date = new Date(timestamp);
+            Y = date.getFullYear() + '-';
+            M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+            D = (date.getDate() + 1 < 10 ? '0' + date.getDate() : date.getDate());
+            return Y + M + D;
+        }
+        // 获取当前时间
+        function getDate() {
+            var date = new Date();
+            var Y = date.getFullYear();
+            var M = date.getMonth() + 1;
+            if (M < 10) {
+                M = '0' + M;
+            }
+            var D = date.getDate();
+            if (D < 10) {
+                D = '0' + D;
+            }
+            var time = Y + '-' + M + '-' + D;
+            return time;
+        }
+        $(function () {
+        })
+    });
+
+</script>

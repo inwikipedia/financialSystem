@@ -1,0 +1,83 @@
+{
+  "ok": true,
+  "message": "success",
+  "data": [
+    {
+      "name": "项目名称",
+      "searchName":"projectName",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":true
+    },
+    {
+      "name": "项目负责人",
+      "searchName":"projectLeader",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":true
+    },
+    {
+      "name": "项目起始时间",
+      "searchName":"projectCreateDate",
+      "type":"date",
+      "searchType":"2",
+      "isSearch":true
+    },
+    {
+      "name": "项目结束时间",
+      "searchName":"projectEndTime",
+      "type":"date",
+      "searchType":"2",
+      "isSearch":true
+    },
+    {
+      "name": "项目组成员",
+      "searchName":"projectMemberNames",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":true
+    },
+    {
+      "name": "项目状态",
+      "searchName":"projectStatus",
+      "type":"select",
+      "searchType":"1",
+      "isSearch":true
+    },
+    {
+      "name": "项目进度",
+      "searchName":"processPercent",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":false
+    },
+    {
+      "name": "项目累计工时（人天）",
+      "searchName":"projectWorkTime",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":true
+    },
+    {
+      "name": "项目合同金额（元）",
+      "searchName":"projectContractAmount",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":false
+    },
+    {
+      "name": "项目支出金额（元）",
+      "searchName":"projectTotalExpenditure",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":false
+    },
+    {
+      "name": "项目金额合计（元）",
+      "searchName":"projectMoney",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":false
+    }
+  ]
+}

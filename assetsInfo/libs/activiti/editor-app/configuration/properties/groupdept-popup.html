@@ -1,0 +1,42 @@
+<div class="modal" ng-controller="KisBpmGroupDeptPopupCtrl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="font-size: 16px;margin: 5px 0;display: inline-block;">{{'PROPERTY.ASSIGNMENT.TITLE' | translate:property}}</p>
+                <button style="margin: 5px 0;display: inline-block;" type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <ul id="myTab" class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#role" data-toggle="tab">受理组机构</a>
+                    </li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade in active" id="role">
+                        <div style="height:420px;">
+                            <div class="col-xs-8 modalDiv">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="请输入受理组机构名称" ng-model="searchText">
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="button" ng-click="doSearch();">搜索</button>
+                                </span>
+                                </div>
+                            </div>
+                            <div class="col-xs-8 modalDiv">
+                                <div class="boxDiv3">
+                                    <ul id="orgTree" class="ztree"></ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button ng-click="save()" class="btn btn-primary" translate style="width: 80px;">ACTION.SAVE</button>
+                <button ng-click="close()" class="btn btn-primary" translate style="background-color: #949494;width: 80px;">ACTION.CANCEL</button>
+            </div>
+        </div>
+    </div>
+</div>

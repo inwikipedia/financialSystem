@@ -1,0 +1,42 @@
+<style>
+#adcformdesign-table-td table td{
+    white-space: nowrap;
+}
+#adcformdesign-table-td [rowspan] {
+    position: static;
+}
+#adcformdesign-table-td input{
+    display: inline-block;
+}
+#adcformdesign-table-td .layui-input-inline{
+    float: none;
+}
+</style>
+<div class="layui-row">
+    <div class="layui-col-md12">
+        <div class="layui-card p-main">
+            <div class="layui-card-body" style="height: 700px;overflow: auto;">
+                <div class="layui-table layui-form adc-form-design-helper" style="padding: 20px;box-sizing: border-box;"
+                    id="adcformdesign-table-td" formType="extandForm-formctrl">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['admin'], function () {
+        var admin = layui.admin;
+        admin.req('/api/form/formInfo/monthplan2', {}, function (res) {
+            var tableContent = "";
+            tableContent = res.data.contentHtml;
+            tableContent = tableContent.replace(/\{\|\-/g, "").replace(/\-\|\}/g, "")
+            tableContent = tableContent.replace(/<table(.*?)>/ig, function () {
+                return '<table' + arguments[1] + ' style="margin: 0 auto;">'
+            });
+            tableContent += "<script src='/assetsInfo/libs/addtable/formctrl.js'><\/script>"
+            $('#adcformdesign-table-td').html(tableContent);
+        }, {
+            method: 'get'
+        });
+    })
+</script>

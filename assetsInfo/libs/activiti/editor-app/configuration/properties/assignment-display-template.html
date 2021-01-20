@@ -1,0 +1,12 @@
+<div ng-controller="AssignmentDisplayCtrl">
+<span ng-if="property.value.assignment.assignee=='${initiator}'">${initiator}</span>
+<span ng-if="property.value.assignment.assignee&&property.value.assignment.assignee!='${initiator}'">{{usname||"${assignee}"}} </span>
+<span ng-if="property.value.assignment.candidateUsers.length > 0">{{'PROPERTY.ASSIGNMENT.CANDIDATE_USERS_DISPLAY' | translate:property.value.assignment.candidateUsers}} </span>
+<!--
+<span ng-if="property.value.assignment.candidateGroups.length > 0">{{'PROPERTY.ASSIGNMENT.CANDIDATE_GROUPS_DISPLAY' | translate:property.value.assignment.candidateGroups}} </span>
+-->
+<span ng-if="!property.value.assignment.assignee && (!property.value.assignment.candidateUsers || property.value.assignment.candidateUsers.length == 0)" translate>PROPERTY.ASSIGNMENT.EMPTY</span>
+
+<span ng-if="property.value.assignment.assignee && property.value.assignment.assignee!='${assignee}'" ng-click="hideDetailsForMe();clearAssignee();$event.stopPropagation();" class="glyphicon glyphicon-remove" style="display: inline;float:right;line-height: 35px;" ></span>
+
+</div>

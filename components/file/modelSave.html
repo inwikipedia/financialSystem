@@ -1,0 +1,27 @@
+<div class="layui-tpl-container layui-form" style="padding-bottom: 60px;">
+
+    <!-- 模型名称 -->
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red;">*</span> 模型名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="mname" placeholder="请输入模型名称" class="layui-input">
+        </div>
+    </div>
+
+    <!-- 模型描述 -->
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red;">*</span> 模型描述</label>
+        <div class="layui-input-block">
+            <textarea name="minfo" placeholder="请输入模型描述" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <!-- 提交按钮 -->
+    <!-- 取消按钮 -->
+    <div class="layui-form-item" style="text-align: center;position: absolute;bottom: 0;left: 0;right: 0;">
+        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="modelSave">保存</button>
+        <button class="layui-btn layui-btn-primary" lay-submit lay-filter="modelCancle">取消</button>
+    </div>
+</div>

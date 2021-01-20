@@ -1,0 +1,447 @@
+<script src="../../assetsInfo/libs/echarts.js"></script>
+<script src="../../assetsInfo/js/FormMerge.js"></script>
+<link rel="stylesheet" href="assetsInfo/css/report.css">
+<style>
+    /* 新增/编辑上方输入框样式优化 */
+    
+    .card-show-edit .layui-form-label {
+        padding: 5px 15px 5px 0;
+        width: auto;
+    }
+    
+    .titDivbox {
+        width: 90%;
+        margin: auto;
+        position: relative;
+    }
+    
+    .titDiv {
+        width: 100%;
+        font-size: 16px;
+        font-weight: bold;
+        color: #888;
+        position: absolute;
+        top: 25px;
+    }
+    
+    .tit01,
+    .tit02 {
+        width: 50%;
+        float: left;
+        text-align: center;
+    }
+    
+    .chart {
+        height: 360px;
+        width: 90%;
+    }
+    
+    .form-bottom {
+        overflow: auto
+    }
+    
+    .chart {
+        padding-bottom: 20px;
+    }
+    
+    @media screen and (min-width: 1366px) and (max-width: 1920px) {
+        .chart {
+            height: 360px;
+            width: 90%;
+        }
+    }
+    
+    @media screen and (min-width: 1920px) {
+        .chart {
+            height: 370px;
+            width: 90%;
+        }
+    }
+</style>
+
+<div class="layui-row layui-col-space15">
+    <!-- 列表展示 -->
+    <div class="layui-col-md12 card-show-list">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span class="layui-card-header-title"><strong>纳税情况汇总表</strong></span>
+                <!-- <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-sm exportbtn">导出PPT</a> -->
+            </div>
+
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <div class="layui-form-item chart" id="picture"></div>
+                </div>
+                <div class="layui-col-md6">
+                    <div class="layui-form-item chart" id="picture2"></div>
+                </div>
+            </div>
+
+            <div class="botTable">
+
+                <table id="tableContent-form" lay-filter="tableContent-form"></table>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="control-1">
+    <a class="table-control-btn" lay-event="edit">编辑</a>
+</script>
+<script>
+    layui.use(['table'], function() {
+        var table = layui.table,
+            admin = layui.admin,
+            layer = layui.layer;
+
+        //下面表格
+        table.render({
+            elem: '#tableContent-form',
+            url: '/json/11.json', //数据接口
+            cols: [
+                [ //表头
+                    {
+                        field: 'budgetcount',
+                        title: '税种名称',
+                        width: 200,
+                        align: 'center'
+                    }, {
+                        field: 'time',
+                        title: '年份',
+                        width: 100,
+                        align: 'center'
+
+                    }, {
+                        field: 'jan',
+                        title: '1月',
+                        width: 100,
+                        align: 'center'
+
+                    }, {
+                        field: 'feb',
+                        title: '2月',
+                        width: 100,
+                        align: 'center'
+
+                    }, {
+                        field: 'march',
+                        title: '3月',
+                        width: 100,
+                        align: 'center'
+
+                    }, {
+                        field: 'april',
+                        title: '4月',
+                        width: 100,
+                        align: 'center'
+
+                    }, {
+                        field: 'may',
+                        title: '5月',
+                        width: 100,
+                        align: 'center'
+
+                    }, {
+                        field: 'june',
+                        title: '6月',
+                        width: 100,
+                        align: 'center'
+
+                    }, {
+                        field: 'july',
+                        title: '7月',
+                        width: 100,
+                        align: 'center'
+
+                    }, {
+                        field: 'aug',
+                        title: '8月',
+                        width: 100,
+                        align: 'center'
+
+                    }, {
+                        field: 'sep',
+                        title: '9月',
+                        width: 100,
+                        align: 'center'
+
+                    }, {
+                        field: 'oct',
+                        title: '10月',
+                        width: 100,
+                        align: 'center'
+
+                    }, {
+                        field: 'nove',
+                        title: '11月',
+                        width: 100,
+                        align: 'center'
+
+                    }, {
+                        field: 'dec',
+                        title: '12月',
+                        width: 100,
+                        align: 'center'
+
+                    }, {
+                        field: 'count',
+                        title: '合计',
+                        width: 100,
+                        align: 'center'
+                    }, {
+                        field: 'col',
+                        title: '累计1-11月',
+                        width: 120,
+                        align: 'center'
+                    }, {
+                        field: 'compar',
+                        title: '同期对比',
+                        width: 100,
+                        align: 'center'
+                    }
+                ]
+            ],
+            done: function(res, curr, count) {
+                alarmTableRowSpan("budgetcount", 1);
+            }
+        })
+
+        //图表1
+        admin.req('/json/report.json', {}, function(res) {
+            var depObject = res.paytaxes[0];
+            var xData = [];
+            var tableCol = [];
+            var depObject2 = res.paytaxes2[0];
+            var xData2 = [];
+            var tableCol2 = [];
+            for (var key in depObject) {
+                xData.push(depObject[key])
+            }
+            for (var key2 in depObject2) {
+                xData2.push(depObject2[key2])
+            }
+            var yData1 = [],
+                yData2 = [];
+            for (var key in res.paytaxes[1]) {
+                yData1.push(res.paytaxes[1][key])
+            }
+            for (var key in res.paytaxes[2]) {
+                yData2.push(res.paytaxes[2][key])
+            }
+            var yData3 = [],
+                yData4 = [];
+            for (var key in res.paytaxes2[1]) {
+                yData3.push(res.paytaxes2[1][key])
+            }
+            for (var key in res.paytaxes2[2]) {
+                yData4.push(res.paytaxes2[2][key])
+            }
+            showUpL(xData, yData1, yData2)
+            showUpL2(xData2, yData3, yData4)
+        }, {
+            method: 'get'
+        });
+        //echart1
+        var showUpL = function(xData, data1, data2) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("picture"));
+            // 图表配置项
+            var option = {
+                title: {
+                    left: 'center',
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        crossStyle: {
+                            color: '#999'
+                        }
+                    }
+                },
+                grid: {
+                    left: '7%',
+                },
+                legend: {
+                    data: [{
+                        name: '2017年',
+                        icon: "roundRect"
+                    }, {
+                        name: '2018年',
+                        icon: "roundRect"
+                    }],
+                    left: 'center',
+                    bottom: 'bottom',
+                    padding: [7, 0, 0, 0],
+                    itemWidth: 10,
+                    itemHeight: 10
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: xData,
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#949494',
+                        }
+                    }
+                }],
+                yAxis: [{
+                        type: 'value',
+                        min: 0,
+                        axisLabel: {
+                            formatter: '{value}'
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#949494',
+                            }
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                type: 'dashed',
+                                color: "#E8E8E8"
+                            }
+                        },
+                    }
+
+                ],
+                series: [{
+                        name: '2017年',
+                        type: 'bar',
+                        barMaxWidth: 30,
+                        data: data1,
+                        color: 'RGBA(51,185,253,0.8)',
+                    }, {
+                        name: '2018年',
+                        type: 'line',
+                        color: 'RGBA(255,233, 133,0.8)',
+                        data: data2,
+                        itemStyle: { //设置折线拐点处数值
+                            normal: {
+                                label: {
+                                    show: true,
+                                    color: '#000'
+                                }
+                            }
+                        }
+                    }
+
+                ]
+            };
+            myChart.setOption(option);
+        };
+        //2
+        var showUpL2 = function(xData2, data3, data4) {
+            // 图表初始化
+            var myChart = echarts.init(document.getElementById("picture2"));
+            // 图表配置项
+            var option = {
+                title: {
+                    left: 'center',
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        crossStyle: {
+                            color: '#999'
+                        }
+                    }
+                },
+                grid: {
+                    right: '2%'
+                },
+                legend: {
+                    data: [{
+                        name: '2017年',
+                        icon: "roundRect"
+                    }, {
+                        name: '2018年',
+                        icon: "roundRect"
+                    }],
+                    left: 'center',
+                    bottom: 'bottom',
+                    padding: [7, 0, 0, 0],
+                    itemWidth: 10,
+                    itemHeight: 10
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: xData2,
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#949494',
+                        }
+                    }
+                }],
+                yAxis: [{
+                        type: 'value',
+
+                        axisLabel: {
+                            formatter: '{value}'
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#999',
+                            }
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                type: 'dashed',
+                                color: "#E8E8E8"
+                            }
+                        },
+                        scale: true,
+                        splitNumber: 3,
+
+                    }
+
+                ],
+                series: [{
+                        name: '2017年',
+                        type: 'bar',
+                        barMaxWidth: 30,
+                        data: data3,
+                        color: 'RGBA(51,185,253,0.8)',
+                    }, {
+                        name: '2018年',
+                        type: 'line',
+                        color: 'RGBA(255,233, 133,0.8)',
+                        data: data4,
+                        itemStyle: { //设置折线拐点处数值
+                            normal: {
+                                label: {
+                                    show: true,
+                                    color: '#000'
+                                }
+                            }
+                        }
+                    }
+
+                ]
+            };
+            myChart.setOption(option);
+        };
+        setTimeout(function() {
+            window.onresize = function() {
+                myChart.resize();
+            }
+        }, 200);
+
+    });
+</script>

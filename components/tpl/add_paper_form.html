@@ -1,0 +1,430 @@
+<style>
+    #add-paper input{
+        height: 32px;
+    }
+    #add-paper .reduceMarginL{
+        margin-left: 100px;
+    }
+    #add-paper .reduceMarginL button{
+        width: 63px;
+        height: 26px;
+        line-height: 26px;
+    }
+    #add-paper .labelWidth{
+        width: 70px;
+    }
+    #add-paper .layui-form-select dl dd.layui-this{
+        background-color: #229FFF
+    }
+    .layui-layer-load{
+        background-color: white;
+    }
+</style>
+
+<link rel="stylesheet" href="../../assetsInfo/libs/layui/css/layui.css" />
+<link rel="stylesheet" href="../../assetsInfo/css/style.css">
+
+<div class="layui-tpl-container" style="padding-top: 20px">
+    <div class="layui-form" id="add-paper">
+        <div class="layui-row">
+            <div style="width: 50%;float: left">
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"><span style="color: red;">*</span> 名称</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" name="name" placeholder="请输入名称" class="layui-input" maxlength="150" lay-verify="required">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">索引</label>
+                    <div class="layui-input-block reduceMarginL" >
+                        <select name="index" id="index">
+                            <!--<option value="0">无</option>
+                            <option value="1">EI</option>
+                            <option value="2">SCI</option>
+                            <option value="3">ISTP</option>
+                            <option value="4">ISR</option>-->
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"><span style="color: red;">*</span> 刊登时间</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入刊登时间" lay-verify="required" class="layui-input" name="publishedTime" id="publishedTime" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"><span>部门</span> </label>
+                    <div class="layui-input-block reduceMarginL" style="position: relative">
+                        <input type="text" placeholder="请输入部门" class="layui-input" name="deptName" id="deptName" readonly>
+                        <img class="deptName" src="/assetsInfo/images/bumen.png" alt="" style="position:absolute; right:23px;top:6px">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">保密程度</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <select name="securityLevel" id="securityLevel">
+                            <!--<option value="0">公开</option>
+                            <option value="1">保密</option>-->
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">关键词</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入关键词" class="layui-input" name="keywords" maxlength="100">
+                    </div>
+                </div>
+            </div>
+            <div style="width: 50%;float: left">
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">发表期刊</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入发表期刊" class="layui-input" name="publishedJournals" maxlength="50">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">刊登期号</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入刊登期号" class="layui-input" name="publishedIssue" maxlength="50">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">公司</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入公司" class="layui-input" name="company" maxlength="50">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth">作者</label>
+                    <div class="layui-input-block reduceMarginL">
+                        <input type="text" placeholder="请输入作者" class="layui-input" name="authorUserNames" maxlength="50">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label labelWidth"><span style="color: red;">*</span><span> 附件</span> </label>
+                    <div class="layui-input-block reduceMarginL" style="position: relative">
+                        <input type="text" placeholder="请上传附件" id="fileName" class="layui-input" readonly>
+                    </div>
+                    <div class="layui-inline reduceMarginL" style="margin-top: 12px">
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" title="选择" id="chooseFile">选择</button>
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" title="删除" id="delFile" style="margin-left: 13px">删除</button>
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" title="上传" id="upload" style="margin-left: 13px">上传</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label labelWidth">摘要</label>
+                <div class="layui-input-block reduceMarginL">
+                    <textarea name="paperAbstract" placeholder="请输入" class="layui-textarea" maxlength="2000"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item" style="left: 50%;position: absolute;bottom: 10px; margin-left: -72px">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="menuSave">确定</button>
+            <button class="layui-btn layui-btn-primary"  id="cancle">取消</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../../assetsInfo/libs/jquery-1.12.4.min.js"></script>
+<!-- Q.js 轻量路由框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/q.js"></script>
+<!-- jQuery 轻量级 MVVM 框架 -->
+<script type="text/javascript" src="../../assetsInfo/libs/pandyle.min.js"></script>
+<!-- layui 脚本文件 -->
+<script type="text/javascript" src="../../assetsInfo/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../module/config.js"></script>
+<script type="text/javascript" src="/assetsInfo/js/jsencrypt.min.js"></script>
+<script type="text/javascript" src="../../module/ajaxSet.js"></script>
+<script src="/assetsInfo/js/ADCFormDesignHelper.js"></script>
+<script>
+    layui.use(['form','laydate','upload','table','util'], function() {
+        var laydate = layui.laydate,
+            upload = layui.upload,
+            admin = layui.admin,
+            config = layui.config,
+            form = layui.form;
+        var account = config.getAccount();
+        var fileId;
+        laydate.render({
+            elem: '#publishedTime'
+        });
+        var file = '';
+        var deptId = '';
+        var id = '';
+        //组织机构选择
+        $('#deptName').on('click', function(){
+            function deptName(data){
+                $('#deptName').val(data.name);
+                deptId = data.id;
+            }
+            parent.dept(deptName)
+        })
+        $('.deptName').on('click', function(){
+            function deptName(data){
+                $('#deptName').val(data.name);
+                deptId = data.id;
+            }
+            parent.dept(deptName)
+        })
+        //下拉框
+        $.ajax({
+            url: "/ADC_info/api/sys/dictype/list?dicCode=paperIndex",
+            success: function (data) {
+               var list = data.data;
+                var con = '';
+                /*list.sort(sortBy('dicTypeCode', true));
+                function sortBy(attr, rev) {
+                    //第二个参数没有传递 默认升序排列
+                    if (rev == undefined) {
+                        rev = 1;
+                    } else {
+                        rev = (rev) ? 1 : -1;
+                    }
+                    return function (a, b) {
+                        a = a[attr];
+                        b = b[attr];
+                        if (a < b) {
+                            return rev * -1;
+                        }
+                        if (a > b) {
+                            return rev * 1;
+                        }
+                        return 0;
+                    }
+                }*/
+                for(i=0;i<list.length;i++){
+                    con += '<option value='+list[i].id+'>'+list[i].dicTypeName+'</option>'
+                }
+                $('#index').html()
+                $('#index').html(con)
+                form.render("select");
+            }
+        })
+        $.ajax({
+            url: "/ADC_info/api/sys/dictype/list?dicCode=secret",
+            success: function (data) {
+                var list = data.data;
+                var con = '';
+                for(i=0;i<list.length;i++){
+                    con += '<option value='+list[i].id+'>'+list[i].dicTypeName+'</option>'
+                }
+                $('#securityLevel').html()
+                $('#securityLevel').html(con)
+                form.render("select");
+            }
+        })
+
+        //编辑回显
+        if(parent.$('.layui-layer-title').text()=='编辑论文'){
+            id = parent.$('.editPaper').attr('name');
+            $.ajax({
+                url: "/ADC_info/api/knowledge/paper/"+id,
+                success: function (data) {
+                    for(var item in data.data){
+                        if(data.data[item]){
+                            data.data[item] = ADCFormDesignHelper.htmlDecodeByRegExp(data.data[item])
+                        }
+                    }
+                    deptId = data.data.deptId;
+                    var publishedTime = data.data.publishedTime?layui.util.toDateString(data.data.publishedTime,'yyyy-MM-dd'):'';
+                    $('input[name=name]').val(data.data.name);
+                    $('input[name=publishedTime]').val(publishedTime);
+                    $('input[name=keywords]').val(data.data.keywords);
+                    $('input[name=publishedJournals]').val(data.data.publishedJournals);
+                    $('input[name=publishedIssue]').val(data.data.publishedIssue);
+                    $('input[name=company]').val(data.data.company);
+                    $('input[name=authorUserNames]').val(data.data.authorUserNames);
+                    $('textarea[name=paperAbstract]').val(data.data.paperAbstract);
+                    $('input[name=deptName]').val(data.data.deptName);
+                    $('input[id=fileName]').val(data.data.fileName);
+                    $("select[name=index]").find("option:contains("+data.data.index+")").attr("selected",true);
+                    $("select[name=securityLevel]").find("option:contains("+data.data.securityLevel+")").attr("selected",true);
+                    form.render('select')
+                    fileId = data.data.fileId;
+                    $('#delFile').off('click').on('click',function () {
+                        if(!$('#fileName').val()){
+                            return layer.msg('请先选择文件', {
+                                icon: 5
+                            });
+                        }else{
+                            $.ajax({
+                                url: "/ADC_info/api/knowledge/paper/deleteFile/"+fileId,
+                                type: 'delete',
+                                success: function (data) {
+                                    if (data.ok) {
+                                        $('#fileName').val('');
+                                        fileId = '';
+                                    } else {
+                                        return layer.msg(data.reason, {
+                                            icon: 5
+                                        });
+                                    }
+                                }
+                            })
+                        }
+
+                    })
+                }
+            })
+
+        }
+
+
+
+        var files
+        // 清空文件队列
+        function clearFile(){
+            for (var x in files) {
+                delete files[x];
+            }
+        }
+        var index;
+        $('#delFile').off('click').on('click',function () {
+            if(!$('#fileName').val()){
+                return layer.msg('请先选择文件', {
+                    icon: 5
+                });
+            }
+        });
+        $('#upload').off('click').on('click',function () {
+            if(!$('#fileName').val()){
+                return layer.msg('请先选择文件', {
+                    icon: 5
+                });
+            }
+        });
+        // 上传
+        var uploadRender = upload.render({
+            elem: '#chooseFile',
+            url: '/ADC_info/api/sys/file/upload',
+            field: 'file',
+            accept: 'file',// 所有文件
+            auto: false,// 自动上传
+            exts:'pdf|doc|docx|xlsx|xls|zip|rar|jpg|jpeg|png|gif|ppt|pptx',// 允许上传的文件后缀
+            bindAction: '#upload',
+            choose:function(obj){
+                uploadRender.config.elem.next()[0].value = '';// 防止choose方法只触发一次
+                files = obj.pushFile();// 文件队列
+                clearFile();
+                obj.preview(function(index, file, result){// file:准备上传的文件对象
+                    files = obj.pushFile();
+                    $('#fileName').val(file.name);
+                    $('#delFile').off('click').on('click',function () {
+                        if(!$('#fileName').val()){
+                            return layer.msg('请先选择文件', {
+                                icon: 5
+                            });
+                        }else{
+                            delete files[index];// 删除列表中对应的文件，一般在某个事件中使用
+                            $('#fileName').val('');
+                        }
+                    })
+                });
+            },
+            before:function () {
+                if($('#fileName').val()){
+                    index = layer.load(2);
+                }else {
+                    return layer.msg('请先选择文件', {
+                        icon: 5
+                    });
+                }
+            },
+            done: function(res,indexs) {// 上传完毕回调
+                layer.close(index);
+                if (res.ok) {
+                    layer.msg('文件上传成功！', {
+                        icon: 1
+                    });
+                    file = res.data.fileId;
+                    //删除附件
+                    $('#delFile').off('click').on('click',function () {
+                        if($('#fileName').val()){
+                            $.ajax({
+                                url: "/ADC_info/api/knowledge/paper/deleteFile/"+file,
+                                type: 'delete',
+                                success: function (data) {
+                                    if (data.ok) {
+                                        delete files[indexs];
+                                        $('#fileName').val('');
+                                        file = '';
+                                    } else {
+                                        return layer.msg(data.reason, {
+                                            icon: 5
+                                        });
+                                    }
+                                }
+                            })
+                        }else {
+                            return layer.msg('请先选择文件', {
+                                icon: 5
+                            });
+                        }
+
+                    })
+                } else {
+                    layer.msg('文件上传失败：' + res.message, {
+                        icon: 5
+                    });
+                }
+            }
+        });
+        $('#cancle').on('click',function () {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        });
+        form.on('submit(menuSave)', function(data){
+            data.field.fileId = file;
+            data.field.deptId = deptId;
+            delete data.field.file;
+            data.field.uploadUserId = account.usid;
+            data.field.uploadUserName = account.usname;
+            data.field.extInfo1 = data.field.index;
+            data.field.index = $('#index option:selected').text();
+            data.field.extInfo2 =  data.field.securityLevel;
+            data.field.securityLevel = $('#securityLevel option:selected').text();
+//            data.field.updateTime = layui.util.toDateString();
+            var url= "/ADC_info/api/knowledge/paper/create";
+            var type = "post";
+            if(parent.$('.layui-layer-title').text()=='编辑论文'){
+                if(!file){
+                    console.log(fileId,143)
+                    data.field.fileId = fileId;
+                }
+                data.field.id = id;
+                url = "/ADC_info/api/knowledge/paper/update";
+                type = "put"
+            }
+            if(!data.field.fileId ){
+                return layer.msg('请上传一个文件！', {
+                    icon: 0
+                });
+            }
+            $.ajax({
+                type: type,
+                url: url,
+                data: JSON.stringify(data.field),
+                contentType: 'application/json; charset=UTF-8',
+                success: function (data) {
+                    if (data.ok) {
+                        layer.msg('保存成功', {
+                            icon: 1
+                        });
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        parent.$('.paper-refresh').click()
+                    } else {
+                        layer.msg('保存失败' +data.message, {
+                            icon: 5
+                        });
+                    }
+                },
+                error: function () {
+                    layer.alert("获取数据错误");
+                }
+            })
+        })
+    })
+</script>

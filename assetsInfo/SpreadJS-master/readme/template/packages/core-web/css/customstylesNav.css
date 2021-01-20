@@ -1,0 +1,21 @@
+/* Scss Document */
+body,
+td,
+th {
+  font-family: Open Sans, Segoe UI, Verdana, Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-variant: normal; }
+
+.i-layout-container {
+  margin-top: 60px !important; }
+
+.i-header {
+  background-color: #fff;
+  color: #333;
+  border-top: 1px solid #cacbcc; }
+
+.i-header.ui-state-active {
+  background-color: #fff;
+  color: #333;
+  border-bottom: 1px solid #cacbcc; }

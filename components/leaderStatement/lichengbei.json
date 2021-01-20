@@ -1,0 +1,61 @@
+{
+  "ok": true,
+  "message": "success",
+  "data": [
+    {
+      "name": "项目名称",
+      "searchName":"projectName",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":true
+    },
+    {
+      "name": "里程碑名称",
+      "searchName":"milepostName",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":true
+    },
+    {
+      "name": "负责人",
+      "searchName":"milepostManagerName",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":true
+    },
+    {
+      "name": "开始时间",
+      "searchName":"milepostBeginTime",
+      "type":"date",
+      "searchType":"2",
+      "isSearch":true
+    },{
+      "name": "结束时间",
+      "searchName":"milepostEndTime",
+      "type":"date",
+      "searchType":"2",
+      "isSearch":true
+    },
+    {
+      "name": "目标",
+      "searchName":"milepostTarget",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":true
+    },
+    {
+      "name": "完成状态",
+      "searchName":"finishStatus",
+      "type":"select",
+      "searchType":"1",
+      "isSearch":true
+    },
+    {
+      "name": "预计成果物",
+      "searchName":"resultName",
+      "type":"input",
+      "searchType":"1",
+      "isSearch":true
+    }
+  ]
+}

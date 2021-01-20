@@ -1,0 +1,105 @@
+.layui-layout-admin .layui-body{
+    background: white;
+    padding-right: 0px;
+}
+.leaderForm{
+    overflow: auto;
+    height:calc(100vh - 70px);
+}
+.reportTree{
+    float:left;
+    width: 16%;
+    height: calc(100% - 22px);
+    padding-top: 10px;
+    border:1px solid #F5F5F5;
+    overflow: auto;
+    margin:10px 10px 0 10px;
+}
+.reportRight{
+    float:left;
+    width: calc(84% - 36px);
+    padding-right: 14px;
+    margin:10px 0px 0px 0px;
+    /*height:calc(100vh - 150px);*/
+    /*height: 490px;*/
+}
+.reportTree li a cite{
+    font-size: 14px;
+    color: #666;
+    font-weight: 400;
+    width: 140px;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.reportTree li ul{
+    margin-left: 22px;
+}
+.reportTree ul{
+    margin-bottom: 0;
+}
+.reportTree .layui-tree-branch{
+    display: none;
+}
+.reportTree li .layui-tree-spread{
+    display: none;
+}
+.reportTree .layui-tree-leaf{
+    display: none;
+}
+.reportTree li a{
+    color: #666;
+}
+.reportTree>li{
+    margin:  0 0 10px 10px;
+    position: relative;
+}
+.reportTree>li:first-child{
+    margin-top:  10px;
+}
+.reportTree li ul li:first-child{
+    margin: 10px 0 0 0px;
+}
+.reportTree li ul li{
+    margin:  10px 0 0 0px;
+}
+.reportRight .setInput {
+    color: #646464;
+    width: 170px;
+    float: left;
+    margin-right: 10px;
+}
+.reportTitle{
+    width: calc(33% - 20px);
+    display: inline-block;
+    height: 80px;
+    padding: 10px;
+}
+.projectReceipts{
+    color: #24a3f6;
+}
+.projectExpend{
+    color: #7ed321;
+}
+.projectIncome{
+    color: #9012fe;
+}
+.reportInline{
+    display: inline-block;
+    font-size:18px;
+    margin-left: 5px;
+}
+.reportTitle img{
+    vertical-align: top;
+}
+.researchMoney,.reportEchart{
+    display: none;
+}
+#echartBox{
+    width: 100%;
+    height: 400px;
+}
+.layui-form-select dl{
+    text-align: center;
+}

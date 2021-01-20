@@ -1,0 +1,116 @@
+<div class="modal" ng-controller="KisBpmAssignmentPopupCtrl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="font-size: 16px;margin: 5px 0;display: inline-block;">{{'PROPERTY.ASSIGNMENT.TITLE' | translate:property}}</p>
+                <button style="margin: 5px 0;display: inline-block;" type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <ul id="myTab" class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#org" data-toggle="tab">部门</a>
+                    </li>
+                    <li>
+                        <a href="#role" data-toggle="tab">角色</a>
+                    </li>
+                    <li>
+                        <a href="#exp" data-toggle="tab">表达式</a>
+                    </li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade in active" id="org">
+                        <div style="height:420px;">
+                            <div class="col-xs-8 modalDiv">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="请输入人员名称" ng-model="searchText">
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="button" ng-click="doSearch();">搜索</button>
+                                </span>
+                                </div>
+                            </div>
+                            <div class="col-xs-5 modalDiv">
+                                <div class="boxDiv">
+                                    <ul id="orgTree" class="ztree"></ul>
+                                </div>
+                                <div class="boxDiv2">
+                                    <select id="sel_all_area" size="10" style="width:100%;border:1px solid #cccccc;">  
+                                    <option ng-repeat="user in searchList" value="{{user.usid}}">
+                                        {{user.usname}}
+                                    </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-2 modalDiv buttonDiv">
+                                <button type="button" ng-click="chooseUser();" class="btn btn-primary" id="btn_choose_selected_area" style="display: block;margin:0 auto;outline:0;"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                                <button type="button" ng-click="removeUser();" class="btn btn-primary" id="btn_remove_selected_area" style="display: block;margin:0 auto;outline:0;"><span class="glyphicon glyphicon-chevron-left"></span></button>
+                            </div>
+                            <div class="col-xs-5 modalDiv">
+                                <div class="boxDiv3">
+                                    <select id="sel_selected_areas" size="23" style="width:100%;border:1px solid #cccccc;">
+                                    <option ng-repeat="user in selectedUserArr">
+                                        {{user.usname}}
+                                    </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="role">
+                        <div style="height:420px;">
+                            <div class="col-xs-8 modalDiv">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="请输入人员名称" ng-model="searchTextByRole">
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="button" ng-click="doSearchByRole();">搜索</button>
+                                </span>
+                                </div>
+                            </div>
+                            <div class="col-xs-5 modalDiv">
+                                <div class="boxDiv4">
+                                    <select id="roleList" size="12" style="width:100%;border:1px solid #cccccc;" ng-model="selectRole" ng-change="getUserByRole();">  
+                                    <option ng-repeat="role in roleList" value="{{role.rname}}">
+                                        {{role.rname}}
+                                    </option>
+                                    </select>
+                                </div>
+                                <div class="boxDiv2">
+                                    <select id="sel_all_area_role" size="10" style="width:100%;border:1px solid #cccccc;">  
+                                    <option ng-repeat="user in searchListByRole" value="{{user.usid}}">
+                                        {{user.usname}}
+                                    </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-2 modalDiv buttonDiv">
+                                <button type="button" ng-click="chooseUserFromRole();" class="btn btn-primary" id="btn_choose_selected_area2" style="display: block;margin:0 auto;outline:0;"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                                <button type="button" ng-click="removeUser();" class="btn btn-primary" id="btn_remove_selected_area2" style="display: block;margin:0 auto;outline:0;"><span class="glyphicon glyphicon-chevron-left"></span></button>
+                            </div>
+                            <div class="col-xs-5 modalDiv">
+                                <div class="boxDiv3">
+                                    <select id="sel_selected_areas_role" size="23" style="width:100%;border:1px solid #cccccc;">
+                                    <option ng-repeat="user in selectedUserArr">
+                                        {{user.usname}}
+                                    </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="exp">
+                        <div style="height:420px;">
+                            <div class="col-xs-8 modalDiv">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="请输入表达式，格式：${受理人}" ng-model="expAssignee" style="width:300px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button ng-click="save()" class="btn btn-primary" translate style="width: 80px;">ACTION.SAVE</button>
+                <button ng-click="close()" class="btn btn-primary" translate style="background-color: #949494;width: 80px;">ACTION.CANCEL</button>
+            </div>
+        </div>
+    </div>
+</div>
